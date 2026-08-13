@@ -1,0 +1,384 @@
+<!DOCTYPE html><script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Vaani Home Page Search Analysis",
+  "schemaVersion": 1,
+  "description": "Static analysis of Vaani home-page (MAIN screen) first-search behavior for 352,400 sessions (2026-07-25 to 2026-07-27): nudge vs organic triggers, whether searches match prior browsing (match_status), category-level continuation rates, top keywords, and two data-quality flags found during the analysis."
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vaani Home-Page Search — Pre/Post Category Consistency (single-source rebuild)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0f1115; --card-bg: #171a21; --card-border: #262b36;
+    --text: #e8eaed; --text-dim: #9aa3b2;
+    --accent: #7c9eff; --green: #4ade80; --amber: #fbbf24; --red: #f87171;
+    --grid: #262b36;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+  h1 { font-size: 22px; margin: 0 0 4px 0; }
+  h2 { font-size: 16px; margin: 0 0 4px 0; }
+  h2 .lvl { color: var(--accent); font-weight: 800; margin-right: 6px; }
+  h3 { font-size: 13px; margin: 0 0 10px 0; color: var(--text-dim); text-transform: uppercase; letter-spacing: .04em; }
+  .subtitle { color: var(--text-dim); font-size: 13px; margin-bottom: 22px; }
+  .subtitle code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+  .badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; margin-left:8px; vertical-align:middle; letter-spacing:.03em; }
+  .badge.pop { background: rgba(74,222,128,0.15); color: var(--green); }
+  .badge.sample { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .badge.broad { background: rgba(124,158,255,0.15); color: var(--accent); }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .kpi-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+  .kpi-card.big { grid-column: span 2; }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); margin-bottom: 6px; }
+  .kpi-value { font-size: 24px; font-weight: 600; }
+  .kpi-value.huge { font-size: 34px; }
+  .kpi-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .green { color: var(--green); } .amber { color: var(--amber); } .red { color: var(--red); }
+  .section { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .chart-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; align-items: start; }
+  @media (max-width: 900px) { .chart-row, .chart-row-3 { grid-template-columns: 1fr; } }
+  .chart-wrap { position: relative; height: 260px; }
+  .chart-wrap.tall { height: 320px; }
+  .chart-wrap.short { height: 210px; }
+  .insight { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: rgba(124,158,255,0.08); border: 1px solid rgba(124,158,255,0.25); font-size: 12.5px; line-height: 1.6; color: var(--text); }
+  .insight b { color: var(--accent); }
+  .insight-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); font-weight: 700; margin-bottom: 4px; display:block; }
+  .flag { margin-bottom: 14px; padding: 12px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.55; }
+  .flag.bad { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); }
+  .flag.warn { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); }
+  .flag b { color: var(--text); font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  th { color: var(--text-dim); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .table-scroll { max-height: 420px; overflow: auto; border-radius: 8px; }
+  .bar-cell { display: flex; align-items: center; gap: 6px; min-width:110px; }
+  .bar-track { flex: 1; height: 6px; background: var(--grid); border-radius: 3px; overflow: hidden; min-width: 50px; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .notes { font-size: 12.5px; color: var(--text-dim); line-height: 1.7; }
+  .notes code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+  code { background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; font-size: 11.5px; }
+  .metric-same { color: var(--green); font-weight: 600; }
+  .metric-diff { color: var(--red); }
+  .metric-nondom { color: #60d4c8; font-weight: 600; }
+  .metric-combined { font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Vaani Home-Page Search — Pre/Post Category Consistency</h1>
+<div class="subtitle">3-day window: 25–27 July 2026 &middot; rebuilt end-to-end from a single source: the full 352,400-row session export (no sampling anywhere in this version) &middot; <b>every section below is restricted to the 157,210 sessions (44.6% of 352,400) where BOTH a pre-search browsing signal (any screen — home feed, search results, category pages, widgets) AND a resolved search category exist</b> &middot; rolled up from sscat to scat/category via a static <code>sscat_id → scat, category</code> dimension map &middot; every level reports <b>Same-dominant% → Same-in-set (non-dominant)% → Combined% → Different%</b>, for sscat, scat, and category grain</div>
+
+<div class="section">
+  <h2><span class="lvl">L0</span>Overall — dominant vs. full seen-set match, by granularity <span class="badge pop">full population, n=157,210</span></h2>
+  <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6; margin: 4px 0 14px 0;">
+    <b>Same-dominant</b> = the search matches the single category viewed most before searching. <b>Same-in-set (non-dominant)</b> = it matches something else seen, just not the top one — the two are mutually exclusive by construction. <b>Combined</b> = dominant + non-dominant, i.e. the search matched anything at all in the pre-search browsed set.
+  </p>
+  <div class="chart-row-3">
+    <div class="kpi-card">
+      <div class="kpi-label">sscat</div>
+      <div class="kpi-value huge">157,210</div>
+      <div class="kpi-sub">total qualifying sessions</div>
+      <table style="margin-top:12px;">
+        <tr><td>Same-dominant</td><td class="num metric-same">9.29%</td></tr>
+        <tr><td>Same-in-set (non-dom)</td><td class="num metric-nondom">15.08%</td></tr>
+        <tr><td class="metric-combined">Combined — seen again</td><td class="num metric-combined">24.37%</td></tr>
+        <tr><td>Different</td><td class="num metric-diff">75.63%</td></tr>
+      </table>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">scat</div>
+      <div class="kpi-value huge">157,210</div>
+      <div class="kpi-sub">total qualifying sessions</div>
+      <table style="margin-top:12px;">
+        <tr><td>Same-dominant</td><td class="num metric-same">15.94%</td></tr>
+        <tr><td>Same-in-set (non-dom)</td><td class="num metric-nondom">21.54%</td></tr>
+        <tr><td class="metric-combined">Combined — seen again</td><td class="num metric-combined">37.48%</td></tr>
+        <tr><td>Different</td><td class="num metric-diff">62.52%</td></tr>
+      </table>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">category</div>
+      <div class="kpi-value huge">157,210</div>
+      <div class="kpi-sub">total qualifying sessions</div>
+      <table style="margin-top:12px;">
+        <tr><td>Same-dominant</td><td class="num metric-same">28.22%</td></tr>
+        <tr><td>Same-in-set (non-dom)</td><td class="num metric-nondom">30.91%</td></tr>
+        <tr><td class="metric-combined">Combined — seen again</td><td class="num metric-combined">59.13%</td></tr>
+        <tr><td>Different</td><td class="num metric-diff">40.87%</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="chart-wrap" style="margin-top:18px;"><canvas id="l0Chart"></canvas></div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    At category grain, <b>59.1% of searches land on a category the user had already browsed that session</b> (28.2% same-dominant + 30.9% same-in-set) — a majority, not a coin flip — versus 37.5% at scat and 24.4% at sscat. The non-dominant part of the set consistently outweighs the dominant part (category: 30.9% non-dominant vs. 28.2% dominant) — a meaningful share of "hits" come from the user's broader browsing footprint, not just the single most-viewed category. This 157,210-session population (44.6% of all first searches) is the base for every section in this document.
+  </div>
+</div>
+
+<div class="flag warn">
+  <b>L2 (nudge-triggered vs. organic) is not available in this rebuild.</b> The new full-population export does not include a <code>first_search_source</code> / nudge-attribution column, so the organic-vs-nudge split cannot be reproduced from this data. If you re-export with that column included, this section can be added back.
+</div>
+
+<div class="section">
+  <h2><span class="lvl">L4</span>By query length (words) <span class="badge pop">full population, n=157,210</span></h2>
+  <div class="chart-row">
+    <div>
+      <table>
+        <tr><th>Words</th><th class="num">Total</th><th class="num">Same-dom%</th><th class="num">In-set (non-dom)%</th><th class="num">Combined%</th><th class="num">Diff%</th></tr>
+        <tr><td>1</td><td class="num">37,216</td><td class="num metric-same">1.55%</td><td class="num metric-nondom">5.23%</td><td class="num metric-combined">6.78%</td><td class="num metric-diff">93.22%</td></tr>
+        <tr><td>2</td><td class="num">64,158</td><td class="num metric-same">6.32%</td><td class="num metric-nondom">13.49%</td><td class="num metric-combined">19.81%</td><td class="num metric-diff">80.19%</td></tr>
+        <tr><td>3</td><td class="num">30,751</td><td class="num metric-same">15.04%</td><td class="num metric-nondom">20.75%</td><td class="num metric-combined">35.79%</td><td class="num metric-diff">64.21%</td></tr>
+        <tr><td>4+</td><td class="num">25,085</td><td class="num metric-same">21.31%</td><td class="num metric-nondom">26.80%</td><td class="num metric-combined">48.11%</td><td class="num metric-diff">51.89%</td></tr>
+      </table>
+    </div>
+    <div class="chart-wrap"><canvas id="l4Chart"></canvas></div>
+  </div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    Query length remains the strongest predictor in the full-population rebuild: combined match rate (same-dominant + same-in-set) climbs from 6.8% (1-word queries) to 48.1% (4+ words) — roughly a 7x increase, monotonic across every bucket. Short, generic queries ("saree", "watch") are rarely a continuation of browsing; long, qualified queries land on something already browsed roughly half the time. <i>Numbers in this section were re-verified directly against the source table on 2026-08-05 and corrected slightly from the original figures (word-count bucketing was re-derived from <code>first_search_keyword</code>).</i>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="lvl">L5</span>By query attribute type <span class="badge pop">full population, n=157,210</span></h2>
+  <div class="chart-row">
+    <div>
+      <table style="margin-bottom:14px;">
+        <tr><th>Query has</th><th class="num">Total</th><th class="num">Same-dom%</th><th class="num">In-set (non-dom)%</th><th class="num">Combined%</th><th class="num">Diff%</th></tr>
+        <tr><td>An attribute (color/size/gender/material/occasion/price/qty)</td><td class="num">53,689</td><td class="num metric-same">12.68%</td><td class="num metric-nondom">19.43%</td><td class="num metric-combined">32.11%</td><td class="num metric-diff">67.89%</td></tr>
+        <tr><td>No detectable attribute</td><td class="num">103,521</td><td class="num metric-same">7.53%</td><td class="num metric-nondom">12.83%</td><td class="num metric-combined">20.36%</td><td class="num metric-diff">79.64%</td></tr>
+      </table>
+      <h3>Attribute types detected (% of full qualifying population)</h3>
+      <div class="chart-wrap short"><canvas id="attrTypes"></canvas></div>
+    </div>
+    <div class="chart-wrap tall"><canvas id="l5Chart"></canvas></div>
+  </div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    Consistent with L4: queries with an explicit attribute match prior browsing <b>~1.6x more often</b> than generic ones (32.1% vs. 20.4% combined). 65.9% of all qualifying queries still carry no detectable attribute — plain category terms like "saree" or "watch" — and among the ones that do, <b>gender/age framing dominates</b> (18.5%: "women", "kids"), ahead of color (6.9%) and price/budget (5.1%). Size (0.8%) and pack/quantity (0.6%) language are rare. <i>Unlike L0 and L4, this section has not been independently re-verified against the source table — the exact keyword dictionary used for attribute classification isn't available outside the original query, so a from-scratch reproduction would be a different guess, not a correction.</i>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="lvl">M</span>Pre-search browsing depth — how many products did they see before searching? <span class="badge broad">n=157,210</span></h2>
+  <div class="chart-row">
+    <div>
+      <div class="kpi-grid" style="margin-bottom:14px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Mean products viewed pre-search</div>
+          <div class="kpi-value huge">137.1</div>
+          <div class="kpi-sub">median 50.0 &middot; mean 98.6 distinct products</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Viewed 100+ products pre-search</div>
+          <div class="kpi-value huge green">34.3%</div>
+          <div class="kpi-sub">largest single bucket of this population</div>
+        </div>
+      </div>
+      <table>
+        <tr><th>Products viewed pre-search</th><th class="num">% of sessions</th><th class="num">Match rate</th></tr>
+        <tr><td>1–5</td><td class="num">2.52%</td><td class="num">5.1%</td></tr>
+        <tr><td>6–20</td><td class="num">6.55%</td><td class="num">7.9%</td></tr>
+        <tr><td>21–50</td><td class="num">40.95%</td><td class="num">19.3%</td></tr>
+        <tr><td>51–100</td><td class="num">15.69%</td><td class="num">26.2%</td></tr>
+        <tr><td>100+</td><td class="num">34.31%</td><td class="num metric-same">34.2%</td></tr>
+      </table>
+      <div style="font-size:11px; color:var(--text-dim); margin-top:8px;">By definition every session in this population viewed at least 1 product pre-search (a pre-signal is required to qualify). Match rate = search sscat matches something in the pre-search browsed set.</div>
+    </div>
+    <div class="chart-wrap tall"><canvas id="mChart"></canvas></div>
+  </div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    Browsing depth and match rate track cleanly and monotonically: <b>5.1% (1–5 views) → 34.2% (100+ views)</b>, a <b>~7x</b> lift. Over a third of this population (34.3%) browsed 100+ products before searching — these heavy pre-search browsers are the most likely of anyone's to have their search land on something they'd already seen.
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="lvl">N</span>Product clicks before &amp; after the search <span class="badge broad">n=157,210</span></h2>
+  <div class="chart-row">
+    <div>
+      <div class="kpi-grid" style="margin-bottom:14px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Any click before search</div>
+          <div class="kpi-value huge">59.9%</div>
+          <div class="kpi-sub">mean 5.2 clicks, 4.7 distinct products (among clickers)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Any click after search</div>
+          <div class="kpi-value huge green">85.7%</div>
+          <div class="kpi-sub">mean 8.2 clicks, 7.4 distinct products (among clickers)</div>
+        </div>
+      </div>
+      <table style="margin-bottom:14px;">
+        <tr><th>Click pattern</th><th class="num">% of sessions</th></tr>
+        <tr><td>Clicked both before and after</td><td class="num metric-same">52.5%</td></tr>
+        <tr><td>Clicked before only</td><td class="num">7.5%</td></tr>
+        <tr><td>Clicked after only</td><td class="num">33.2%</td></tr>
+        <tr><td>No click either side</td><td class="num metric-diff">6.8%</td></tr>
+      </table>
+      <table>
+        <tr><th>Match rate by pre-click</th><th class="num">Match rate</th></tr>
+        <tr><td>No click before search</td><td class="num">16.7%</td></tr>
+        <tr><td>Clicked before search</td><td class="num metric-same">29.5%</td></tr>
+      </table>
+    </div>
+    <div class="chart-wrap tall"><canvas id="nChart"></canvas></div>
+  </div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    Within this already-browsing population, click behavior is intense: 85.7% click on something <b>after</b> the search and 59.9% clicked something <b>before</b> it too — only 6.8% never click at all. A pre-search click still nearly <b>doubles</b> the match rate (16.7% → 29.5%), confirming clicking is a stronger intent signal than viewing alone. Post-click rate barely moves with match quality (same_dominant 87.8%, same_any_not_dominant 86.3%, different 85.3%) — once someone has a pre-search signal, they browse and click after searching at a consistently high rate regardless of whether the search matched what they'd seen.
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="lvl">O</span>7-day click history — what sscats had they clicked before today's search? <span class="badge broad">n=157,210</span></h2>
+  <div class="chart-row">
+    <div>
+      <div class="kpi-grid" style="margin-bottom:14px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Clicked something in prior 7 days</div>
+          <div class="kpi-value huge">95.5%</div>
+          <div class="kpi-sub">n=150,200 &middot; mean 13.4 distinct sscats (median 9.0)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">7-day click-match rate</div>
+          <div class="kpi-value huge green">23.3%</div>
+          <div class="kpi-sub">search sscat also clicked in the prior 7 days (n=150,200 with both signals)</div>
+        </div>
+      </div>
+      <table>
+        <tr><th>Distinct sscats clicked, prior 7 days</th><th class="num">% of sessions</th><th class="num">Match rate</th></tr>
+        <tr><td>0</td><td class="num">4.46%</td><td class="num metric-diff">—</td></tr>
+        <tr><td>1</td><td class="num">7.63%</td><td class="num">12.1%</td></tr>
+        <tr><td>2–3</td><td class="num">13.85%</td><td class="num">16.2%</td></tr>
+        <tr><td>4–5</td><td class="num">11.43%</td><td class="num">19.9%</td></tr>
+        <tr><td>6–10</td><td class="num">21.14%</td><td class="num">22.4%</td></tr>
+        <tr><td>10+</td><td class="num">41.49%</td><td class="num metric-same">29.2%</td></tr>
+      </table>
+    </div>
+    <div class="chart-wrap tall"><canvas id="oChart"></canvas></div>
+  </div>
+  <div class="insight">
+    <span class="insight-label">Insight</span>
+    95.5% of this population has some 7-day click history — and it's still predictive on its own: <b>23.3% of searches match something clicked in the prior week</b>, climbing to <b>29.2%</b> for users with a wide 7-day footprint (10+ distinct sscats, the single largest bucket at 41.5% of this population) vs. just 12.1% for users who clicked only one. Longer-window click history is a meaningfully weaker signal than same-session browsing depth (Section M topped out at 34.2%) but confirms the pattern holds beyond the session boundary — repeat category interest, not just in-session momentum, predicts what people search for.
+  </div>
+</div>
+
+<div class="flag bad">
+  <b>Data-quality flag 1 — session timing is unusable:</b> <code>session_position_of_first_search</code> is <b>UNKNOWN_TIMING for 100% of rows</b>, confirmed on the full table. The START/MIDDLE/END logic never fires — almost certainly a <code>unix_timestamp()</code> format mismatch, since it defaults to expecting <code>yyyy-MM-dd HH:mm:ss</code> and the session timing columns in <code>va_user_session_activity</code> are likely a different format (ISO-8601 with <code>T</code>/timezone/millis). Fix the format string before relying on this field anywhere.
+</div>
+<div class="flag warn">
+  <b>Data-quality flag 2 — trailing newline in scat names:</b> some Kids sub-category values carry a literal trailing newline (e.g. <code>"Kids - Girls Western Wear\n"</code>). This is present consistently on both the search-side and pre-browse-side scat values, so scat-grain matching is unaffected, but it will silently break joins/dedupes against any table where the same category isn't newline-suffixed.
+</div>
+<div class="flag warn">
+  <b>Data-quality flag 3 — L2 unavailable:</b> the nudge-vs-organic split (previously L2) cannot be reproduced from the current full-population export, which does not include a <code>first_search_source</code> column (see the flag above section L0).
+</div>
+
+<div class="section">
+  <h2>Methodology &amp; caveats</h2>
+  <div class="notes">
+    <b>Single source, single population.</b> This version of the report is rebuilt end-to-end from one file: the full 352,400-row session export (the same file used for sections M–O in the prior version). Every section — L0 through O — now uses the identical 157,210-session qualifying population (44.6% of 352,400): sessions with both a pre-search browsing signal (any screen — home feed, search results, category pages, widgets, not home-feed-only) and a resolved search category. Nothing in this document is sample-based any longer; L4 and L5 were previously computed on a 10,000-row sample and are now exact, computed on the full qualifying population.<br><br>
+    <b>What "Same-dominant / Same-in-set (non-dominant) / Combined / Different" means.</b> Same-dominant = the search's resolved category (at the stated grain) matches the single most-viewed category in the session's pre-search views. Same-in-set (non-dominant) = it matches a category viewed, just not the single most-viewed one — computed as dominant checked first, then set-membership checked on whatever's left, so it deliberately excludes dominant matches rather than including them. Combined = same-dominant + same-in-set (non-dominant), i.e. the search matched anything at all in the pre-search set, dominant or not. Different = it matches none of the pre-viewed categories. Same-dominant, same-in-set (non-dominant), and Different always sum to 100% of the qualifying population at each grain; Combined is the derived sum of the first two, so Different = 100% − Combined.<br><br>
+    <b>Category hierarchy rollup.</b> sscat (finest) → scat → category (coarsest). The base export only carries sscat-level match natively (<code>pre_sscat_set</code>, <code>pre_dominant_sscat_id</code>); scat/category-level matching was computed locally by mapping every sscat_id in <code>pre_sscat_set</code> to its scat/category via a static dimension table, then checking whether the search's resolved scat/category falls in that mapped set (same-in-set) or equals the dominant sscat's mapped scat/category (same-dominant).<br><br>
+    <b>L2 (nudge vs. organic) is not reproducible from this export</b> — see Data-quality flag 3.<br><br>
+    <b>Query intent classification</b> is keyword-based regex matching on the lower-cased search string (color names, size/unit tokens, gender/age words, material fabrics, occasion words, price/budget phrases, pack/quantity phrases) — a coverage heuristic, not an NLP intent model; categories are non-exclusive.<br><br>
+    <b>Known limitations carried over from the source query:</b> <code>session_position_of_first_search</code> is non-functional (see flag 1); pre-search browsing/clicks use an any-origin definition (not home-feed-only), so absolute match rates here are structurally higher than an earlier, narrower iteration of this analysis that restricted pre-signal to the home feed only — that iteration has been fully superseded by this single-source rebuild.
+  </div>
+</div>
+
+<script>
+const RED = '#f87171', ORANGE = '#fbbf24', BLUE = '#7c9eff', GREY = '#4b5160', GREEN = '#4ade80', TEAL = '#60d4c8';
+const baseOpts = { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ labels:{ color:'#9aa3b2', font:{size:11} } } }, scales:{} };
+Chart.defaults.color = '#9aa3b2';
+Chart.defaults.borderColor = '#262b36';
+
+// L0
+new Chart(document.getElementById('l0Chart'), {
+  type: 'bar',
+  data: {
+    labels: ['sscat','scat','category'],
+    datasets: [
+      { label:'Same-dominant%', data:[9.29,15.94,28.22], backgroundColor: GREEN, stack:'s' },
+      { label:'Same-in-set (non-dom)%', data:[15.08,21.54,30.91], backgroundColor: TEAL, stack:'s' },
+      { label:'Different%', data:[75.63,62.52,40.87], backgroundColor: RED, stack:'s' }
+    ]
+  },
+  options: { ...baseOpts, scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'}} } }
+});
+
+// L4
+new Chart(document.getElementById('l4Chart'), {
+  type: 'bar',
+  data: {
+    labels: ['1 word','2 words','3 words','4+ words'],
+    datasets: [
+      { label:'Same-dominant%', data:[1.55,6.32,15.04,21.31], backgroundColor: GREEN, stack:'s' },
+      { label:'In-set (non-dom)%', data:[5.23,13.49,20.75,26.80], backgroundColor: TEAL, stack:'s' }
+    ]
+  },
+  options: { ...baseOpts, scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, max:50, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'} } } }
+});
+
+// L5
+new Chart(document.getElementById('l5Chart'), {
+  type: 'bar',
+  data: {
+    labels: ['Has attribute','No attribute'],
+    datasets: [
+      { label:'Same-dominant', data:[12.68,7.53], backgroundColor: GREEN, stack:'s' },
+      { label:'In-set (non-dom)', data:[19.43,12.83], backgroundColor: TEAL, stack:'s' },
+      { label:'Different', data:[67.89,79.64], backgroundColor: RED, stack:'s' }
+    ]
+  },
+  options: { ...baseOpts, scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'}} } }
+});
+
+new Chart(document.getElementById('attrTypes'), {
+  type: 'bar',
+  data: {
+    labels: ['Gender / age','Color','Price / budget','Material','Occasion','Size / dimension','Quantity / pack'],
+    datasets: [{ data:[18.48,6.90,5.05,3.22,2.35,0.78,0.55], backgroundColor: BLUE }]
+  },
+  options: { ...baseOpts, indexAxis:'y', plugins:{legend:{display:false}}, scales:{ x:{ max:22, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'} }, y:{ grid:{display:false} } } }
+});
+
+// M: pre-search view bucket vs match rate
+new Chart(document.getElementById('mChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1–5','6–20','21–50','51–100','100+'],
+    datasets: [{ label:'Match rate%', data:[5.1,7.9,19.3,26.2,34.2], backgroundColor: GREEN }]
+  },
+  options: { ...baseOpts, plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{ max:40, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'} } } }
+});
+
+// N: click pattern breakdown + match rate by pre-click
+new Chart(document.getElementById('nChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Both before & after','Before only','After only','Neither'],
+    datasets: [{ data:[52.5,7.5,33.2,6.8], backgroundColor:[GREEN, TEAL, BLUE, GREY] }]
+  },
+  options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{ color:'#9aa3b2', font:{size:11} } } } }
+});
+
+// O: 7-day sscat bucket vs match rate
+new Chart(document.getElementById('oChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1','2–3','4–5','6–10','10+'],
+    datasets: [{ label:'7-day click-match rate%', data:[12.1,16.2,19.9,22.4,29.2], backgroundColor: TEAL }]
+  },
+  options: { ...baseOpts, plugins:{legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{ max:32, ticks:{callback:v=>v+'%'}, grid:{color:'#262b36'} } } }
+});
+</script>
+
+</body>
+</html>
