@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vaani Turn Tagging — Distribution Trees</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 32px 40px 60px;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #fafafa; color: #1c1c1e;
+}
+h1 { font-size: 24px; margin: 0 0 4px; }
+h2 { font-size: 18px; margin: 36px 0 6px; color: #1c1c1e; border-bottom: 2px solid #e5e5ea; padding-bottom: 6px; }
+h3 { font-size: 15px; margin: 22px 0 10px; color: #3a3a3c; }
+.subtitle { color: #6b6b70; font-size: 13px; margin-bottom: 14px; }
+.meta { color: #8a8a8e; font-size: 12px; margin-bottom: 20px; }
+.note { color: #6b6b70; font-size: 12.5px; font-style: italic; margin: 6px 0 16px; max-width: 980px; line-height: 1.5; }
+.tabbar { display: flex; gap: 8px; margin: 4px 0 22px; border-bottom: 2px solid #e5e5ea; }
+.tabbtn {
+  border: none; background: transparent; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: #6b6b70;
+  padding: 10px 18px; border-radius: 8px 8px 0 0; border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+.tabbtn:hover { background: #f0f0f2; color: #1c1c1e; }
+.tabbtn.active { color: #1f6feb; border-bottom-color: #1f6feb; background: #fff; }
+.tabpane { display: none; }
+.tabpane.active { display: block; }
+.stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 18px 0 8px; }
+.stat-card {
+  background: #fff; border: 1px solid #e5e5ea; border-radius: 10px;
+  padding: 12px 18px; min-width: 140px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.stat-card .num { font-size: 22px; font-weight: 650; color: #1a1a1a; }
+.stat-card .lbl { font-size: 11.5px; color: #8a8a8e; margin-top: 2px; }
+.charts-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 18px 0 10px; }
+.chart-box {
+  background: #fff; border: 1px solid #e5e5ea; border-radius: 12px; padding: 16px 18px;
+  flex: 1; min-width: 320px; height: 260px;
+}
+.chart-box.tall { height: 340px; }
+.chart-box.xtall { height: 430px; }
+.insight {
+  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #1f6feb;
+  border-radius: 8px; padding: 10px 16px; margin: 4px 0 22px;
+  font-size: 12.5px; line-height: 1.55; color: #24344d; max-width: 1100px;
+}
+.insight b { color: #0b3a91; }
+.chart-box .ct { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #3a3a3c; }
+.flow { position: relative; overflow-x: auto; padding: 12px 6px 20px; }
+.twrap { display: flex; align-items: center; width: max-content; }
+.tkids { display: flex; flex-direction: column; gap: 10px; margin-left: 64px; }
+.tsvg { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 0; }
+.tedge { fill: none; stroke: #b6bfc9; stroke-width: 1.6px; }
+.tedge.hl { stroke: #7a8aa0; stroke-width: 2.2px; }
+.node {
+  position: relative; z-index: 1;
+  border-radius: 9px; padding: 9px 14px; font-size: 12.5px; line-height: 1.4;
+  min-width: 165px; text-align: center; border: 1px solid transparent;
+  box-shadow: 0 1px 2px rgba(20,30,50,0.07);
+  transition: box-shadow .12s ease;
+}
+.node:hover { box-shadow: 0 3px 8px rgba(20,30,50,0.18); }
+.node .cnt { display: block; font-size: 11px; opacity: 0.85; margin-top: 2px; }
+.node.root { color: #fff; font-weight: 600; min-width: 190px; font-size: 13.5px; }
+.node.find-root { background: #1f6feb; }
+.node.decide-root { background: #8250df; }
+.node.others-root { background: #57606a; }
+.node.sh-root { background: #1a7f37; }
+.node.snh-root { background: #bf3989; }
+.node.find-l2 { background: #eaf1ff; color: #0b3a91; border-color: #cfe3ff; }
+.node.decide-l2 { background: #f1eafb; color: #4a2380; border-color: #e0d0f7; }
+.node.others-l2 { background: #eeeff0; color: #3a3f44; border-color: #dcdee0; }
+.node.info { background: #f5f5f5; color: #555; border-color: #e2e2e2; font-style: italic; font-size: 11.5px; }
+.node.lookup { background: #fbe4f1; color: #7a1655; border: 1px dashed #e5a9cd; font-size: 12px; }
+.node.leaf-sh { background: #d5f2dd; color: #175c2c; }
+.node.leaf-snh { background: #fdeef7; color: #7a1655; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.pill.FIND { background: #eaf1ff; color: #0b3a91; }
+.pill.DECIDE { background: #f1eafb; color: #4a2380; }
+.pill.OTHERS { background: #eeeff0; color: #3a3f44; }
+.pill.search_happened { background: #d5f2dd; color: #175c2c; }
+.pill.search_not_happened { background: #fdeef7; color: #7a1655; }
+.gridjs-th { font-size: 12px !important; }
+.gridjs-td { font-size: 12.5px !important; vertical-align: top !important; }
+.footer-note { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e5e5ea; color: #a0a0a5; font-size: 11.5px; }
+</style>
+</head>
+<body>
+
+<h1>Vaani Turn Tagging — Distribution Trees</h1>
+<div class="subtitle">Sections 4 (User Turn Classifier) &amp; 5 (Vaani Turn Classifier)</div>
+
+<div class="tabbar">
+  <button class="tabbtn active" id="btn_all" onclick="showTab('all')">Overall</button>
+  <button class="tabbtn" id="btn_pw" onclick="showTab('pw')">Power Users</button>
+  <button class="tabbtn" id="btn_tall" onclick="showTab('tall')">Session Trend — Overall</button>
+  <button class="tabbtn" id="btn_tpw" onclick="showTab('tpw')">Session Trend — Power Users</button>
+  <button class="tabbtn" id="btn_sall" onclick="showTab('sall')">Screen × L1 — Overall</button>
+  <button class="tabbtn" id="btn_spw" onclick="showTab('spw')">Screen × L1 — Power Users</button>
+</div>
+
+
+<section class="tabpane" id="pane_all">
+<div class="meta" id="metaLine_all"></div>
+<div class="note">Tags are shown exactly as produced by the LLM tagger — tagging correctness is out of scope for the distribution trees below. L3 fields with no real data in this sample (category_recency_lifetime / category_recency_7d — both 100% not_available_in_sample) are omitted; L3 fields with real data (attribute_types, info_basis) are shown in full. Every example row in Section 6 was individually checked against the taxonomy and the reply text before inclusion.</div>
+
+<div class="stats-row" id="statsRow_all"></div>
+
+<h2>Top-level split</h2>
+<div class="charts-row">
+  <div class="chart-box"><div class="ct">User Turn Classifier — L1 (ask type)</div><canvas id="chartUserL1_all"></canvas></div>
+  <div class="chart-box"><div class="ct">Vaani Turn Classifier — L1 (search happened?)</div><canvas id="chartVaaniL1_all"></canvas></div>
+</div>
+
+<h2>4. User Turn Classifier — Distribution Tree</h2>
+
+<h3 id="hFind_all">FIND branch</h3>
+<div class="flow" id="flowFind_all"></div>
+
+<div class="charts-row">
+  <div class="chart-box tall"><div class="ct" id="ctCwa_all"></div><canvas id="chartCwa_all"></canvas></div>
+  <div class="chart-box tall"><div class="ct" id="ctAo_all"></div><canvas id="chartAo_all"></canvas></div>
+</div>
+
+<h3 id="hDecide_all">DECIDE branch — no L3 tier defined</h3>
+<div class="flow" id="flowDecide_all"></div>
+
+<h3 id="hOthers_all">OTHERS branch</h3>
+<div class="flow" id="flowOthers_all"></div>
+
+<h2>5. Vaani Turn Classifier — Distribution Tree</h2>
+<div class="note">search_happened vs search_not_happened maps 1:1 to the <code>search_rendered</code> flag on every turn, with zero exceptions. The no-search branch's L2 label set is chosen by looking up the User Turn Classifier's ask-shape for the same turn (Find-shaped vs Decide/Others-shaped) — that ask-shape is a lookup key only, never written into this classifier's own tag.</div>
+
+<h3 id="hSh_all">search_happened branch</h3>
+<div class="flow" id="flowSh_all"></div>
+
+<h3 id="hSnh_all">search_not_happened branch</h3>
+<div class="flow" id="flowSnh_all"></div>
+
+<h2>6. Example Turns — Deepest Tagging Granularity</h2>
+<div class="note">One real example turn per leaf-level tag, pulled verbatim from the tagged data. Search or click column headers to filter/sort.</div>
+<div id="examplesGrid_all"></div>
+
+<div class="footer-note">Generated from 15 batch files · n = 2,201,813 classified turns · 519,160 sessions · 167,082 users · window 2026-05-20 to 2026-07-20</div>
+</section>
+
+<section class="tabpane" id="pane_pw">
+<div class="meta" id="metaLine_pw"></div>
+<div class="note">Tags are shown exactly as produced by the LLM tagger — tagging correctness is out of scope for the distribution trees below. L3 fields with no real data in this sample (category_recency_lifetime / category_recency_7d — both 100% not_available_in_sample) are omitted; L3 fields with real data (attribute_types, info_basis) are shown in full. Every example row in Section 6 was individually checked against the taxonomy and the reply text before inclusion. <b>This tab is filtered to the power-user cohort</b>: user_ids from all_exps_first15d_vaani_gt5.csv (users with &gt;5 Vaani sessions in their first 15 days, across all experiment arms). 16,685 of the 26,109 CSV users matched the tagged dataset.</div>
+
+<div class="stats-row" id="statsRow_pw"></div>
+
+<h2>Top-level split</h2>
+<div class="charts-row">
+  <div class="chart-box"><div class="ct">User Turn Classifier — L1 (ask type)</div><canvas id="chartUserL1_pw"></canvas></div>
+  <div class="chart-box"><div class="ct">Vaani Turn Classifier — L1 (search happened?)</div><canvas id="chartVaaniL1_pw"></canvas></div>
+</div>
+
+<h2>4. User Turn Classifier — Distribution Tree</h2>
+
+<h3 id="hFind_pw">FIND branch</h3>
+<div class="flow" id="flowFind_pw"></div>
+
+<div class="charts-row">
+  <div class="chart-box tall"><div class="ct" id="ctCwa_pw"></div><canvas id="chartCwa_pw"></canvas></div>
+  <div class="chart-box tall"><div class="ct" id="ctAo_pw"></div><canvas id="chartAo_pw"></canvas></div>
+</div>
+
+<h3 id="hDecide_pw">DECIDE branch — no L3 tier defined</h3>
+<div class="flow" id="flowDecide_pw"></div>
+
+<h3 id="hOthers_pw">OTHERS branch</h3>
+<div class="flow" id="flowOthers_pw"></div>
+
+<h2>5. Vaani Turn Classifier — Distribution Tree</h2>
+<div class="note">search_happened vs search_not_happened maps 1:1 to the <code>search_rendered</code> flag on every turn, with zero exceptions. The no-search branch's L2 label set is chosen by looking up the User Turn Classifier's ask-shape for the same turn (Find-shaped vs Decide/Others-shaped) — that ask-shape is a lookup key only, never written into this classifier's own tag.</div>
+
+<h3 id="hSh_pw">search_happened branch</h3>
+<div class="flow" id="flowSh_pw"></div>
+
+<h3 id="hSnh_pw">search_not_happened branch</h3>
+<div class="flow" id="flowSnh_pw"></div>
+
+<h2>6. Example Turns — Deepest Tagging Granularity</h2>
+<div class="note">One real example turn per leaf-level tag, pulled verbatim from the tagged data. Search or click column headers to filter/sort.</div>
+<div id="examplesGrid_pw"></div>
+
+<div class="footer-note">Power-user cohort: all_exps_first15d_vaani_gt5.csv (>5 Vaani sessions in first 15 days) · 16,685 matched users · n = 1,067,795 classified turns · 195,649 sessions</div>
+</section>
+
+<section class="tabpane" id="pane_tall">
+<div class="meta" id="tmeta_tall"></div>
+<div class="note">Sessions are ordered per user by the timestamp of their first turn — S1 is each user's very first Vaani session, S2 their second, and so on. Each bar shows the FIND / DECIDE / OTHERS split (User Turn Classifier L1) of all turns spoken in that session position; the line overlays the share of turns where a search was actually rendered (Vaani Turn Classifier L1 = search_happened). Covers all 167,082 users in the tagged dataset.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">Turn mix by session position — FIND / DECIDE / OTHERS (100% stacked) + search-happened rate</div><canvas id="chartMix_tall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> The L1 mix is stable but drifts in one clear direction: FIND holds ~58–59% at every position, DECIDE grows from 27.3% in S1 to ~32% by S10, and OTHERS shrinks from 13.7% to ~9.7%. Search-happened rate barely moves (42.7% in S1 → ~42–43% throughout). Net: returning users don't search more — they ask more purchase-decision questions and produce less noise.</div>
+
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">How many sessions exist at each position (funnel / retention)</div><canvas id="chartRet_tall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Steep early drop-off: only 52% of the 167k S1 users come back for S2, 33% reach S3, and under 6% reach S10. Every later-session distribution therefore describes an increasingly self-selected, more engaged subset.</div>
+
+<h2>L1 + L2 evolution session-over-session</h2>
+<div class="note">Each chart drills one L1 branch down to its L2 mix: the bars show what share of that branch's turns each L2 takes at every session position. Hover any segment for absolute turn counts.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">FIND → L2 mix by session position (% of FIND turns)</div><canvas id="chartL2Find_tall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Essentially flat — category_only (~43%) and category_with_attributes (~38–39%) dominate at every position. The only drift: attributes_only rises slightly (9.0% → 10.7%) while no_category falls (9.5% → 8.3%), i.e. experienced users refine on-screen results a bit more and make vague no-category asks a bit less.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">DECIDE → L2 mix by session position (% of DECIDE turns)</div><canvas id="chartL2Decide_tall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> The clearest evolution in the data: price grows from 60.0% of DECIDE turns in S1 to 66.5% by S10, with the loss coming almost entirely from quality (13.0% → 8.2%), plus smaller declines in delivery_time (5.6% → 4.5%) and how_to_use (2.3% → 1.5%). Repeat users increasingly use Vaani as a bargaining/price tool rather than a quality-vetting tool.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">OTHERS → L2 mix by session position (% of OTHERS turns)</div><canvas id="chartL2Others_tall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> As OTHERS shrinks overall, its internal mix gets noisier: unresolved rises from 54.9% to ~58% of the branch, while off_journey and action_led_ask fade. Intentional off-topic and how-do-I-do-X asks disappear with experience; what remains of OTHERS in later sessions is mostly ASR gibberish.</div>
+
+<h2>Numbers behind the charts</h2>
+<div id="trendGrid_tall"></div>
+</section>
+
+<section class="tabpane" id="pane_tpw">
+<div class="meta" id="tmeta_tpw"></div>
+<div class="note">Sessions are ordered per user by the timestamp of their first turn — S1 is each user's very first Vaani session, S2 their second, and so on. Each bar shows the FIND / DECIDE / OTHERS split (User Turn Classifier L1) of all turns spoken in that session position; the line overlays the share of turns where a search was actually rendered (Vaani Turn Classifier L1 = search_happened). <b>Filtered to the power-user cohort</b> (all_exps_first15d_vaani_gt5.csv, 16,685 matched users). Note the flat retention through S6: these users were pre-selected for having &gt;5 sessions in their first 15 days, so nearly all of them reach session 6 by construction.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">Turn mix by session position — FIND / DECIDE / OTHERS (100% stacked) + search-happened rate</div><canvas id="chartMix_tpw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Power users start different and converge to the overall pattern: S1 is unusually DECIDE-heavy (34.9% vs 27.3% overall) and FIND-light (53.1%), and the search-happened rate starts low at 36.6% — but session over session FIND climbs to ~58% and the search rate rises steadily to ~42% by S6–S10. Early power-user sessions are dominated by questioning/bargaining on products already on screen; searching behaviour grows with experience.</div>
+
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">How many sessions exist at each position (funnel / retention)</div><canvas id="chartRet_tpw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Flat by construction through S6 — this cohort was pre-selected for >5 sessions in their first 15 days, so ~100% of the 16,684 users appear in S1–S6. The natural decay only starts after S6 (80% at S7, 46% at S10), so S1–S6 comparisons here are true same-users comparisons, not survivorship effects.</div>
+
+<h2>L1 + L2 evolution session-over-session</h2>
+<div class="note">Each chart drills one L1 branch down to its L2 mix: the bars show what share of that branch's turns each L2 takes at every session position. Hover any segment for absolute turn counts.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">FIND → L2 mix by session position (% of FIND turns)</div><canvas id="chartL2Find_tpw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Power users begin with vaguer asks and sharpen them: no_category drops from 11.4% of FIND in S1 to 8.6% by S10, while category_only (40.5% → 42.1%) and category_with_attributes (37.1% → 38.5%) both rise. attributes_only stays ~11%. By S10 the FIND mix is indistinguishable from the overall population's.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">DECIDE → L2 mix by session position (% of DECIDE turns)</div><canvas id="chartL2Decide_tpw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Unlike the overall population, power users are price-obsessed from day one: price is already 64.6% of DECIDE in S1 and only inches up to 65.8% by S10 — the learning curve the general population shows over 10 sessions, power users have effectively completed before S1. The residual movement mirrors the overall trend: quality falls (11.7% → 8.4%) while other_product_information ticks up (10.8% → 12.3%).</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">OTHERS → L2 mix by session position (% of OTHERS turns)</div><canvas id="chartL2Others_tpw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Same direction as overall but starting cleaner: unresolved grows from 52.3% of OTHERS in S1 to ~58% by S10 as off_journey and action_led_ask decay. Combined with the shrinking OTHERS branch itself, genuine off-topic behaviour nearly vanishes for experienced power users — residual OTHERS is mostly unintelligible ASR.</div>
+
+<h2>Numbers behind the charts</h2>
+<div id="trendGrid_tpw"></div>
+</section>
+
+<section class="tabpane" id="pane_sall">
+<div class="meta" id="smeta_sall"></div>
+<div class="note">Same session ordering as the other trend tabs (S1 = each user's first session). First chart: which app screen users were on when they spoke to Vaani, by session position. Then one chart per screen: how the FIND / DECIDE / OTHERS ask-mix on that screen evolves session-over-session. Covers all 167,082 users in the tagged dataset.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">Where do turns happen — screen share by session position (100% stacked)</div><canvas id="chartScrShare_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Turn volume consolidates onto two surfaces: SINGLE_PRODUCT grows from 46.0% of S1 turns to 51.9% by S10 and MAIN grows from 8.8% to 15.2%, while every checkout-side screen shrinks (CART 4.6% → 1.7%, PAYMENT_SELECTION 2.4% → 1.3%) and VOICE_ASSISTANT_INTRO_SCREEN disappears entirely (2.8% → 0%) — it's only shown to fresh users. Experienced users talk to Vaani mostly while inspecting a product or launching from the homepage.</div>
+
+<h2>Per-screen ask mix, session-over-session</h2>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">SINGLE_PRODUCT — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_SINGLE_PRODUCT_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> The product page turns into a bargaining desk: DECIDE grows from 47.1% of turns in S1 to 53.3% by S10 while FIND drops 40.1% → 37.5% and OTHERS falls 12.7% → 9.2%. Repeat users on a product page increasingly interrogate price/size/quality instead of asking to see something else.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CATALOG_SEARCH_RESULTS — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CATALOG_SEARCH_RESULTS_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Already FIND-dominated and gets more so: 86.2% → 88.3% FIND, with OTHERS shrinking 7.7% → 5.8%. On search results, users of every tenure do one thing — refine and re-search; that behaviour only sharpens.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">MAIN — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_MAIN_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Stable launcher behaviour: FIND holds 77.7% → 79.6% and DECIDE stays ~6%. OTHERS dips modestly (16.5% → 14.1%) — the homepage remains the place where sessions start with a fresh search ask, regardless of experience.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CART — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CART_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> The biggest OTHERS cleanup of any screen: OTHERS falls 36.6% → 29.0% while DECIDE rises 46.2% → 52.3%. New users are confused/noisy at the cart; experienced ones ask pointed price/quantity/delivery questions before committing.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CATALOG_LISTING_PAGE — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CATALOG_LISTING_PAGE_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Mirrors search results: FIND creeps 86.7% → 88.5%, OTHERS drops 10.2% → 7.5%. Listing pages are used the same way at every tenure — browse and refine.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">VOICE_ASSISTANT_INTRO_SCREEN — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_VOICE_ASSISTANT_INTRO_SCREEN_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Mostly an S1–S2 phenomenon (it onboards new users) and volume goes to zero by S10. While it exists, its OTHERS share drops sharply (25.6% in S1 → ~14% for the few later-session turns) — first-touch confusion concentrated on first-touch users.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">PAYMENT_SELECTION — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_PAYMENT_SELECTION_sall"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> The noisiest screen at every tenure, but improving: OTHERS falls 48.0% → 41.4% as DECIDE rises 37.1% → 41.7%. Even by S10 nearly half the asks here don't map to a clean shopping intent — payment is where users most often say things Vaani can't act on.</div>
+</section>
+
+<section class="tabpane" id="pane_spw">
+<div class="meta" id="smeta_spw"></div>
+<div class="note">Same session ordering as the other trend tabs (S1 = each user's first session). First chart: which app screen users were on when they spoke to Vaani, by session position. Then one chart per screen: how the FIND / DECIDE / OTHERS ask-mix on that screen evolves session-over-session. <b>Filtered to the power-user cohort</b> (all_exps_first15d_vaani_gt5.csv, 16,685 matched users). Note the flat retention through S6: these users were pre-selected for having &gt;5 sessions in their first 15 days, so nearly all of them reach session 6 by construction.</div>
+
+<div class="charts-row">
+  <div class="chart-box xtall" style="min-width:100%"><div class="ct">Where do turns happen — screen share by session position (100% stacked)</div><canvas id="chartScrShare_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Power users already start concentrated on SINGLE_PRODUCT (54.0% of S1 turns vs 46.0% overall) — they land on products fast from day one. Over sessions the mix converges to the overall pattern: MAIN more than doubles (6.6% → 15.1%) as they increasingly launch asks from the homepage, while checkout screens (CART 3.1% → 1.7%) and the intro screen (1.1% → 0%) fade.</div>
+
+<h2>Per-screen ask mix, session-over-session</h2>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">SINGLE_PRODUCT — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_SINGLE_PRODUCT_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Opposite drift to the overall population: power users start extremely DECIDE-heavy on product pages (54.4% in S1) and stay there (53.7% at S10), while FIND recovers slightly (34.3% → 37.2%). The overall population takes ~10 sessions to reach the bargaining intensity power users show in S1.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CATALOG_SEARCH_RESULTS — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CATALOG_SEARCH_RESULTS_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> FIND strengthens 84.6% → 88.3% while DECIDE fades (7.6% → 5.8%) — early on, power users sometimes negotiate directly from the results grid; with experience they save decision questions for the product page and keep search results purely for refining.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">MAIN — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_MAIN_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> FIND rises 76.5% → 79.5% and DECIDE falls 8.5% → 6.1%. Same convergence story: homepage asks become almost purely search launches as sessions accumulate.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CART — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CART_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Same cleanup as overall but from a cleaner base: OTHERS 34.8% → 27.0%, DECIDE 49.3% → 53.8%. By S10 more than half of cart-screen asks are pointed purchase-decision questions.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">CATALOG_LISTING_PAGE — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_CATALOG_LISTING_PAGE_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> FIND climbs 82.9% → 88.3% with OTHERS dropping 11.4% → 7.3% — listing pages become a pure browse-and-refine surface, matching the overall population.</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">VOICE_ASSISTANT_INTRO_SCREEN — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_VOICE_ASSISTANT_INTRO_SCREEN_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Tiny share even in S1 (1.1% of turns — power users skip the hand-holding) and effectively gone after the first few sessions; the residual turns get steadily more FIND-shaped (72.8% → ~91%).</div>
+<div class="charts-row">
+  <div class="chart-box tall" style="min-width:100%"><div class="ct">PAYMENT_SELECTION — FIND / DECIDE / OTHERS mix by session position (% of turns on this screen)</div><canvas id="chartScr_PAYMENT_SELECTION_spw"></canvas></div>
+</div>
+<div class="insight"><b>What changed:</b> Still the noisiest screen, improving slowly: OTHERS 43.2% → 40.5%, DECIDE 42.7% → 43.2%. Power users start ~5pts cleaner than the overall population here but plateau — payment-screen confusion seems structural, not a learning-curve issue.</div>
+</section>
+
+<script>
+const DATASETS = { all: {"totals": {"turns": 2201813, "sessions": 519160, "users": 167082, "files": 15}, "userL1": {"labels": ["FIND", "DECIDE", "OTHERS"], "counts": [1289995, 657387, 254431]}, "vaaniL1": {"labels": ["search_happened", "search_not_happened"], "counts": [936035, 1265778]}, "findL2": {"labels": ["category_only", "category_with_attributes", "attributes_only", "no_category"], "counts": [548201, 500406, 125533, 115855]}, "decideL2": {"labels": ["price", "other_product_information", "quality", "delivery_time", "size_fit", "quantity_pack_contents", "how_to_use", "comparison"], "counts": [421135, 75724, 66928, 32286, 26901, 20796, 13061, 556]}, "othersL2": {"labels": ["unresolved", "off_journey", "action_led_ask"], "counts": [145126, 58690, 50615]}, "infoBasis": {"labels": ["stated_problem", "recipient", "use_case", "occasion"], "counts": [106856, 4842, 2863, 1294]}, "cwaAttrs": {"labels": ["color", "size", "price_budget", "gender", "age_lifestage", "material", "pattern_design", "use_case", "product_feature", "quality_tier", "recipient", "quantity_pack", "occasion", "brand"], "counts": [83954, 72027, 70118, 67371, 65238, 64419, 60806, 60614, 59388, 58244, 51841, 40112, 25467, 15555]}, "aoAttrs": {"labels": ["use_case", "price_budget", "size", "color", "recipient", "age_lifestage", "gender", "quantity_pack", "product_feature", "material", "pattern_design", "quality_tier", "occasion", "brand"], "counts": [25936, 25364, 22811, 21287, 19964, 19236, 16948, 15797, 12997, 12804, 10655, 7467, 6366, 1869]}, "searchHappenedL2": {"labels": ["picked_up_directly", "inferred"], "counts": [882982, 53053]}, "snhFind": {"labels": ["clarifying_question", "context_locked", "refused_to_answer"], "counts": [288350, 52290, 40054]}, "snhDo": {"labels": ["specific_answer", "generic_answer", "refused_to_answer", "no_data_found"], "counts": [633169, 167872, 62305, 21738]}, "rows": [["Section 4", "FIND", "category_only", "—", "dryers", "ये रहे आपके लिए ड्रायर।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: color", "Jamini color ki Sadi Jamane colour", "नमस्ते! क्या आप जामुनी रंग की साड़ियाँ देखना चाहती हैं? मैं आपके लिए अभी ढूँढती हूँ।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: size", "4xl size and shirt", "माफ़ कीजिए, इस शर्ट में 4XL साइज़ उपलब्ध नहीं है, इसमें केवल M, L, XL और XXL साइज़ ही मिलते हैं। क्या मैं आपके लिए 4XL साइज़ वाली दूसरी शर्ट ढूँढूँ?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: price_budget", "₹500 ki Sadi Gulabi Rang ki", "ये रही आपकी पसंद की गुलाबी साड़ियाँ। क्या आप इनमें से कोई देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: gender", "girls ke liye party wear", "ये रहे लड़कियों के लिए पार्टी वियर कपड़े। क्या आप इनमें से किसी का दाम या जानकारी देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: age_lifestage", "bacchon ke liye Khilauna", "ये रहे बच्चों के लिए खिलौने।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: material", "cotton kurti", "ये रही कॉटन कुर्ती की लिस्ट। क्या आप किसी खास रंग या बजट में देखना चाहती हैं?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: pattern_design", "flower clips dikhayen", "ये रहे आपके लिए फ्लावर क्लिप्स।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: use_case", "everyday padne wala Kapda dikhaye", "रोजाना पहनने के लिए मैं आपको और भी कुर्तियाँ दिखा सकती हूँ। क्या आप कुछ खास रंग या डिज़ाइन ढूँढ रही हैं?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: product_feature", "remote control car", "ये रही रिमोट कंट्रोल कार। क्या आप किसी खास उम्र के बच्चे के लिए देख रही हैं?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: quality_tier", "high quality ki t-shirt Bataye", "यहाँ कई अच्छी टी-शर्ट्स हैं, क्या आप इनमें से कोई पसंद करना चाहेंगी या मैं आपके लिए कुछ और ढूँढूँ?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: recipient", "bacchon ke liye Khilauna", "ये रहे बच्चों के लिए खिलौने।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: quantity_pack", "aise hi aur bhejiye combo Ho", "जिस सामान को आप पसंद कर रही हैं, उसे दबाइए। अगले पन्ने पर नीचे आपको और भी मिलते-जुलते कॉम्बो दिख जाएंगे।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: occasion", "party wear kapde", "ये रहे पार्टी के लिए सुंदर एथनिक कपड़े। क्या आप इनमें से किसी का दाम या जानकारी देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: brand", "clean clear face wash", "ये रहा आपका क्लीन एंड क्लियर फेस वॉश।"], ["Section 4", "FIND", "attributes_only", "attribute_type: use_case", "gift", "उपहार के लिए आप यहाँ दी गई घड़ियों में से कोई भी चुन सकती हैं। क्या आप किसी खास तरह की घड़ी देखना चाहती हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: price_budget", "under 200", "माफ़ कीजिए, यह छतरी ₹375 की है और ₹200 में मिलना मुमकिन नहीं है। क्या आप ₹200 के अंदर दूसरी छतरियाँ देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: size", "nahin mujhe Bada size chahie", "माफ़ कीजिए, इस सामान में XXL से बड़ा साइज़ उपलब्ध नहीं है। क्या आप किसी और तरह की पैंट या ट्राउज़र देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: color", "purple colour", "ये रहे आपके लिए बैंगनी रंग के बैग।"], ["Section 4", "FIND", "attributes_only", "attribute_type: recipient", "do baccha De chahie", "बच्चों के लिए लहंगा चोली ढूँढने में मैं आपकी मदद कर सकती हूँ। बच्चे की उम्र क्या है और आप किस रंग में देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: age_lifestage", "do baccha De chahie", "बच्चों के लिए लहंगा चोली ढूँढने में मैं आपकी मदद कर सकती हूँ। बच्चे की उम्र क्या है और आप किस रंग में देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: gender", "Ladies ke liye", "ये रहे महिलाओं के लिए कॉटन ट्रैक पैंट्स। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: quantity_pack", "pack of 22", "ये रहे छतरियों के कॉम्बो पैक। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: product_feature", "waterproof", "यहाँ वॉटरप्रूफ तिरपाल के कई विकल्प मौजूद हैं। क्या आप किसी खास साइज़ या बजट में तिरपाल ढूँढ रही हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: material", "linen Mein dikhaiye", "ये रही लिनन शर्ट्स। क्या आप इनमें से कोई देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: pattern_design", "aur Anarkali", "ये रहे कुछ और अनारकली सूट के विकल्प। क्या आप इनमें से किसी को पसंद कर रही हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: quality_tier", "Achcha quality", "यहाँ कई अच्छी क्वालिटी की शर्ट्स मौजूद हैं, आप इनमें से कौन सी देखना चाहेंगी? आप किसी एक पर क्लिक करके उसकी असली फोटो और लोगों की राय देख सकती हैं।"], ["Section 4", "FIND", "attributes_only", "attribute_type: occasion", "Diwali", "ये रहे लड़कियों के लिए रिंग सेट के विकल्प। क्या आप इनमें से कोई खास डिज़ाइन देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: brand", "Mujhe Sparx", "जी, मैं आपके लिए Sparx की चप्पलें ढूँढ देती हूँ। क्या आप किसी खास रंग या बजट में देखना चाहती हैं?"], ["Section 4", "FIND", "no_category", "info_basis: stated_problem", "Nahin yah mujhe nahin Pasand a Raha", "कोई बात नहीं, मैं आपके लिए कुछ और कॉटन टी-शर्ट और प्लाज़ो सेट ढूँढती हूँ। क्या आप इनमें से कोई और डिज़ाइन देखना चाहेंगी?"], ["Section 4", "FIND", "no_category", "info_basis: recipient", "Mere bacche ke liye Kuchh badhiya Sa item batao", "बच्चों के लिए यहाँ बहुत सारे अच्छे कपड़े और खिलौने मौजूद हैं। क्या आप लड़कों के लिए कुछ देखना चाहेंगी या लड़कियों के लिए?"], ["Section 4", "FIND", "no_category", "info_basis: use_case", "Gift item under 250", "ये रहे 250 रुपये से कम के गिफ्ट आइटम। क्या आप इनमें से कुछ देखना चाहेंगी?"], ["Section 4", "FIND", "no_category", "info_basis: occasion", "girls birthday gift for all age", "ये रहे लड़कियों के लिए जन्मदिन के तोहफे। आप इनमें से क्या चुनना चाहेंगी?"], ["Section 4", "DECIDE", "price", "—", "Dedh Sau", "अरे, इतने कम दाम में तो यह सामान मिल पाना मुश्किल है क्योंकि इसकी क्वालिटी बहुत अच्छी है। थोड़ा और बजट बढ़ाएँ तो शायद हम बात बना सकें।"], ["Section 4", "DECIDE", "other_product_information", "—", "yah kya hai", "यह फिटकरी (alum stone) है जो 250 ग्राम के पैक में है और इसका दाम ₹88 है। आप इसके दाम के बारे में क्या सोच रही हैं?"], ["Section 4", "DECIDE", "quality", "—", "product ki quality acchi hai kya Agar Main mangwa ho to", "इस सामान को 2458 लोगों ने 4 स्टार दिए हैं, जो काफी अच्छे हैं। आप नीचे जाकर बाकी लोगों की असली फोटो और राय देख सकती हैं, जिससे आपको क्वालिटी का सही अंदाज़ा हो जाएगा।"], ["Section 4", "DECIDE", "delivery_time", "—", "delivery kab tak ho jayegi", "आम तौर पर सामान 5 से 7 दिन में पहुँच जाता है। क्या आप ऑर्डर पूरा करने के लिए नीचे दिख रहा 'ऑर्डर दें' बटन दबाना चाहेंगी?"], ["Section 4", "DECIDE", "size_fit", "—", "ismein Bada size milega", "इस सामान में S, M, L, XL और XXL साइज़ उपलब्ध हैं, लेकिन इससे बड़ा साइज़ अभी नहीं है। क्या आप इनमें से कोई साइज़ चुनना चाहेंगी?"], ["Section 4", "DECIDE", "quantity_pack_contents", "—", "is kitchen set Mein Kitni item Hogi", "इस सेट में 1 किचन सेट आता है, जैसा कि आप फोटो में देख सकती हैं। क्या आप इसे ₹274 में लेना चाहेंगी या कुछ कम करना है?"], ["Section 4", "DECIDE", "how_to_use", "—", "Lagane Se Kya Hota Hai", "यह कॉम्बो आपके चेहरे को एक समान और स्मूथ लुक देने में मदद करता है, जिससे मेकअप लंबे समय तक टिका रहता है। क्या आप इसे आज़माना चाहेंगी?"], ["Section 4", "DECIDE", "comparison", "—", "aap meri help karo na batao Main Kaun Sa Lun", "गुलाबी रंग बहुत प्यारा और साफ़-सुथरा दिखता है, आप उसे चुन सकती हैं। क्या आप इसे अभी ऑर्डर करने के लिए नीचे दिख रहा बैंगनी 'Buy Now' बटन दबाना चाहेंगी?"], ["Section 4", "OTHERS", "unresolved", "—", "AI gumbal", "माफ़ कीजिए, मैं आपकी बात समझ नहीं पाई। आप क्या ढूँढना या देखना चाहती हैं?"], ["Section 4", "OTHERS", "off_journey", "—", "hi hello", "नमस्ते! मैं आपकी क्या मदद कर सकती हूँ?"], ["Section 4", "OTHERS", "action_led_ask", "—", "daba Diya aap Kya Karen", "यह Order वाला स्क्रीन है, ऊपर की सारी जानकारी एक नज़र देख लीजिए। फिर आगे बढ़ने के लिए नीचे बैंगनी रंग का 'Continue' बटन दबाइए।"], ["Section 5", "search_happened", "picked_up_directly", "—", "bacchon ke liye Khilauna", "ये रहे बच्चों के लिए खिलौने।"], ["Section 5", "search_happened", "inferred", "—", "Jo yah Hara suthe se color change Nahin ho sakta hai", "माफ़ कीजिए, इस सामान में रंग बदलने का विकल्प नहीं है क्योंकि यह कॉम्बो पैक है। क्या आप कोई और कुर्ती देखना चाहेंगी?"], ["Section 5", "search_not_happened", "clarifying_question", "ask-shape: FIND", "acchi Si Sadi dikhaiye", "कौन से रंग की साड़ी पसंद करेंगी और आपका बजट क्या है? मुझे ये बता दीजिए ताकि मैं आपके लिए अच्छी साड़ी ढूँढ सकूँ।"], ["Section 5", "search_not_happened", "context_locked", "ask-shape: FIND", "aise hi aur bhejiye combo Ho", "जिस सामान को आप पसंद कर रही हैं, उसे दबाइए। अगले पन्ने पर नीचे आपको और भी मिलते-जुलते कॉम्बो दिख जाएंगे।"], ["Section 5", "search_not_happened", "refused_to_answer", "ask-shape: FIND", "AI gambar", "माफ़ कीजिए, मैं इस request में मदद नहीं कर सकती। क्या आप यहाँ दिख रहे कपड़ों में से कुछ देखना चाहेंगी?"], ["Section 5", "search_not_happened", "specific_answer", "ask-shape: DECIDE/OTHERS", "Lagane Se Kya Hota Hai", "यह कॉम्बो आपके चेहरे को एक समान और स्मूथ लुक देने में मदद करता है, जिससे मेकअप लंबे समय तक टिका रहता है। क्या आप इसे आज़माना चाहेंगी?"], ["Section 5", "search_not_happened", "generic_answer", "ask-shape: DECIDE/OTHERS", "eyes teacher", "माफ़ कीजिए, मैं आपकी बात समझ नहीं पाई। क्या आप यहाँ दिख रहे कपड़ों या सामान में से कुछ देखना चाहती हैं?"], ["Section 5", "search_not_happened", "refused_to_answer", "ask-shape: DECIDE/OTHERS", "murgi ke", "माफ़ कीजिए, मैं सिर्फ़ इस order summary से जुड़ी मदद कर सकती हूँ। आप अभी Leak Proof Canvas Water Storage ले रही हैं, जिसकी कीमत ₹370 है।"], ["Section 5", "search_not_happened", "no_data_found", "ask-shape: DECIDE/OTHERS", "ismein Pani Kitna Aata Hai", "माफ़ कीजिए, यहाँ पानी की मात्रा के बारे में जानकारी नहीं दी गई है। क्या आप इस सामान के दाम के बारे में कुछ बात करना चाहेंगी?"]]}, pw: {"totals": {"turns": 1067795, "sessions": 195649, "users": 16684, "files": 15}, "userL1": {"labels": ["FIND", "DECIDE", "OTHERS"], "counts": [598442, 356873, 112480]}, "vaaniL1": {"labels": ["search_happened", "search_not_happened"], "counts": [426069, 641726]}, "findL2": {"labels": ["category_only", "category_with_attributes", "attributes_only", "no_category"], "counts": [249951, 227712, 64294, 56485]}, "decideL2": {"labels": ["price", "other_product_information", "quality", "delivery_time", "size_fit", "quantity_pack_contents", "how_to_use", "comparison"], "counts": [234808, 41570, 33027, 16039, 13763, 11356, 6026, 284]}, "othersL2": {"labels": ["unresolved", "off_journey", "action_led_ask"], "counts": [64479, 26584, 21417]}, "infoBasis": {"labels": ["stated_problem", "recipient", "use_case", "occasion"], "counts": [51775, 2531, 1506, 673]}, "cwaAttrs": {"labels": ["color", "price_budget", "size", "age_lifestage", "gender", "material", "use_case", "pattern_design", "quality_tier", "product_feature", "recipient", "quantity_pack", "occasion", "brand"], "counts": [39262, 33946, 33511, 31359, 29974, 28776, 27683, 27352, 26667, 25637, 25238, 19257, 11449, 6441]}, "aoAttrs": {"labels": ["use_case", "price_budget", "size", "color", "recipient", "age_lifestage", "quantity_pack", "gender", "product_feature", "material", "pattern_design", "quality_tier", "occasion", "brand"], "counts": [13093, 12806, 12165, 10778, 10759, 9917, 8783, 8203, 6657, 6597, 5102, 3767, 3269, 918]}, "searchHappenedL2": {"labels": ["picked_up_directly", "inferred"], "counts": [400427, 25642]}, "snhFind": {"labels": ["clarifying_question", "context_locked", "refused_to_answer"], "counts": [143694, 24131, 17899]}, "snhDo": {"labels": ["specific_answer", "generic_answer", "refused_to_answer", "no_data_found"], "counts": [345542, 75334, 25417, 9709]}, "rows": [["Section 4", "FIND", "category_only", "—", "Chudi dikhao Chudi", "यहाँ अभी हेयर एक्सेसरीज दिख रही हैं, मैं आपके लिए चूड़ियाँ ढूँढ देती हूँ। क्या आप किसी खास रंग या डिज़ाइन की चूड़ियाँ देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: color", "baingani color stone border wali sadi", "ये रही आपकी बैंगनी रंग की स्टोन बॉर्डर वाली साड़ियाँ। क्या आप इनमें से कोई देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: price_budget", "Dhai Sau ke under mein Sadi", "नमस्ते, मैंने आपके लिए 250 रुपये से कम की साड़ियाँ ढूँढ ली हैं। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: size", "hand purse Chota", "ये रहे आपके छोटे हैंड पर्स। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: age_lifestage", "4 sal ke bacche ke liye school bag", "ये रहे 4 साल के बच्चे के लिए स्कूल बैग। आप इनमें से अपनी पसंद का बैग चुन सकती हैं।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: gender", "ladki ka shirt", "ये रही लड़कियों की शर्ट्स। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: material", "cotton kurti pant set", "ये रही आपकी पसंद की कॉटन कुर्ती पैंट सेट। क्या आप किसी खास रंग या बजट में देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: use_case", "padhai karne wala likhane wala table", "जी, मैं आपके लिए बच्चों की पढ़ाई वाली टेबल ढूँढ देती हूँ। क्या आप किसी खास रंग या बजट के बारे में बता सकती हैं?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: pattern_design", "mirror work Mein kurta set dikhaiye", "ये रहे मिरर वर्क वाले कुर्ता सेट। आप इनमें से अपनी पसंद का चुन सकती हैं।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: quality_tier", "Thodi achcha wala suit dikhao Sasta wala", "ये रहे अच्छे और सस्ते कॉटन सूट। क्या आप इनमें से कोई देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: product_feature", "remote control car", "ये रही आपकी रिमोट कंट्रोल कार।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: recipient", "bacche ke liye 4 sal ke bacche ke liye tiffin box aur water bottle", "ये रहा आपके बच्चे के लिए टिफिन बॉक्स और पानी की बोतल का सामान। आप इनमें से अपनी पसंद का सामान चुन सकती हैं।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: quantity_pack", "teen peace mein", "ये रही तीन पीस वाली लाइट घड़ियाँ। आप इनमें से अपनी पसंद का सेट चुन सकती हैं।"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: occasion", "party wear kapde", "ये रहे पार्टी के लिए सुंदर एथनिक कपड़े। क्या आप इनमें से किसी का दाम या जानकारी देखना चाहेंगी?"], ["Section 4", "FIND", "category_with_attributes", "attribute_type: brand", "—", "(no cleanly-tagged example found in the power-user sample — every sampled turn carrying this tag was mis-attributed by the tagger)"], ["Section 4", "FIND", "attributes_only", "attribute_type: use_case", "study dekh", "ये रहे पढ़ाई के सामान के लिए कुछ रैक। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: price_budget", "thoda sa Sasta bhi dikhao", "ये रहे कम दाम वाले कॉटन कुर्ती पैंट सेट। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: size", "Mujhe XL size ka hi chahie 500 mein", "ये देखिए ₹500 के अंदर XL साइज़ की जींस के विकल्प। क्या आप इनमें से किसी को पसंद कर रही हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: color", "Green colour ka hi sirf dikhayen", "जी, मैं आपके लिए हरे रंग की कुर्तियाँ ढूँढ देती हूँ। क्या आप इनमें से कोई खास डिज़ाइन देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: recipient", "bacchon ke liye", "8 साल की बच्ची के लिए नाइट ड्रेस ढूँढने में मैं आपकी मदद करती हूँ। ये रही आपके लिए नाइट ड्रेस।"], ["Section 4", "FIND", "attributes_only", "attribute_type: age_lifestage", "8 sal ki bacchi ke liye", "आठ साल की बच्ची के लिए यहाँ कई प्यारे विकल्प हैं, जैसे ये पीले रंग वाला सेट या नीले रंग की डंगरी। क्या आप इनमें से किसी की और जानकारी देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: quantity_pack", "ji han combo wale", "ये रहे बोतल रखने वाली जगह के साथ कुछ और कॉम्बो बैग्स। इनमें से आपको कौन सा पसंद आ रहा है?"], ["Section 4", "FIND", "attributes_only", "attribute_type: gender", "ladkiyon ke liye", "ये रही लड़कियों के लिए 9 से 12 साल की स्पोर्ट्स टी-शर्ट्स। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: product_feature", "waterproof Bluetooth", "ये रहे वॉटरप्रूफ ब्लूटूथ इयरबड्स के विकल्प। क्या आप इनमें से किसी के बारे में और जानना चाहती हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: material", "han aise hi cotton Ke Dikha Do", "ये रहे आपके लिए कॉटन के सूट। क्या आप इनमें से किसी को पसंद कर रही हैं?"], ["Section 4", "FIND", "attributes_only", "attribute_type: pattern_design", "aur design dikhao", "यहाँ और भी कई सुंदर डिज़ाइन वाले पर्स हैं। क्या आप इनमें से कोई देखना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: quality_tier", "Achcha quality", "यहाँ कई अच्छी क्वालिटी की शर्ट्स मौजूद हैं, आप इनमें से कौन सी देखना चाहेंगी? आप किसी एक पर क्लिक करके उसकी असली फोटो और लोगों की राय देख सकती हैं।"], ["Section 4", "FIND", "attributes_only", "attribute_type: occasion", "Meri Bahan ka birthday hai aur Main Hai Na Meri Bahan se bol rahi hun", "आपकी बहन के जन्मदिन के लिए यह बहुत अच्छा तोहफा है, पर ₹150 में यह सेट देना मुमकिन नहीं है। क्या आप इसे ₹253 में लेना चाहेंगी?"], ["Section 4", "FIND", "attributes_only", "attribute_type: brand", "—", "(no cleanly-tagged example found in the power-user sample — every sampled turn carrying this tag was mis-attributed by the tagger)"], ["Section 4", "FIND", "no_category", "info_basis: stated_problem", "Nahin Pasand Nahin I aur dikhao", "कोई बात नहीं, मैं आपके लिए और भी विकल्प ढूँढती हूँ। ये रहे कम दाम वाले सफेद सूट के कुछ और नए विकल्प।"], ["Section 4", "FIND", "no_category", "info_basis: recipient", "gift for my husband", "आप अपने पति के लिए क्या ढूँढ रही हैं, जैसे कि कपड़े, घड़ी या कुछ और? मुझे थोड़ा और बताइए ताकि मैं सही सामान दिखा सकूँ।"], ["Section 4", "FIND", "no_category", "info_basis: use_case", "yoga karne wala", "योग के लिए आप योगा मैट ढूँढ रही हैं क्या? आप किस बजट तक का सामान देखना चाहेंगी?"], ["Section 4", "FIND", "no_category", "info_basis: occasion", "birthday gift", "ये रहे बर्थडे गिफ्ट के कुछ विकल्प। आप इनमें से क्या देखना चाहेंगी?"], ["Section 4", "DECIDE", "price", "—", "yah order kitne ka hai", "आपको कुल ₹86 देने होंगे, यही आपका पूरा दाम है। यह दाम आपको सामान घर पहुँचने के समय देना होगा।"], ["Section 4", "DECIDE", "other_product_information", "—", "kaun si company ki hai", "यह Hammer कंपनी की स्मार्टवॉच है। क्या आप इसे लेना चाहेंगी या दाम के बारे में कुछ और बात करना चाहती हैं?"], ["Section 4", "DECIDE", "quality", "—", "frock kaisa hai", "इस फ्रॉक को 155 लोगों ने रेटिंग दी है और इसे 4 स्टार मिले हैं। बाकी लोगों की असली फोटो और राय नीचे देख सकती हैं, क्या आप वो देखना चाहेंगी?"], ["Section 4", "DECIDE", "delivery_time", "—", "yah Kab Aaegi", "स्क्रीन पर लिखा है कि आपका सामान 25th July तक आ जाएगा। ऊपर दिख रही इसी तारीख को मान कर चलिए।"], ["Section 4", "DECIDE", "size_fit", "—", "ismein double Excel hai kya", "हाँ, इस टॉप में XXL साइज़ उपलब्ध है। क्या हम दाम पर बात आगे बढ़ाएं?"], ["Section 4", "DECIDE", "quantity_pack_contents", "—", "Thande Pani ke liye kitne litre Ki Hai", "यह बोतल 0.2 लीटर की है। इसका दाम ₹99 है, आप इसे कितने में लेना चाहेंगी?"], ["Section 4", "DECIDE", "how_to_use", "—", "Kis Tarah use karna is cream", "इसे साफ़ त्वचा पर प्रभावित जगह पर लगाकर धीरे-धीरे मालिश करें। इस क्रीम का दाम ₹164 है, क्या आप इसे लेना चाहेंगी या कुछ कम करना है?"], ["Section 4", "DECIDE", "comparison", "—", "ine donon mein se kaun sa sabse Chhota hai", "यहाँ दिए गए साइज़ में 'XS' सबसे छोटा है। क्या आप इसे ऑर्डर करना चाहेंगी?"], ["Section 4", "OTHERS", "unresolved", "—", "Badshah", "माफ़ कीजिए, मैं समझ नहीं पाई कि आप क्या ढूँढ रहे हैं। क्या आप इन बच्चों के जूतों के बारे में कुछ पूछना चाहते हैं?"], ["Section 4", "OTHERS", "off_journey", "—", "Mujhe Flipkart se mangwana", "माफ़ कीजिए, मैं सिर्फ़ आपका payment वाला step आसान बनाने में मदद कर सकती हूँ।"], ["Section 4", "OTHERS", "action_led_ask", "—", "kya ham log return kar kar cash on paise Le sakte hain", "जी हाँ, सामान वापस करना आसान है। ऐप से वापस देने पर आपके पैसे आपके बैंक खाते में वापस आ जाते हैं।"], ["Section 5", "search_happened", "picked_up_directly", "—", "flower clips dikhayen", "ये रहे आपके लिए फ्लावर क्लिप्स।"], ["Section 5", "search_happened", "inferred", "—", "acchi price Mein Ho Jo", "यहाँ 500 रुपये से कम दाम वाले फ्रॉक सूट हैं। क्या आप इनमें से कोई पसंद करना चाहेंगी?"], ["Section 5", "search_not_happened", "clarifying_question", "ask-shape: FIND", "acchi Si Sadi dikhaiye", "कौन से रंग की साड़ी पसंद करेंगी और आपका बजट क्या है? मुझे ये बता दीजिए ताकि मैं आपके लिए अच्छी साड़ी ढूँढ सकूँ।"], ["Section 5", "search_not_happened", "context_locked", "ask-shape: FIND", "KVS second class course", "माफ़ कीजिए, मैं सिर्फ़ इस सामान से जुड़ी बातचीत कर सकती हूँ। क्या आप इस स्मार्टवॉच के बारे में कुछ जानना चाहती हैं?"], ["Section 5", "search_not_happened", "refused_to_answer", "ask-shape: FIND", "iPhone 17 Pro Max Kaise le", "माफ़ कीजिए, मैं इस request में मदद नहीं कर सकती।"], ["Section 5", "search_not_happened", "specific_answer", "ask-shape: DECIDE/OTHERS", "kitne ke Milenge", "इस प्यारे सेट का दाम ₹331 है, आप इसके लिए क्या दाम देना चाहेंगी?"], ["Section 5", "search_not_happened", "generic_answer", "ask-shape: DECIDE/OTHERS", "mere ko pata Chale ki kaisi hai cream Logon ki jankari bataiye", "लोगों की राय जानने के लिए आप नीचे दी गई असली फोटो देख सकती हैं जो बाकी ग्राहकों ने डाली हैं। क्या आप इस क्रीम को खरीदने के लिए आगे बढ़ना चाहेंगी?"], ["Section 5", "search_not_happened", "refused_to_answer", "ask-shape: DECIDE/OTHERS", "iska price 400 karo", "माफ़ कीजिए, मैं दाम कम नहीं कर सकती क्योंकि यह दाम सिस्टम द्वारा तय किए गए हैं। आगे बढ़ने के लिए नीचे दिख रहा बैंगनी 'आगे बढ़ें' बटन दबाइए।"], ["Section 5", "search_not_happened", "no_data_found", "ask-shape: DECIDE/OTHERS", "aur ismein 2xl hai kya", "माफ़ कीजिए, इस सेट में 2XL साइज़ उपलब्ध नहीं है, यहाँ सिर्फ L, XS और M साइज़ ही मिल रहे हैं। क्या आप इनमें से कोई साइज़ देखना चाहेंगी?"]]} };
+const TRENDS = { tall: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "sessions": [167082, 86994, 55474, 38997, 29026, 22444, 17815, 14370, 11765, 9769, 8172, 6899, 5858, 5026, 4336, 35133], "turns": [607591, 361435, 241687, 175637, 132757, 104691, 83868, 68312, 55596, 46630, 39024, 33753, 29086, 24473, 20601, 176672], "find": [358207, 213950, 142293, 102444, 77662, 61306, 49011, 39018, 32658, 27276, 22522, 19343, 16639, 14122, 11781, 101763], "decide": [166100, 104039, 71933, 53474, 40644, 32281, 26068, 22328, 17442, 14812, 12562, 11083, 9440, 8019, 6878, 60284], "others": [83284, 43446, 27461, 19719, 14451, 11104, 8789, 6966, 5496, 4542, 3940, 3327, 3007, 2332, 1942, 14625], "sh": [259250, 153760, 102426, 73836, 56232, 44574, 35610, 28275, 24047, 19888, 16760, 14113, 12204, 10346, 8751, 75963]}, tpw: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "sessions": [16684, 16684, 16681, 16668, 16613, 16434, 13334, 10913, 9069, 7644, 6476, 5525, 4743, 4109, 3568, 30504], "turns": [127179, 114519, 100975, 92117, 84947, 78940, 64762, 52600, 43192, 37327, 30697, 27137, 23528, 19939, 17082, 152854], "find": [67582, 62092, 55045, 50787, 47852, 45526, 37451, 29841, 25177, 21642, 17599, 15600, 13371, 11497, 9751, 87629], "decide": [44338, 39365, 34676, 31006, 27615, 24987, 20410, 17362, 13751, 12055, 10015, 8849, 7683, 6530, 5740, 52491], "others": [15259, 13062, 11254, 10324, 9480, 8427, 6901, 5397, 4264, 3630, 3083, 2688, 2474, 1912, 1591, 12734], "sh": [46532, 42336, 37773, 35281, 33835, 32899, 26894, 21408, 18497, 15650, 12993, 11365, 9758, 8368, 7240, 65240]} };
+const L2TRENDS = { tall: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "FIND": {"category_only": [153227, 89395, 59967, 43183, 33131, 26160, 20906, 16357, 14016, 11639, 9493, 8306, 7307, 6141, 5040, 43933], "category_with_attributes": [138779, 84683, 55946, 40050, 30057, 23666, 18905, 15180, 12609, 10449, 8824, 7380, 6222, 5349, 4517, 37790], "attributes_only": [32221, 20032, 13467, 9867, 7584, 6132, 4894, 4133, 3350, 2928, 2352, 2037, 1692, 1520, 1297, 12027], "no_category": [33980, 19840, 12913, 9344, 6890, 5348, 4306, 3348, 2683, 2260, 1853, 1620, 1418, 1112, 927, 8013]}, "DECIDE": {"price": [99681, 66112, 46949, 35730, 26866, 21533, 17388, 14962, 11535, 9854, 8161, 7221, 6188, 5254, 4576, 39125], "other_product_information": [19105, 11585, 7745, 5717, 4594, 3588, 2977, 2559, 2034, 1791, 1537, 1395, 1191, 1056, 828, 8022], "quality": [21564, 11285, 7237, 4849, 3791, 2864, 2232, 1861, 1475, 1211, 1032, 909, 815, 630, 561, 4612], "delivery_time": [9383, 5185, 3388, 2429, 1879, 1390, 1155, 1003, 815, 670, 596, 548, 383, 365, 304, 2793], "size_fit": [7421, 4321, 2861, 2133, 1584, 1278, 952, 837, 675, 547, 528, 454, 338, 294, 222, 2456], "quantity_pack_contents": [4883, 3153, 2243, 1594, 1198, 1027, 910, 689, 590, 503, 465, 382, 352, 273, 282, 2252], "how_to_use": [3882, 2308, 1451, 980, 707, 574, 439, 401, 303, 227, 232, 169, 170, 138, 96, 984], "comparison": [181, 90, 59, 42, 25, 27, 15, 16, 15, 9, 11, 5, 3, 9, 9, 40]}, "OTHERS": {"unresolved": [45742, 24612, 15599, 11393, 8382, 6503, 5140, 4113, 3276, 2644, 2337, 1988, 1845, 1444, 1134, 8974], "off_journey": [21085, 9730, 6151, 4362, 3147, 2446, 1973, 1532, 1225, 1009, 894, 711, 641, 498, 423, 2863], "action_led_ask": [16457, 9104, 5711, 3964, 2922, 2155, 1676, 1321, 995, 889, 709, 628, 521, 390, 385, 2788]}}, tpw: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "FIND": {"category_only": [27391, 25092, 22605, 21109, 20042, 19199, 15858, 12304, 10751, 9106, 7363, 6656, 5775, 4989, 4095, 37616], "category_with_attributes": [25097, 23647, 20777, 19286, 18359, 17563, 14399, 11632, 9707, 8326, 6939, 5955, 5058, 4396, 3827, 32744], "attributes_only": [7410, 6623, 5810, 5273, 4944, 4666, 3800, 3248, 2625, 2345, 1826, 1684, 1370, 1199, 1077, 10394], "no_category": [7684, 6730, 5853, 5119, 4507, 4098, 3394, 2657, 2094, 1865, 1471, 1305, 1168, 913, 752, 6875]}, "DECIDE": {"price": [28626, 26212, 23318, 20923, 18350, 16564, 13466, 11456, 9039, 7938, 6438, 5637, 4992, 4197, 3774, 33878], "other_product_information": [4793, 4192, 3653, 3334, 3132, 2823, 2426, 2046, 1615, 1478, 1233, 1171, 991, 876, 718, 7089], "quality": [5186, 4066, 3369, 2736, 2521, 2257, 1801, 1504, 1211, 1018, 868, 746, 697, 545, 482, 4020], "delivery_time": [2089, 1673, 1462, 1374, 1226, 1082, 897, 809, 637, 556, 475, 442, 315, 303, 249, 2450], "size_fit": [1690, 1433, 1244, 1182, 1091, 1022, 738, 657, 532, 460, 422, 393, 268, 247, 186, 2198], "quantity_pack_contents": [1127, 1100, 1001, 903, 822, 786, 730, 553, 484, 424, 389, 321, 281, 234, 244, 1957], "how_to_use": [779, 658, 607, 531, 455, 432, 339, 321, 219, 174, 179, 134, 136, 119, 80, 863], "comparison": [48, 31, 22, 23, 18, 21, 13, 16, 14, 7, 11, 5, 3, 9, 7, 36]}, "OTHERS": {"unresolved": [7976, 7211, 6276, 5872, 5426, 4921, 4029, 3195, 2533, 2104, 1815, 1611, 1530, 1191, 935, 7854], "off_journey": [4173, 3292, 2813, 2533, 2182, 1878, 1579, 1215, 962, 814, 720, 589, 552, 417, 353, 2512], "action_led_ask": [3110, 2559, 2165, 1919, 1872, 1628, 1293, 987, 769, 712, 548, 488, 392, 304, 303, 2368]}} };
+const SCRTRENDS = { sall: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "screens": ["SINGLE_PRODUCT", "CATALOG_SEARCH_RESULTS", "MAIN", "CART", "CATALOG_LISTING_PAGE", "VOICE_ASSISTANT_INTRO_SCREEN", "PAYMENT_SELECTION"], "share": {"SINGLE_PRODUCT": [279722, 169001, 114665, 85261, 65327, 52381, 42063, 35840, 28349, 24197, 20729, 17848, 15641, 13105, 11173, 98944], "CATALOG_SEARCH_RESULTS": [187686, 113939, 74698, 52348, 39241, 30358, 24456, 18808, 16056, 13113, 10808, 9470, 8024, 6487, 5386, 45515], "MAIN": [53271, 43290, 32316, 25046, 19085, 15457, 12295, 9850, 8265, 7106, 5729, 4872, 4100, 3765, 3118, 25787], "CART": [27973, 13224, 7570, 4872, 3607, 2419, 1867, 1427, 1032, 801, 661, 567, 485, 431, 394, 2465], "CATALOG_LISTING_PAGE": [26982, 12590, 7302, 4520, 3179, 2371, 1745, 1330, 1112, 773, 651, 614, 490, 399, 272, 2290], "VOICE_ASSISTANT_INTRO_SCREEN": [17148, 1277, 311, 128, 73, 46, 36, 26, 17, 14, 15, 7, 5, 5, 3, 26], "PAYMENT_SELECTION": [14787, 8091, 4815, 3459, 2243, 1653, 1402, 1029, 765, 623, 429, 374, 338, 281, 255, 1639]}, "l1": {"SINGLE_PRODUCT": {"FIND": [112287, 65543, 43386, 31665, 24340, 19695, 15686, 13084, 10595, 9084, 7650, 6568, 5792, 4915, 4195, 37536], "DECIDE": [131785, 84108, 59013, 44530, 34165, 27448, 22180, 19317, 15062, 12893, 11063, 9633, 8312, 7019, 6027, 53898], "OTHERS": [35650, 19350, 12266, 9066, 6822, 5238, 4197, 3439, 2692, 2220, 2016, 1647, 1537, 1171, 951, 7510]}, "CATALOG_SEARCH_RESULTS": {"FIND": [161785, 98551, 64865, 45596, 34396, 26692, 21521, 16559, 14180, 11585, 9596, 8243, 7056, 5777, 4741, 40747], "DECIDE": [11508, 7036, 4667, 3176, 2248, 1637, 1415, 1046, 894, 761, 560, 585, 431, 359, 307, 2437], "OTHERS": [14393, 8352, 5166, 3576, 2597, 2029, 1520, 1203, 982, 767, 652, 642, 537, 351, 338, 2331]}, "MAIN": {"FIND": [41379, 34295, 25465, 19812, 15164, 12150, 9721, 7833, 6586, 5656, 4530, 3859, 3241, 2964, 2500, 20818], "DECIDE": [3122, 2719, 2165, 1644, 1284, 1102, 805, 649, 535, 447, 360, 360, 247, 253, 201, 1662], "OTHERS": [8770, 6276, 4686, 3590, 2637, 2205, 1769, 1368, 1144, 1003, 839, 653, 612, 548, 417, 3307]}, "CART": {"FIND": [4825, 2293, 1266, 856, 611, 451, 315, 243, 182, 150, 112, 90, 100, 97, 84, 423], "DECIDE": [12920, 6400, 3826, 2483, 1872, 1249, 1019, 783, 557, 419, 359, 306, 242, 228, 194, 1380], "OTHERS": [10228, 4531, 2478, 1533, 1124, 719, 533, 401, 293, 232, 190, 171, 143, 106, 116, 662]}, "CATALOG_LISTING_PAGE": {"FIND": [23386, 11047, 6361, 3915, 2751, 2054, 1514, 1141, 987, 684, 560, 522, 405, 325, 223, 1986], "DECIDE": [855, 472, 318, 195, 125, 120, 88, 81, 49, 31, 35, 37, 35, 25, 22, 122], "OTHERS": [2741, 1071, 623, 410, 303, 197, 143, 108, 76, 58, 56, 55, 50, 49, 27, 182]}, "VOICE_ASSISTANT_INTRO_SCREEN": {"FIND": [12323, 1012, 239, 90, 48, 32, 28, 17, 13, 12, 12, 2, 4, 2, 2, 14], "DECIDE": [429, 35, 8, 3, 7, 2, 1, 2, 1, 0, 2, 0, 0, 1, 0, 2], "OTHERS": [4396, 230, 64, 35, 18, 12, 7, 7, 3, 2, 1, 5, 1, 2, 1, 10]}, "PAYMENT_SELECTION": {"FIND": [2215, 1205, 711, 509, 352, 232, 225, 141, 115, 105, 62, 59, 41, 42, 36, 237], "DECIDE": [5481, 3266, 1936, 1443, 942, 722, 560, 450, 344, 260, 183, 162, 173, 134, 127, 782], "OTHERS": [7091, 3620, 2168, 1507, 949, 699, 617, 438, 306, 258, 184, 153, 124, 105, 92, 620]}}}, spw: {"labels": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16+"], "screens": ["SINGLE_PRODUCT", "CATALOG_SEARCH_RESULTS", "MAIN", "CART", "CATALOG_LISTING_PAGE", "VOICE_ASSISTANT_INTRO_SCREEN", "PAYMENT_SELECTION"], "share": {"SINGLE_PRODUCT": [68633, 60295, 53028, 47943, 43485, 40318, 33003, 27870, 22342, 19569, 16532, 14334, 12742, 10651, 9318, 86207], "CATALOG_SEARCH_RESULTS": [39754, 34839, 29675, 26323, 24246, 22343, 18694, 14296, 12296, 10341, 8356, 7639, 6410, 5285, 4438, 38698], "MAIN": [8333, 11531, 11910, 12155, 11704, 11525, 9302, 7529, 6326, 5625, 4474, 3914, 3335, 3107, 2554, 22368], "CART": [3939, 3224, 2593, 2279, 2324, 1867, 1458, 1073, 780, 653, 492, 461, 387, 325, 335, 2167], "CATALOG_LISTING_PAGE": [2446, 1946, 1862, 1671, 1710, 1633, 1261, 1026, 867, 606, 505, 490, 381, 331, 229, 1989], "VOICE_ASSISTANT_INTRO_SCREEN": [1417, 234, 83, 60, 39, 30, 24, 25, 14, 11, 14, 7, 4, 4, 3, 19], "PAYMENT_SELECTION": [2655, 2449, 1822, 1684, 1438, 1222, 1019, 779, 567, 519, 322, 292, 267, 236, 205, 1400]}, "l1": {"SINGLE_PRODUCT": {"FIND": [23507, 20487, 18006, 16453, 15344, 14922, 12192, 10146, 8284, 7284, 6054, 5332, 4699, 3980, 3495, 32688], "DECIDE": [37344, 33139, 29480, 26394, 23407, 21339, 17443, 15057, 11956, 10512, 8867, 7702, 6767, 5722, 5054, 46956], "OTHERS": [7782, 6669, 5542, 5096, 4734, 4057, 3368, 2667, 2102, 1773, 1611, 1300, 1276, 949, 769, 6563]}, "CATALOG_SEARCH_RESULTS": {"FIND": [33640, 29799, 25403, 22735, 21210, 19663, 16445, 12565, 10848, 9128, 7424, 6624, 5623, 4687, 3902, 34583], "DECIDE": [3019, 2467, 2071, 1714, 1432, 1170, 1048, 805, 683, 595, 428, 476, 332, 294, 249, 2093], "OTHERS": [3095, 2573, 2201, 1874, 1604, 1510, 1201, 926, 765, 618, 504, 539, 455, 304, 287, 2022]}, "MAIN": {"FIND": [6374, 8999, 9318, 9488, 9181, 9002, 7303, 5949, 5060, 4474, 3543, 3099, 2618, 2462, 2058, 18056], "DECIDE": [706, 881, 846, 900, 852, 851, 623, 510, 398, 345, 272, 282, 216, 208, 158, 1420], "OTHERS": [1253, 1651, 1746, 1767, 1671, 1672, 1376, 1070, 868, 806, 659, 533, 501, 437, 338, 2892]}, "CART": {"FIND": [626, 538, 391, 400, 388, 345, 240, 186, 134, 126, 86, 74, 82, 65, 78, 364], "DECIDE": [1942, 1679, 1396, 1180, 1234, 985, 806, 584, 425, 351, 277, 243, 193, 174, 162, 1236], "OTHERS": [1371, 1007, 806, 699, 702, 537, 412, 303, 221, 176, 129, 144, 112, 86, 95, 567]}, "CATALOG_LISTING_PAGE": {"FIND": [2028, 1714, 1583, 1435, 1474, 1401, 1093, 884, 762, 535, 437, 423, 318, 266, 185, 1718], "DECIDE": [138, 96, 107, 80, 62, 87, 61, 55, 42, 27, 23, 26, 27, 19, 20, 112], "OTHERS": [280, 136, 172, 156, 174, 145, 107, 87, 63, 44, 45, 41, 36, 46, 24, 159]}, "VOICE_ASSISTANT_INTRO_SCREEN": {"FIND": [1031, 191, 62, 39, 25, 20, 19, 16, 10, 10, 12, 2, 3, 1, 2, 12], "DECIDE": [55, 5, 1, 1, 4, 2, 1, 2, 1, 0, 1, 0, 0, 1, 0, 1], "OTHERS": [331, 38, 20, 20, 10, 8, 4, 7, 3, 1, 1, 5, 1, 2, 1, 6]}, "PAYMENT_SELECTION": {"FIND": [375, 364, 282, 236, 230, 173, 159, 95, 79, 85, 43, 46, 28, 36, 31, 206], "DECIDE": [1134, 1098, 775, 737, 623, 552, 428, 349, 246, 224, 147, 120, 148, 112, 97, 672], "OTHERS": [1146, 987, 765, 711, 585, 497, 432, 335, 242, 210, 132, 126, 91, 88, 77, 522]}}} };
+const rendered = {};
+
+function fmt(n){ return n.toLocaleString(); }
+function pct(n, d){ return (100*n/d).toFixed(1) + '%'; }
+const PALETTE = ['#1f6feb','#8250df','#57606a','#1a7f37','#bf3989','#c9782f','#0aa5a5','#a83279','#6b8e23','#7a5cff','#d1495b','#2a9d8f','#e07a5f','#3d5a80'];
+
+function pie(id, labels, counts, colors){
+  new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data: counts, backgroundColor: colors || PALETTE }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { font: { size: 11 } } },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${fmt(ctx.parsed)} (${pct(ctx.parsed, ctx.dataset.data.reduce((a,b)=>a+b,0))})` } } }
+    }
+  });
+}
+
+function hbar(id, labels, counts, total, color){
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data: counts.map(c => 100*c/total), backgroundColor: color || '#1f6feb', borderRadius: 4 }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `${fmt(counts[ctx.dataIndex])} turns (${ctx.parsed.x.toFixed(1)}% of branch)` } } },
+      scales: { x: { ticks: { callback: (v) => v + '%' }, grid: { color: '#eee' } }, y: { grid: { display: false } } }
+    }
+  });
+}
+
+function node(cls, label, count, pctText){
+  const div = document.createElement('div');
+  div.className = 'node ' + cls;
+  div.innerHTML = `${label}${count!=null ? `<span class="cnt">${fmt(count)}${pctText ? ' | ' + pctText : ''}</span>` : ''}`;
+  return div;
+}
+
+// Proper tree renderer: nested {cls,label,count,pct,children[]} → nodes + SVG
+// connectors joining each parent to exactly its own children.
+const TREE_REDRAWS = [];
+function renderTree(elId, tree){
+  const el = document.getElementById(elId);
+  const edges = [];
+  function build(nd){
+    const wrap = document.createElement('div'); wrap.className = 'twrap';
+    const n = node(nd.cls, nd.label, nd.count, nd.pct);
+    wrap.appendChild(n);
+    if (nd.children && nd.children.length){
+      const kids = document.createElement('div'); kids.className = 'tkids';
+      nd.children.forEach(ch => {
+        const cw = build(ch);
+        kids.appendChild(cw);
+        edges.push([n, cw.firstChild, !!ch.hl]);
+      });
+      wrap.appendChild(kids);
+    }
+    return wrap;
+  }
+  el.appendChild(build(tree));
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('tsvg');
+  el.appendChild(svg);
+  function draw(){
+    svg.setAttribute('width', el.scrollWidth);
+    svg.setAttribute('height', el.scrollHeight);
+    svg.innerHTML = '';
+    const r = el.getBoundingClientRect();
+    edges.forEach(([p, c, hl]) => {
+      const pr = p.getBoundingClientRect(), cr = c.getBoundingClientRect();
+      const x1 = pr.right - r.left + el.scrollLeft, y1 = pr.top + pr.height/2 - r.top + el.scrollTop;
+      const x2 = cr.left - r.left + el.scrollLeft, y2 = cr.top + cr.height/2 - r.top + el.scrollTop;
+      const mx = x1 + (x2 - x1) * 0.55;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`);
+      path.setAttribute('class', 'tedge' + (hl ? ' hl' : ''));
+      svg.appendChild(path);
+    });
+  }
+  draw();
+  TREE_REDRAWS.push(draw);
+}
+let redrawTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(redrawTimer);
+  redrawTimer = setTimeout(() => TREE_REDRAWS.forEach(f => f()), 120);
+});
+
+function renderDashboard(sfx){
+  if (rendered[sfx]) return;
+  rendered[sfx] = true;
+  const D = DATASETS[sfx];
+  const T = D.totals.turns;
+
+  document.getElementById('metaLine_' + sfx).textContent =
+    `n = ${fmt(D.totals.turns)} classified turns · ${fmt(D.totals.sessions)} sessions · ${fmt(D.totals.users)} users · ${D.totals.files} batch files`;
+
+  const statsRow = document.getElementById('statsRow_' + sfx);
+  [['Total turns', D.totals.turns], ['Sessions', D.totals.sessions], ['Users w/ sessions', D.totals.users], ['Batch files', D.totals.files]]
+  .forEach(([lbl, num]) => {
+    const d = document.createElement('div');
+    d.className = 'stat-card';
+    d.innerHTML = `<div class="num">${fmt(num)}</div><div class="lbl">${lbl}</div>`;
+    statsRow.appendChild(d);
+  });
+
+  pie('chartUserL1_' + sfx, D.userL1.labels, D.userL1.counts, ['#1f6feb','#8250df','#57606a']);
+  pie('chartVaaniL1_' + sfx, D.vaaniL1.labels, D.vaaniL1.counts, ['#1a7f37','#bf3989']);
+
+  const cwaTotal = D.findL2.counts[1], aoTotal = D.findL2.counts[2];
+  document.getElementById('ctCwa_' + sfx).textContent = `category_with_attributes → attribute_types (multi-label, % of ${fmt(cwaTotal)} turns)`;
+  document.getElementById('ctAo_' + sfx).textContent = `attributes_only → attribute_types (multi-label, % of ${fmt(aoTotal)} turns)`;
+  hbar('chartCwa_' + sfx, D.cwaAttrs.labels, D.cwaAttrs.counts, cwaTotal, '#1f6feb');
+  hbar('chartAo_' + sfx, D.aoAttrs.labels, D.aoAttrs.counts, aoTotal, '#3a86ff');
+
+  document.getElementById('hFind_' + sfx).textContent = `FIND branch (${pct(D.userL1.counts[0], T)} of all turns)`;
+  document.getElementById('hDecide_' + sfx).textContent = `DECIDE branch (${pct(D.userL1.counts[1], T)} of all turns) — no L3 tier defined`;
+  document.getElementById('hOthers_' + sfx).textContent = `OTHERS branch (${pct(D.userL1.counts[2], T)} of all turns)`;
+  document.getElementById('hSh_' + sfx).textContent = `search_happened branch (${pct(D.vaaniL1.counts[0], T)} of all turns)`;
+  document.getElementById('hSnh_' + sfx).textContent = `search_not_happened branch (${pct(D.vaaniL1.counts[1], T)} of all turns)`;
+
+  // FIND tree — each L2 carries its own children (attribute charts / info_basis leaves)
+  (function(){
+    const total = D.userL1.counts[0];
+    const fl = D.findL2.labels, fc = D.findL2.counts;
+    const l2child = (l, i) => {
+      const base = { cls: 'find-l2', label: '<b>' + l + '</b>', count: fc[i], pct: pct(fc[i], total) + ' of FIND' };
+      if (l === 'category_with_attributes' || l === 'attributes_only')
+        base.children = [{ cls: 'info', label: 'L3: attribute_types (14 types, multi-label)<br>→ distribution chart below', count: null, pct: null }];
+      if (l === 'no_category')
+        base.children = D.infoBasis.labels.map((ib, k) => ({
+          cls: 'find-l2', label: 'info_basis: <b>' + ib + '</b>',
+          count: D.infoBasis.counts[k], pct: pct(D.infoBasis.counts[k], fc[i]) + ' of no_category'
+        }));
+      return base;
+    };
+    renderTree('flowFind_' + sfx, {
+      cls: 'root find-root', label: 'FIND', count: total, pct: pct(total, T) + ' of all turns',
+      children: fl.map((l, i) => l2child(l, i))
+    });
+  })();
+
+  renderTree('flowDecide_' + sfx, {
+    cls: 'root decide-root', label: 'DECIDE', count: D.userL1.counts[1], pct: pct(D.userL1.counts[1], T) + ' of all turns',
+    children: D.decideL2.labels.map((l, i) => ({
+      cls: 'decide-l2', label: '<b>' + l + '</b>',
+      count: D.decideL2.counts[i], pct: pct(D.decideL2.counts[i], D.userL1.counts[1]) + ' of DECIDE'
+    }))
+  });
+
+  renderTree('flowOthers_' + sfx, {
+    cls: 'root others-root', label: 'OTHERS', count: D.userL1.counts[2], pct: pct(D.userL1.counts[2], T) + ' of all turns',
+    children: [
+      ...D.othersL2.labels.map((l, i) => ({
+        cls: 'others-l2', label: '<b>' + l + '</b>',
+        count: D.othersL2.counts[i], pct: pct(D.othersL2.counts[i], D.userL1.counts[2]) + ' of OTHERS'
+      })),
+      { cls: 'info', label: 'no_search_triggered_when_demanded<br>(not observed in this data)', count: 0, pct: '0.0%' }
+    ]
+  });
+
+  renderTree('flowSh_' + sfx, {
+    cls: 'root sh-root', label: 'search_happened', count: D.vaaniL1.counts[0], pct: pct(D.vaaniL1.counts[0], T) + ' of all turns',
+    children: D.searchHappenedL2.labels.map((l, i) => ({
+      cls: 'leaf-sh', label: '<b>' + l + '</b>',
+      count: D.searchHappenedL2.counts[i], pct: pct(D.searchHappenedL2.counts[i], D.vaaniL1.counts[0]) + ' of search_happened'
+    }))
+  });
+
+  // search_not_happened — leaves nested under the ask-shape lookup that owns them
+  (function(){
+    const total = D.vaaniL1.counts[1];
+    const findTotal = D.snhFind.counts.reduce((a,b)=>a+b,0);
+    const doTotal = D.snhDo.counts.reduce((a,b)=>a+b,0);
+    renderTree('flowSnh_' + sfx, {
+      cls: 'root snh-root', label: 'search_not_happened', count: total, pct: pct(total, T) + ' of all turns',
+      children: [
+        { cls: 'lookup', label: 'ask-shape lookup: <b>FIND</b><br><span style="font-size:10px">(routing key, not stored)</span>',
+          count: findTotal, pct: pct(findTotal, total) + ' of branch', hl: true,
+          children: D.snhFind.labels.map((l, i) => ({
+            cls: 'leaf-snh', label: '<b>' + l + '</b>',
+            count: D.snhFind.counts[i], pct: pct(D.snhFind.counts[i], findTotal) + ' of FIND-shaped'
+          })) },
+        { cls: 'lookup', label: 'ask-shape lookup: <b>DECIDE / OTHERS</b><br><span style="font-size:10px">(routing key, not stored)</span>',
+          count: doTotal, pct: pct(doTotal, total) + ' of branch', hl: true,
+          children: D.snhDo.labels.map((l, i) => ({
+            cls: 'leaf-snh', label: '<b>' + l + '</b>',
+            count: D.snhDo.counts[i], pct: pct(D.snhDo.counts[i], doTotal) + ' of D/O-shaped'
+          })) },
+      ]
+    });
+  })();
+
+  new gridjs.Grid({
+    columns: [
+      { name: 'Section', width: '80px' },
+      { name: 'L1', width: '150px', formatter: (cell) => gridjs.html(`<span class="pill ${cell}">${cell}</span>`) },
+      { name: 'L2', width: '190px' },
+      { name: 'L3 (deepest tier)', width: '190px' },
+      { name: 'Example — user_said', width: '280px' },
+      { name: 'Example — vaani_replied' },
+    ],
+    data: D.rows.map(r => [r[0], r[1], r[2], r[3], r[4], r[5]]),
+    search: true,
+    sort: true,
+    pagination: { limit: 12 },
+    style: { table: { 'font-size': '12.5px' } }
+  }).render(document.getElementById('examplesGrid_' + sfx));
+}
+
+function renderTrend(sfx){
+  if (rendered[sfx]) return;
+  rendered[sfx] = true;
+  const T = TRENDS[sfx];
+  const totSessions = T.sessions.reduce((a,b)=>a+b,0);
+  const totTurns = T.turns.reduce((a,b)=>a+b,0);
+  document.getElementById('tmeta_' + sfx).textContent =
+    `${fmt(totSessions)} sessions · ${fmt(totTurns)} classified turns · sessions ordered per user by first-turn timestamp`;
+
+  const pctArr = (arr) => arr.map((v,i) => 100*v/(T.find[i]+T.decide[i]+T.others[i]));
+  const shPct = T.sh.map((v,i) => 100*v/T.turns[i]);
+
+  new Chart(document.getElementById('chartMix_' + sfx), {
+    data: {
+      labels: T.labels,
+      datasets: [
+        { type: 'bar', label: 'FIND', data: pctArr(T.find), backgroundColor: '#1f6feb', stack: 's' },
+        { type: 'bar', label: 'DECIDE', data: pctArr(T.decide), backgroundColor: '#8250df', stack: 's' },
+        { type: 'bar', label: 'OTHERS', data: pctArr(T.others), backgroundColor: '#57606a', stack: 's' },
+        { type: 'line', label: 'search_happened rate', data: shPct, borderColor: '#1a7f37',
+          backgroundColor: '#1a7f37', borderWidth: 2.5, pointRadius: 3, tension: 0.25, yAxisID: 'y' },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { font: { size: 11 } } },
+        tooltip: { callbacks: { label: (ctx) => {
+          if (ctx.dataset.type === 'line') return `search_happened: ${ctx.parsed.y.toFixed(1)}% of turns (${fmt(T.sh[ctx.dataIndex])})`;
+          const raw = ctx.dataset.label === 'FIND' ? T.find[ctx.dataIndex] : ctx.dataset.label === 'DECIDE' ? T.decide[ctx.dataIndex] : T.others[ctx.dataIndex];
+          return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}% (${fmt(raw)} turns)`;
+        } } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#eee' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartRet_' + sfx), {
+    type: 'bar',
+    data: { labels: T.labels, datasets: [{ label: 'sessions', data: T.sessions, backgroundColor: '#c9782f', borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `${fmt(ctx.parsed.y)} sessions (${(100*ctx.parsed.y/T.sessions[0]).toFixed(1)}% of S1)` } } },
+      scales: { y: { grid: { color: '#eee' } }, x: { grid: { display: false } } }
+    }
+  });
+
+  const L2 = L2TRENDS[sfx];
+  function stackedL2(canvasId, branch, palette){
+    const series = L2[branch];
+    const l2names = Object.keys(series);
+    const totals = L2.labels.map((_, i) => l2names.reduce((a, n) => a + series[n][i], 0));
+    new Chart(document.getElementById(canvasId), {
+      type: 'bar',
+      data: {
+        labels: L2.labels,
+        datasets: l2names.map((n, k) => ({
+          label: n, data: series[n].map((v, i) => totals[i] ? 100*v/totals[i] : 0),
+          backgroundColor: palette[k % palette.length], stack: 's'
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 } } },
+          tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}% (${fmt(series[ctx.dataset.label][ctx.dataIndex])} turns)` } } },
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#eee' } }
+        }
+      }
+    });
+  }
+  stackedL2('chartL2Find_' + sfx, 'FIND', ['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff']);
+  stackedL2('chartL2Decide_' + sfx, 'DECIDE', ['#8250df','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']);
+  stackedL2('chartL2Others_' + sfx, 'OTHERS', ['#57606a','#8c959f','#c4cad1']);
+
+  new gridjs.Grid({
+    columns: ['Session #', 'Sessions', 'Turns', 'FIND %', 'DECIDE %', 'OTHERS %', 'search_happened %'],
+    data: T.labels.map((l,i) => {
+      const tot = T.find[i]+T.decide[i]+T.others[i];
+      return [l, fmt(T.sessions[i]), fmt(T.turns[i]),
+        (100*T.find[i]/tot).toFixed(1)+'%', (100*T.decide[i]/tot).toFixed(1)+'%', (100*T.others[i]/tot).toFixed(1)+'%',
+        (100*T.sh[i]/T.turns[i]).toFixed(1)+'%'];
+    }),
+    sort: false, search: false,
+    style: { table: { 'font-size': '12.5px' } }
+  }).render(document.getElementById('trendGrid_' + sfx));
+}
+
+function renderScreen(sfx){
+  if (rendered[sfx]) return;
+  rendered[sfx] = true;
+  const T = SCRTRENDS[sfx];
+  const SCRPAL = ['#1f6feb','#0aa5a5','#c9782f','#8250df','#6b8e23','#bf3989','#57606a'];
+
+  const totTurns = T.labels.map((_, i) => T.screens.reduce((a, s) => a + T.share[s][i], 0));
+  document.getElementById('smeta_' + sfx).textContent =
+    `${fmt(totTurns.reduce((a,b)=>a+b,0))} classified turns across ${T.screens.length} screens · sessions ordered per user by first-turn timestamp`;
+
+  new Chart(document.getElementById('chartScrShare_' + sfx), {
+    type: 'bar',
+    data: {
+      labels: T.labels,
+      datasets: T.screens.map((s, k) => ({
+        label: s, data: T.share[s].map((v, i) => totTurns[i] ? 100*v/totTurns[i] : 0),
+        backgroundColor: SCRPAL[k % SCRPAL.length], stack: 's'
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { font: { size: 10.5 } } },
+        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}% (${fmt(T.share[ctx.dataset.label][ctx.dataIndex])} turns)` } } },
+      scales: {
+        x: { stacked: true, grid: { display: false } },
+        y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#eee' } }
+      }
+    }
+  });
+
+  T.screens.forEach(scr => {
+    const m = T.l1[scr];
+    const tot = T.labels.map((_, i) => m.FIND[i] + m.DECIDE[i] + m.OTHERS[i]);
+    new Chart(document.getElementById(`chartScr_${scr}_${sfx}`), {
+      type: 'bar',
+      data: {
+        labels: T.labels,
+        datasets: [
+          { label: 'FIND', data: m.FIND.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#1f6feb', stack: 's' },
+          { label: 'DECIDE', data: m.DECIDE.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#8250df', stack: 's' },
+          { label: 'OTHERS', data: m.OTHERS.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#57606a', stack: 's' },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 } } },
+          tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}% (${fmt(m[ctx.dataset.label][ctx.dataIndex])} turns)` } } },
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#eee' } }
+        }
+      }
+    });
+  });
+}
+
+function showTab(sfx){
+  document.querySelectorAll('.tabpane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tabbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById('pane_' + sfx).classList.add('active');
+  document.getElementById('btn_' + sfx).classList.add('active');
+  if (sfx === 'tall' || sfx === 'tpw') renderTrend(sfx);
+  else if (sfx === 'sall' || sfx === 'spw') renderScreen(sfx);
+  else renderDashboard(sfx);
+}
+
+showTab('all');
+</script>
+</body>
+</html>

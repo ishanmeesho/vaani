@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'><title>First-ask outcome → same-ask repeat probability — 2026-07-24</title>
+<script src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'></script>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:20px;color:#111;background:#fff}
+  h1{margin:0 0 4px 0;font-size:22px}
+  h2{margin:24px 0 6px 0;font-size:17px}
+  .sub{color:#555;font-size:13px;margin-bottom:14px;max-width:1100px}
+  .chart-wrap{background:#fafafa;border:1px solid #e5e7eb;border-radius:6px;padding:12px;margin-bottom:8px}
+  .canvas-holder{position:relative;height:380px}
+  table{border-collapse:collapse;font-size:12px;margin-top:12px}
+  th,td{border:1px solid #ccc;padding:6px 10px;text-align:right;vertical-align:middle}
+  th{background:#f4f4f6;font-weight:600}
+  th.rowh,td.rowh{text-align:left;background:#f9f9fb;font-weight:600;min-width:280px}
+  td.g{background:#dcfce7}
+  td.b{background:#fee2e2}
+  td.lift-hi{background:#bbf7d0;font-weight:600}
+  td.lift-lo{background:#fecaca;font-weight:600}
+  code{background:#f1f5f9;padding:1px 4px;border-radius:3px;font-size:12px}
+  .writeup{background:#f8fafc;border-left:4px solid #0ea5e9;padding:10px 14px;margin:6px 0 10px 0;
+           font-size:13px;line-height:1.5;color:#1f2937;max-width:1100px;border-radius:4px}
+  .writeup b{color:#0c4a6e}
+</style>
+</head><body>
+<h1>First-ask outcome → same-ask repeat probability</h1>
+<div class='sub'>For each <code>L1::L2</code> user ask: we take each user's <b>first</b> turn of that ask on or after
+<b>2026-06-17</b> (Vaani experiment start). We grade that first turn's outcome as good/bad using the Tier-2 rules
+(rules 1–4 you gave; <code>B1b_*</code> and <code>_sscat_unknown</code> counted as bad). We then check whether the
+same user produced another turn of the <i>same</i> ask later in the dataset.
+Cohorts with a good first outcome and cohorts with a bad first outcome are compared side-by-side.
+Bars: repeat probability. Hover for underlying user counts. na-first users (outcome couldn't be graded — OTHERS L1
+or clicks-void window) are excluded from the good/bad comparison but shown in the table.</div>
+
+<h2>FIND</h2>
+<div class='writeup'><b>For FIND, the "did the first turn succeed?" signal is weak — and inverted for vague asks.</b>
+    Category-driven FIND asks (<code>category_only</code>, <code>category_with_attributes</code>)
+    show a modest lift: a good first turn nudges repeat rate from ~58% → ~62% and adds ~0.25 turns
+    to the mean (lift ≈ <b>1.06–1.08x</b>). Small effect, but directionally right.
+    <br><br>
+    But <code>attributes_only</code> and <code>no_category</code> actually invert
+    (<b>0.89–0.98x</b>) — users whose ambiguous first ask went <i>badly</i> come back and ask
+    the same thing more, not less. Reads as: bad-first users are still searching for what they
+    wanted; good-first users got resolved and moved on. FIND repeat is mostly a shopper-intent
+    signal, not a Vaani-quality signal.</div>
+
+<div class='chart-wrap'>
+  <div class='canvas-holder'><canvas id='chart_find'></canvas></div>
+</div>
+<script>
+(function() {
+  const rows = [{"tag": "FIND::category_only", "repeat_pct_good": 61.44637622787586, "repeat_pct_bad": 57.6035850719953, "n_first_good": 44691, "n_first_bad": 40836, "n_repeat_good": 27461, "n_repeat_bad": 23523, "n_first_na": 19859, "lift": 1.0667109720875478, "mean_turns_good": 4.685932290617798, "mean_turns_bad": 4.44000391811147, "turns_ratio": 1.0553892242083722}, {"tag": "FIND::category_with_attributes", "repeat_pct_good": 62.61873128556981, "repeat_pct_bad": 58.10197910940077, "n_first_good": 50429, "n_first_bad": 29104, "n_repeat_good": 31578, "n_repeat_bad": 16910, "n_first_na": 18338, "lift": 1.077738353243775, "mean_turns_good": 4.606635071090047, "mean_turns_bad": 4.347512369433755, "turns_ratio": 1.0596025220027245}, {"tag": "FIND::attributes_only", "repeat_pct_good": 47.57416563658838, "repeat_pct_bad": 48.45789971617786, "n_first_good": 12944, "n_first_bad": 21140, "n_repeat_good": 6158, "n_repeat_bad": 10244, "n_first_na": 7797, "lift": 0.9817628480646997, "mean_turns_good": 2.623609394313968, "mean_turns_bad": 2.8237937559129613, "turns_ratio": 0.9291080089755804}, {"tag": "FIND::no_category", "repeat_pct_good": 45.781823121858444, "repeat_pct_bad": 46.274706447703814, "n_first_good": 7361, "n_first_bad": 23931, "n_repeat_good": 3370, "n_repeat_bad": 11074, "n_first_na": 7469, "lift": 0.989348753051467, "mean_turns_good": 2.497350903409863, "mean_turns_bad": 2.8135472817684177, "turns_ratio": 0.8876164689296375}];
+  const labels = rows.map(r => r.tag.replace(/^[^:]+::/, ''));
+  const goodBar = {
+    label: 'first outcome was good — P(repeats same ask)',
+    data:  rows.map(r => r.repeat_pct_good),
+    backgroundColor: '#22c55e',
+  };
+  const badBar = {
+    label: 'first outcome was bad — P(repeats same ask)',
+    data:  rows.map(r => r.repeat_pct_bad),
+    backgroundColor: '#dc2626',
+  };
+  const ctx = document.getElementById('chart_find').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels: labels, datasets: [goodBar, badBar] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => {
+              const r = rows[item.dataIndex];
+              if (item.datasetIndex === 0) {
+                const mt = r.mean_turns_good !== null && r.mean_turns_good !== undefined ? r.mean_turns_good.toFixed(2) : '–';
+                return [
+                  `good→repeat: ${(r.repeat_pct_good ?? 0).toFixed(1)}%  (${r.n_repeat_good.toLocaleString()} / ${r.n_first_good.toLocaleString()} users)`,
+                  `avg total same-ask turns / user (good-first): ${mt}`,
+                ];
+              }
+              const mt = r.mean_turns_bad !== null && r.mean_turns_bad !== undefined ? r.mean_turns_bad.toFixed(2) : '–';
+              return [
+                `bad→repeat: ${(r.repeat_pct_bad ?? 0).toFixed(1)}%  (${r.n_repeat_bad.toLocaleString()} / ${r.n_first_bad.toLocaleString()} users)`,
+                `avg total same-ask turns / user (bad-first): ${mt}`,
+              ];
+            },
+            afterLabel: (item) => {
+              const r = rows[item.dataIndex];
+              const lift  = r.lift        !== null && r.lift        !== undefined ? r.lift.toFixed(2) + 'x' : 'n/a';
+              const ratio = r.turns_ratio !== null && r.turns_ratio !== undefined ? r.turns_ratio.toFixed(2) + 'x' : 'n/a';
+              return `lift (good/bad repeat%): ${lift}   ·   ratio (good/bad avg turns): ${ratio}   ·   na-first: ${r.n_first_na.toLocaleString()}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 30 } },
+        y: { title: { display: true, text: '% of first-time users who ask again' }, min: 0, max: 100 }
+      }
+    }
+  });
+})();
+</script>
+
+<h2>DECIDE</h2>
+<div class='writeup'><b>DECIDE is where a good first turn actually matters — clear, large, and consistent.</b>
+    Every DECIDE ask (except tiny <code>comparison</code>) shows a meaningful uplift on both
+    axes when the first turn was good: repeat rate lifts <b>1.14–1.37x</b> and average total
+    turns lift <b>1.10–1.30x</b>. The standout is <code>DECIDE::price</code>: after a good
+    first turn, <b>84% of users repeat</b> (vs 63% after a bad first) and they produce
+    <b>10.7 turns on average</b> (vs 8.2). <code>delivery_time</code> shows the highest repeat-%
+    lift (1.37x), <code>quantity_pack_contents</code> the strongest turns lift after price.
+    <br><br>
+    Business read: making the first DECIDE answer <i>useful</i> (correct, specific, in-context)
+    is worth optimizing — it directly deepens engagement on the ask that already dominates
+    the DECIDE branch.</div>
+
+<div class='chart-wrap'>
+  <div class='canvas-holder'><canvas id='chart_decide'></canvas></div>
+</div>
+<script>
+(function() {
+  const rows = [{"tag": "DECIDE::price", "repeat_pct_good": 83.96882043576258, "repeat_pct_bad": 62.80373831775701, "n_first_good": 10648, "n_first_bad": 37450, "n_repeat_good": 8941, "n_repeat_bad": 23520, "n_first_na": 0, "lift": 1.3370035396765767, "mean_turns_good": 10.667637114951164, "mean_turns_bad": 8.187423230974632, "turns_ratio": 1.3029297269736093}, {"tag": "DECIDE::quality", "repeat_pct_good": 52.54582484725051, "repeat_pct_bad": 44.71662955051584, "n_first_good": 4910, "n_first_bad": 22003, "n_repeat_good": 2580, "n_repeat_bad": 9839, "n_first_na": 0, "lift": 1.1750846469296197, "mean_turns_good": 2.7175152749490836, "mean_turns_bad": 2.4086260964413944, "turns_ratio": 1.1282428928940258}, {"tag": "DECIDE::other_product_information", "repeat_pct_good": 53.17244063838069, "repeat_pct_bad": 46.52307692307692, "n_first_good": 5138, "n_first_bad": 21125, "n_repeat_good": 2732, "n_repeat_bad": 9828, "n_first_na": 0, "lift": 1.1429261380604316, "mean_turns_good": 3.0850525496302064, "mean_turns_bad": 2.8120710059171596, "turns_ratio": 1.0970749113868885}, {"tag": "DECIDE::delivery_time", "repeat_pct_good": 52.27369315767106, "repeat_pct_bad": 38.17153628652215, "n_first_good": 2353, "n_first_bad": 12732, "n_repeat_good": 1230, "n_repeat_bad": 4860, "n_first_na": 0, "lift": 1.369441689883679, "mean_turns_good": 2.5584360390990226, "mean_turns_bad": 2.0413917687715992, "turns_ratio": 1.2532802758573642}, {"tag": "DECIDE::size_fit", "repeat_pct_good": 46.57401422107304, "repeat_pct_bad": 39.51023004346443, "n_first_good": 3094, "n_first_bad": 9433, "n_repeat_good": 1441, "n_repeat_bad": 3727, "n_first_na": 0, "lift": 1.178783676274167, "mean_turns_good": 2.3264382676147384, "mean_turns_bad": 2.064030531114174, "turns_ratio": 1.1271336506630625}, {"tag": "DECIDE::quantity_pack_contents", "repeat_pct_good": 42.084942084942085, "repeat_pct_bad": 33.51552506105361, "n_first_good": 2072, "n_first_bad": 8599, "n_repeat_good": 872, "n_repeat_bad": 2882, "n_first_na": 0, "lift": 1.2556849999598092, "mean_turns_good": 2.211872586872587, "mean_turns_bad": 1.869868589370857, "turns_ratio": 1.182902691368703}, {"tag": "DECIDE::how_to_use", "repeat_pct_good": 35.59617058311575, "repeat_pct_bad": 30.72788697788698, "n_first_good": 1149, "n_first_bad": 6512, "n_repeat_good": 409, "n_repeat_bad": 2001, "n_first_na": 0, "lift": 1.1584320981371803, "mean_turns_good": 1.875543951261967, "mean_turns_bad": 1.660933660933661, "turns_ratio": 1.1292106333781369}, {"tag": "DECIDE::comparison", "repeat_pct_good": 8.823529411764707, "repeat_pct_bad": 11.83574879227053, "n_first_good": 68, "n_first_bad": 414, "n_repeat_good": 6, "n_repeat_bad": 49, "n_first_na": 0, "lift": 0.745498199279712, "mean_turns_good": 1.088235294117647, "mean_turns_bad": 1.1642512077294687, "turns_ratio": 0.9347083231632901}];
+  const labels = rows.map(r => r.tag.replace(/^[^:]+::/, ''));
+  const goodBar = {
+    label: 'first outcome was good — P(repeats same ask)',
+    data:  rows.map(r => r.repeat_pct_good),
+    backgroundColor: '#22c55e',
+  };
+  const badBar = {
+    label: 'first outcome was bad — P(repeats same ask)',
+    data:  rows.map(r => r.repeat_pct_bad),
+    backgroundColor: '#dc2626',
+  };
+  const ctx = document.getElementById('chart_decide').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: { labels: labels, datasets: [goodBar, badBar] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: {
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => {
+              const r = rows[item.dataIndex];
+              if (item.datasetIndex === 0) {
+                const mt = r.mean_turns_good !== null && r.mean_turns_good !== undefined ? r.mean_turns_good.toFixed(2) : '–';
+                return [
+                  `good→repeat: ${(r.repeat_pct_good ?? 0).toFixed(1)}%  (${r.n_repeat_good.toLocaleString()} / ${r.n_first_good.toLocaleString()} users)`,
+                  `avg total same-ask turns / user (good-first): ${mt}`,
+                ];
+              }
+              const mt = r.mean_turns_bad !== null && r.mean_turns_bad !== undefined ? r.mean_turns_bad.toFixed(2) : '–';
+              return [
+                `bad→repeat: ${(r.repeat_pct_bad ?? 0).toFixed(1)}%  (${r.n_repeat_bad.toLocaleString()} / ${r.n_first_bad.toLocaleString()} users)`,
+                `avg total same-ask turns / user (bad-first): ${mt}`,
+              ];
+            },
+            afterLabel: (item) => {
+              const r = rows[item.dataIndex];
+              const lift  = r.lift        !== null && r.lift        !== undefined ? r.lift.toFixed(2) + 'x' : 'n/a';
+              const ratio = r.turns_ratio !== null && r.turns_ratio !== undefined ? r.turns_ratio.toFixed(2) + 'x' : 'n/a';
+              return `lift (good/bad repeat%): ${lift}   ·   ratio (good/bad avg turns): ${ratio}   ·   na-first: ${r.n_first_na.toLocaleString()}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 30 } },
+        y: { title: { display: true, text: '% of first-time users who ask again' }, min: 0, max: 100 }
+      }
+    }
+  });
+})();
+</script>
+
+<h2>OTHERS</h2>
+<div class='writeup'><b>OTHERS turns aren't gradable, so no cohort comparison is possible.</b>
+    All OTHERS asks (unresolved, off_journey, action_led_ask) fall outside the outcome tree and
+    end up in <code>not_applicable_L1_others</code>. Every user's first OTHERS turn is
+    graded <b>na</b>, so we can't split good-first vs bad-first cohorts. The bars will therefore
+    be empty here — this section is included only for completeness and to surface the
+    <b>~103k na-first users</b> counted for OTHERS tags.</div>
+<h2>Detail table</h2>
+<table>
+
+<tr>
+  <th class='rowh'>user L1::L2</th>
+  <th>users w/ good first</th>
+  <th>repeat% | good</th>
+  <th>avg total same-ask turns/user | good-first</th>
+  <th>users w/ bad first</th>
+  <th>repeat% | bad</th>
+  <th>avg total same-ask turns/user | bad-first</th>
+  <th>lift (good/bad repeat%)</th>
+  <th>ratio (good/bad avg turns)</th>
+  <th>na-first users</th>
+</tr>
+
+<tr><td class='rowh'>FIND::category_only</td><td>44,691</td><td class='g'>61.4%<br><small style='color:#555;font-weight:normal'>27,461 repeated</small></td><td class='g'>4.69</td><td>40,836</td><td class='b'>57.6%<br><small style='color:#555;font-weight:normal'>23,523 repeated</small></td><td class='b'>4.44</td><td class=''>1.07x</td><td class=''>1.06x</td><td>19,859</td></tr>
+<tr><td class='rowh'>FIND::category_with_attributes</td><td>50,429</td><td class='g'>62.6%<br><small style='color:#555;font-weight:normal'>31,578 repeated</small></td><td class='g'>4.61</td><td>29,104</td><td class='b'>58.1%<br><small style='color:#555;font-weight:normal'>16,910 repeated</small></td><td class='b'>4.35</td><td class=''>1.08x</td><td class=''>1.06x</td><td>18,338</td></tr>
+<tr><td class='rowh'>FIND::attributes_only</td><td>12,944</td><td class='g'>47.6%<br><small style='color:#555;font-weight:normal'>6,158 repeated</small></td><td class='g'>2.62</td><td>21,140</td><td class='b'>48.5%<br><small style='color:#555;font-weight:normal'>10,244 repeated</small></td><td class='b'>2.82</td><td class=''>0.98x</td><td class=''>0.93x</td><td>7,797</td></tr>
+<tr><td class='rowh'>FIND::no_category</td><td>7,361</td><td class='g'>45.8%<br><small style='color:#555;font-weight:normal'>3,370 repeated</small></td><td class='g'>2.50</td><td>23,931</td><td class='b'>46.3%<br><small style='color:#555;font-weight:normal'>11,074 repeated</small></td><td class='b'>2.81</td><td class=''>0.99x</td><td class=''>0.89x</td><td>7,469</td></tr>
+<tr><td class='rowh'>DECIDE::price</td><td>10,648</td><td class='g'>84.0%<br><small style='color:#555;font-weight:normal'>8,941 repeated</small></td><td class='g'>10.67</td><td>37,450</td><td class='b'>62.8%<br><small style='color:#555;font-weight:normal'>23,520 repeated</small></td><td class='b'>8.19</td><td class='lift-hi'>1.34x</td><td class='lift-hi'>1.30x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::quality</td><td>4,910</td><td class='g'>52.5%<br><small style='color:#555;font-weight:normal'>2,580 repeated</small></td><td class='g'>2.72</td><td>22,003</td><td class='b'>44.7%<br><small style='color:#555;font-weight:normal'>9,839 repeated</small></td><td class='b'>2.41</td><td class='lift-hi'>1.18x</td><td class=''>1.13x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::other_product_information</td><td>5,138</td><td class='g'>53.2%<br><small style='color:#555;font-weight:normal'>2,732 repeated</small></td><td class='g'>3.09</td><td>21,125</td><td class='b'>46.5%<br><small style='color:#555;font-weight:normal'>9,828 repeated</small></td><td class='b'>2.81</td><td class=''>1.14x</td><td class=''>1.10x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::delivery_time</td><td>2,353</td><td class='g'>52.3%<br><small style='color:#555;font-weight:normal'>1,230 repeated</small></td><td class='g'>2.56</td><td>12,732</td><td class='b'>38.2%<br><small style='color:#555;font-weight:normal'>4,860 repeated</small></td><td class='b'>2.04</td><td class='lift-hi'>1.37x</td><td class='lift-hi'>1.25x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::size_fit</td><td>3,094</td><td class='g'>46.6%<br><small style='color:#555;font-weight:normal'>1,441 repeated</small></td><td class='g'>2.33</td><td>9,433</td><td class='b'>39.5%<br><small style='color:#555;font-weight:normal'>3,727 repeated</small></td><td class='b'>2.06</td><td class='lift-hi'>1.18x</td><td class=''>1.13x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::quantity_pack_contents</td><td>2,072</td><td class='g'>42.1%<br><small style='color:#555;font-weight:normal'>872 repeated</small></td><td class='g'>2.21</td><td>8,599</td><td class='b'>33.5%<br><small style='color:#555;font-weight:normal'>2,882 repeated</small></td><td class='b'>1.87</td><td class='lift-hi'>1.26x</td><td class='lift-hi'>1.18x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::how_to_use</td><td>1,149</td><td class='g'>35.6%<br><small style='color:#555;font-weight:normal'>409 repeated</small></td><td class='g'>1.88</td><td>6,512</td><td class='b'>30.7%<br><small style='color:#555;font-weight:normal'>2,001 repeated</small></td><td class='b'>1.66</td><td class='lift-hi'>1.16x</td><td class=''>1.13x</td><td>0</td></tr>
+<tr><td class='rowh'>DECIDE::comparison</td><td>68</td><td class='g'>8.8%<br><small style='color:#555;font-weight:normal'>6 repeated</small></td><td class='g'>1.09</td><td>414</td><td class='b'>11.8%<br><small style='color:#555;font-weight:normal'>49 repeated</small></td><td class='b'>1.16</td><td class='lift-lo'>0.75x</td><td class=''>0.93x</td><td>0</td></tr>
+<tr><td class='rowh'>OTHERS::action_led_ask</td><td>0</td><td class='g'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='g'>–</td><td>0</td><td class='b'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='b'>–</td><td class=''>–</td><td class=''>–</td><td>23,302</td></tr>
+<tr><td class='rowh'>OTHERS::off_journey</td><td>0</td><td class='g'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='g'>–</td><td>0</td><td class='b'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='b'>–</td><td class=''>–</td><td class=''>–</td><td>27,648</td></tr>
+<tr><td class='rowh'>OTHERS::unresolved</td><td>0</td><td class='g'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='g'>–</td><td>0</td><td class='b'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='b'>–</td><td class=''>–</td><td class=''>–</td><td>52,701</td></tr>
+</table>
+</body></html>
