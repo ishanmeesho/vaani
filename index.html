@@ -5,36 +5,118 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vaani Dashboards</title>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-         margin: 0; padding: 40px 24px; background: #0f1115; color: #e8eaed; }
-  .wrap { max-width: 780px; margin: 0 auto; }
-  h1 { font-size: 24px; margin: 0 0 6px 0; }
-  .sub { color: #9aa3b2; font-size: 14px; margin-bottom: 28px; }
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { margin-bottom: 10px; }
-  a { display: block; padding: 14px 16px; background: #171a21; border: 1px solid #262b36;
-      border-radius: 8px; color: #e8eaed; text-decoration: none; font-size: 15px; }
-  a:hover { border-color: #7c9eff; }
-  a .desc { display: block; color: #9aa3b2; font-size: 12px; margin-top: 4px; font-weight: 400; }
+  :root {
+    --bg: #0f1115; --card-bg: #171a21; --card-border: #262b36;
+    --text: #e8eaed; --text-dim: #9aa3b2;
+    --accent: #7c9eff; --amber: #fbbf24;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         background: var(--bg); color: var(--text); padding: 48px 24px 64px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 6px 0; }
+  .sub { color: var(--text-dim); font-size: 14px; margin-bottom: 40px; max-width: 640px; line-height: 1.5; }
+  section { margin-bottom: 36px; }
+  .sec-head { margin-bottom: 14px; }
+  .sec-title { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent);
+               font-weight: 700; margin: 0 0 4px 0; }
+  .sec-desc { font-size: 13px; color: var(--text-dim); margin: 0; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  li a { display: block; padding: 14px 16px; background: var(--card-bg); border: 1px solid var(--card-border);
+         border-radius: 10px; color: var(--text); text-decoration: none; }
+  li a:hover { border-color: var(--accent); }
+  .doc-name { font-size: 14.5px; font-weight: 600; }
+  .doc-desc { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 3px; font-weight: 400; }
+  .pending { opacity: 0.55; cursor: default; }
+  .pending:hover { border-color: var(--card-border); }
+  .badge { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
+           margin-left: 8px; vertical-align: middle; letter-spacing: .03em; background: rgba(251,191,36,0.15); color: var(--amber); }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Vaani Dashboards</h1>
-  <div class="sub">Analysis dashboards from the vaani repo.</div>
-  <ul>
-    <li><a href="vaani_top40_insight_explorer.html">Vaani Top-40 Insight Explorer</a></li>
-    <li><a href="Vaani_Tagging_Dashboard.html">Vaani Turn Tagging — Distribution Trees</a></li>
-    <li><a href="vaani_research_conversion_impact.html">Does Vaani's Re-Search Help or Hurt Conversion?</a></li>
-    <li><a href="alternate_product.html">Does Vaani's Re-Search Help or Hurt Conversion? <span class="desc">alternate product view</span></a></li>
-    <li><a href="vaani_nudge_prepost_category_20260727.html">Vaani Nudge Pre/Post Category Analysis — 25–27 Jul 2026</a></li>
-    <li><a href="pdp_revisit_v2_20260724.html">PDP Revisit Deep Dive — exp 19446 — 2026-07-24</a></li>
-    <li><a href="three_way_sankey_20260724.html">Outcome Distribution Matrices — 2026-07-24</a></li>
-    <li><a href="action_grade_pivot_20260724.html">User × Vaani Outcome Heatmap — 2026-07-24</a></li>
-    <li><a href="first_ask_repeat_20260724.html">First-Ask Outcome → Same-Ask Repeat Probability — 2026-07-24</a></li>
-    <li><a href="user_ask_repeatability_20260724.html">User-Ask Repeatability Curves — 2026-07-24</a></li>
-    <li><a href="vaani_homepage_search_analysis.html">Vaani Home-Page Search — Pre/Post Category Consistency — 25–27 Jul 2026</a></li>
-  </ul>
+  <div class="sub">Analysis dashboards for Vaani — how it's used, its outcomes, and what we know about the users behind it.</div>
+
+  <section>
+    <div class="sec-head">
+      <p class="sec-title">Vaani Usage &amp; Outcomes</p>
+      <p class="sec-desc">Current usage patterns, outcome quality, and whether behavior repeats into habit.</p>
+    </div>
+    <ul>
+      <li><a href="01-vaani-usage-and-outcomes/turn-tagging.html">
+        <span class="doc-name">Turn Tagging</span>
+        <span class="doc-desc">How Vaani is being used right now — distribution of turns by tag/type.</span>
+      </a></li>
+      <li><a href="01-vaani-usage-and-outcomes/outcome-distribution-matrices.html">
+        <span class="doc-name">Outcome Distribution Matrices</span>
+        <span class="doc-desc">DECIDE / FIND outcome breakdowns across search-happened and search-not-happened turns.</span>
+      </a></li>
+      <li><a href="01-vaani-usage-and-outcomes/outcome-heatmap.html">
+        <span class="doc-name">Outcome Heatmap</span>
+        <span class="doc-desc">User ask × Vaani reply — outcome grading as a pivot heatmap.</span>
+      </a></li>
+      <li><a href="01-vaani-usage-and-outcomes/repeatability-first-ask.html">
+        <span class="doc-name">Repeatability — First-Ask Outcome</span>
+        <span class="doc-desc">Does a good first-turn outcome predict whether the same ask repeats?</span>
+      </a></li>
+      <li><a href="01-vaani-usage-and-outcomes/repeatability-curves.html">
+        <span class="doc-name">Repeatability — Curves</span>
+        <span class="doc-desc">User-ask repeatability over time — where habit-forming behavior shows up.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="sec-title">Where &amp; When Vaani Is Used</p>
+      <p class="sec-desc">Surface-level deep dives — outcomes broken down by where in the app Vaani shows up.</p>
+    </div>
+    <ul>
+      <li><a href="02-where-and-when-vaani-is-used/homepage-usage.html">
+        <span class="doc-name">Homepage Usage</span>
+        <span class="doc-desc">Deep dive on how Vaani is used from the home screen.</span>
+      </a></li>
+      <li><a href="02-where-and-when-vaani-is-used/pdp-turn-nudge-analysis.html">
+        <span class="doc-name">PDP Turn — Nudge Analysis</span>
+        <span class="doc-desc">How Vaani's zero-click nudge is used on the product detail page.</span>
+      </a></li>
+      <li class="pending"><a class="pending" href="02-where-and-when-vaani-is-used/pdp-research-conversion-impact.html">
+        <span class="doc-name">PDP Research — Conversion Impact<span class="badge">needs re-export</span></span>
+        <span class="doc-desc">What happens when a user re-searches (DECIDE/FIND) from PDP — impact on conversion. File is a broken browser snapshot; needs a clean re-export.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="sec-title">Alternate Discovery &amp; Revisit Behavior</p>
+      <p class="sec-desc">User behavior around discovering alternate products and returning to PDPs.</p>
+    </div>
+    <ul>
+      <li class="pending"><a class="pending" href="03-alternate-discovery-and-revisits/alternate-product-discovery.html">
+        <span class="doc-name">Alternate Product Discovery<span class="badge">needs re-export</span></span>
+        <span class="doc-desc">How users discover alternate products via Vaani. File is a broken browser snapshot; needs a clean re-export.</span>
+      </a></li>
+      <li><a href="03-alternate-discovery-and-revisits/pdp-revisit-deep-dive.html">
+        <span class="doc-name">PDP Revisit Deep Dive</span>
+        <span class="doc-desc">Experiment 19446 — revisit behavior on the product detail page.</span>
+      </a></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="sec-title">Understanding Vaani's Users</p>
+      <p class="sec-desc">Who is using Vaani, and what we can learn about them.</p>
+    </div>
+    <ul>
+      <li><a href="04-understanding-vaani-users/top40-insight-explorer.html">
+        <span class="doc-name">Top-40 Insight Explorer</span>
+        <span class="doc-desc">Explorer view of the top 40 tagged Vaani behaviors/segments.</span>
+      </a></li>
+    </ul>
+  </section>
 </div>
 </body>
 </html>
