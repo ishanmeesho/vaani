@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Vaani PDP Clicks Before Turn — Exp 19446",
+  "schemaVersion": 1,
+  "description": "How many same-sscat PDP clicks precede a Vaani turn on PDP (exp 19446 Test, 2026-07-03..07-20) — FIND/DECIDE × search split, for all users, power users, by session position; plus question-type (L2) mix by browse depth and order outcomes (same-product purchases, post-turn clicks, revisits)."
+}
+</script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vaani PDP Clicks Before Turn — Exp 19446</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 28px 36px 60px;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #fafafa; color: #1c1c1e;
+}
+h1 { font-size: 23px; margin: 0 0 4px; }
+h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padding-bottom: 6px; }
+.subtitle { color: #6b6b70; font-size: 13px; margin-bottom: 4px; }
+.meta { color: #8a8a8e; font-size: 12px; margin-bottom: 16px; }
+.note { color: #6b6b70; font-size: 12.5px; font-style: italic; margin: 6px 0 14px; max-width: 1000px; line-height: 1.5; }
+.headline {
+  background: #fff8e6; border: 1px solid #f0dfa8; border-left: 4px solid #d4a017;
+  border-radius: 8px; padding: 12px 16px; margin: 10px 0 18px;
+  font-size: 13px; line-height: 1.6; max-width: 1100px; color: #4a3b10;
+}
+.tabbar { display: flex; gap: 8px; margin: 10px 0 20px; border-bottom: 2px solid #e5e5ea; }
+.tabbtn {
+  border: none; background: transparent; cursor: pointer;
+  font-size: 14px; font-weight: 600; color: #6b6b70;
+  padding: 10px 18px; border-radius: 8px 8px 0 0; border-bottom: 3px solid transparent; margin-bottom: -2px;
+}
+.tabbtn:hover { background: #f0f0f2; color: #1c1c1e; }
+.tabbtn.active { color: #1f6feb; border-bottom-color: #1f6feb; background: #fff; }
+.tabpane { display: none; }
+.tabpane.active { display: block; }
+.stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0 8px; }
+.stat-card {
+  background: #fff; border: 1px solid #e5e5ea; border-radius: 10px;
+  padding: 12px 18px; min-width: 130px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.stat-card .num { font-size: 21px; font-weight: 650; }
+.stat-card .num.find { color: #1f6feb; } .stat-card .num.decide { color: #8250df; }
+.stat-card .lbl { font-size: 11.5px; color: #8a8a8e; margin-top: 2px; }
+.charts-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0 8px; }
+.chart-box {
+  background: #fff; border: 1px solid #e5e5ea; border-radius: 12px; padding: 16px 18px;
+  flex: 1; min-width: 340px; height: 300px;
+}
+.chart-box.tall { height: 380px; }
+.chart-box .ct { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #3a3a3c; }
+.insight {
+  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #1f6feb;
+  border-radius: 8px; padding: 10px 16px; margin: 6px 0 20px;
+  font-size: 12.5px; line-height: 1.55; color: #24344d; max-width: 1100px;
+}
+.insight b { color: #0b3a91; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.pill.FIND { background: #eaf1ff; color: #0b3a91; }
+.pill.DECIDE { background: #f1eafb; color: #4a2380; }
+.gridjs-th { font-size: 12px !important; }
+.gridjs-td { font-size: 12.5px !important; }
+.footer-note { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e5e5ea; color: #a0a0a5; font-size: 11.5px; max-width: 1100px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<h1>PDP Clicks Before a Vaani Turn — Same Sub-Sub-Category</h1>
+<div class="subtitle">Experiment 19446 Test arm · turns on PDP (SINGLE_PRODUCT) tagged FIND / DECIDE · window 2026-07-03 → 2026-07-20</div>
+<div class="meta" id="metaTop"></div>
+
+<div class="headline"><b>Headline:</b> a Vaani PDP turn typically lands on the <b>2nd same-sscat PDP</b> the user opens in that session (median 2, mean 4–5 — the count includes the PDP being discussed). DECIDE turns come earlier in the browse trail than FIND turns; turns where Vaani rendered a search sit on deeper trails everywhere; and power users / later sessions engage Vaani after <b>more</b> clicking, not less.</div>
+
+<div class="tabbar">
+  <button class="tabbtn active" id="btn_all" onclick="showTab('all')">All Users</button>
+  <button class="tabbtn" id="btn_pw" onclick="showTab('pw')">Power Users</button>
+  <button class="tabbtn" id="btn_trend" onclick="showTab('trend')">By Session Position</button>
+  <button class="tabbtn" id="btn_l2" onclick="showTab('l2')">Question × Depth</button>
+  <button class="tabbtn" id="btn_ord" onclick="showTab('ord')">Order Outcomes</button>
+</div>
+
+<section class="tabpane active" id="pane_all">
+  <div class="meta" id="meta_all"></div>
+  <div class="stats-row" id="stats_all"></div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — which Nth same-sscat PDP was the turn on? (% of turns)</div><canvas id="bkF_all"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — which Nth same-sscat PDP was the turn on? (% of turns)</div><canvas id="bkD_all"></canvas></div>
+  </div>
+  <div class="insight" id="ins1_all"></div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">Mean same-sscat clicks before the turn (incl. current PDP)</div><canvas id="mean_all"></canvas></div>
+    <div class="chart-box"><div class="ct">Mean clicks before the turn — same sscat vs any sscat</div><canvas id="tot_all"></canvas></div>
+  </div>
+  <div class="insight" id="ins2_all"></div>
+  <h2>Numbers</h2>
+  <div id="grid_all"></div>
+</section>
+
+<section class="tabpane" id="pane_pw">
+  <div class="meta" id="meta_pw"></div>
+  <div class="note">Power users = &gt;5 tagged Vaani sessions within 15 days of the user's first tagged session (derived from the tagged dataset; the original first15d CSV was not available).</div>
+  <div class="stats-row" id="stats_pw"></div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — which Nth same-sscat PDP was the turn on? (% of turns)</div><canvas id="bkF_pw"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — which Nth same-sscat PDP was the turn on? (% of turns)</div><canvas id="bkD_pw"></canvas></div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">Mean same-sscat clicks before the turn (incl. current PDP)</div><canvas id="mean_pw"></canvas></div>
+    <div class="chart-box"><div class="ct">Power vs all users — mean same-sscat clicks</div><canvas id="cmp_pw"></canvas></div>
+  </div>
+  <div class="insight"><b>Read:</b> power users click <b>slightly more</b> PDPs before talking than the general population (FIND 5.10 vs 4.84, DECIDE 4.22 vs 4.04) — they are heavier browsers overall, and Vaani engagement rides on top of that browsing rather than replacing it. The search-happened premium (+0.9 FIND, +1.6 DECIDE) is the same shape as in the full population.</div>
+  <h2>Numbers</h2>
+  <div id="grid_pw"></div>
+</section>
+
+<section class="tabpane" id="pane_trend">
+  <div class="meta" id="meta_trend"></div>
+  <div class="note">S1 = the user's first Vaani session, S2 their second, and so on (per-user rank of tagged Vaani sessions by first-turn timestamp, dataset window 2026-05-20 → 07-20). All-user cohort; later positions are survivorship-selected heavier users — the Power Users tab shows the same direction within a fixed cohort.</div>
+  <div class="charts-row">
+    <div class="chart-box tall" style="min-width:100%"><div class="ct">Mean same-sscat clicks before the turn, by session position</div><canvas id="tr_mean"></canvas></div>
+  </div>
+  <div class="insight"><b>What changed:</b> first-session users engage Vaani on the shallowest trails (FIND 4.22 / DECIDE 3.58) and veterans on the deepest (S11+: 5.50 / 4.61) — users do <b>not</b> learn to shortcut browsing by asking Vaani earlier. The steepest riser is <b>DECIDE with search</b> (4.10 → 6.83): for experienced users, a searching decide-turn increasingly marks the end of a long comparison crawl.</div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">Share of turns on the very 1st same-sscat PDP (%)</div><canvas id="tr_first"></canvas></div>
+    <div class="chart-box"><div class="ct">Turns per position (n, stacked)</div><canvas id="tr_n"></canvas></div>
+  </div>
+  <div class="insight"><b>What changed:</b> the "talked on the first PDP" share falls with experience — FIND 41.3% → 31.5%, DECIDE 45.3% → 37.0% from S1 to S11+ — mirroring the rising means: with each session, Vaani shifts from first-evaluation companion to end-of-crawl tool.</div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — Nth-PDP mix by position (100% stacked)</div><canvas id="tr_bkF"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — Nth-PDP mix by position (100% stacked)</div><canvas id="tr_bkD"></canvas></div>
+  </div>
+  <h2>Numbers</h2>
+  <div id="grid_trend"></div>
+</section>
+
+<section class="tabpane" id="pane_l2">
+  <div class="meta">879,571 joined turns with resolved sscat · all users · L2 sub-tag mix at each browse depth (which Nth same-sscat PDP the turn was on)</div>
+  <div class="charts-row">
+    <div class="chart-box tall"><div class="ct">FIND — L2 mix by browse depth (100% stacked)</div><canvas id="l2F"></canvas></div>
+    <div class="chart-box tall"><div class="ct">DECIDE — L2 mix by browse depth (100% stacked)</div><canvas id="l2D"></canvas></div>
+  </div>
+  <div class="insight"><b>FIND gets more specified with depth:</b> category_with_attributes climbs +9pp (32.9% → 41.9%) while no_category nearly halves (11.2% → 6.4%) — early asks are vague, late asks arrive with color/size/budget constraints. attributes_only is depth-flat (~16%).</div>
+  <div class="insight"><b>DECIDE barely changes — price is ~68–70% at every depth.</b> The movement is in the minor asks: how_to_use collapses 3× (2.2% → 0.7%, a first-contact question), while size_fit (+60%: 3.2% → 5.1%) and quantity/pack (2.4% → 3.3%) grow — deep comparers have settled <i>what</i> and now filter on fit and pack. Quality is dead flat (~8.3%).</div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — the two movers (% of FIND turns at depth)</div><canvas id="l2FM"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — the three movers (% of DECIDE turns at depth)</div><canvas id="l2DM"></canvas></div>
+  </div>
+  <h2>Numbers</h2>
+  <div id="grid_l2"></div>
+</section>
+
+<section class="tabpane" id="pane_ord">
+  <div class="meta">Order splits: session ordered (any orders_json event) vs not · "same product" = order for the exact pid the turn was on, at/after the turn</div>
+  <div class="stats-row" id="stats_ord"></div>
+  <div class="charts-row">
+    <div class="chart-box tall" style="min-width:100%"><div class="ct">Pre-turn same-sscat clicks (mean) by order outcome</div><canvas id="ordPre"></canvas></div>
+  </div>
+  <div class="insight"><b>Depth predicts ordering:</b> sessions that end in an order carried ~1.5 more same-sscat clicks before the turn (FIND 6.22 vs 4.66; DECIDE 5.41 vs 3.81). Deepest of all: buyers of the <b>same sscat but a different product</b> (FIND 7.78, median 4) — serial comparators for whom the Vaani PDP was one more candidate. And given an ordered session, the order is the turn's own product in <b>42.8% of DECIDE turns vs only 16.4% of FIND turns</b>.</div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — pre-turn distribution: which Nth same-sscat PDP (% of turns)</div><canvas id="ordDistF"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — pre-turn distribution: which Nth same-sscat PDP (% of turns)</div><canvas id="ordDistD"></canvas></div>
+  </div>
+  <div class="insight"><b>Distribution view:</b> non-ordering sessions are front-loaded (FIND 36.7% / DECIDE 43.1% of turns on the 1st PDP), while ordering sessions shift right — same-sscat-different-product buyers most of all (only 21.3% of FIND turns on the 1st PDP, and 22.2% on the 11th+). The same-product buyers sit in between: engaged early-ish, but with a fatter deep tail than non-buyers.</div>
+  <h2>Conversion: what the session ends up ordering, by turn depth</h2>
+  <div class="note">Session grain — each session's <b>first</b> Vaani PDP turn, classified by which Nth same-sscat PDP it was on. Outcome classes are mutually exclusive (priority: same product &gt; same sscat different product &gt; different sscat). "Ordered" = any orders_json event in the session.</div>
+  <div class="stats-row" id="stats_conv"></div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — % of sessions ordering, by turn depth (stacked by what they bought)</div><canvas id="convF"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — % of sessions ordering, by turn depth (stacked by what they bought)</div><canvas id="convD"></canvas></div>
+  </div>
+  <div class="insight"><b>Turn on the very first same-sscat PDP:</b> 8.5% (FIND) / 9.8% (DECIDE) of sessions go on to order — 91%+ order nothing. FIND first-PDP orders are mostly <i>elsewhere</i> (4.8% diff sscat + 2.6% same sscat diff product vs just 1.1% the turn's own product), while DECIDE first-PDP orders are led by the turn's own product (4.0%). <b>Conversion rises steadily with depth</b> — FIND 8.5% → 15.2%, DECIDE 9.8% → 24.3% at 11+ PDPs — and for DECIDE the same-product share more than doubles (4.0% → 9.7%): deep-crawl decide-talk is the highest-intent signal in this data. (Correlation, not causation — depth proxies intent.)</div>
+  <div id="grid_conv" style="margin-bottom:26px"></div>
+  <h2>After the turn: clicks &amp; revisits until the same-sscat purchase</h2>
+  <div class="note">Each session's <b>first</b> Vaani PDP turn, where the session ordered in the same sscat at/after the turn (FIND n=6,876 · DECIDE n=7,751). Window = turn → first same-sscat order.</div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">Post-turn same-sscat clicks until order (mean)</div><canvas id="ordPost"></canvas></div>
+    <div class="chart-box"><div class="ct">Revisits to the turn's own PDP before order</div><canvas id="ordRev"></canvas></div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-box"><div class="ct">FIND — post-turn clicks until order: distribution (% of turns)</div><canvas id="ordPostDistF"></canvas></div>
+    <div class="chart-box"><div class="ct">DECIDE — post-turn clicks until order: distribution (% of turns)</div><canvas id="ordPostDistD"></canvas></div>
+  </div>
+  <div class="insight"><b>Same-product purchases happen on the spot:</b> median post-turn same-sscat clicks = 0 (DECIDE 72.8% buy with zero further same-sscat clicks; mean just 0.89). <b>Different-product purchases mean the turn was mid-crawl</b> — 6.3 (DECIDE) to 8.4 (FIND) more same-sscat PDPs follow, and the distribution shows it: only 1.5–3.2% of different-product buyers order with zero further clicks, while ~25% (FIND) click through 11+ more PDPs. Revisiting the Vaani PDP is rare (~80% never re-open it); only FIND-same-product buyers meaningfully return (41.8% ≥1 revisit — talk, wander, come back to buy).</div>
+  <h2>Numbers</h2>
+  <h3 style="font-size:14px;color:#3a3a3c;margin:14px 0 8px">Pre-turn depth × order status</h3>
+  <div id="grid_ord1"></div>
+  <h3 style="font-size:14px;color:#3a3a3c;margin:20px 0 8px">Post-turn (first PDP turn, same-sscat-ordered sessions)</h3>
+  <div id="grid_ord2"></div>
+</section>
+
+<div class="footer-note" id="foot"></div>
+
+<script>
+const D = {"meta":{"warehouse_rows":2012690,"deduped_joined_tagged":880981,"excluded_unknown_turn_sscat":1410,"window":"2026-07-03..2026-07-20","experiment":"19446 Test (audience 165308)","perday_joined":{"2026-07-03":8142,"2026-07-04":16789,"2026-07-05":16230,"2026-07-06":66434,"2026-07-07":86297,"2026-07-08":76575,"2026-07-09":74410,"2026-07-10":94852,"2026-07-11":57736,"2026-07-12":51958,"2026-07-13":40972,"2026-07-14":38717,"2026-07-15":34666,"2026-07-16":46342,"2026-07-17":43764,"2026-07-18":43770,"2026-07-19":43770,"2026-07-20":39557}},"all_users":{"FIND":{"overall":{"n":359582,"mean_same_sscat":4.84,"median_same_sscat":2.0,"mean_total_clicks":9.65,"buckets":{"0":0.1,"1":35.8,"2":16.9,"3-5":22.9,"6-10":13.2,"11+":11.1}},"search_happened":{"n":226193,"mean_same_sscat":5.12,"median_same_sscat":2,"mean_total_clicks":10.1,"buckets":{"0":0.1,"1":33.8,"2":16.6,"3-5":23.4,"6-10":14.1,"11+":12.1}},"search_not_happened":{"n":133389,"mean_same_sscat":4.36,"median_same_sscat":2,"mean_total_clicks":8.89,"buckets":{"0":0.1,"1":39.3,"2":17.5,"3-5":22.0,"6-10":11.7,"11+":9.3}}},"DECIDE":{"overall":{"n":519989,"mean_same_sscat":4.04,"median_same_sscat":2,"mean_total_clicks":8.01,"buckets":{"0":0.1,"1":41.5,"2":17.7,"3-5":21.4,"6-10":11.1,"11+":8.2}},"search_happened":{"n":11974,"mean_same_sscat":5.38,"median_same_sscat":3.0,"mean_total_clicks":10.08,"buckets":{"0":0.1,"1":31.9,"2":16.5,"3-5":23.7,"6-10":14.6,"11+":13.1}},"search_not_happened":{"n":508015,"mean_same_sscat":4.01,"median_same_sscat":2,"mean_total_clicks":7.96,"buckets":{"0":0.1,"1":41.7,"2":17.8,"3-5":21.4,"6-10":11.0,"11+":8.1}}}},"power_users":{"FIND":{"overall":{"n":198113,"mean_same_sscat":5.1,"median_same_sscat":2,"mean_total_clicks":10.52,"buckets":{"0":0.1,"1":33.5,"2":16.7,"3-5":23.6,"6-10":14.1,"11+":11.9}},"search_happened":{"n":119471,"mean_same_sscat":5.45,"median_same_sscat":3,"mean_total_clicks":11.12,"buckets":{"0":0.1,"1":31.1,"2":16.3,"3-5":24.2,"6-10":15.1,"11+":13.2}},"search_not_happened":{"n":78642,"mean_same_sscat":4.58,"median_same_sscat":2.0,"mean_total_clicks":9.59,"buckets":{"0":0.1,"1":37.2,"2":17.4,"3-5":22.8,"6-10":12.5,"11+":10.0}}},"DECIDE":{"overall":{"n":324788,"mean_same_sscat":4.22,"median_same_sscat":2.0,"mean_total_clicks":8.52,"buckets":{"0":0.1,"1":39.6,"2":17.6,"3-5":22.1,"6-10":11.8,"11+":8.9}},"search_happened":{"n":6715,"mean_same_sscat":5.83,"median_same_sscat":3,"mean_total_clicks":11.13,"buckets":{"0":0.0,"1":29.0,"2":16.1,"3-5":24.7,"6-10":15.4,"11+":14.7}},"search_not_happened":{"n":318073,"mean_same_sscat":4.19,"median_same_sscat":2,"mean_total_clicks":8.47,"buckets":{"0":0.1,"1":39.8,"2":17.6,"3-5":22.0,"6-10":11.7,"11+":8.7}}}},"power_meta":{"power_turns":523780,"power_users_in_data":19637},"by_session_position":{"S1":{"FIND":{"overall":{"n":94611,"mean_same_sscat":4.22,"median_same_sscat":2,"mean_total_clicks":8.43,"buckets":{"0":0.1,"1":41.3,"2":17.4,"3-5":21.0,"6-10":11.2,"11+":9.1}},"search_happened":{"n":60032,"mean_same_sscat":4.43,"median_same_sscat":2.0,"mean_total_clicks":8.65,"buckets":{"0":0.1,"1":39.9,"2":17.1,"3-5":21.4,"6-10":11.7,"11+":9.8}},"search_not_happened":{"n":34579,"mean_same_sscat":3.86,"median_same_sscat":2,"mean_total_clicks":8.04,"buckets":{"0":0.1,"1":43.6,"2":17.9,"3-5":20.3,"6-10":10.3,"11+":7.9}}},"DECIDE":{"overall":{"n":123244,"mean_same_sscat":3.58,"median_same_sscat":2.0,"mean_total_clicks":7.42,"buckets":{"0":0.1,"1":45.3,"2":18.1,"3-5":19.9,"6-10":9.8,"11+":6.8}},"search_happened":{"n":2949,"mean_same_sscat":4.1,"median_same_sscat":2,"mean_total_clicks":8.24,"buckets":{"0":0.1,"1":39.1,"2":18.0,"3-5":21.8,"6-10":12.5,"11+":8.5}},"search_not_happened":{"n":120295,"mean_same_sscat":3.56,"median_same_sscat":2,"mean_total_clicks":7.4,"buckets":{"0":0.1,"1":45.4,"2":18.1,"3-5":19.8,"6-10":9.8,"11+":6.7}}}},"S2":{"FIND":{"overall":{"n":57027,"mean_same_sscat":4.7,"median_same_sscat":2,"mean_total_clicks":9.3,"buckets":{"0":0.2,"1":37.2,"2":17.0,"3-5":22.3,"6-10":12.9,"11+":10.4}},"search_happened":{"n":35650,"mean_same_sscat":4.99,"median_same_sscat":2.0,"mean_total_clicks":9.63,"buckets":{"0":0.2,"1":35.0,"2":16.6,"3-5":22.9,"6-10":13.9,"11+":11.5}},"search_not_happened":{"n":21377,"mean_same_sscat":4.21,"median_same_sscat":2,"mean_total_clicks":8.75,"buckets":{"0":0.2,"1":41.0,"2":17.7,"3-5":21.4,"6-10":11.2,"11+":8.6}}},"DECIDE":{"overall":{"n":80526,"mean_same_sscat":3.8,"median_same_sscat":2.0,"mean_total_clicks":7.75,"buckets":{"0":0.1,"1":43.7,"2":18.0,"3-5":20.8,"6-10":10.0,"11+":7.3}},"search_happened":{"n":1873,"mean_same_sscat":5.09,"median_same_sscat":2,"mean_total_clicks":9.41,"buckets":{"0":0.0,"1":33.0,"2":17.4,"3-5":23.9,"6-10":13.6,"11+":12.2}},"search_not_happened":{"n":78653,"mean_same_sscat":3.77,"median_same_sscat":2,"mean_total_clicks":7.71,"buckets":{"0":0.1,"1":44.0,"2":18.1,"3-5":20.7,"6-10":10.0,"11+":7.2}}}},"S3":{"FIND":{"overall":{"n":37797,"mean_same_sscat":4.76,"median_same_sscat":2,"mean_total_clicks":9.53,"buckets":{"0":0.1,"1":35.1,"2":16.7,"3-5":23.7,"6-10":13.4,"11+":11.0}},"search_happened":{"n":23552,"mean_same_sscat":5.07,"median_same_sscat":3.0,"mean_total_clicks":9.98,"buckets":{"0":0.2,"1":32.8,"2":16.3,"3-5":24.2,"6-10":14.4,"11+":12.1}},"search_not_happened":{"n":14245,"mean_same_sscat":4.25,"median_same_sscat":2,"mean_total_clicks":8.79,"buckets":{"0":0.1,"1":38.9,"2":17.3,"3-5":22.9,"6-10":11.6,"11+":9.3}}},"DECIDE":{"overall":{"n":56834,"mean_same_sscat":3.9,"median_same_sscat":2.0,"mean_total_clicks":7.65,"buckets":{"0":0.1,"1":42.1,"2":18.0,"3-5":21.0,"6-10":11.0,"11+":7.8}},"search_happened":{"n":1336,"mean_same_sscat":5.36,"median_same_sscat":3.0,"mean_total_clicks":9.8,"buckets":{"0":0.1,"1":32.3,"2":16.5,"3-5":23.8,"6-10":14.1,"11+":13.2}},"search_not_happened":{"n":55498,"mean_same_sscat":3.86,"median_same_sscat":2.0,"mean_total_clicks":7.6,"buckets":{"0":0.1,"1":42.3,"2":18.0,"3-5":21.0,"6-10":11.0,"11+":7.7}}}},"S4":{"FIND":{"overall":{"n":27916,"mean_same_sscat":5.08,"median_same_sscat":2.0,"mean_total_clicks":9.86,"buckets":{"0":0.2,"1":33.9,"2":17.3,"3-5":23.6,"6-10":13.3,"11+":11.7}},"search_happened":{"n":17566,"mean_same_sscat":5.32,"median_same_sscat":3.0,"mean_total_clicks":10.3,"buckets":{"0":0.2,"1":31.6,"2":17.0,"3-5":24.2,"6-10":14.5,"11+":12.6}},"search_not_happened":{"n":10350,"mean_same_sscat":4.67,"median_same_sscat":2.0,"mean_total_clicks":9.13,"buckets":{"0":0.2,"1":37.8,"2":17.9,"3-5":22.6,"6-10":11.3,"11+":10.2}}},"DECIDE":{"overall":{"n":42854,"mean_same_sscat":4.21,"median_same_sscat":2.0,"mean_total_clicks":8.15,"buckets":{"0":0.1,"1":40.8,"2":17.6,"3-5":21.8,"6-10":11.2,"11+":8.4}},"search_happened":{"n":990,"mean_same_sscat":5.66,"median_same_sscat":3.0,"mean_total_clicks":10.14,"buckets":{"0":0.0,"1":31.1,"2":15.5,"3-5":23.4,"6-10":16.6,"11+":13.4}},"search_not_happened":{"n":41864,"mean_same_sscat":4.18,"median_same_sscat":2.0,"mean_total_clicks":8.1,"buckets":{"0":0.1,"1":41.1,"2":17.7,"3-5":21.8,"6-10":11.1,"11+":8.3}}}},"S5":{"FIND":{"overall":{"n":21326,"mean_same_sscat":4.97,"median_same_sscat":2.0,"mean_total_clicks":9.91,"buckets":{"0":0.2,"1":33.2,"2":17.0,"3-5":24.4,"6-10":14.0,"11+":11.4}},"search_happened":{"n":13410,"mean_same_sscat":5.32,"median_same_sscat":3.0,"mean_total_clicks":10.64,"buckets":{"0":0.2,"1":30.9,"2":16.6,"3-5":24.8,"6-10":15.1,"11+":12.5}},"search_not_happened":{"n":7916,"mean_same_sscat":4.36,"median_same_sscat":2.0,"mean_total_clicks":8.67,"buckets":{"0":0.1,"1":37.0,"2":17.6,"3-5":23.7,"6-10":12.1,"11+":9.4}}},"DECIDE":{"overall":{"n":32622,"mean_same_sscat":4.21,"median_same_sscat":2.0,"mean_total_clicks":7.93,"buckets":{"0":0.1,"1":40.0,"2":17.1,"3-5":22.2,"6-10":11.9,"11+":8.7}},"search_happened":{"n":765,"mean_same_sscat":5.47,"median_same_sscat":3,"mean_total_clicks":9.86,"buckets":{"0":0.0,"1":28.9,"2":15.7,"3-5":27.3,"6-10":16.1,"11+":12.0}},"search_not_happened":{"n":31857,"mean_same_sscat":4.18,"median_same_sscat":2,"mean_total_clicks":7.88,"buckets":{"0":0.1,"1":40.3,"2":17.1,"3-5":22.1,"6-10":11.8,"11+":8.6}}}},"S6":{"FIND":{"overall":{"n":17370,"mean_same_sscat":5.29,"median_same_sscat":3.0,"mean_total_clicks":10.6,"buckets":{"0":0.1,"1":32.2,"2":16.5,"3-5":24.1,"6-10":14.7,"11+":12.4}},"search_happened":{"n":10821,"mean_same_sscat":5.54,"median_same_sscat":3,"mean_total_clicks":11.12,"buckets":{"0":0.2,"1":30.1,"2":15.9,"3-5":24.8,"6-10":15.6,"11+":13.4}},"search_not_happened":{"n":6549,"mean_same_sscat":4.87,"median_same_sscat":2,"mean_total_clicks":9.76,"buckets":{"0":0.1,"1":35.6,"2":17.5,"3-5":23.0,"6-10":13.2,"11+":10.7}}},"DECIDE":{"overall":{"n":26167,"mean_same_sscat":4.31,"median_same_sscat":2,"mean_total_clicks":8.43,"buckets":{"0":0.0,"1":39.3,"2":18.5,"3-5":22.4,"6-10":11.0,"11+":8.9}},"search_happened":{"n":579,"mean_same_sscat":5.6,"median_same_sscat":3,"mean_total_clicks":10.48,"buckets":{"0":0.2,"1":29.0,"2":17.8,"3-5":24.4,"6-10":14.5,"11+":14.2}},"search_not_happened":{"n":25588,"mean_same_sscat":4.28,"median_same_sscat":2.0,"mean_total_clicks":8.38,"buckets":{"0":0.0,"1":39.5,"2":18.5,"3-5":22.3,"6-10":10.9,"11+":8.8}}}},"S7":{"FIND":{"overall":{"n":13900,"mean_same_sscat":5.06,"median_same_sscat":3.0,"mean_total_clicks":10.24,"buckets":{"0":0.1,"1":32.7,"2":17.0,"3-5":24.2,"6-10":14.9,"11+":11.2}},"search_happened":{"n":8798,"mean_same_sscat":5.42,"median_same_sscat":3.0,"mean_total_clicks":10.86,"buckets":{"0":0.1,"1":29.4,"2":16.8,"3-5":24.8,"6-10":16.2,"11+":12.7}},"search_not_happened":{"n":5102,"mean_same_sscat":4.43,"median_same_sscat":2.0,"mean_total_clicks":9.18,"buckets":{"0":0.1,"1":38.2,"2":17.2,"3-5":23.1,"6-10":12.6,"11+":8.7}}},"DECIDE":{"overall":{"n":21190,"mean_same_sscat":4.32,"median_same_sscat":2.0,"mean_total_clicks":8.39,"buckets":{"0":0.1,"1":39.4,"2":17.0,"3-5":23.2,"6-10":11.7,"11+":8.7}},"search_happened":{"n":457,"mean_same_sscat":5.72,"median_same_sscat":3,"mean_total_clicks":10.86,"buckets":{"0":0.0,"1":30.9,"2":14.7,"3-5":23.6,"6-10":15.5,"11+":15.3}},"search_not_happened":{"n":20733,"mean_same_sscat":4.29,"median_same_sscat":2,"mean_total_clicks":8.33,"buckets":{"0":0.1,"1":39.6,"2":17.0,"3-5":23.2,"6-10":11.6,"11+":8.5}}}},"S8":{"FIND":{"overall":{"n":11732,"mean_same_sscat":5.16,"median_same_sscat":3.0,"mean_total_clicks":10.17,"buckets":{"0":0.1,"1":31.9,"2":17.3,"3-5":24.7,"6-10":13.8,"11+":12.2}},"search_happened":{"n":7215,"mean_same_sscat":5.48,"median_same_sscat":3,"mean_total_clicks":10.76,"buckets":{"0":0.1,"1":28.7,"2":17.3,"3-5":25.4,"6-10":15.2,"11+":13.3}},"search_not_happened":{"n":4517,"mean_same_sscat":4.65,"median_same_sscat":2,"mean_total_clicks":9.23,"buckets":{"0":0.2,"1":36.9,"2":17.4,"3-5":23.5,"6-10":11.6,"11+":10.5}}},"DECIDE":{"overall":{"n":18691,"mean_same_sscat":4.3,"median_same_sscat":2,"mean_total_clicks":8.17,"buckets":{"0":0.1,"1":38.7,"2":17.3,"3-5":23.5,"6-10":11.0,"11+":9.3}},"search_happened":{"n":397,"mean_same_sscat":5.61,"median_same_sscat":3,"mean_total_clicks":10.65,"buckets":{"0":0.0,"1":30.2,"2":16.9,"3-5":24.7,"6-10":13.6,"11+":14.6}},"search_not_happened":{"n":18294,"mean_same_sscat":4.27,"median_same_sscat":2.0,"mean_total_clicks":8.12,"buckets":{"0":0.1,"1":38.9,"2":17.3,"3-5":23.5,"6-10":11.0,"11+":9.2}}}},"S9":{"FIND":{"overall":{"n":9533,"mean_same_sscat":5.1,"median_same_sscat":2,"mean_total_clicks":10.13,"buckets":{"0":0.1,"1":34.3,"2":16.2,"3-5":22.9,"6-10":14.0,"11+":12.4}},"search_happened":{"n":6082,"mean_same_sscat":5.59,"median_same_sscat":3.0,"mean_total_clicks":11.03,"buckets":{"0":0.1,"1":31.6,"2":16.1,"3-5":22.9,"6-10":15.0,"11+":14.3}},"search_not_happened":{"n":3451,"mean_same_sscat":4.24,"median_same_sscat":2,"mean_total_clicks":8.53,"buckets":{"0":0.0,"1":39.2,"2":16.5,"3-5":22.8,"6-10":12.3,"11+":9.1}}},"DECIDE":{"overall":{"n":14503,"mean_same_sscat":4.11,"median_same_sscat":2,"mean_total_clicks":7.82,"buckets":{"0":0.0,"1":40.3,"2":17.4,"3-5":22.6,"6-10":11.1,"11+":8.6}},"search_happened":{"n":344,"mean_same_sscat":6.37,"median_same_sscat":3.0,"mean_total_clicks":12.21,"buckets":{"0":0.0,"1":25.6,"2":18.6,"3-5":22.7,"6-10":17.2,"11+":16.0}},"search_not_happened":{"n":14159,"mean_same_sscat":4.05,"median_same_sscat":2,"mean_total_clicks":7.72,"buckets":{"0":0.0,"1":40.7,"2":17.4,"3-5":22.6,"6-10":10.9,"11+":8.4}}}},"S10":{"FIND":{"overall":{"n":8080,"mean_same_sscat":5.16,"median_same_sscat":3.0,"mean_total_clicks":9.98,"buckets":{"0":0.2,"1":32.3,"2":16.9,"3-5":24.2,"6-10":14.2,"11+":12.1}},"search_happened":{"n":4997,"mean_same_sscat":5.47,"median_same_sscat":3,"mean_total_clicks":10.65,"buckets":{"0":0.2,"1":29.6,"2":16.8,"3-5":25.3,"6-10":15.0,"11+":13.0}},"search_not_happened":{"n":3083,"mean_same_sscat":4.66,"median_same_sscat":2,"mean_total_clicks":8.91,"buckets":{"0":0.2,"1":36.7,"2":17.1,"3-5":22.5,"6-10":12.9,"11+":10.6}}},"DECIDE":{"overall":{"n":12247,"mean_same_sscat":4.13,"median_same_sscat":2,"mean_total_clicks":8.12,"buckets":{"0":0.1,"1":39.1,"2":18.3,"3-5":21.5,"6-10":11.9,"11+":9.1}},"search_happened":{"n":246,"mean_same_sscat":6.58,"median_same_sscat":3.0,"mean_total_clicks":11.56,"buckets":{"0":0.0,"1":24.4,"2":15.4,"3-5":23.6,"6-10":15.9,"11+":20.7}},"search_not_happened":{"n":12001,"mean_same_sscat":4.08,"median_same_sscat":2,"mean_total_clicks":8.05,"buckets":{"0":0.1,"1":39.4,"2":18.3,"3-5":21.5,"6-10":11.8,"11+":8.9}}}},"S11+":{"FIND":{"overall":{"n":60290,"mean_same_sscat":5.5,"median_same_sscat":3.0,"mean_total_clicks":11.17,"buckets":{"0":0.1,"1":31.5,"2":16.2,"3-5":23.7,"6-10":15.1,"11+":13.4}},"search_happened":{"n":38070,"mean_same_sscat":5.83,"median_same_sscat":3.0,"mean_total_clicks":11.83,"buckets":{"0":0.1,"1":29.5,"2":15.7,"3-5":24.2,"6-10":15.9,"11+":14.6}},"search_not_happened":{"n":22220,"mean_same_sscat":4.93,"median_same_sscat":2.0,"mean_total_clicks":10.04,"buckets":{"0":0.0,"1":35.0,"2":16.9,"3-5":22.8,"6-10":13.9,"11+":11.3}}},"DECIDE":{"overall":{"n":91111,"mean_same_sscat":4.61,"median_same_sscat":2,"mean_total_clicks":8.97,"buckets":{"0":0.1,"1":37.0,"2":17.2,"3-5":22.5,"6-10":13.1,"11+":10.2}},"search_happened":{"n":2038,"mean_same_sscat":6.83,"median_same_sscat":3.0,"mean_total_clicks":12.63,"buckets":{"0":0.0,"1":25.3,"2":14.4,"3-5":24.8,"6-10":17.0,"11+":18.5}},"search_not_happened":{"n":89073,"mean_same_sscat":4.56,"median_same_sscat":2,"mean_total_clicks":8.89,"buckets":{"0":0.1,"1":37.3,"2":17.2,"3-5":22.4,"6-10":13.0,"11+":10.0}}}}},"session_position_note":"ordinal = per-user rank of Vaani sessions by first-turn ts within tagged dataset window 2026-05-20..2026-07-20"};
+
+const fmt = n => n.toLocaleString();
+const BK = ['1','2','3-5','6-10','11+'];
+const C = { FIND:'#1f6feb', DECIDE:'#8250df', sh:'#1a7f37', snh:'#bf3989', overall:'#57606a' };
+const SPLITS = [['overall','overall',C.overall],['search_happened','search happened',C.sh],['search_not_happened','no search',C.snh]];
+const rendered = {};
+Chart.defaults.font.size = 11;
+
+document.getElementById('metaTop').textContent =
+  `n = ${fmt(D.meta.deduped_joined_tagged)} tagged PDP turns (19446 Test ∩ LLM-tagged user sample) · counts include the click that opened the PDP being discussed · product→sscat via supply catalog chain (0.16% unresolved, excluded)`;
+document.getElementById('foot').textContent =
+  `Method: clicks_json product-opens in the same app session with ts strictly before the turn ts, same sscat as the turn's PDP. Tagged data is a user-level sample (~28% of Test-arm users). 2026-07-03→05 have 3–5× fewer audience-tagged sessions than later days (experiments_json coverage ramp), so pooled numbers weight the later two weeks. Source: gold.va_user_session_activity + silver.supply__products/catalogs/sub_sub_categories; tags from all_turns_flat_consolidated_with_outcome.jsonl. Full numbers: data/pdp_clicks_before_turn_results.json · report: VAANI_PDP_CLICKS_BEFORE_TURN_ANALYSIS.md`;
+
+function bucketChart(id, block){
+  new Chart(document.getElementById(id), { type:'bar',
+    data:{ labels: BK.map(b=>b==='1'?'1st':b==='2'?'2nd':b+'th'),
+      datasets: SPLITS.map(([k,lbl,col])=>({ label:lbl, data: BK.map(b=>block[k].buckets[b]), backgroundColor: col, borderRadius:3 })) },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'top'}, tooltip:{callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y}% of ${fmt(block[SPLITS[c.datasetIndex][0]].n)} turns`}} },
+      scales:{ y:{ ticks:{callback:v=>v+'%'}, grid:{color:'#eee'} }, x:{ grid:{display:false} } } } });
+}
+function meanChart(id, coh){
+  const labels=[], data=[], cols=[], ns=[];
+  for (const l1 of ['FIND','DECIDE']) for (const [k,lbl,col] of SPLITS){
+    labels.push(l1+' · '+lbl); data.push(coh[l1][k].mean_same_sscat); ns.push(coh[l1][k].n);
+    cols.push(l1==='FIND' ? (k==='overall'?C.FIND:k==='search_happened'?'#6ea8fe':'#9ec5fe') : (k==='overall'?C.DECIDE:k==='search_happened'?'#a98eea':'#c5b3f1'));
+  }
+  new Chart(document.getElementById(id), { type:'bar',
+    data:{ labels, datasets:[{ data, backgroundColor: cols, borderRadius:4 }] },
+    options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:(c)=>`mean ${c.parsed.x} same-sscat clicks · median ${coh[c.label.split(' · ')[0]][SPLITS.find(s=>s[1]===c.label.split(' · ')[1])[0]].median_same_sscat} · n=${fmt(ns[c.dataIndex])}`}} },
+      scales:{ x:{ grid:{color:'#eee'} }, y:{ grid:{display:false} } } } });
+}
+function statCards(el, coh, extra){
+  const items = [...extra,
+    ['FIND mean / median', coh.FIND.overall.mean_same_sscat+' / '+coh.FIND.overall.median_same_sscat, 'find'],
+    ['DECIDE mean / median', coh.DECIDE.overall.mean_same_sscat+' / '+coh.DECIDE.overall.median_same_sscat, 'decide'],
+    ['FIND on 1st PDP', coh.FIND.overall.buckets['1']+'%', 'find'],
+    ['DECIDE on 1st PDP', coh.DECIDE.overall.buckets['1']+'%', 'decide']];
+  for (const [lbl,num,cls] of items){
+    const d=document.createElement('div'); d.className='stat-card';
+    d.innerHTML=`<div class="num ${cls||''}">${num}</div><div class="lbl">${lbl}</div>`;
+    el.appendChild(d);
+  }
+}
+function numbersGrid(el, coh){
+  const rows=[];
+  for (const l1 of ['FIND','DECIDE']) for (const [k,lbl] of SPLITS){
+    const c=coh[l1][k];
+    rows.push([l1, lbl, fmt(c.n), c.mean_same_sscat, c.median_same_sscat, c.buckets['1']+'%', c.buckets['2']+'%', c.buckets['3-5']+'%', c.buckets['6-10']+'%', c.buckets['11+']+'%', c.mean_total_clicks]);
+  }
+  new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Split','n turns','mean same-sscat','median','1st','2nd','3-5th','6-10th','11+th','mean any-sscat'],
+    data:rows, sort:false, search:false, style:{table:{'font-size':'12.5px'}} }).render(el);
+}
+
+function renderCohort(sfx){
+  if (rendered[sfx]) return; rendered[sfx]=true;
+  const coh = sfx==='all' ? D.all_users : D.power_users;
+  const totN = coh.FIND.overall.n + coh.DECIDE.overall.n;
+  document.getElementById('meta_'+sfx).textContent = sfx==='all'
+    ? `${fmt(totN)} PDP turns (FIND ${fmt(coh.FIND.overall.n)} · DECIDE ${fmt(coh.DECIDE.overall.n)}) · window ${D.meta.window}`
+    : `${fmt(totN)} PDP turns from ${fmt(D.power_meta.power_users_in_data)} power users (FIND ${fmt(coh.FIND.overall.n)} · DECIDE ${fmt(coh.DECIDE.overall.n)})`;
+  statCards(document.getElementById('stats_'+sfx), coh, [['PDP turns', fmt(totN)]]);
+  bucketChart('bkF_'+sfx, coh.FIND);
+  bucketChart('bkD_'+sfx, coh.DECIDE);
+  meanChart('mean_'+sfx, coh);
+  if (sfx==='all'){
+    document.getElementById('ins1_all').innerHTML = `<b>Read:</b> DECIDE turns come earliest — <b>41.5%</b> happen on the very first same-sscat PDP of the session (vs <b>35.8%</b> for FIND): questioning/bargaining starts at first contact with a product. The long tail is real: ~20–25% of turns sit on trails of 6+ same-sscat PDPs. Search-rendered turns shift right (deeper trails) in both branches — deep-trail users are the unsatisfied ones still hunting alternatives.`;
+    document.getElementById('ins2_all').innerHTML = `<b>Same-sscat vs any-sscat:</b> roughly half of all pre-turn clicking is in the turn's own category (FIND 4.84 of 9.65; DECIDE 4.04 of 8.01) — sessions mix categories heavily before settling on the one they engage Vaani about. DECIDE-with-search is rare (n=${fmt(D.all_users.DECIDE.search_happened.n)}, 2.3% of DECIDE PDP turns) but has the deepest trail (mean 5.38).`;
+    new Chart(document.getElementById('tot_all'), { type:'bar',
+      data:{ labels:['FIND','DECIDE'], datasets:[
+        { label:'same sscat', data:[coh.FIND.overall.mean_same_sscat, coh.DECIDE.overall.mean_same_sscat], backgroundColor:[C.FIND,C.DECIDE], borderRadius:4 },
+        { label:'any sscat', data:[coh.FIND.overall.mean_total_clicks, coh.DECIDE.overall.mean_total_clicks], backgroundColor:['#9ec5fe','#c5b3f1'], borderRadius:4 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
+        scales:{ y:{ grid:{color:'#eee'} }, x:{ grid:{display:false} } } } });
+  } else {
+    new Chart(document.getElementById('cmp_pw'), { type:'bar',
+      data:{ labels:['FIND overall','FIND search','FIND no-search','DECIDE overall','DECIDE search','DECIDE no-search'],
+        datasets:[
+          { label:'all users', data: SPLITS.map(s=>D.all_users.FIND[s[0]].mean_same_sscat).concat(SPLITS.map(s=>D.all_users.DECIDE[s[0]].mean_same_sscat)), backgroundColor:'#c4cad1', borderRadius:3 },
+          { label:'power users', data: SPLITS.map(s=>D.power_users.FIND[s[0]].mean_same_sscat).concat(SPLITS.map(s=>D.power_users.DECIDE[s[0]].mean_same_sscat)), backgroundColor:'#1a7f37', borderRadius:3 }] },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
+        scales:{ y:{ grid:{color:'#eee'} }, x:{ grid:{display:false}, ticks:{font:{size:10}} } } } });
+  }
+  numbersGrid(document.getElementById('grid_'+sfx), coh);
+}
+
+function renderTrend(){
+  if (rendered.trend) return; rendered.trend=true;
+  const POS = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11+'];
+  const B = D.by_session_position;
+  const totalTurns = POS.reduce((a,p)=>a+B[p].FIND.overall.n+B[p].DECIDE.overall.n,0);
+  document.getElementById('meta_trend').textContent = `${fmt(totalTurns)} PDP turns across positions · all users`;
+  const line = (l1,k,lbl,col,dash) => ({ type:'line', label:lbl, data:POS.map(p=>B[p][l1][k].mean_same_sscat),
+    borderColor:col, backgroundColor:col, borderWidth:2.2, pointRadius:2.5, tension:0.25, borderDash: dash||[] });
+  new Chart(document.getElementById('tr_mean'), {
+    data:{ labels:POS, datasets:[
+      line('FIND','overall','FIND overall',C.FIND), line('FIND','search_happened','FIND search',C.FIND,[6,3]), line('FIND','search_not_happened','FIND no-search',C.FIND,[2,3]),
+      line('DECIDE','overall','DECIDE overall',C.DECIDE), line('DECIDE','search_happened','DECIDE search',C.DECIDE,[6,3]), line('DECIDE','search_not_happened','DECIDE no-search',C.DECIDE,[2,3]) ] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'top'}, tooltip:{callbacks:{label:(c)=>{ const [l1] = c.dataset.label.split(' '); const k = c.dataset.label.includes('no-search')?'search_not_happened':c.dataset.label.includes('search')?'search_happened':'overall'; return `${c.dataset.label}: ${c.parsed.y} (n=${fmt(B[POS[c.dataIndex]][l1][k].n)})`; }}} },
+      scales:{ y:{ grid:{color:'#eee'}, title:{display:true,text:'mean same-sscat clicks'} }, x:{ grid:{display:false} } } } });
+  new Chart(document.getElementById('tr_first'), {
+    data:{ labels:POS, datasets:[
+      { type:'line', label:'FIND', data:POS.map(p=>B[p].FIND.overall.buckets['1']), borderColor:C.FIND, backgroundColor:C.FIND, borderWidth:2.2, pointRadius:2.5, tension:0.25 },
+      { type:'line', label:'DECIDE', data:POS.map(p=>B[p].DECIDE.overall.buckets['1']), borderColor:C.DECIDE, backgroundColor:C.DECIDE, borderWidth:2.2, pointRadius:2.5, tension:0.25 } ] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
+      scales:{ y:{ ticks:{callback:v=>v+'%'}, grid:{color:'#eee'} }, x:{ grid:{display:false} } } } });
+  new Chart(document.getElementById('tr_n'), { type:'bar',
+    data:{ labels:POS, datasets:[
+      { label:'FIND', data:POS.map(p=>B[p].FIND.overall.n), backgroundColor:C.FIND, stack:'s', borderRadius:2 },
+      { label:'DECIDE', data:POS.map(p=>B[p].DECIDE.overall.n), backgroundColor:C.DECIDE, stack:'s', borderRadius:2 } ] },
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
+      scales:{ y:{ stacked:true, grid:{color:'#eee'} }, x:{ stacked:true, grid:{display:false} } } } });
+  const PALS = { F:['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff','#e8f1ff'], D:['#8250df','#a98eea','#c5b3f1','#d9cdf7','#efe9fb'] };
+  for (const [l1,cv,pal] of [['FIND','tr_bkF',PALS.F],['DECIDE','tr_bkD',PALS.D]]){
+    new Chart(document.getElementById(cv), { type:'bar',
+      data:{ labels:POS, datasets: BK.map((b,i)=>({ label:(b==='1'?'1st':b==='2'?'2nd':b+'th'), data:POS.map(p=>B[p][l1].overall.buckets[b]), backgroundColor:pal[i], stack:'s' })) },
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
+        scales:{ x:{ stacked:true, grid:{display:false} }, y:{ stacked:true, min:0, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#eee'} } } } });
+  }
+  const rows=[];
+  for (const p of POS) for (const l1 of ['FIND','DECIDE']){
+    const c=B[p][l1];
+    rows.push([p, l1, fmt(c.overall.n), c.overall.mean_same_sscat, c.overall.median_same_sscat,
+      c.search_happened.mean_same_sscat, c.search_not_happened.mean_same_sscat, c.overall.buckets['1']+'%', c.overall.mean_total_clicks]);
+  }
+  new gridjs.Grid({ columns:['Pos',{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'n','mean','median','mean (search)','mean (no search)','on 1st PDP','mean any-sscat'],
+    data:rows, sort:false, search:false, pagination:{limit:11}, style:{table:{'font-size':'12.5px'}} }).render(document.getElementById('grid_trend'));
+}
+
+const L2D = {"FIND":{"1st":{"n":129237,"mix":{"category_only":39.53,"category_with_attributes":32.95,"attributes_only":16.31,"no_category":11.21}},"2nd":{"n":60791,"mix":{"category_only":38.48,"category_with_attributes":35.11,"attributes_only":16.62,"no_category":9.79}},"3-5":{"n":82220,"mix":{"category_only":37.71,"category_with_attributes":37.58,"attributes_only":16.34,"no_category":8.38}},"6-10":{"n":47543,"mix":{"category_only":37.17,"category_with_attributes":39.8,"attributes_only":16.09,"no_category":6.94}},"11+":{"n":39791,"mix":{"category_only":36.05,"category_with_attributes":41.95,"attributes_only":15.6,"no_category":6.4}}},"DECIDE":{"1st":{"n":216140,"mix":{"price":69.68,"other_product_information":10.79,"quality":8.32,"size_fit":3.17,"delivery_time":3.39,"quantity_pack_contents":2.44,"how_to_use":2.18,"comparison":0.04}},"2nd":{"n":92243,"mix":{"price":70.44,"other_product_information":10.13,"quality":8.26,"size_fit":3.62,"delivery_time":3.28,"quantity_pack_contents":2.65,"how_to_use":1.57,"comparison":0.04}},"3-5":{"n":111300,"mix":{"price":70.55,"other_product_information":10.14,"quality":8.15,"size_fit":3.98,"delivery_time":2.99,"quantity_pack_contents":2.9,"how_to_use":1.23,"comparison":0.06}},"6-10":{"n":57594,"mix":{"price":69.57,"other_product_information":11.07,"quality":8.14,"size_fit":4.42,"delivery_time":2.96,"quantity_pack_contents":2.87,"how_to_use":0.91,"comparison":0.06}},"11+":{"n":42712,"mix":{"price":67.26,"other_product_information":12.1,"quality":8.75,"size_fit":5.08,"delivery_time":2.81,"quantity_pack_contents":3.27,"how_to_use":0.66,"comparison":0.07}}}};
+const ORD = {"part12":{"FIND":{"not_ordered":{"n":318997,"mean":4.66,"median":2,"buckets":{"1":36.7,"2":17.1,"3-5":22.7,"6-10":12.9,"11+":10.4}},"all":{"n":359582,"mean":4.84,"median":2,"buckets":{"1":35.8,"2":16.9,"3-5":22.9,"6-10":13.2,"11+":11.1}},"ordered_same_product":{"n":6673,"mean":5.61,"median":3,"buckets":{"1":29.5,"2":16.8,"3-5":24.5,"6-10":15.4,"11+":13.8}},"ordered_any":{"n":40585,"mean":6.22,"median":3,"buckets":{"1":28.7,"2":15.3,"3-5":23.8,"6-10":15.9,"11+":16.2}},"ordered_diff_product":{"n":33912,"mean":6.34,"median":3,"buckets":{"1":28.5,"2":15.0,"3-5":23.6,"6-10":16.1,"11+":16.7}},"ordered_same_sscat_diff_product":{"n":13260,"mean":7.78,"median":4,"buckets":{"1":21.3,"2":13.2,"3-5":24.0,"6-10":19.2,"11+":22.2}}},"DECIDE":{"not_ordered":{"n":446218,"mean":3.81,"median":2,"buckets":{"1":43.1,"2":17.9,"3-5":21.0,"6-10":10.5,"11+":7.4}},"all":{"n":519989,"mean":4.04,"median":2,"buckets":{"1":41.5,"2":17.7,"3-5":21.4,"6-10":11.1,"11+":8.2}},"ordered_diff_product":{"n":42210,"mean":5.42,"median":3,"buckets":{"1":32.4,"2":16.0,"3-5":23.4,"6-10":14.8,"11+":13.3}},"ordered_any":{"n":73771,"mean":5.41,"median":3,"buckets":{"1":31.7,"2":16.5,"3-5":23.7,"6-10":14.8,"11+":13.2}},"ordered_same_sscat_diff_product":{"n":17595,"mean":6.55,"median":3,"buckets":{"1":24.7,"2":15.1,"3-5":25.2,"6-10":17.4,"11+":17.5}},"ordered_same_product":{"n":31561,"mean":5.4,"median":3,"buckets":{"1":30.9,"2":17.2,"3-5":24.2,"6-10":14.8,"11+":13.0}}}},"part3":{"FIND":{"same_product":{"n":1681,"pre":3.93,"post_mean":1.94,"post_med":0,"post_zero":51.0,"rev_mean":0.65,"no_revisit":58.2,"pre_b":{"1":41.9,"2":17.8,"3-5":21.4,"6-10":10.6,"11+":8.2},"post_b":{"0":51.0,"1":17.6,"2":9.3,"3-5":11.9,"6-10":6.8,"11+":3.4}},"all":{"n":6876,"pre":5.09,"post_mean":6.78,"post_med":4,"post_zero":13.6,"rev_mean":0.3,"no_revisit":80.4,"pre_b":{"1":34.3,"2":16.1,"3-5":22.5,"6-10":14.7,"11+":12.3},"post_b":{"0":13.6,"1":15.1,"2":11.8,"3-5":22.5,"6-10":17.7,"11+":19.4}},"diff_product":{"n":5195,"pre":5.46,"post_mean":8.35,"post_med":5,"post_zero":1.5,"rev_mean":0.18,"no_revisit":87.5,"pre_b":{"1":31.9,"2":15.5,"3-5":22.9,"6-10":16.0,"11+":13.7},"post_b":{"0":1.5,"1":14.2,"2":12.6,"3-5":25.9,"6-10":21.2,"11+":24.6}}},"DECIDE":{"same_product":{"n":4595,"pre":3.44,"post_mean":0.89,"post_med":0,"post_zero":72.8,"rev_mean":0.33,"no_revisit":77.6,"pre_b":{"1":47.4,"2":17.1,"3-5":19.6,"6-10":9.4,"11+":6.3},"post_b":{"0":72.8,"1":12.9,"2":5.2,"3-5":5.8,"6-10":2.0,"11+":1.2}},"all":{"n":7751,"pre":3.64,"post_mean":3.1,"post_med":1,"post_zero":44.5,"rev_mean":0.3,"no_revisit":79.6,"pre_b":{"1":45.7,"2":17.0,"3-5":19.8,"6-10":10.2,"11+":7.2},"post_b":{"0":44.5,"1":16.2,"2":9.3,"3-5":14.4,"6-10":8.2,"11+":7.4}},"diff_product":{"n":3156,"pre":3.93,"post_mean":6.32,"post_med":3,"post_zero":3.2,"rev_mean":0.25,"no_revisit":82.7,"pre_b":{"1":43.3,"2":16.9,"3-5":20.0,"6-10":11.4,"11+":8.4},"post_b":{"0":3.2,"1":21.1,"2":15.1,"3-5":27.0,"6-10":17.2,"11+":16.4}}}}};
+
+function renderL2(){
+  if (rendered.l2) return; rendered.l2=true;
+  const DEPTHS=['1st','2nd','3-5','6-10','11+'];
+  const PALS={FIND:['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff'],DECIDE:['#8250df','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']};
+  for (const [l1,cv] of [['FIND','l2F'],['DECIDE','l2D']]){
+    const l2s=Object.keys(L2D[l1]['1st'].mix);
+    new Chart(document.getElementById(cv), { type:'bar',
+      data:{ labels:DEPTHS, datasets:l2s.map((k,i)=>({label:k, data:DEPTHS.map(d=>L2D[l1][d].mix[k]||0), backgroundColor:PALS[l1][i%PALS[l1].length], stack:'s'})) },
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'top', labels:{font:{size:10}}}, tooltip:{callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y}% of ${fmt(L2D[l1][DEPTHS[c.dataIndex]].n)} turns`}} },
+        scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, min:0, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#eee'}} } } });
+  }
+  const mover=(l1,k,col)=>({type:'line',label:k,data:['1st','2nd','3-5','6-10','11+'].map(d=>L2D[l1][d].mix[k]),borderColor:col,backgroundColor:col,borderWidth:2.2,pointRadius:3,tension:0.25});
+  new Chart(document.getElementById('l2FM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('FIND','category_with_attributes','#1f6feb'),mover('FIND','no_category','#bf3989')]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}},x:{grid:{display:false}}}} });
+  new Chart(document.getElementById('l2DM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('DECIDE','how_to_use','#bf3989'),mover('DECIDE','size_fit','#1a7f37'),mover('DECIDE','quantity_pack_contents','#c9782f')]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}},x:{grid:{display:false}}}} });
+  const rows=[];
+  for (const l1 of ['FIND','DECIDE']) for (const d of DEPTHS){
+    const c=L2D[l1][d];
+    rows.push([l1,d,fmt(c.n),...Object.entries(c.mix).slice(0,6).map(([k,v])=>k.slice(0,12)+' '+v+'%')].slice(0,9));
+  }
+  new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Depth','n','L2 #1','L2 #2','L2 #3','L2 #4','L2 #5','L2 #6'],
+    data:rows, sort:false, search:false, style:{table:{'font-size':'12px'}} }).render(document.getElementById('grid_l2'));
+}
+
+function renderOrders(){
+  if (rendered.ord) return; rendered.ord=true;
+  const P=ORD.part12, T=ORD.part3;
+  [['FIND ordered-session share','11.3%','find'],['DECIDE ordered-session share','14.2%','decide'],
+   ['Ordered = turn\'s product (FIND)','16.4%','find'],['Ordered = turn\'s product (DECIDE)','42.8%','decide']]
+  .forEach(([lbl,num,cls])=>{ const d=document.createElement('div'); d.className='stat-card';
+    d.innerHTML=`<div class="num ${cls}">${num}</div><div class="lbl">${lbl}</div>`; document.getElementById('stats_ord').appendChild(d); });
+  const GRP=[['not_ordered','did not order'],['ordered_any','ordered (any)'],['ordered_same_product','ordered turn\'s product'],['ordered_same_sscat_diff_product','same sscat, diff product'],['ordered_diff_product','diff product (any sscat)']];
+  new Chart(document.getElementById('ordPre'), { type:'bar',
+    data:{ labels:GRP.map(g=>g[1]), datasets:[
+      {label:'FIND', data:GRP.map(g=>P.FIND[g[0]].mean), backgroundColor:C.FIND, borderRadius:3},
+      {label:'DECIDE', data:GRP.map(g=>P.DECIDE[g[0]].mean), backgroundColor:C.DECIDE, borderRadius:3}] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'top'}, tooltip:{callbacks:{label:(c)=>{const g=GRP[c.dataIndex][0], l1=c.dataset.label; return `${l1}: mean ${c.parsed.y} · median ${P[l1][g].median} · n=${fmt(P[l1][g].n)}`;}}} },
+      scales:{ y:{grid:{color:'#eee'}, title:{display:true,text:'mean same-sscat clicks before turn'}}, x:{grid:{display:false}} } } });
+  // conversion by depth (session grain, first PDP turn)
+  const CONV={"FIND":{"1st":{"no_order":91.46,"same_product":1.12,"same_sscat_diff_product":2.62,"diff_sscat":4.8,"any_order":8.54,"n":63284},"2nd":{"no_order":90.46,"same_product":1.25,"same_sscat_diff_product":3.35,"diff_sscat":4.95,"any_order":9.54,"n":24043},"3-5":{"no_order":89.12,"same_product":1.29,"same_sscat_diff_product":4.27,"diff_sscat":5.33,"any_order":10.88,"n":27859},"6-10":{"no_order":87.55,"same_product":1.24,"same_sscat_diff_product":5.82,"diff_sscat":5.38,"any_order":12.45,"n":14305},"11+":{"no_order":84.84,"same_product":1.44,"same_sscat_diff_product":7.43,"diff_sscat":6.28,"any_order":15.16,"n":9552}},"DECIDE":{"1st":{"no_order":90.2,"same_product":4.0,"same_sscat_diff_product":2.51,"diff_sscat":3.29,"any_order":9.8,"n":54618},"2nd":{"no_order":87.7,"same_product":5.21,"same_sscat_diff_product":3.52,"diff_sscat":3.56,"any_order":12.3,"n":15094},"3-5":{"no_order":83.39,"same_product":7.01,"same_sscat_diff_product":4.89,"diff_sscat":4.71,"any_order":16.61,"n":12880},"6-10":{"no_order":79.84,"same_product":8.34,"same_sscat_diff_product":6.9,"diff_sscat":4.91,"any_order":20.16,"n":5214},"11+":{"no_order":75.73,"same_product":9.71,"same_sscat_diff_product":8.81,"diff_sscat":5.74,"any_order":24.27,"n":2996}}};
+  [['FIND: order rate on 1st PDP','8.5%','find'],['DECIDE: order rate on 1st PDP','9.8%','decide'],
+   ['FIND: order rate at 11+ PDPs','15.2%','find'],['DECIDE: order rate at 11+ PDPs','24.3%','decide']]
+  .forEach(([lbl,num,cls])=>{ const d=document.createElement('div'); d.className='stat-card';
+    d.innerHTML=`<div class="num ${cls}">${num}</div><div class="lbl">${lbl}</div>`; document.getElementById('stats_conv').appendChild(d); });
+  const CCLS=[['same_product','ordered turn\'s product','#1a7f37'],['same_sscat_diff_product','same sscat, diff product','#c9782f'],['diff_sscat','diff sscat','#8c959f'],['no_order','no order','#ececef']];
+  for (const [l1,cv] of [['FIND','convF'],['DECIDE','convD']]){
+    new Chart(document.getElementById(cv), { type:'bar',
+      data:{ labels:['1st','2nd','3-5th','6-10th','11+th'],
+        datasets: CCLS.map(([k,lbl,col])=>({label:lbl, data:['1st','2nd','3-5','6-10','11+'].map(b=>CONV[l1][b][k]), backgroundColor:col, stack:'s', borderRadius:2, borderColor:k==='no_order'?'#d8d8dc':col, borderWidth:k==='no_order'?1:0})) },
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'top', labels:{font:{size:10}}}, tooltip:{callbacks:{
+          label:(c)=>`${c.dataset.label}: ${c.parsed.y}% of ${fmt(CONV[l1][['1st','2nd','3-5','6-10','11+'][c.dataIndex]].n)} sessions`,
+          footer:(items)=>{const b=['1st','2nd','3-5','6-10','11+'][items[0].dataIndex]; return `ordered anything: ${CONV[l1][b].any_order}% · no order: ${CONV[l1][b].no_order}%`;} }} },
+        scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, min:0, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#eee'}, title:{display:true,text:'% of sessions (bars total 100%)'}} } } });
+  }
+  const rc=[];
+  for (const l1 of ['FIND','DECIDE']) for (const b of ['1st','2nd','3-5','6-10','11+']){
+    const c=CONV[l1][b];
+    rc.push([l1,b,fmt(c.n),c.no_order+'%',c.any_order+'%',c.same_product+'%',c.same_sscat_diff_product+'%',c.diff_sscat+'%']);
+  }
+  new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Turn depth','sessions','no order','ordered anything','turn\'s product','same sscat, diff product','diff sscat'],
+    data:rc, sort:false, search:false, style:{table:{'font-size':'12.5px'}} }).render(document.getElementById('grid_conv'));
+  // pre-turn depth distributions by order outcome (mirrors All Users bucket charts)
+  const DGRP=[['not_ordered','did not order','#c4cad1'],['ordered_same_product','ordered turn\'s product','#1a7f37'],['ordered_same_sscat_diff_product','same sscat, diff product','#c9782f'],['ordered_diff_product','diff product (any sscat)','#bf3989']];
+  for (const [l1,cv] of [['FIND','ordDistF'],['DECIDE','ordDistD']]){
+    new Chart(document.getElementById(cv), { type:'bar',
+      data:{ labels:['1st','2nd','3-5th','6-10th','11+th'],
+        datasets: DGRP.map(([k,lbl,col])=>({label:lbl, data:['1','2','3-5','6-10','11+'].map(b=>P[l1][k].buckets[b]), backgroundColor:col, borderRadius:3})) },
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'top', labels:{font:{size:10}}}, tooltip:{callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y}% of ${fmt(P[l1][DGRP[c.datasetIndex][0]].n)} turns`}} },
+        scales:{ y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}}, x:{grid:{display:false}} } } });
+  }
+  const G3=[['same_product','bought same product'],['diff_product','bought different product']];
+  // post-turn clicks-until-order distributions
+  const G3C=[['same_product','bought same product','#1a7f37'],['diff_product','bought different product','#bf3989']];
+  for (const [l1,cv] of [['FIND','ordPostDistF'],['DECIDE','ordPostDistD']]){
+    new Chart(document.getElementById(cv), { type:'bar',
+      data:{ labels:['0','1','2','3-5','6-10','11+'],
+        datasets: G3C.map(([k,lbl,col])=>({label:lbl, data:['0','1','2','3-5','6-10','11+'].map(b=>T[l1][k].post_b[b]), backgroundColor:col, borderRadius:3})) },
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{position:'top', labels:{font:{size:10}}}, tooltip:{callbacks:{label:(c)=>`${c.dataset.label}: ${c.parsed.y}% of ${fmt(T[l1][G3C[c.datasetIndex][0]].n)} turns`}} },
+        scales:{ y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}}, x:{grid:{display:false}, title:{display:true,text:'same-sscat clicks after turn, before order'}} } } });
+  }
+  new Chart(document.getElementById('ordPost'), { type:'bar',
+    data:{ labels:G3.map(g=>g[1]), datasets:[
+      {label:'FIND', data:G3.map(g=>T.FIND[g[0]].post_mean), backgroundColor:C.FIND, borderRadius:3},
+      {label:'DECIDE', data:G3.map(g=>T.DECIDE[g[0]].post_mean), backgroundColor:C.DECIDE, borderRadius:3}] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'top'}, tooltip:{callbacks:{label:(c)=>{const g=G3[c.dataIndex][0], l1=c.dataset.label, t=T[l1][g]; return `${l1}: mean ${t.post_mean} · median ${t.post_med} · ${t.post_zero}% with zero · n=${fmt(t.n)}`;}}} },
+      scales:{ y:{grid:{color:'#eee'}}, x:{grid:{display:false}} } } });
+  new Chart(document.getElementById('ordRev'), { type:'bar',
+    data:{ labels:G3.map(g=>g[1]), datasets:[
+      {label:'FIND — % never revisited', data:G3.map(g=>T.FIND[g[0]].no_revisit), backgroundColor:'#9ec5fe', borderRadius:3},
+      {label:'DECIDE — % never revisited', data:G3.map(g=>T.DECIDE[g[0]].no_revisit), backgroundColor:'#c5b3f1', borderRadius:3}] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{position:'top'}, tooltip:{callbacks:{label:(c)=>{const g=G3[c.dataIndex][0], l1=c.dataset.label.split(' ')[0], t=T[l1][g]; return `${l1}: ${c.parsed.y}% never revisit · mean revisits ${t.rev_mean} · n=${fmt(t.n)}`;}}} },
+      scales:{ y:{min:0,max:100,ticks:{callback:v=>v+'%'},grid:{color:'#eee'}}, x:{grid:{display:false}} } } });
+  const r1=[];
+  for (const l1 of ['FIND','DECIDE']) for (const [k,lbl] of [['all','all turns'],...GRP]) r1.push([l1,lbl,fmt(P[l1][k].n),P[l1][k].mean,P[l1][k].median]);
+  new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Order status','n','mean pre-turn same-sscat','median'],
+    data:r1, sort:false, search:false, style:{table:{'font-size':'12.5px'}} }).render(document.getElementById('grid_ord1'));
+  const r2=[];
+  for (const l1 of ['FIND','DECIDE']) for (const [k,lbl] of [['all','all same-sscat-ordered'],...G3]){
+    const t=T[l1][k];
+    r2.push([l1,lbl,fmt(t.n),t.pre,t.post_mean+' / '+t.post_med,t.post_zero+'%',t.rev_mean,t.no_revisit+'%']);
+  }
+  new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Purchase','n','pre-turn mean','post-turn mean/med','% zero post-clicks','mean revisits','% never revisit'],
+    data:r2, sort:false, search:false, style:{table:{'font-size':'12.5px'}} }).render(document.getElementById('grid_ord2'));
+}
+
+function showTab(sfx){
+  document.querySelectorAll('.tabpane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane_'+sfx).classList.add('active');
+  document.getElementById('btn_'+sfx).classList.add('active');
+  if (sfx==='trend') renderTrend(); else if (sfx==='l2') renderL2(); else if (sfx==='ord') renderOrders(); else renderCohort(sfx);
+}
+showTab('all');
+</script>
+</body>
+</html>
