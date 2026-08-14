@@ -1,0 +1,666 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<meta charset="utf-8">
+<title>Habit Formation, Uplift &amp; Cost — Vaani 1+OD</title>
+<style>
+:root {
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --surface-2: #f2f1ee;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --good: #0ca30c;
+  --critical: #d03b3b;
+  --warning: #c98500;
+
+  --depth-0: #b7d3f6;
+  --depth-1: #86b6ef;
+  --depth-2: #5598e7;
+  --depth-3: #2a78d6;
+  --depth-4: #1c5cab;
+  --depth-5: #0d366b;
+
+  --unmatched: #2a78d6;
+  --matched: #1baf7a;
+  --control: #e34948;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --surface-2: #222220;
+    --text: #ffffff;
+    --text-2: #c3c2b7;
+    --muted: #898781;
+    --grid: #2c2c2a;
+    --baseline: #383835;
+    --border: rgba(255,255,255,0.10);
+    --good: #0ca30c;
+    --critical: #e66767;
+    --warning: #c98500;
+
+    --depth-0: #184f95;
+    --depth-1: #1c5cab;
+    --depth-2: #256abf;
+    --depth-3: #2a78d6;
+    --depth-4: #3987e5;
+    --depth-5: #5598e7;
+
+    --unmatched: #3987e5;
+    --matched: #199e70;
+    --control: #e66767;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0d0d0d; --surface: #1a1a19; --surface-2: #222220; --text: #ffffff;
+  --text-2: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --baseline: #383835;
+  --border: rgba(255,255,255,0.10); --good: #0ca30c; --critical: #e66767; --warning: #c98500;
+  --depth-0: #184f95; --depth-1: #1c5cab; --depth-2: #256abf; --depth-3: #2a78d6; --depth-4: #3987e5; --depth-5: #5598e7;
+  --unmatched: #3987e5; --matched: #199e70; --control: #e66767;
+}
+:root[data-theme="light"] {
+  --page: #f9f9f7; --surface: #fcfcfb; --surface-2: #f2f1ee; --text: #0b0b0b;
+  --text-2: #52514e; --muted: #898781; --grid: #e1e0d9; --baseline: #c3c2b7;
+  --border: rgba(11,11,11,0.10); --good: #0ca30c; --critical: #d03b3b; --warning: #c98500;
+  --depth-0: #b7d3f6; --depth-1: #86b6ef; --depth-2: #5598e7; --depth-3: #2a78d6; --depth-4: #1c5cab; --depth-5: #0d366b;
+  --unmatched: #2a78d6; --matched: #1baf7a; --control: #e34948;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--page);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 28px clamp(16px, 4vw, 48px) 72px;
+}
+.wrap { max-width: 1200px; margin: 0 auto; }
+
+header.masthead { border-bottom: 1px solid var(--border); padding-bottom: 22px; margin-bottom: 28px; }
+.eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--unmatched); font-weight: 600; }
+h1 { font-size: clamp(24px, 3vw, 32px); font-weight: 700; margin: 4px 0 8px; text-wrap: balance; letter-spacing: -0.01em; }
+.subhead { color: var(--text-2); font-size: 14.5px; max-width: 82ch; line-height: 1.55; }
+.methodology {
+  margin-top: 14px; padding: 12px 14px; background: var(--surface-2); border-radius: 8px;
+  font-size: 12.5px; color: var(--text-2); line-height: 1.65;
+}
+.methodology b { color: var(--text); }
+.methodology code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11.5px; }
+
+section { margin-bottom: 40px; }
+h2 { font-size: 19px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.01em; }
+.section-note { color: var(--text-2); font-size: 13.5px; margin: 0 0 18px; max-width: 82ch; line-height: 1.5; }
+
+.callouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 36px; }
+.callout {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px;
+  box-shadow: 0 1px 2px rgba(11,11,11,0.05);
+}
+.callout .k { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
+.callout .v { font-size: 24px; font-weight: 700; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.callout .d { font-size: 12.5px; color: var(--text-2); margin-top: 4px; line-height: 1.45; }
+.callout .v.good { color: var(--good); }
+.callout .v.critical { color: var(--critical); }
+
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 22px 16px; box-shadow: 0 1px 2px rgba(11,11,11,0.05);
+}
+.chart-title { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+.chart-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12px; color: var(--text-2); }
+.legend .item { display: flex; align-items: center; gap: 6px; }
+.legend .swatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+
+.hbar-group { display: flex; flex-direction: column; gap: 10px; }
+.hbar-row { display: grid; grid-template-columns: 56px 1fr 64px; align-items: center; gap: 10px; }
+.hbar-row .label { font-size: 12.5px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.hbar-track { position: relative; height: 22px; background: var(--surface-2); border-radius: 4px; overflow: visible; }
+.hbar-fill {
+  position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px;
+  transition: filter 0.12s ease;
+}
+.hbar-fill:hover { filter: brightness(1.08); }
+.hbar-row .value { font-size: 12.5px; text-align: right; font-variant-numeric: tabular-nums; color: var(--text); font-weight: 600; }
+
+.dual-hbar-row { display: grid; grid-template-columns: 56px 1fr 1fr; align-items: center; gap: 10px; }
+.dual-track-pair { display: flex; gap: 4px; align-items: center; }
+.dual-track { position: relative; height: 20px; background: var(--surface-2); border-radius: 4px; flex: 1; }
+.dual-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; }
+.dual-val { font-size: 11.5px; font-variant-numeric: tabular-nums; color: var(--text); font-weight: 600; white-space: nowrap; padding-left: 6px; }
+
+.ref-line { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--control); z-index: 2; }
+.ref-line::after {
+  content: attr(data-label); position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--control); white-space: nowrap; font-weight: 600;
+}
+
+.tooltip {
+  position: fixed; pointer-events: none; background: var(--text); color: var(--page);
+  font-size: 11.5px; padding: 6px 9px; border-radius: 6px; z-index: 50; opacity: 0;
+  transition: opacity 0.08s ease; max-width: 220px; line-height: 1.4; font-variant-numeric: tabular-nums;
+}
+.tooltip.show { opacity: 1; }
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+@media (max-width: 760px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data-table th {
+  text-align: right; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted);
+  font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--baseline);
+}
+table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+table.data-table td { padding: 9px 10px; border-bottom: 1px solid var(--grid); text-align: right; font-variant-numeric: tabular-nums; }
+table.data-table tr:last-child td { border-bottom: none; }
+.delta-pos { color: var(--good); font-weight: 600; }
+.delta-neg { color: var(--critical); font-weight: 600; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.table-wrap table.data-table { min-width: 640px; }
+.table-wrap { padding: 4px 8px; }
+
+.ratio-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.ratio-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; }
+.ratio-card h3 { font-size: 14px; margin: 0 0 2px; }
+.ratio-card .n { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.ratio-card dl { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; font-size: 13px; }
+.ratio-card dt { color: var(--text-2); }
+.ratio-card dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+.caveats { background: var(--surface-2); border-radius: 10px; padding: 16px 20px; font-size: 12.5px; color: var(--text-2); line-height: 1.7; }
+.caveats li { margin-bottom: 6px; }
+.caveats b { color: var(--text); }
+
+@media (prefers-reduced-motion: reduce) { .hbar-fill, .callout { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="eyebrow">Vaani &middot; Pooled 1+OD Test vs Control</span>
+    <h1>Habit formation, order uplift, and whether the cost is worth it</h1>
+    <p class="subhead">Every Test-arm user in the pooled 1+OD experiments (19179 / 19446 / 20009), bucketed by lifetime Vaani-session count — 0 (never used), 1, 2, 3, 4, or 5+ (habit-formed) — with a Control-arm baseline alongside. The central question: once you control for how often someone simply opens the app, how much of the "habit-formed users order more" story survives, and does the extra Vaani usage that produces it look cheap or expensive per incremental order?</p>
+    <p class="methodology">
+      <b>Population:</b> pooled 1+OD Test arm (5,065,273 users) vs Control arm, Vaani-leakage users (any <code>bk_turns_json</code> signal) stripped from Control per standing rule.
+      <b>Window:</b> 2026-05-20 &rarr; 2026-07-19 (full available gold+scrap history).
+      <b>Matched cut:</b> restricted to users with &ge;27 total app opens in the window — the 5+ bucket's own 25th percentile — so every bucket is compared among users who are, at minimum, as frequent an app-opener as a typical habit-formed user. This doesn't fully equalize frequency (the 5+ bucket still averages more opens even above the floor — see caveats) but removes the bulk of the "they just don't open the app much" confound.
+      <b>Orders / clicks / turns</b> are scalar counts from each session's JSON envelope (<code>orders_json.count</code>, <code>clicks_json.count</code>, <code>bk_turns_json.count</code>). <b>Zero-click %</b> = share of app-open sessions with no click. <b>Sscat/app-open</b> = distinct sub-sub-categories touched via <code>cart_json</code>/<code>orders_json</code>, per app open.
+    </p>
+  </header>
+
+  <section id="callouts-section">
+    <div class="callouts" id="callouts"></div>
+  </section>
+
+  <section id="funnel-section">
+    <h2>1. The funnel — where do exposed users actually land?</h2>
+    <p class="section-note">Left: the full Test-arm population (87.4% never touch Vaani at all). Right: the same six buckets restricted to users who open the app &ge;27 times — habit formation looks much more common once you only count people who had the opportunity to form one.</p>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">All exposed Test-arm users</div>
+        <div class="chart-sub">n = 5,065,273</div>
+        <div class="hbar-group" id="funnel-unmatched"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Matched on app-open frequency (&ge;27 opens)</div>
+        <div class="chart-sub">n = 1,003,623</div>
+        <div class="hbar-group" id="funnel-matched"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="confound-section">
+    <h2>2. The confound reveal — how much of the order gap is just "these people shop more"?</h2>
+    <p class="section-note">Same buckets, average orders per user. The unmatched view shows a steep 4x gap between never-users and 5+; once matched on app-open frequency, most of that gap turns out to be frequency, not Vaani — the real gap shrinks to about 1.4x.</p>
+    <div class="chart-card">
+      <div class="legend">
+        <span class="item"><span class="swatch" style="background:var(--unmatched)"></span>Unmatched (full population)</span>
+        <span class="item"><span class="swatch" style="background:var(--matched)"></span>Matched (&ge;27 app opens)</span>
+        <span class="item"><span class="swatch" style="background:var(--control)"></span>Control-arm baseline</span>
+      </div>
+      <div class="hbar-group" id="confound-chart"></div>
+    </div>
+  </section>
+
+  <section id="uplift-section">
+    <h2>3. Order uplift by bucket, against both baselines</h2>
+    <p class="section-note">Matched population only (&ge;27 app opens). Uplift vs Test-0 uses same-arm non-adopters as baseline (cleanest comparison, but self-selection risk — see caveats); uplift vs Control uses the true unexposed arm. Notably, Test-0 users order slightly <i>less</i> than Control even when matched — a nudged-but-unengaged population may skew differently than true Control.</p>
+    <div class="table-wrap">
+      <table class="data-table" id="uplift-table"></table>
+    </div>
+  </section>
+
+  <section id="quality-section">
+    <h2>4. Engagement quality — zero-click, clicks/open, category breadth</h2>
+    <p class="section-note">Matched population. All three move the same direction with Vaani depth — fewer dead-end sessions, more clicks per visit, more distinct categories touched — though the gains flatten quickly after bucket 1-2 and only jump again at 5+.</p>
+    <div class="grid-3">
+      <div class="chart-card">
+        <div class="chart-title">Zero-click %</div>
+        <div class="chart-sub">lower is better</div>
+        <div class="hbar-group" id="chart-zeroclick"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Clicks / app-open</div>
+        <div class="chart-sub">higher is better</div>
+        <div class="hbar-group" id="chart-clicksopen"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Distinct sscat / app-open</div>
+        <div class="chart-sub">higher is better</div>
+        <div class="hbar-group" id="chart-sscatopen"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cost-section">
+    <h2>5. The cost lens — is the turn spend commensurate with the outcome?</h2>
+    <p class="section-note">Total Vaani turns per user is a directional cost proxy (more turns &asymp; more LLM calls &asymp; more infra spend — no &#8377;/turn figure was available to dollarize this). The right-hand chart divides that turn spend by the <i>incremental</i> orders each bucket produces over baseline — turns "paid" per extra order won. Reading it against the Test-0 baseline: light users (1-2 sessions) buy an incremental order far more cheaply in turns than habit-formed users do. Even against the more conservative Control baseline, the 5+ bucket is still the least turn-efficient per incremental order.</p>
+
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-title">Right now, blended across every current Vaani user — what's the going rate per incremental order?</div>
+      <div class="chart-sub">total turns spent &divide; total incremental orders, summed across all users who've ever used Vaani (buckets 1&ndash;5+)</div>
+      <div class="table-wrap" style="margin-top:8px">
+        <table class="data-table" id="blended-cost-table"></table>
+      </div>
+      <div class="section-note" style="margin-top:12px; margin-bottom:0">
+        The <b>unmatched</b> row is what a plain "total turns &divide; total order lift" calculation gives you — and it's misleadingly cheap for the same reason &sect;2 flagged: it conflates "these users just shop more" with "Vaani caused this order." The <b>matched</b> row (frequency-controlled) is the trustworthy one: <b>you're currently paying roughly 35&ndash;60 turns for every incremental order Vaani produces</b>, depending on which baseline you treat as the counterfactual.
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">Avg Vaani turns per user</div>
+        <div class="chart-sub">the "spend" side</div>
+        <div class="hbar-group" id="chart-turns"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Turns per incremental order</div>
+        <div class="chart-sub">the "cost per outcome" side &mdash; lower is more efficient</div>
+        <div class="legend" style="margin-bottom:10px">
+          <span class="item"><span class="swatch" style="background:var(--unmatched)"></span>vs Test-0</span>
+          <span class="item"><span class="swatch" style="background:var(--control)"></span>vs Control</span>
+        </div>
+        <div class="hbar-group" id="chart-costperorder"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ratio-section">
+    <h2>6. Intensity cut — heavy relative Vaani reliance isn't the same as habit formation</h2>
+    <p class="section-note">Within matched Vaani-users, split at the median of (Vaani sessions &divide; total app opens). Counter-intuitively, the high-ratio half — who lean on Vaani far more per visit — actually order <i>less</i>, not more, despite spending 7x more turns. High ratio looks less like "loves Vaani" and more like "needed more help per visit," plausibly a lower-intent or less-confident shopper profile.</p>
+    <div class="ratio-cards" id="ratio-cards"></div>
+  </section>
+
+  <section id="stratified-section">
+    <h2>7. Appendix — an even tighter homogeneity check (added 2026-07-23)</h2>
+    <p class="section-note">
+      Everything above (&sect;2&ndash;6) matches on a <b>floor</b> — &ge;27 app opens — which still leaves a residual gradient: even above the floor, the 5+ bucket averages 78.5 app opens vs bucket-0's 57.6 (flagged in the caveats). Two ways to tighten this were considered: (a) <b>cap the observation period</b> so every user's app-open count is measured over the same fixed calendar window rather than the full ~61-day span, or (b) <b>stratify into narrow app-open bands</b> so every cohort being compared has a near-identical average app-open count by construction, not just a shared floor. This section runs (b) &mdash; it's the more tractable of the two given how this data has to be queried (a calendar-capped rebuild would need a per-user "days since first seen" anchor point not currently computed), and it directly answers "make the averages the same across cohorts." (a) remains a good next refinement, not run here.
+    </p>
+    <p class="section-note">
+      <b>Method:</b> every matched user (Test and Control, &ge;27 app opens) is placed into one of six app-open bands (27&ndash;39, 40&ndash;59, 60&ndash;79, 80&ndash;119, 120&ndash;199, 200+). Within each band, Control and every Vaani-session bucket now share an average app-open count that differs by <b>less than 1 app open</b> in every band &mdash; a much tighter match than the floor alone produced. Order uplift is then computed <i>within</i> each band and rolled up into a single weighted figure per bucket.
+    </p>
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-title">Avg orders per user, by app-open band</div>
+      <div class="chart-sub">columns are near-identical avg app-opens within a row &mdash; any remaining gap across a row is no longer an app-open-frequency artifact</div>
+      <div class="table-wrap" style="margin-top:8px">
+        <table class="data-table" id="stratified-table"></table>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Blended uplift &amp; turn-cost, fully stratified</div>
+      <div class="chart-sub">same calculation as &sect;5's headline box, but using the within-band uplift instead of the floor-matched one</div>
+      <div class="table-wrap" style="margin-top:8px">
+        <table class="data-table" id="stratified-blended-table"></table>
+      </div>
+      <div class="section-note" style="margin-top:12px; margin-bottom:0">
+        Tightening the match <b>shrinks the apparent uplift further</b> — the 5+ bucket's incremental-order gap vs Test-0 drops from +0.915 (floor-only) to <b>+0.409</b> (stratified), and turns-per-incremental-order rises from 56.1 to <b>125.6</b>. Vs Control, cost rises from 59.9 to <b>185.0</b> turns/order. This doesn't mean Vaani has no effect — a positive gap survives in every single band, including the tightest ones — but it confirms the floor-only match in &sect;2&ndash;5 was still overstating the effect, and the true current cost per incremental order is higher than that section's headline number.
+      </div>
+    </div>
+  </section>
+
+  <section id="effort-section">
+    <h2>8. Appendix — is shopping effort actually reducing? (added 2026-07-28)</h2>
+    <p class="section-note">
+      Same matched population (&ge;27 app opens), asking a different question: as Vaani usage deepens, does it take <i>less</i> browsing to get to a purchase? Three proxies, chosen for what's actually queryable &mdash; <code>clicks_json</code> carries <code>product_id</code> but no category, while <code>cart_json</code>/<code>orders_json</code> carry both, so "products seen" is operationalized two ways rather than one: (a) <b>clicks per app&#8209;open</b> (browsing volume, category&#8209;agnostic, from the cheap <code>clicks_json.count</code> field &mdash; a true distinct&#8209;products&#8209;clicked count was attempted but the full unnest timed out at population scale, so total click volume is the substitute here), (b) <b>distinct cart&#8209;added products within the sscat(s) the user ultimately ordered from</b> (from <code>cart_json</code>, restricted to order&#8209;placers &mdash; the closest available proxy for "how many options did they consider in the category they bought from"), and (c) <b>app&#8209;opens to first order</b> (order&#8209;placers only). All are matched on app&#8209;open frequency exactly as above.
+    </p>
+    <p class="section-note">
+      <b>Window note:</b> <code>scrap.va_user_session_activity</code> is currently broken table&#8209;wide ("Metadata not found in transaction log" &mdash; a new fault, distinct from the earlier void&#8209;break) as of 2026&#8209;07&#8209;28, so this section rebuilds the matched cohort from <code>gold</code> only (<b>2026&#8209;06&#8209;10 &rarr; 2026&#8209;07&#8209;26</b>) rather than the fuller 2026&#8209;05&#8209;20&#8209;onward window used in &sect;1&#8209;7. Bucket sizes here are therefore not directly comparable to the earlier sections' counts (e.g. the 5+ bucket is 61,488 users here vs 51,051 there) &mdash; the &ge;27&#8209;opens floor and bucket logic are otherwise identical.
+    </p>
+    <div class="chart-card" style="margin-bottom:16px">
+      <div class="chart-title">Browsing &amp; conversion-effort metrics, by Vaani-session bucket</div>
+      <div class="chart-sub">if Vaani were reducing effort, these numbers would fall as bucket depth increases &mdash; instead every one of them holds flat or rises</div>
+      <div class="table-wrap" style="margin-top:8px">
+        <table class="data-table" id="effort-table"></table>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="chart-card">
+        <div class="chart-title">Clicks per order</div>
+        <div class="chart-sub">browsing effort per completed order &mdash; lower would mean less effort</div>
+        <div class="hbar-group" id="chart-clicksperorder"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">App-opens to first order</div>
+        <div class="chart-sub">visits needed to convert &mdash; lower would mean faster conversion</div>
+        <div class="hbar-group" id="chart-openstoorder"></div>
+      </div>
+    </div>
+    <div class="section-note" style="margin-top:16px; margin-bottom:0">
+      <b>The honest answer is no &mdash; effort is not reducing.</b> Clicks/app-open rises from 3.60 (never-users) to 4.13 (5+); clicks/order rises from 92.4 to 100.8; distinct cart products considered within the ordered category rises from 4.10 to 5.66 per user (1.21 to 1.33 per order); and app-opens needed to reach a first order <i>rises</i> slightly too, from 16.8 to 19.0 &mdash; the 5+ bucket takes marginally <i>more</i> visits to convert than never-users or Control (16.96), not fewer. Every metric points the same direction: heavier Vaani users browse and click somewhat more, not less, and don't reach their first order any faster. This doesn't contradict &sect;2&ndash;7's order-uplift finding (they still end up ordering more overall) &mdash; but it does mean the mechanism isn't "Vaani gets people to what they want faster." It looks more like heavier Vaani users are simply more thorough/exploratory shoppers across the board, in orders <i>and</i> browsing alike, than like Vaani compressing the path to purchase.
+    </div>
+  </section>
+
+  <section id="caveats-section">
+    <h2>Caveats</h2>
+    <ul class="caveats">
+      <li><b>Correlational, not causal.</b> Users who go on to use Vaani 5+ times may already have more shopping intent than those who don't — matching on app-open frequency narrows one confound, not all of them.</li>
+      <li><b>The app-open match is a floor, not a band.</b> Even above 27 opens, the 5+ bucket still averages 78.5 opens vs bucket-0's 57.6 — a residual frequency gradient remains inside the "matched" numbers, so the true Vaani-specific uplift is likely smaller than even the matched 1.4x figure suggests.</li>
+      <li><b>Cost is a relative proxy, not a dollarized figure.</b> Turns per incremental order lets you compare buckets against each other, not against a real infra budget — apply your own &#8377;/turn figure to the raw turn counts in the data table if you have one.</li>
+      <li><b>Test-0 as a baseline carries self-selection risk</b> — these are users who saw the same nudges and chose not to engage, which may correlate with lower intent independent of Vaani itself. The Control comparison avoids this but reintroduces ordinary cross-arm randomization noise.</li>
+      <li><b>Scope:</b> pooled 1+OD experiments only (19179/19446/20009) — does not include experiment 17675, which was added separately to the earlier city-level cohort work in this conversation.</li>
+      <li><b>&sect;8 uses a different window than &sect;1&ndash;7</b> (2026-06-10 &rarr; 07-26, gold-only) because <code>scrap.va_user_session_activity</code> was broken table-wide at query time — bucket populations there are not directly comparable to the earlier sections' counts.</li>
+    </ul>
+  </section>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script id="reportData" type="application/json">{"buckets":[{"bucket":"0","n_unmatched":4426192,"pct_unmatched":87.4,"avg_app_opens_unmatched":16.1,"avg_orders_unmatched":0.658,"n_matched":746767,"pct_matched":74.4,"avg_app_opens_matched":57.6,"avg_orders_matched":2.258,"avg_turns_matched":0.0,"sum_turns_matched":0,"uplift_vs_test0":0.0,"uplift_vs_ctrl":-0.175,"cost_per_order_vs_test0":null,"cost_per_order_vs_ctrl":null,"zero_click_pct_matched":40.69,"clicks_per_open_matched":3.3376,"sscat_per_open_matched":0.0799},{"bucket":"1","n_unmatched":375983,"pct_unmatched":7.4,"avg_app_opens_unmatched":26.6,"avg_orders_unmatched":1.141,"n_matched":117073,"pct_matched":11.7,"avg_app_opens_matched":61.8,"avg_orders_matched":2.481,"avg_turns_matched":2.4,"sum_turns_matched":280668,"uplift_vs_test0":0.223,"uplift_vs_ctrl":0.048,"cost_per_order_vs_test0":10.7,"cost_per_order_vs_ctrl":49.9,"zero_click_pct_matched":36.94,"clicks_per_open_matched":3.6658,"sscat_per_open_matched":0.0851},{"bucket":"2","n_unmatched":114662,"pct_unmatched":2.3,"avg_app_opens_unmatched":33.8,"avg_orders_unmatched":1.458,"n_matched":47203,"pct_matched":4.7,"avg_app_opens_matched":63.7,"avg_orders_matched":2.586,"avg_turns_matched":5.97,"sum_turns_matched":281712,"uplift_vs_test0":0.329,"uplift_vs_ctrl":0.154,"cost_per_order_vs_test0":18.2,"cost_per_order_vs_ctrl":38.9,"zero_click_pct_matched":36.89,"clicks_per_open_matched":3.7483,"sscat_per_open_matched":0.0875},{"bucket":"3","n_unmatched":52199,"pct_unmatched":1.0,"avg_app_opens_unmatched":39.5,"avg_orders_unmatched":1.691,"n_matched":25633,"pct_matched":2.6,"avg_app_opens_matched":65.4,"avg_orders_matched":2.656,"avg_turns_matched":10.18,"sum_turns_matched":261010,"uplift_vs_test0":0.399,"uplift_vs_ctrl":0.223,"cost_per_order_vs_test0":25.5,"cost_per_order_vs_ctrl":45.6,"zero_click_pct_matched":37.11,"clicks_per_open_matched":3.8017,"sscat_per_open_matched":0.0876},{"bucket":"4","n_unmatched":28759,"pct_unmatched":0.6,"avg_app_opens_unmatched":44.4,"avg_orders_unmatched":1.9,"n_matched":15896,"pct_matched":1.6,"avg_app_opens_matched":67.4,"avg_orders_matched":2.761,"avg_turns_matched":15.28,"sum_turns_matched":242817,"uplift_vs_test0":0.503,"uplift_vs_ctrl":0.328,"cost_per_order_vs_test0":30.4,"cost_per_order_vs_ctrl":46.6,"zero_click_pct_matched":37.24,"clicks_per_open_matched":3.7865,"sscat_per_open_matched":0.0879},{"bucket":"5+","n_unmatched":67478,"pct_unmatched":1.3,"avg_app_opens_unmatched":63.9,"avg_orders_unmatched":2.635,"n_matched":51051,"pct_matched":5.1,"avg_app_opens_matched":78.5,"avg_orders_matched":3.172,"avg_turns_matched":51.34,"sum_turns_matched":2620712,"uplift_vs_test0":0.915,"uplift_vs_ctrl":0.739,"cost_per_order_vs_test0":56.1,"cost_per_order_vs_ctrl":69.4,"zero_click_pct_matched":37.17,"clicks_per_open_matched":4.0109,"sscat_per_open_matched":0.0902}],"control":{"unmatched":{"n_users":4171289,"avg_app_opens":19.1,"avg_orders":0.8,"zero_click_pct":48.92,"clicks_per_open":2.8195},"matched":{"n_users":867477,"avg_app_opens":60.6,"avg_orders":2.433,"zero_click_pct":50.33,"clicks_per_open":2.8368}},"ratio_cut":{"low_ratio":{"n_users":128428,"avg_ratio":0.0202,"avg_app_opens":78.1,"avg_vaani_sessions":1.3,"avg_turns":3.43,"avg_orders":2.983,"zero_click_pct":36.68},"high_ratio":{"n_users":128428,"avg_ratio":0.1016,"avg_app_opens":54.2,"avg_vaani_sessions":5.4,"avg_turns":25.28,"avg_orders":2.362,"zero_click_pct":37.5}},"blended":{"matched":{"n_users":256856,"total_turns":3686919,"incr_orders_test0":106572,"incr_orders_ctrl":61546,"cost_test0":34.6,"cost_ctrl":59.9},"unmatched":{"n_users":639081,"total_turns":6190106,"incr_orders_test0":496217,"incr_orders_ctrl":405184,"cost_test0":12.5,"cost_ctrl":15.3}}}</script>
+<script id="stratifiedData" type="application/json">{"rows":[{"bin":"27\u201339","control":{"n":334146,"avg_app_opens":32.3,"avg_orders":1.537},"buckets":{"0":{"n":309148,"avg_app_opens":32.2,"avg_orders":1.495},"1":{"n":43107,"avg_app_opens":32.4,"avg_orders":1.539},"2":{"n":16489,"avg_app_opens":32.4,"avg_orders":1.573},"3":{"n":8579,"avg_app_opens":32.4,"avg_orders":1.546},"4":{"n":5109,"avg_app_opens":32.5,"avg_orders":1.561},"5+":{"n":12355,"avg_app_opens":32.7,"avg_orders":1.599}}},{"bin":"40\u201359","control":{"n":249336,"avg_app_opens":48.2,"avg_orders":2.166},"buckets":{"0":{"n":216605,"avg_app_opens":48.0,"avg_orders":2.085},"1":{"n":33987,"avg_app_opens":48.2,"avg_orders":2.134},"2":{"n":13569,"avg_app_opens":48.4,"avg_orders":2.175},"3":{"n":7361,"avg_app_opens":48.3,"avg_orders":2.205},"4":{"n":4503,"avg_app_opens":48.4,"avg_orders":2.25},"5+":{"n":13593,"avg_app_opens":48.7,"avg_orders":2.242}}},{"bin":"60\u201379","control":{"n":118369,"avg_app_opens":68.4,"avg_orders":2.833},"buckets":{"0":{"n":96190,"avg_app_opens":68.3,"avg_orders":2.728},"1":{"n":16611,"avg_app_opens":68.3,"avg_orders":2.889},"2":{"n":6841,"avg_app_opens":68.6,"avg_orders":2.824},"3":{"n":3848,"avg_app_opens":68.5,"avg_orders":2.842},"4":{"n":2357,"avg_app_opens":68.6,"avg_orders":2.957},"5+":{"n":8331,"avg_app_opens":68.7,"avg_orders":2.963}}},{"bin":"80\u2013119","control":{"n":98442,"avg_app_opens":95.9,"avg_orders":3.656},"buckets":{"0":{"n":76309,"avg_app_opens":95.6,"avg_orders":3.473},"1":{"n":14026,"avg_app_opens":96.1,"avg_orders":3.679},"2":{"n":6062,"avg_app_opens":96.2,"avg_orders":3.823},"3":{"n":3307,"avg_app_opens":96.2,"avg_orders":3.889},"4":{"n":2229,"avg_app_opens":95.9,"avg_orders":3.763},"5+":{"n":8768,"avg_app_opens":96.5,"avg_orders":3.914}}},{"bin":"120\u2013199","control":{"n":50448,"avg_app_opens":148.5,"avg_orders":4.9},"buckets":{"0":{"n":36930,"avg_app_opens":148.1,"avg_orders":4.632},"1":{"n":7046,"avg_app_opens":148.8,"avg_orders":4.971},"2":{"n":3210,"avg_app_opens":148.4,"avg_orders":5.144},"3":{"n":1927,"avg_app_opens":149.1,"avg_orders":5.117},"4":{"n":1256,"avg_app_opens":148.7,"avg_orders":5.467},"5+":{"n":5682,"avg_app_opens":150.1,"avg_orders":5.617}}},{"bin":"200+","control":{"n":16764,"avg_app_opens":285.2,"avg_orders":6.821},"buckets":{"0":{"n":11556,"avg_app_opens":287.2,"avg_orders":6.36},"1":{"n":2298,"avg_app_opens":288.4,"avg_orders":7.391},"2":{"n":1034,"avg_app_opens":276.8,"avg_orders":7.38},"3":{"n":612,"avg_app_opens":285.7,"avg_orders":8.077},"4":{"n":441,"avg_app_opens":285.2,"avg_orders":8.048},"5+":{"n":2323,"avg_app_opens":289.2,"avg_orders":8.953}}}],"blended_by_bucket":{"1":{"n":117075,"avg_turns":2.4,"incr_vs_test0":0.118,"incr_vs_ctrl":0.017,"cost_vs_test0":20.3,"cost_vs_ctrl":137.8},"2":{"n":47205,"avg_turns":5.97,"incr_vs_test0":0.169,"incr_vs_ctrl":0.064,"cost_vs_test0":35.3,"cost_vs_ctrl":93.1},"3":{"n":25634,"avg_turns":10.18,"incr_vs_test0":0.2,"incr_vs_ctrl":0.092,"cost_vs_test0":51.0,"cost_vs_ctrl":110.7},"4":{"n":15895,"avg_turns":15.28,"incr_vs_test0":0.255,"incr_vs_ctrl":0.144,"cost_vs_test0":59.9,"cost_vs_ctrl":106.4},"5+":{"n":51052,"avg_turns":51.33,"incr_vs_test0":0.409,"incr_vs_ctrl":0.277,"cost_vs_test0":125.6,"cost_vs_ctrl":185.0}},"blended_total":{"n":256861,"total_turns":3686958,"incr_orders_test0":51876,"incr_orders_ctrl":23869,"cost_test0":71.1,"cost_ctrl":154.5}}</script>
+<script id="effortData" type="application/json">{"rows":[{"bucket":"0","n":972947,"avg_app_opens":60.9,"clicks_per_open":3.596,"clicks_per_order":92.37,"cart_products_per_user":4.095,"cart_products_per_order":1.214,"opens_to_first_order":16.76,"n_order_placers":683773},{"bucket":"1","n":143270,"avg_app_opens":64.1,"clicks_per_open":3.786,"clicks_per_order":94.54,"cart_products_per_user":4.417,"cart_products_per_order":1.279,"opens_to_first_order":17.01,"n_order_placers":106462},{"bucket":"2","n":57724,"avg_app_opens":65.8,"clicks_per_open":3.828,"clicks_per_order":94.17,"cart_products_per_user":4.52,"cart_products_per_order":1.281,"opens_to_first_order":17.04,"n_order_placers":43797},{"bucket":"3","n":31185,"avg_app_opens":67.7,"clicks_per_open":3.903,"clicks_per_order":94.64,"cart_products_per_user":4.698,"cart_products_per_order":1.29,"opens_to_first_order":17.21,"n_order_placers":23919},{"bucket":"4","n":19635,"avg_app_opens":69.1,"clicks_per_open":3.922,"clicks_per_order":94.81,"cart_products_per_user":4.79,"cart_products_per_order":1.287,"opens_to_first_order":17.5,"n_order_placers":15081},{"bucket":"5+","n":61488,"avg_app_opens":82.8,"clicks_per_open":4.13,"clicks_per_order":100.8,"cart_products_per_user":5.661,"cart_products_per_order":1.33,"opens_to_first_order":19.04,"n_order_placers":49009}],"control":{"n":1092704,"avg_app_opens":63.0,"clicks_per_open":3.303,"clicks_per_order":83.55,"cart_products_per_user":4.278,"cart_products_per_order":1.235,"opens_to_first_order":16.96,"n_order_placers":785481},"window":{"start":"2026-06-10","end":"2026-07-26"}}</script>
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById('reportData').textContent);
+  const buckets = data.buckets;
+  const depthColors = ['--depth-0','--depth-1','--depth-2','--depth-3','--depth-4','--depth-5'];
+  const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  const tooltip = document.getElementById('tooltip');
+  function attachTooltip(el, text) {
+    el.addEventListener('mousemove', (e) => {
+      tooltip.textContent = text;
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top = (e.clientY + 14) + 'px';
+      tooltip.classList.add('show');
+    });
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  }
+
+  function hbar(container, items, opts) {
+    opts = opts || {};
+    const maxVal = opts.max || Math.max(...items.map(i => i.value));
+    container.innerHTML = '';
+    items.forEach((it, idx) => {
+      const row = document.createElement('div');
+      row.className = 'hbar-row';
+      const pct = maxVal > 0 ? Math.max(2, 100 * it.value / maxVal) : 0;
+      const color = it.color || `var(${depthColors[idx % depthColors.length]})`;
+      row.innerHTML = `
+        <div class="label">${it.label}</div>
+        <div class="hbar-track"><div class="hbar-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div class="value">${it.display}</div>`;
+      const fill = row.querySelector('.hbar-fill');
+      attachTooltip(fill, it.tooltip || `${it.label}: ${it.display}`);
+      container.appendChild(row);
+    });
+  }
+
+  // --- callouts ---
+  const b5 = buckets[5], b0 = buckets[0];
+  const callouts = [
+    { k: 'Reach habit formation', v: b5.pct_unmatched + '%', cls: '', d: 'of all exposed Test-arm users ever reach 5+ Vaani sessions. Rises to ' + b5.pct_matched + '% once matched on app-open frequency.' },
+    { k: 'Raw order gap (5+ vs never)', v: (b5.avg_orders_unmatched / b0.avg_orders_unmatched).toFixed(1) + 'x', cls: '', d: 'unmatched — but most of this is a frequency effect, not Vaani (see §2).' },
+    { k: 'Matched order gap (5+ vs never)', v: (b5.avg_orders_matched / b0.avg_orders_matched).toFixed(2) + 'x', cls: 'good', d: 'once both groups open the app equally often, the real gap is far smaller: +' + b5.uplift_vs_test0.toFixed(2) + ' orders/user.' },
+    { k: 'Cost per incremental order, 5+ bucket', v: b5.cost_per_order_vs_test0 + ' turns', cls: 'critical', d: 'vs ' + buckets[1].cost_per_order_vs_test0 + ' turns for the 1-session bucket — light users buy incremental orders far more cheaply.' },
+  ];
+  const calloutsEl = document.getElementById('callouts');
+  callouts.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'callout';
+    div.innerHTML = `<div class="k">${c.k}</div><div class="v ${c.cls}">${c.v}</div><div class="d">${c.d}</div>`;
+    calloutsEl.appendChild(div);
+  });
+
+  // --- funnel charts ---
+  hbar(document.getElementById('funnel-unmatched'),
+    buckets.map(b => ({ label: b.bucket, value: b.pct_unmatched, display: b.pct_unmatched + '%',
+      tooltip: `${b.bucket} Vaani sessions: ${b.n_unmatched.toLocaleString()} users (${b.pct_unmatched}%), avg ${b.avg_app_opens_unmatched} app opens` })),
+    { max: 100 });
+  hbar(document.getElementById('funnel-matched'),
+    buckets.map(b => ({ label: b.bucket, value: b.pct_matched, display: b.pct_matched + '%',
+      tooltip: `${b.bucket} Vaani sessions: ${b.n_matched.toLocaleString()} users (${b.pct_matched}%), avg ${b.avg_app_opens_matched} app opens` })),
+    { max: 100 });
+
+  // --- confound reveal: dual bars per bucket ---
+  const confoundEl = document.getElementById('confound-chart');
+  confoundEl.innerHTML = '';
+  const maxOrders = Math.max(...buckets.map(b => Math.max(b.avg_orders_unmatched, b.avg_orders_matched)), data.control.matched.avg_orders);
+  buckets.forEach(b => {
+    const row = document.createElement('div');
+    row.className = 'dual-hbar-row';
+    const pctU = 100 * b.avg_orders_unmatched / maxOrders;
+    const pctM = 100 * b.avg_orders_matched / maxOrders;
+    row.innerHTML = `
+      <div class="label">${b.bucket}</div>
+      <div class="dual-track-pair">
+        <div class="dual-track"><div class="dual-fill" style="width:${pctU}%;background:var(--unmatched)"></div></div>
+        <div class="dual-val">${b.avg_orders_unmatched.toFixed(2)}</div>
+      </div>
+      <div class="dual-track-pair">
+        <div class="dual-track"><div class="dual-fill" style="width:${pctM}%;background:var(--matched)"></div>
+          <div class="ref-line" style="left:${100*data.control.matched.avg_orders/maxOrders}%" title="Control (matched): ${data.control.matched.avg_orders}"></div>
+        </div>
+        <div class="dual-val">${b.avg_orders_matched.toFixed(2)}</div>
+      </div>`;
+    attachTooltip(row.querySelectorAll('.dual-fill')[0], `Unmatched, ${b.bucket} sessions: ${b.avg_orders_unmatched} avg orders/user`);
+    attachTooltip(row.querySelectorAll('.dual-fill')[1], `Matched, ${b.bucket} sessions: ${b.avg_orders_matched} avg orders/user (Control matched: ${data.control.matched.avg_orders})`);
+    confoundEl.appendChild(row);
+  });
+
+  // --- blended cost table ---
+  const blendedTable = document.getElementById('blended-cost-table');
+  const bl = data.blended;
+  blendedTable.innerHTML = `
+    <thead><tr>
+      <th>Cut</th><th>Vaani users</th><th>Total turns</th><th>Incr. orders vs Test-0</th><th>Turns/order vs Test-0</th><th>Incr. orders vs Control</th><th>Turns/order vs Control</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="text-align:left">Matched (&ge;27 opens) &mdash; trustworthy</td>
+        <td>${bl.matched.n_users.toLocaleString()}</td>
+        <td>${bl.matched.total_turns.toLocaleString()}</td>
+        <td>${bl.matched.incr_orders_test0.toLocaleString()}</td>
+        <td style="font-weight:700">${bl.matched.cost_test0}</td>
+        <td>${bl.matched.incr_orders_ctrl.toLocaleString()}</td>
+        <td style="font-weight:700">${bl.matched.cost_ctrl}</td>
+      </tr>
+      <tr style="opacity:0.6">
+        <td style="text-align:left">Unmatched (raw, naive) &mdash; inflated</td>
+        <td>${bl.unmatched.n_users.toLocaleString()}</td>
+        <td>${bl.unmatched.total_turns.toLocaleString()}</td>
+        <td>${bl.unmatched.incr_orders_test0.toLocaleString()}</td>
+        <td>${bl.unmatched.cost_test0}</td>
+        <td>${bl.unmatched.incr_orders_ctrl.toLocaleString()}</td>
+        <td>${bl.unmatched.cost_ctrl}</td>
+      </tr>
+    </tbody>`;
+
+  // --- uplift table ---
+  const upliftTable = document.getElementById('uplift-table');
+  upliftTable.innerHTML = `
+    <thead><tr>
+      <th>Bucket</th><th>Users</th><th>Avg orders</th><th>Uplift vs Test-0</th><th>Uplift vs Control</th>
+    </tr></thead>
+    <tbody>${buckets.map(b => `
+      <tr>
+        <td style="text-align:left">${b.bucket === '0' ? '0 (never used)' : b.bucket === '5+' ? '5+ (habit-formed)' : b.bucket}</td>
+        <td>${b.n_matched.toLocaleString()}</td>
+        <td>${b.avg_orders_matched.toFixed(3)}</td>
+        <td class="${b.uplift_vs_test0 > 0 ? 'delta-pos' : b.uplift_vs_test0 < 0 ? 'delta-neg' : ''}">${b.uplift_vs_test0 > 0 ? '+' : ''}${b.uplift_vs_test0.toFixed(3)}</td>
+        <td class="${b.uplift_vs_ctrl > 0 ? 'delta-pos' : b.uplift_vs_ctrl < 0 ? 'delta-neg' : ''}">${b.uplift_vs_ctrl > 0 ? '+' : ''}${b.uplift_vs_ctrl.toFixed(3)}</td>
+      </tr>`).join('')}
+      <tr style="opacity:0.75">
+        <td style="text-align:left">Control (true baseline)</td>
+        <td>${data.control.matched.n_users.toLocaleString()}</td>
+        <td>${data.control.matched.avg_orders.toFixed(3)}</td>
+        <td>&mdash;</td><td>&mdash;</td>
+      </tr>
+    </tbody>`;
+
+  // --- quality small multiples ---
+  hbar(document.getElementById('chart-zeroclick'),
+    buckets.map(b => ({ label: b.bucket, value: b.zero_click_pct_matched, display: b.zero_click_pct_matched + '%',
+      tooltip: `${b.bucket} sessions: ${b.zero_click_pct_matched}% zero-click (Control: ${data.control.matched.zero_click_pct}%)` })));
+  hbar(document.getElementById('chart-clicksopen'),
+    buckets.map(b => ({ label: b.bucket, value: b.clicks_per_open_matched, display: b.clicks_per_open_matched.toFixed(2),
+      tooltip: `${b.bucket} sessions: ${b.clicks_per_open_matched.toFixed(3)} clicks/open (Control: ${data.control.matched.clicks_per_open})` })));
+  hbar(document.getElementById('chart-sscatopen'),
+    buckets.map(b => ({ label: b.bucket, value: b.sscat_per_open_matched, display: b.sscat_per_open_matched.toFixed(3),
+      tooltip: `${b.bucket} sessions: ${b.sscat_per_open_matched.toFixed(4)} distinct sscat/open` })));
+
+  // --- cost lens ---
+  hbar(document.getElementById('chart-turns'),
+    buckets.map(b => ({ label: b.bucket, value: b.avg_turns_matched, display: b.avg_turns_matched.toFixed(1),
+      tooltip: `${b.bucket} sessions: ${b.avg_turns_matched.toFixed(2)} avg turns/user, ${b.sum_turns_matched.toLocaleString()} total turns in bucket` })));
+
+  const costEl = document.getElementById('chart-costperorder');
+  costEl.innerHTML = '';
+  const costBuckets = buckets.filter(b => b.cost_per_order_vs_test0 !== null);
+  const maxCost = Math.max(...costBuckets.map(b => Math.max(b.cost_per_order_vs_test0 || 0, b.cost_per_order_vs_ctrl || 0)));
+  costBuckets.forEach(b => {
+    const row = document.createElement('div');
+    row.className = 'dual-hbar-row';
+    const pctT = 100 * (b.cost_per_order_vs_test0 || 0) / maxCost;
+    const pctC = 100 * (b.cost_per_order_vs_ctrl || 0) / maxCost;
+    row.innerHTML = `
+      <div class="label">${b.bucket}</div>
+      <div class="dual-track-pair">
+        <div class="dual-track"><div class="dual-fill" style="width:${pctT}%;background:var(--unmatched)"></div></div>
+        <div class="dual-val">${b.cost_per_order_vs_test0}</div>
+      </div>
+      <div class="dual-track-pair">
+        <div class="dual-track"><div class="dual-fill" style="width:${pctC}%;background:var(--control)"></div></div>
+        <div class="dual-val">${b.cost_per_order_vs_ctrl}</div>
+      </div>`;
+    attachTooltip(row.querySelectorAll('.dual-fill')[0], `${b.bucket} sessions: ${b.cost_per_order_vs_test0} turns per incremental order vs Test-0`);
+    attachTooltip(row.querySelectorAll('.dual-fill')[1], `${b.bucket} sessions: ${b.cost_per_order_vs_ctrl} turns per incremental order vs Control`);
+    costEl.appendChild(row);
+  });
+
+  // --- ratio cards ---
+  const ratioEl = document.getElementById('ratio-cards');
+  const rc = data.ratio_cut;
+  function ratioCard(title, r, color) {
+    return `<div class="ratio-card">
+      <h3><span style="color:${color}">&#9679;</span> ${title}</h3>
+      <div class="n">n = ${r.n_users.toLocaleString()} &middot; avg ratio ${r.avg_ratio}</div>
+      <dl>
+        <dt>Avg app opens</dt><dd>${r.avg_app_opens}</dd>
+        <dt>Avg Vaani sessions</dt><dd>${r.avg_vaani_sessions}</dd>
+        <dt>Avg Vaani turns</dt><dd>${r.avg_turns}</dd>
+        <dt>Avg orders</dt><dd>${r.avg_orders}</dd>
+        <dt>Zero-click %</dt><dd>${r.zero_click_pct}%</dd>
+      </dl>
+    </div>`;
+  }
+  ratioEl.innerHTML = ratioCard('Low ratio (relies on Vaani less per visit)', rc.low_ratio, cssVar('--matched')) +
+                       ratioCard('High ratio (relies on Vaani more per visit)', rc.high_ratio, cssVar('--control'));
+
+  // --- stratified (app-open band) section ---
+  const strat = JSON.parse(document.getElementById('stratifiedData').textContent);
+  const bucketOrder = ['0','1','2','3','4','5+'];
+
+  const stratTable = document.getElementById('stratified-table');
+  stratTable.innerHTML = `
+    <thead><tr>
+      <th>App-open band</th><th>Control</th>${bucketOrder.map(b => `<th>${b === '0' ? '0 (never)' : b === '5+' ? '5+ (habit)' : b}</th>`).join('')}
+    </tr></thead>
+    <tbody>${strat.rows.map(row => `
+      <tr>
+        <td style="text-align:left">${row.bin}<br><span style="font-weight:400;color:var(--muted);font-size:11px">avg opens &asymp; ${row.control.avg_app_opens}</span></td>
+        <td>${row.control.avg_orders.toFixed(3)}<br><span style="font-weight:400;color:var(--muted);font-size:11px">n=${row.control.n.toLocaleString()}</span></td>
+        ${bucketOrder.map(b => {
+          const c = row.buckets[b];
+          if (!c) return '<td>&mdash;</td>';
+          const delta = c.avg_orders - row.control.avg_orders;
+          const cls = b === '0' ? '' : (delta > 0 ? 'delta-pos' : delta < 0 ? 'delta-neg' : '');
+          return `<td class="${cls}">${c.avg_orders.toFixed(3)}<br><span style="font-weight:400;color:var(--muted);font-size:11px">n=${c.n.toLocaleString()}</span></td>`;
+        }).join('')}
+      </tr>`).join('')}
+    </tbody>`;
+
+  const stratBlendedTable = document.getElementById('stratified-blended-table');
+  const sb = strat.blended_by_bucket;
+  const sbt = strat.blended_total;
+  stratBlendedTable.innerHTML = `
+    <thead><tr>
+      <th>Bucket</th><th>Users</th><th>Avg turns/user</th><th>Incr. orders vs Test-0</th><th>Turns/order vs Test-0</th><th>Incr. orders vs Control</th><th>Turns/order vs Control</th>
+    </tr></thead>
+    <tbody>
+      ${['1','2','3','4','5+'].map(b => `
+        <tr>
+          <td style="text-align:left">${b === '5+' ? '5+ (habit-formed)' : b}</td>
+          <td>${sb[b].n.toLocaleString()}</td>
+          <td>${sb[b].avg_turns}</td>
+          <td class="${sb[b].incr_vs_test0 > 0 ? 'delta-pos' : 'delta-neg'}">${sb[b].incr_vs_test0 > 0 ? '+' : ''}${sb[b].incr_vs_test0}</td>
+          <td>${sb[b].cost_vs_test0 ?? '&mdash;'}</td>
+          <td class="${sb[b].incr_vs_ctrl > 0 ? 'delta-pos' : 'delta-neg'}">${sb[b].incr_vs_ctrl > 0 ? '+' : ''}${sb[b].incr_vs_ctrl}</td>
+          <td>${sb[b].cost_vs_ctrl ?? '&mdash;'}</td>
+        </tr>`).join('')}
+      <tr style="font-weight:700">
+        <td style="text-align:left">All Vaani users (blended)</td>
+        <td>${sbt.n.toLocaleString()}</td>
+        <td>${(sbt.total_turns/sbt.n).toFixed(2)}</td>
+        <td>${sbt.incr_orders_test0.toLocaleString()}</td>
+        <td>${sbt.cost_test0}</td>
+        <td>${sbt.incr_orders_ctrl.toLocaleString()}</td>
+        <td>${sbt.cost_ctrl}</td>
+      </tr>
+    </tbody>`;
+
+  // --- effort (§8) section ---
+  const effort = JSON.parse(document.getElementById('effortData').textContent);
+  const effortTable = document.getElementById('effort-table');
+  const ec = effort.control;
+  effortTable.innerHTML = `
+    <thead><tr>
+      <th>Bucket</th><th>Users</th><th>Avg app opens</th><th>Clicks/open</th><th>Clicks/order</th><th>Cart products/user (ordered sscat)</th><th>Cart products/order</th><th>Opens to 1st order</th>
+    </tr></thead>
+    <tbody>${effort.rows.map(r => `
+      <tr>
+        <td style="text-align:left">${r.bucket === '0' ? '0 (never)' : r.bucket === '5+' ? '5+ (habit)' : r.bucket}</td>
+        <td>${r.n.toLocaleString()}</td>
+        <td>${r.avg_app_opens}</td>
+        <td>${r.clicks_per_open}</td>
+        <td>${r.clicks_per_order ?? '&mdash;'}</td>
+        <td>${r.cart_products_per_user}</td>
+        <td>${r.cart_products_per_order ?? '&mdash;'}</td>
+        <td>${r.opens_to_first_order}</td>
+      </tr>`).join('')}
+      <tr style="opacity:0.75">
+        <td style="text-align:left">Control (true baseline)</td>
+        <td>${ec.n.toLocaleString()}</td>
+        <td>${ec.avg_app_opens}</td>
+        <td>${ec.clicks_per_open}</td>
+        <td>${ec.clicks_per_order}</td>
+        <td>${ec.cart_products_per_user}</td>
+        <td>${ec.cart_products_per_order}</td>
+        <td>${ec.opens_to_first_order}</td>
+      </tr>
+    </tbody>`;
+
+  hbar(document.getElementById('chart-clicksperorder'),
+    effort.rows.map(r => ({ label: r.bucket, value: r.clicks_per_order, display: r.clicks_per_order.toFixed(1),
+      tooltip: `${r.bucket} sessions: ${r.clicks_per_order} clicks/order (Control: ${ec.clicks_per_order})` })));
+  hbar(document.getElementById('chart-openstoorder'),
+    effort.rows.map(r => ({ label: r.bucket, value: r.opens_to_first_order, display: r.opens_to_first_order.toFixed(1),
+      tooltip: `${r.bucket} sessions: ${r.opens_to_first_order} opens to first order (Control: ${ec.opens_to_first_order})` })));
+})();
+</script>
+
+
+</body></html>
