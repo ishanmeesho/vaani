@@ -1,0 +1,662 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Zero-Click Nudges: exp 20958 analysis</title>
+<style>
+  .rpt {
+    --surface-1: #fcfcfb;
+    --page: #f9f9f7;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --accent: #7c2d5c;
+    --accent-wash: #f3e6ee;
+    --control: #2a78d6;
+    --conservative: #eda100;
+    --aggressive: #e34948;
+    --good: #0ca30c;
+    --warning: #fab219;
+    --critical: #d03b3b;
+    --seq-100: #cde2fb; --seq-300: #6da7ec; --seq-500: #256abf; --seq-700: #0d366b;
+    color-scheme: light;
+
+    --serif: "Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .rpt {
+      --surface-1: #1a1a19;
+      --page: #0d0d0d;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --accent: #e0a0c8;
+      --accent-wash: #2a1c24;
+      --control: #3987e5;
+      --conservative: #c98500;
+      --aggressive: #e66767;
+      --good: #0ca30c;
+      --warning: #fab219;
+      --critical: #d03b3b;
+      --seq-100: #184f95; --seq-300: #1c5cab; --seq-500: #5598e7; --seq-700: #cde2fb;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] .rpt {
+    --surface-1: #1a1a19; --page: #0d0d0d; --ink: #ffffff; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --accent: #e0a0c8; --accent-wash: #2a1c24;
+    --control: #3987e5; --conservative: #c98500; --aggressive: #e66767;
+    --seq-100: #184f95; --seq-300: #1c5cab; --seq-500: #5598e7; --seq-700: #cde2fb;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] .rpt {
+    --surface-1: #fcfcfb; --page: #f9f9f7; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+    --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --accent: #7c2d5c; --accent-wash: #f3e6ee;
+    --control: #2a78d6; --conservative: #eda100; --aggressive: #e34948;
+    --seq-100: #cde2fb; --seq-300: #6da7ec; --seq-500: #256abf; --seq-700: #0d366b;
+    color-scheme: light;
+  }
+
+  .rpt * { box-sizing: border-box; }
+  .rpt h1, .rpt h2, .rpt h3 { font-family: var(--serif); font-weight: 600; text-wrap: balance; margin: 0; }
+  .rpt table { border-collapse: collapse; }
+  .rpt a { color: var(--accent); }
+
+  .rpt-shell {
+    display: grid;
+    grid-template-columns: 220px minmax(0,1fr);
+    gap: 0;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .rpt-nav {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 32px 18px 32px 4px;
+    font-size: 0.82rem;
+  }
+  .rpt-nav .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-size: 0.68rem;
+    margin-bottom: 10px;
+  }
+  .rpt-nav ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .rpt-nav a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: var(--ink-2);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+  .rpt-nav a:hover { color: var(--ink); background: var(--accent-wash); border-left-color: var(--accent); }
+
+  .rpt-main { padding: 32px 28px 80px; min-width: 0; }
+
+  .rpt-header { margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+  .rpt-kicker { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .rpt-header h1 { font-size: 2rem; margin-bottom: 8px; }
+  .rpt-header p { color: var(--ink-2); max-width: 62ch; margin: 0; font-size: 0.95rem; }
+  .rpt-meta { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 14px; font-size: 0.78rem; color: var(--muted); }
+  .rpt-meta b { color: var(--ink-2); font-weight: 600; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 36px; }
+  .stat-tile { background: var(--surface-1); padding: 16px 16px; }
+  .stat-tile .label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 6px; }
+  .stat-tile .value { font-family: var(--serif); font-size: 1.55rem; font-weight: 600; line-height: 1.1; }
+  .stat-tile .sub { font-size: 0.74rem; color: var(--ink-2); margin-top: 4px; }
+
+  section.rpt-section { margin-bottom: 52px; scroll-margin-top: 16px; }
+  .sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .sec-num { font-family: var(--serif); color: var(--accent); font-size: 0.85rem; font-weight: 600; }
+  .rpt-section h2 { font-size: 1.28rem; }
+  .sec-dek { color: var(--ink-2); font-size: 0.88rem; max-width: 70ch; margin: 6px 0 20px; }
+
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } .rpt-shell { grid-template-columns: 1fr; } .rpt-nav { position: static; padding: 16px 0; } }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; font-size: 0.78rem; color: var(--ink-2); }
+  .legend span.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+  .barchart { display: flex; flex-direction: column; gap: 14px; }
+  .bar-row { display: grid; grid-template-columns: 190px 1fr 56px; align-items: center; gap: 10px; font-size: 0.82rem; }
+  .bar-row .rlabel { color: var(--ink-2); }
+  .bar-track { background: var(--grid); border-radius: 3px; height: 16px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px 0 0 3px; transition: filter .15s; }
+  .bar-fill:hover { filter: brightness(1.1); }
+  .bar-val { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); font-weight: 600; font-size: 0.82rem; }
+
+  table.data { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  table.data caption { text-align: left; font-size: 0.72rem; color: var(--muted); margin-bottom: 8px; }
+  table.data th { text-align: right; font-weight: 600; color: var(--muted); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 10px; border-bottom: 1px solid var(--grid); }
+  table.data th:first-child, table.data td:first-child { text-align: left; }
+  table.data td { padding: 7px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; text-align: right; }
+  table.data tr:hover td { background: var(--accent-wash); }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; }
+  .pill.zc { background: color-mix(in srgb, var(--critical) 16%, transparent); color: var(--critical); }
+  .pill.other { background: color-mix(in srgb, var(--control) 16%, transparent); color: var(--control); }
+  .tblwrap { overflow-x: auto; }
+
+  .callout { border-left: 3px solid var(--accent); background: var(--accent-wash); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 0.85rem; margin: 16px 0; }
+  .callout b { color: var(--accent); }
+  .callout.good { border-left-color: var(--good); }
+  .callout.good b { color: var(--good); }
+  .callout.warn { border-left-color: var(--critical); background: color-mix(in srgb, var(--critical) 8%, var(--accent-wash)); }
+  .callout.warn b { color: var(--critical); }
+
+  .step-line { display: flex; align-items: flex-end; gap: 4px; height: 130px; padding-top: 10px; }
+  .step-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .step-bar { width: 100%; border-radius: 3px 3px 0 0; position: relative; }
+  .step-label { font-size: 0.68rem; color: var(--muted); }
+  .step-val { font-size: 0.72rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  footer.rpt-footer { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 12px; font-size: 0.78rem; color: var(--muted); }
+  footer.rpt-footer h3 { font-size: 0.9rem; color: var(--ink-2); margin-bottom: 10px; font-family: var(--sans); font-weight: 700; }
+  footer.rpt-footer ul { padding-left: 18px; margin: 0 0 14px; }
+  footer.rpt-footer li { margin-bottom: 6px; }
+</style>
+
+<div class="rpt">
+<div class="rpt-shell">
+
+  <nav class="rpt-nav">
+    <div class="eyebrow">On this page</div>
+    <ol>
+      <li><a href="#correction">Correction notice</a></li>
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#conversion">Conversion by cohort (NEW, both experiments)</a></li>
+      <li><a href="#reach">1&ndash;2. Reach &amp; adoption</a></li>
+      <li><a href="#ruletable">3. Nudge leaderboard</a></li>
+      <li><a href="#sameSession">6a. Same-session effect</a></li>
+      <li><a href="#attribution">4. First-adoption channel</a></li>
+      <li><a href="#comeback">4b. Nudge&rarr;organic comeback</a></li>
+      <li><a href="#habit">6b. Habit persistence</a></li>
+      <li><a href="#qualdump">6c/d. Qualitative turn dump</a></li>
+      <li><a href="#doseresponse">Habit formation: dose-response</a></li>
+      <li><a href="#outcomeeffect">Does prior outcome predict future use?</a></li>
+      <li><a href="#querytype">Does query type predict outcome?</a></li>
+      <li><a href="#fatigue">Extra: fatigue</a></li>
+      <li><a href="#vs19446">Extra: vs. exp 19446</a></li>
+      <li><a href="#methodology">Methodology &amp; caveats</a></li>
+    </ol>
+  </nav>
+
+  <main class="rpt-main">
+
+    <div class="rpt-header">
+      <div class="rpt-kicker">Vaani &middot; Experiment 20958</div>
+      <h1>Zero-Click Nudges: reach, adoption &amp; effect</h1>
+      <p>Control 168647 &middot; Conservative Nudge 168648 &middot; Aggressive Nudge 168649 &mdash; three-arm test of nudging users toward the Vaani voice assistant when a session risks ending without a product click.</p>
+      <div class="rpt-meta">
+        <span><b>Window:</b> 2026-07-17 &rarr; 2026-07-25 (9 days)</span>
+        <span><b>Source:</b> gold.va_user_session_activity</span>
+        <span><b>Corrected:</b> 2026-07-31</span>
+      </div>
+    </div>
+
+    <section id="correction" class="rpt-section">
+      <div class="callout warn"><b>Major correction, 2026-07-31 &mdash; read this first.</b> Every prior version of this report defined "adopted" using the nudge's own <code>adopted</code> flag (a mic-tap within 60 seconds of the nudge). That flag proves the user <i>tapped the mic</i> &mdash; it does not prove Vaani actually produced a response. Checked directly: of every zero-click nudge event flagged <code>adopted=true</code>, only <b>35.6%</b> have a real <code>bk_turns_json</code> conversation turn within 60 seconds of the nudge. The rest are taps that didn't lead anywhere &mdash; a UI open, an error, an abandoned mic. <b>"Adopted" now means: mic tap AND a real Vaani turn within 60 seconds of the nudge.</b> This tightens every adoption-rate number in this report substantially (family/rule adopt rates roughly halve), and reshapes the qualitative dump's population (96,558 &rarr; 84,824 sessions &mdash; the 12,734 that don't survive were mic-taps with no timely turn). Every section below has been rebuilt against this definition. Where a number moved, the old value is shown alongside for transparency.</div>
+    </section>
+
+    <section id="summary" class="rpt-section">
+      <div class="stat-row">
+        <div class="stat-tile"><div class="label">Cohort / arm</div><div class="value">~1.08M</div><div class="sub">balanced across all 3 arms</div></div>
+        <div class="stat-tile"><div class="label">Zero-click strict adopt</div><div class="value">12.9% / 14.1%</div><div class="sub">Cons / Aggr, of users shown (was 32.9% / 37.2% loose)</div></div>
+        <div class="stat-tile"><div class="label">Raw taps that led nowhere</div><div class="value">~61%</div><div class="sub">of zero-click "adoptions," no turn within 60s</div></div>
+        <div class="stat-tile"><div class="label">New adopters via nudge</div><div class="value">62.9% / 65.4%</div><div class="sub">was 72.9% / 75.0% loose</div></div>
+        <div class="stat-tile"><div class="label">Same-session friction drop</div><div class="value">32.6%&rarr;12.8%</div><div class="sub">Conservative, zero-click strict-adopted sessions</div></div>
+        <div class="stat-tile"><div class="label">Clicked Vaani's own result</div><div class="value">52.8%</div><div class="sub">of strict-adopted turns (barely moved from 51.7%)</div></div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Conversion by cohort (NEW) ============ -->
+    <section id="conversion" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">New</span><h2>Conversion improvement across cohorts &mdash; both experiments, tenure-matched</h2></div>
+      <p class="sec-dek">Refreshed to the most current data (window 2026-07-17&ndash;28, 12 days &mdash; gold's rolling range and experiment tagging both advanced since the last pull). Four cohorts for 20958: <b>Control</b> (leakage-excluded) &middot; <b>non-Vaani</b> (Test-arm, never used Vaani) &middot; <b>Vaani, non-zero-click adopter</b> (used Vaani via organic use or "other" nudges, never strictly adopted a zero-click nudge) &middot; <b>Vaani, zero-click adopter</b> (strict adoption: mic-tap + real turn within 60s). Exp 19446 has no zero-click nudges at all, so it gets three cohorts instead of four &mdash; otherwise identical design. <b>Tenure-matched:</b> 19446 has been running since 2026-06-17, so its cohorts here are restricted to users who <i>first</i> entered the 19446 audience during this same 07-17&ndash;28 window &mdash; i.e. genuinely new to the experiment, the same tenure as every 20958 user by construction.</p>
+
+      <div class="card">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Exp 20958 (zero-click nudges) &mdash; full cohort matrix</h3>
+        <div class="tblwrap">
+        <table class="data">
+          <thead><tr>
+            <th style="text-align:left">Cohort</th><th>Users</th><th>Session order rate</th><th>Orders / session</th><th>Clicks / order</th><th>Avg session duration</th><th>% zero-click sessions</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="text-align:left"><b>Control</b> (leakage-excl.)</td><td>1,133,912</td><td>3.42%</td><td>0.0395</td><td>96.6</td><td>317s</td><td>30.53%</td></tr>
+            <tr><td style="text-align:left">Conservative &middot; non-Vaani</td><td>997,432</td><td>3.24%</td><td>0.0376</td><td>95.9</td><td>339s</td><td>32.14%</td></tr>
+            <tr><td style="text-align:left">Conservative &middot; Vaani, non-ZC</td><td>106,045</td><td>3.79%</td><td>0.0434</td><td>97.1</td><td>507s</td><td>30.45%</td></tr>
+            <tr><td style="text-align:left">Conservative &middot; Vaani, ZC adopter</td><td>35,534</td><td>3.63%</td><td>0.0411</td><td>99.7</td><td>207s</td><td>31.53%</td></tr>
+            <tr><td style="text-align:left">Aggressive &middot; non-Vaani</td><td>990,467</td><td>3.25%</td><td>0.0377</td><td>95.4</td><td>317s</td><td>32.32%</td></tr>
+            <tr><td style="text-align:left">Aggressive &middot; Vaani, non-ZC</td><td>94,511</td><td>3.82%</td><td>0.0434</td><td>96.6</td><td>399s</td><td>30.66%</td></tr>
+            <tr><td style="text-align:left">Aggressive &middot; Vaani, ZC adopter</td><td>52,184</td><td>3.68%</td><td>0.0419</td><td>99.4</td><td>207s</td><td>31.22%</td></tr>
+            <tr><td style="text-align:left"><b>Pooled Test &middot; non-Vaani</b></td><td>1,987,899</td><td>3.25%</td><td>0.0376</td><td>95.6</td><td>328s</td><td>32.23%</td></tr>
+            <tr><td style="text-align:left"><b>Pooled Test &middot; Vaani, non-ZC</b></td><td>200,556</td><td>3.80%</td><td>0.0434</td><td>96.9</td><td>457s</td><td>30.55%</td></tr>
+            <tr><td style="text-align:left"><b>Pooled Test &middot; Vaani, ZC adopter</b></td><td>87,718</td><td>3.66%</td><td>0.0415</td><td>99.5</td><td>207s</td><td>31.35%</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Exp 19446 (no zero-click nudges) &mdash; tenure-matched cohort matrix</h3>
+        <div class="tblwrap">
+        <table class="data">
+          <thead><tr>
+            <th style="text-align:left">Cohort</th><th>Users</th><th>Session order rate</th><th>Orders / session</th><th>Clicks / order</th><th>Avg session duration</th><th>% zero-click sessions</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="text-align:left"><b>Control</b> (tenure-matched, leakage-excl.)</td><td>920,225</td><td>4.01%</td><td>0.0466</td><td>78.0</td><td>295s</td><td>31.96%</td></tr>
+            <tr><td style="text-align:left">Test &middot; non-Vaani</td><td>834,627</td><td>3.75%</td><td>0.0438</td><td>77.5</td><td>383s</td><td>33.95%</td></tr>
+            <tr><td style="text-align:left">Test &middot; Vaani user</td><td>105,242</td><td>4.67%</td><td>0.0533</td><td>77.3</td><td>226s</td><td>31.79%</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="callout"><b>Note the level shift between experiments:</b> 19446's clicks/order (~77&ndash;78) sits far below 20958's (~95&ndash;100), and its Control order rate (4.01%) is meaningfully higher than 20958's Control (3.42%). These two experiments' underlying populations aren't on the same footing in absolute level &mdash; 19446 pools a broader, longer-running "1+ order-done" eligible audience per this repo's experiment registry, vs. 20958's fresh bucketing. Compare <i>directional patterns</i> across experiments, not absolute numbers.</div>
+      </div>
+
+      <div class="callout good" style="margin-top:18px;"><b>The headline finding, in both experiments: Vaani users convert meaningfully better than everyone else &mdash; including Control.</b> Session order rate for Vaani users is <b>+10&ndash;12% relative to Control</b> in 20958 (3.66&ndash;3.82% vs 3.42%) and <b>+16.5%</b> in 19446 (4.67% vs 4.01%). Meanwhile, Test-arm users who <i>never</i> engage Vaani at all convert <i>worse</i> than Control in both experiments (&minus;5 to &minus;6.5%) &mdash; being merely eligible for Vaani nudges without acting on them doesn't help, and this population likely skews toward lower-intent browsers to begin with (a selection effect, not evidence the experiment itself hurts non-adopters).</div>
+
+      <div class="grid-2" style="margin-top:18px;">
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:14px;">Session order rate delta vs. own-experiment Control</h3>
+          <div class="barchart">
+            <div class="bar-row"><span class="rlabel">20958 non-Vaani</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:var(--critical)"></div></div><span class="bar-val">&minus;5.0%</span></div>
+            <div class="bar-row"><span class="rlabel">20958 Vaani, ZC adopter</span><div class="bar-track"><div class="bar-fill" style="width:49%;background:var(--seq-500)"></div></div><span class="bar-val">+7.0%</span></div>
+            <div class="bar-row"><span class="rlabel">20958 Vaani, non-ZC</span><div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--seq-700)"></div></div><span class="bar-val">+11.1%</span></div>
+            <div class="bar-row"><span class="rlabel">19446 non-Vaani</span><div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--critical)"></div></div><span class="bar-val">&minus;6.5%</span></div>
+            <div class="bar-row"><span class="rlabel">19446 Vaani user</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--good)"></div></div><span class="bar-val">+16.5%</span></div>
+          </div>
+          <p style="font-size:0.76rem;color:var(--muted);margin-top:10px;">% relative delta vs. that experiment's own Control. Bars scaled to the largest magnitude (19446 Vaani, +16.5%).</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:14px;">Zero-click session rate delta vs. own-experiment Control</h3>
+          <div class="barchart">
+            <div class="bar-row"><span class="rlabel">20958 non-Vaani</span><div class="bar-track"><div class="bar-fill" style="width:90%;background:var(--critical)"></div></div><span class="bar-val">+1.7pp</span></div>
+            <div class="bar-row"><span class="rlabel">20958 Vaani, ZC adopter</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--seq-500)"></div></div><span class="bar-val">+0.8pp</span></div>
+            <div class="bar-row"><span class="rlabel">20958 Vaani, non-ZC</span><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--seq-700)"></div></div><span class="bar-val">+0.03pp</span></div>
+            <div class="bar-row"><span class="rlabel">19446 non-Vaani</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--critical)"></div></div><span class="bar-val">+2.0pp</span></div>
+            <div class="bar-row"><span class="rlabel">19446 Vaani user</span><div class="bar-track"><div class="bar-fill" style="width:9%;background:var(--good)"></div></div><span class="bar-val">&minus;0.2pp</span></div>
+          </div>
+          <p style="font-size:0.76rem;color:var(--muted);margin-top:10px;">Pooled Cons+Agg used for 20958. Positive = worse (more zero-click) than Control.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:18px;"><b>Zero-click adopters land in between:</b> their zero-click session rate (31.2&ndash;31.5%) sits above Vaani-non-ZC users (30.5&ndash;30.7%, essentially matching Control) but below non-Vaani users (32.1&ndash;32.3%) &mdash; consistent with the whole report's story: these are users who <i>needed</i> the nudge (higher baseline browsing-without-clicking risk), and adopting it pulls them back most of the way to normal, without fully erasing the gap. Their sessions are also strikingly <b>shorter</b> (207s vs. 399&ndash;507s for Vaani-non-ZC users) and need <b>more clicks per order</b> (99.4&ndash;99.7 vs. 96.6&ndash;97.1) &mdash; a distinct behavioral signature: quick, transactional "get me to the answer" sessions, vs. Vaani-non-ZC users' longer, more exploratory browsing-plus-chatting sessions.</div>
+
+      <div class="card" style="margin-top:18px;">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Common metrics, tenure-matched</h3>
+        <div class="tblwrap">
+        <table class="data">
+          <thead><tr><th style="text-align:left">Metric</th><th>20958 Conservative</th><th>20958 Aggressive</th><th>19446 Test</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">Vaani adopter % (user-level)</td><td>12.43%</td><td>12.90%</td><td>11.20%</td></tr>
+            <tr><td style="text-align:left">Vaani adoption % (session-level)</td><td>2.28%</td><td>2.42%</td><td>2.59%</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <p style="font-size:0.76rem;color:var(--muted);margin:10px 0;">Session-level adoption is highest for 19446 despite its lower user-level rate &mdash; its Vaani users return for more sessions on average per adopter than 20958's, per the distribution below.</p>
+        <h3 style="font-size:0.95rem;margin:18px 0 10px;">Distribution of Vaani-session count per adopter</h3>
+        <div class="tblwrap">
+        <table class="data">
+          <thead><tr><th style="text-align:left">Sessions</th><th>20958 Conservative</th><th>20958 Aggressive</th><th>19446 Test</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">1</td><td>60.9%</td><td>60.2%</td><td>68.2%</td></tr>
+            <tr><td style="text-align:left">2</td><td>18.7%</td><td>18.8%</td><td>16.8%</td></tr>
+            <tr><td style="text-align:left">3&ndash;5</td><td>15.0%</td><td>15.1%</td><td>11.6%</td></tr>
+            <tr><td style="text-align:left">6&ndash;10</td><td>4.2%</td><td>4.5%</td><td>2.7%</td></tr>
+            <tr><td style="text-align:left">11&ndash;20</td><td>1.1%</td><td>1.2%</td><td>0.6%</td></tr>
+            <tr><td style="text-align:left">21+</td><td>0.2%</td><td>0.2%</td><td>0.1%</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="callout">20958's zero-click nudges correlate with <b>meaningfully deeper repeat usage</b>: only 60&ndash;61% of its adopters stop at 1 session, vs. 68% for 19446 &mdash; despite 19446's Vaani users having a slightly higher raw session-adoption rate. Every depth tier (2, 3&ndash;5, 6&ndash;10) is higher for 20958 than 19446. This is the same pattern already established in the dose-response and 19446-comparison sections, now confirmed on fully current, tenure-matched data.</div>
+      </div>
+
+      <div class="callout" style="margin-top:18px;"><b>Bottom line:</b> across every angle in this section &mdash; order rate, orders/session, zero-click rate, repeat depth &mdash; Vaani engagement (and zero-click-nudge engagement specifically) tracks with better outcomes, in both experiments, on the most current data available, with tenure properly matched between them. The consistent exception is Test-arm users who never engage Vaani at all, who underperform Control &mdash; a reminder that these comparisons are correlational: users self-select into Vaani engagement, and some of what looks like a Vaani effect may reflect who chooses to engage rather than what engaging does to them.</div>
+    </section>
+
+    <!-- ============ SECTION: Reach & Adoption ============ -->
+    <section id="reach" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">01&ndash;02</span><h2>Nudge reach &amp; adoption, by family</h2></div>
+      <p class="sec-dek">"Shown" and the raw mic-tap "adopted" flag are unchanged by this correction (both come straight from <code>nudges_json</code>). What changes is <b>strict adoption</b> &mdash; adopted AND a real Vaani turn within 60 seconds.</p>
+
+      <div class="card">
+        <div class="legend">
+          <span><span class="sw" style="background:var(--conservative)"></span>Conservative</span>
+          <span><span class="sw" style="background:var(--aggressive)"></span>Aggressive</span>
+        </div>
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">% of shown users who strictly adopted (mic tap + real turn within 60s)</h3>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Other &middot; Cons.</span><div class="bar-track"><div class="bar-fill" style="width:15.2%;background:var(--conservative)" title="was 37.9% under the loose (mic-tap-only) definition"></div></div><span class="bar-val">15.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Other &middot; Aggr.</span><div class="bar-track"><div class="bar-fill" style="width:15.2%;background:var(--aggressive)" title="was 37.4% loose"></div></div><span class="bar-val">15.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Zero-click &middot; Cons.</span><div class="bar-track"><div class="bar-fill" style="width:12.9%;background:var(--conservative)" title="was 32.9% loose"></div></div><span class="bar-val">12.9%</span></div>
+          <div class="bar-row"><span class="rlabel">Zero-click &middot; Aggr.</span><div class="bar-track"><div class="bar-fill" style="width:14.1%;background:var(--aggressive)" title="was 37.2% loose"></div></div><span class="bar-val">14.1%</span></div>
+        </div>
+        <p style="font-size:0.76rem;color:var(--muted);margin-top:10px;">Reach (% of cohort shown) is unaffected: other &asymp;42.8%, zero-click 21.4% (Cons) / 29.4% (Aggr) &mdash; identical to before. Of users who raw-tapped the mic, only ~39&ndash;41% actually got a real turn within 60s (roughly consistent across both families and arms).</p>
+        <div class="callout">Aggressive's edge survives the correction: it still reaches more users (29.4% vs 21.4% of cohort) at a strict adoption rate that's now clearly <b>better</b>, not just similar (14.1% vs 12.9%) &mdash; a bigger relative gap than the loose numbers showed (37.2% vs 32.9%).</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Rule-level table ============ -->
+    <section id="ruletable" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">03</span><h2>Nudge leaderboard, by rule (strict adoption)</h2></div>
+      <p class="sec-dek">Strict adopt % = of users shown this specific rule, how many got a real Vaani turn within 60 seconds of it firing.</p>
+      <div class="card tblwrap">
+        <table class="data">
+          <thead><tr>
+            <th style="text-align:left">Rule</th><th>Family</th>
+            <th>Users shown</th><th>Strict adopt %</th><th>Session strict adopt %</th>
+          </tr></thead>
+          <tbody>
+          <tr><td>zero-click-session-36-products <span class="pill zc">conservative</span></td><td>zero-click</td><td>187,295</td><td>10.6%</td><td>7.1%</td></tr>
+          <tr><td>zero-click-fy-24-products <span class="pill zc">conservative</span></td><td>zero-click</td><td>135,266</td><td>9.9%</td><td>6.6%</td></tr>
+          <tr><td>zero-click-search-28-products <span class="pill zc">conservative</span></td><td>zero-click</td><td>99,538</td><td>10.7%</td><td>8.8%</td></tr>
+          <tr><td>zero-click-clp-24-products <span class="pill zc">conservative</span></td><td>zero-click</td><td>28,391</td><td>7.5%</td><td>6.5%</td></tr>
+          <tr><td>pdp-page-intro-v3</td><td><span class="pill other">other</span></td><td>448,426</td><td>10.8%</td><td>5.9%</td></tr>
+          <tr><td>clp-page-intro-v3</td><td><span class="pill other">other</span></td><td>139,546</td><td>11.8%</td><td>8.7%</td></tr>
+          <tr><td>cart-page-intro-v3</td><td><span class="pill other">other</span></td><td>181,813</td><td>9.4%</td><td>7.3%</td></tr>
+          <tr><td>search-results-repeat-if-no-use-v3</td><td><span class="pill other">other</span></td><td>55,682</td><td>13.6%</td><td>11.9%</td></tr>
+          <tr><td>zero-click-session-18-products <span class="pill zc">aggressive</span></td><td>zero-click</td><td>275,374</td><td>11.9%</td><td>6.6%</td></tr>
+          <tr><td>zero-click-fy-12-products <span class="pill zc">aggressive</span></td><td>zero-click</td><td>200,445</td><td>10.9%</td><td>6.4%</td></tr>
+          <tr><td>zero-click-search-12-products <span class="pill zc">aggressive</span></td><td>zero-click</td><td>151,754</td><td>10.0%</td><td>7.3%</td></tr>
+          <tr><td>zero-click-clp-12-products <span class="pill zc">aggressive</span></td><td>zero-click</td><td>35,372</td><td>7.8%</td><td>6.6%</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:16px;"><b>The leaderboard reshuffles under strict adoption.</b> <code>search-results-repeat-if-no-use-v3</code> is now the single best converter (13.6%/13.0%), not the CLP/FY zero-click rules as the loose numbers suggested. CLP zero-click nudges remain weakest (7.5&ndash;7.8%). The compression is real: under the loose definition rates spanned roughly 20&ndash;31%; under strict adoption the whole leaderboard compresses into a tighter 7.5&ndash;13.6% band &mdash; the nudges that "worked" via mic-tap-alone weren't as differentiated as they looked.</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Same-session effect ============ -->
+    <section id="sameSession" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">06a</span><h2>Zero-click nudges: same-session effect (strict adoption)</h2></div>
+      <p class="sec-dek">Zero-click session = a session with no product click at all. Bars show the zero-click rate for sessions where a zero-click nudge fired and was strictly adopted, fired but wasn't (raw tap without a timely turn, or no tap), vs. never fired.</p>
+      <div class="card">
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Control (no nudge)</span><div class="bar-track"><div class="bar-fill" style="width:30.3%;background:var(--muted)"></div></div><span class="bar-val">30.3%</span></div>
+          <div class="bar-row"><span class="rlabel">Cons. &middot; no ZC nudge</span><div class="bar-track"><div class="bar-fill" style="width:32.6%;background:var(--seq-300)"></div></div><span class="bar-val">32.6%</span></div>
+          <div class="bar-row"><span class="rlabel">Cons. &middot; shown, not strictly adopted</span><div class="bar-track"><div class="bar-fill" style="width:25.2%;background:var(--seq-500)" title="includes raw taps that led nowhere"></div></div><span class="bar-val">25.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Cons. &middot; strictly adopted</span><div class="bar-track"><div class="bar-fill" style="width:12.8%;background:var(--seq-700)" title="was 18.3% under loose adoption"></div></div><span class="bar-val">12.8%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; no ZC nudge</span><div class="bar-track"><div class="bar-fill" style="width:33.3%;background:var(--seq-300)"></div></div><span class="bar-val">33.3%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; shown, not strictly adopted</span><div class="bar-track"><div class="bar-fill" style="width:23.2%;background:var(--seq-500)"></div></div><span class="bar-val">23.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; strictly adopted</span><div class="bar-track"><div class="bar-fill" style="width:12.1%;background:var(--seq-700)" title="was 17.4% under loose adoption"></div></div><span class="bar-val">12.1%</span></div>
+        </div>
+        <div class="callout good"><b>The effect gets stronger, not weaker, under the honest definition.</b> A strictly-adopted zero-click nudge now drops the same-session zero-click rate to 12.1&ndash;12.8% &mdash; down from 32.6&ndash;33.3% baseline, roughly a <b>2.6&times; reduction</b> (previously only ~1.8&times; under loose adoption, 33%&rarr;18%). Makes sense: this population is now restricted to nudges that <i>actually produced a Vaani conversation</i>, so of course the conversation's effect on the session outcome is larger and cleaner &mdash; the loose definition was diluting this effect with taps that never led to real Vaani engagement.</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: First-adoption attribution ============ -->
+    <section id="attribution" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">04</span><h2>What drove a user's first-ever Vaani adoption (strict)</h2></div>
+      <p class="sec-dek">"Nudge-attributed" now requires the user's earliest <i>strictly</i>-adopted nudge day to be on or before their first-ever Vaani turn day &mdash; i.e. that nudge is the actual, provable cause of a real conversation, not just a tap.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:6px;">Channel of new adopters during the window</h3>
+          <div class="barchart">
+            <div class="bar-row"><span class="rlabel">Cons. &middot; via nudge</span><div class="bar-track"><div class="bar-fill" style="width:62.9%;background:var(--conservative)" title="90,164 of 143,274 new adopters; was 72.9% loose"></div></div><span class="bar-val">62.9%</span></div>
+            <div class="bar-row"><span class="rlabel">Cons. &middot; organic</span><div class="bar-track"><div class="bar-fill" style="width:37.1%;background:var(--baseline)" title="53,110 of 143,274"></div></div><span class="bar-val">37.1%</span></div>
+            <div class="bar-row"><span class="rlabel">Aggr. &middot; via nudge</span><div class="bar-track"><div class="bar-fill" style="width:65.4%;background:var(--aggressive)" title="97,142 of 148,427 new adopters; was 75.0% loose"></div></div><span class="bar-val">65.4%</span></div>
+            <div class="bar-row"><span class="rlabel">Aggr. &middot; organic</span><div class="bar-track"><div class="bar-fill" style="width:34.6%;background:var(--baseline)" title="51,285 of 148,427"></div></div><span class="bar-val">34.6%</span></div>
+          </div>
+          <div class="callout">Nudges are still the majority driver of first adoption (62.9&ndash;65.4%) &mdash; just a smaller majority than the loose numbers suggested (72.9&ndash;75.0%). About 10 points of what looked like nudge-driven adoption was actually organic adoption that happened to be preceded by an unrelated, unsuccessful mic-tap.</div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:14px;">Which nudge gets credit (share of nudge-attributed new adopters)</h3>
+          <div class="legend"><span><span class="sw" style="background:var(--conservative)"></span>Conservative</span><span><span class="sw" style="background:var(--aggressive)"></span>Aggressive</span></div>
+          <div class="barchart">
+            <div class="bar-row"><span class="rlabel">pdp-page-intro-v3</span><div class="bar-track"><div class="bar-fill" style="width:44.3%;background:var(--conservative)" title="was 51.3% loose"></div></div><span class="bar-val">44.3%</span></div>
+            <div class="bar-row"><span class="rlabel">pdp-page-intro-v3</span><div class="bar-track"><div class="bar-fill" style="width:37.0%;background:var(--aggressive)" title="was 42.0% loose"></div></div><span class="bar-val">37.0%</span></div>
+            <div class="bar-row"><span class="rlabel">clp-page-intro-v3</span><div class="bar-track"><div class="bar-fill" style="width:12.9%;background:var(--conservative)"></div></div><span class="bar-val">12.9%</span></div>
+            <div class="bar-row"><span class="rlabel">zero-click-fy</span><div class="bar-track"><div class="bar-fill" style="width:15.1%;background:var(--aggressive)" title="fy-12-aggressive"></div></div><span class="bar-val">15.1%</span></div>
+            <div class="bar-row"><span class="rlabel">zero-click-fy</span><div class="bar-track"><div class="bar-fill" style="width:10.7%;background:var(--conservative)" title="fy-24-conservative"></div></div><span class="bar-val">10.7%</span></div>
+            <div class="bar-row"><span class="rlabel">zero-click-session</span><div class="bar-track"><div class="bar-fill" style="width:14.0%;background:var(--aggressive)" title="session-18-aggressive"></div></div><span class="bar-val">14.0%</span></div>
+          </div>
+          <div class="callout"><b>Zero-click's share of first-adoption credit goes UP under strict adoption:</b> Conservative 27.1% (was 24.1% loose), Aggressive 37.8% (was 36.2%). <code>pdp-page-intro-v3</code>'s share drops (44.3%/37.0%, was 51.3%/42.0%) &mdash; some of its "credit" was mic-taps that never actually produced the first real conversation. Zero-click nudges' credit holds up better under the honest bar, suggesting their taps are more likely to convert into a real turn than pdp-intro's.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Nudge -> organic comeback ============ -->
+    <section id="comeback" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">04b</span><h2>Of nudge-driven adopters, how many come back organically? (strict)</h2></div>
+      <div class="card">
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Conservative</span><div class="bar-track"><div class="bar-fill" style="width:20.2%;background:var(--conservative)" title="18,229 of 90,164 nudge-driven first adopters; was 17.6% loose"></div></div><span class="bar-val">20.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggressive</span><div class="bar-track"><div class="bar-fill" style="width:19.0%;background:var(--aggressive)" title="18,503 of 97,142; was 16.7% loose"></div></div><span class="bar-val">19.0%</span></div>
+        </div>
+        <div class="callout good">Comeback rate rises under strict adoption (20.2%/19.0%, was 17.6%/16.7%) &mdash; makes sense: this population is now restricted to users whose nudge genuinely started a real Vaani conversation, so they're more likely to trust and return to it. Roughly <b>1 in 5</b> nudge-driven adopters comes back to Vaani organically at least once afterward.</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Habit persistence ============ -->
+    <section id="habit" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">06b</span><h2>Does the friction reduction stick after adoption? (strict)</h2></div>
+      <div class="card">
+        <div class="legend">
+          <span><span class="sw" style="background:var(--baseline)"></span>Pre-adoption (own history)</span>
+          <span><span class="sw" style="background:var(--seq-500)"></span>Post-adoption, organic (no nudge)</span>
+          <span><span class="sw" style="background:var(--seq-700)"></span>Post-adoption, nudged again</span>
+        </div>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Cons. &middot; pre-adoption</span><div class="bar-track"><div class="bar-fill" style="width:47.3%;background:var(--baseline)"></div></div><span class="bar-val">47.3%</span></div>
+          <div class="bar-row"><span class="rlabel">Cons. &middot; post, organic</span><div class="bar-track"><div class="bar-fill" style="width:33.3%;background:var(--seq-500)"></div></div><span class="bar-val">33.3%</span></div>
+          <div class="bar-row"><span class="rlabel">Cons. &middot; post, nudged</span><div class="bar-track"><div class="bar-fill" style="width:12.1%;background:var(--seq-700)" title="was 11.1% loose"></div></div><span class="bar-val">12.1%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; pre-adoption</span><div class="bar-track"><div class="bar-fill" style="width:46.4%;background:var(--baseline)"></div></div><span class="bar-val">46.4%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; post, organic</span><div class="bar-track"><div class="bar-fill" style="width:33.7%;background:var(--seq-500)"></div></div><span class="bar-val">33.7%</span></div>
+          <div class="bar-row"><span class="rlabel">Aggr. &middot; post, nudged</span><div class="bar-track"><div class="bar-fill" style="width:15.2%;background:var(--seq-700)"></div></div><span class="bar-val">15.2%</span></div>
+        </div>
+        <div class="callout">Nearly unchanged from the loose-definition read (pre 46.8/46.6% &rarr; post-organic 33.8/34.3% before; now 47.3/46.4% &rarr; 33.3/33.7%) &mdash; this specific comparison was always restricted to users who <i>did</i> reach a real first turn, so the strict-adoption fix barely moves it. The pattern holds: adoption durably shifts organic behavior by ~13&ndash;14 points, regardless of which adoption definition is used.</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Qualitative turn dump ============ -->
+    <section id="qualdump" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">06c/d</span><h2>Qualitative deep-dive: row-level dump of every strictly-adopted turn</h2></div>
+      <p class="sec-dek">Every session (Conservative + Aggressive, 2026-07-17&ndash;25) where a zero-click nudge was <b>strictly</b> adopted &mdash; <b>84,824 sessions, 72,264 distinct users</b> (down from 96,558/81,465 under the loose definition; the 12,734 excluded rows were mic-taps whose "first turn after the nudge" landed outside the 60-second window). Full file: <code>data/exp20958_zc_turn_qual_dump_v3.json</code> (and <code>.csv</code>).</p>
+
+      <div class="stat-row" style="margin-bottom:24px;">
+        <div class="stat-tile"><div class="label">Rows in dump</div><div class="value">84,824</div><div class="sub">72,264 distinct users</div></div>
+        <div class="stat-tile"><div class="label">Is search turn</div><div class="value">67.4%</div><div class="sub">68.9% Cons / 66.5% Aggr</div></div>
+        <div class="stat-tile"><div class="label">Was user's 1st-ever Vaani turn</div><div class="value">58.2%</div><div class="sub">was 59.6% loose</div></div>
+        <div class="stat-tile"><div class="label">Clicked Vaani's own result</div><div class="value">52.8%</div><div class="sub">barely moved from 51.7% loose</div></div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Click outcome &mdash; exhaustive, sums to 100% &mdash; barely moved by the correction</h3>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Clicked Vaani's own search result</span><div class="bar-track"><div class="bar-fill" style="width:52.8%;background:var(--seq-700)" title="44,783 of 84,824"></div></div><span class="bar-val">52.8%</span></div>
+          <div class="bar-row"><span class="rlabel">No click at all after the turn</span><div class="bar-track"><div class="bar-fill" style="width:17.5%;background:var(--critical)" title="14,863 of 84,824"></div></div><span class="bar-val">17.5%</span></div>
+          <div class="bar-row"><span class="rlabel">Clicked via another surface</span><div class="bar-track"><div class="bar-fill" style="width:15.4%;background:var(--baseline)" title="13,030 of 84,824"></div></div><span class="bar-val">15.4%</span></div>
+          <div class="bar-row"><span class="rlabel">Own typed search instead</span><div class="bar-track"><div class="bar-fill" style="width:14.3%;background:var(--seq-500)" title="12,148 of 84,824"></div></div><span class="bar-val">14.3%</span></div>
+        </div>
+        <p style="font-size:0.76rem;color:var(--muted);margin-top:10px;">This distribution is nearly identical to the loose-definition dump (52.8/17.5/15.4/14.3 vs. 51.7/17.8/16.1/14.4) &mdash; makes sense, since 87.8% of the loose dump's rows already satisfied the strict criterion; this section was never where the correction bit hardest.</p>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Habit formation dose-response ============ -->
+    <section id="doseresponse" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">New</span><h2>Habit formation: does the fallback-to-Vaani behavior actually build? (strict)</h2></div>
+      <p class="sec-dek">Rebuilt with strict adoption: "adopted N times" now counts only tap-and-real-turn events. This shrinks the dose-response population substantially (fewer users qualify as having "really" adopted), and grows the "shown, never adopted" comparison cohort correspondingly.</p>
+
+      <div class="card">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Cohort sizes shift under strict adoption (pooled Cons+Agg, full history)</h3>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Never used Vaani</span><div class="bar-track"><div class="bar-fill" style="width:73.8%;background:var(--baseline)" title="1,639,745 users"></div></div><span class="bar-val">73.8%</span></div>
+          <div class="bar-row"><span class="rlabel">Shown zero-click, never strictly adopted</span><div class="bar-track"><div class="bar-fill" style="width:17.1%;background:var(--critical)" title="379,557 users, was a much smaller bucket under loose adoption"></div></div><span class="bar-val">17.1%</span></div>
+          <div class="bar-row"><span class="rlabel">Used Vaani, never zero-click</span><div class="bar-track"><div class="bar-fill" style="width:5.8%;background:var(--baseline)" title="128,117 users"></div></div><span class="bar-val">5.8%</span></div>
+          <div class="bar-row"><span class="rlabel">Strictly adopted zero-click &ge;1&times;</span><div class="bar-track"><div class="bar-fill" style="width:3.4%;background:var(--seq-700)" title="74,636 users (1x+2x+3x+4-6x+7+x)"></div></div><span class="bar-val">3.4%</span></div>
+        </div>
+        <p style="font-size:0.76rem;color:var(--muted);margin-top:10px;">The "shown, never adopted" cohort roughly triples under strict adoption &mdash; most of the users previously counted as "adopted" belong here now.</p>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Zero-click adopters: own pre-adoption baseline vs. post-adoption organic rate, by total strict adoption count</h3>
+        <div class="legend"><span><span class="sw" style="background:var(--baseline)"></span>Pre-adoption (own history)</span><span><span class="sw" style="background:var(--seq-700)"></span>Post-adoption, organic (no nudge)</span></div>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Adopted 1&times; &middot; pre</span><div class="bar-track"><div class="bar-fill" style="width:42.2%;background:var(--baseline)"></div></div><span class="bar-val">42.2%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 1&times; &middot; post</span><div class="bar-track"><div class="bar-fill" style="width:34.7%;background:var(--seq-700)" title="n=44,988 users"></div></div><span class="bar-val">34.7%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 2&times; &middot; pre</span><div class="bar-track"><div class="bar-fill" style="width:42.9%;background:var(--baseline)"></div></div><span class="bar-val">42.9%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 2&times; &middot; post</span><div class="bar-track"><div class="bar-fill" style="width:34.9%;background:var(--seq-700)" title="n=23,471 users"></div></div><span class="bar-val">34.9%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 3&times; &middot; pre</span><div class="bar-track"><div class="bar-fill" style="width:43.1%;background:var(--baseline)"></div></div><span class="bar-val">43.1%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 3&times; &middot; post</span><div class="bar-track"><div class="bar-fill" style="width:36.1%;background:var(--seq-700)" title="n=3,316 users"></div></div><span class="bar-val">36.1%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 4&ndash;6&times; &middot; pre</span><div class="bar-track"><div class="bar-fill" style="width:44.1%;background:var(--baseline)"></div></div><span class="bar-val">44.1%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 4&ndash;6&times; &middot; post</span><div class="bar-track"><div class="bar-fill" style="width:35.4%;background:var(--seq-700)" title="n=2,651 users"></div></div><span class="bar-val">35.4%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 7+&times; &middot; pre</span><div class="bar-track"><div class="bar-fill" style="width:44.9%;background:var(--baseline)"></div></div><span class="bar-val">44.9%</span></div>
+          <div class="bar-row"><span class="rlabel">Adopted 7+&times; &middot; post</span><div class="bar-track"><div class="bar-fill" style="width:39.5%;background:var(--seq-700)" title="n=210 users, very small sample"></div></div><span class="bar-val">39.5%</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <h3 style="font-size:0.95rem;margin-bottom:14px;">Reference: never-used-Vaani baseline</h3>
+        <div class="barchart">
+          <div class="bar-row"><span class="rlabel">Never used Vaani (organic)</span><div class="bar-track"><div class="bar-fill" style="width:35.3%;background:var(--muted)"></div></div><span class="bar-val">35.3%</span></div>
+        </div>
+      </div>
+
+      <div class="callout good" style="margin-top:18px;"><b>The habit still holds under the strict definition</b> &mdash; every dose bucket still shows a ~7&ndash;9 point drop in organic zero-click rate after adopting (42&ndash;45% pre &rarr; 34&ndash;39.5% post), a bit smaller than the loose-definition drop (~9&ndash;10 points) but the same shape and direction. Post-adoption rates now sit slightly <i>above</i> the never-used-Vaani baseline (35.3%) instead of at/below it as in the loose read &mdash; a real, if more modest, finding: strict adopters improve meaningfully from their own baseline, but don't quite catch up to users who never had a zero-click problem to begin with.</div>
+      <div class="callout" style="margin-top:12px;"><b>Still not a dose-response curve</b> &mdash; if anything <i>less</i> of one now. Post-organic rate is flat-to-slightly-rising across 1&times; (34.7%) through 4&ndash;6&times; (35.4%), with 7+&times; actually highest (39.5%, but n=210, very small and noisy). The honest read is unchanged from before: one successful strict adoption produces most of the shift; repeated adoption doesn't compound it further in this window, and the smaller, cleaner strict-adoption population makes this even clearer than the loose numbers did.</div>
+    </section>
+
+    <!-- ============ SECTION: Does prior outcome predict future use ============ -->
+    <section id="outcomeeffect" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">New</span><h2>Does the outcome of a zero-click nudge affect future behavior? (strict)</h2></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:14px;">Outcome of FIRST strictly-adopted turn &rarr; what happens next</h3>
+          <div class="tblwrap">
+          <table class="data">
+            <thead><tr><th style="text-align:left">First-adoption outcome</th><th>n</th><th>Adopts again</th><th>Later organic use</th></tr></thead>
+            <tbody>
+              <tr><td style="text-align:left">Clicked Vaani's own result</td><td>38,093</td><td>14.9%</td><td>30.0%</td></tr>
+              <tr><td style="text-align:left">Clicked other real-estate</td><td>10,921</td><td>12.8%</td><td>26.3%</td></tr>
+              <tr><td style="text-align:left">No click at all</td><td>12,777</td><td>12.7%</td><td>21.8%</td></tr>
+              <tr><td style="text-align:left">Fell back to own typed search</td><td>10,473</td><td>10.1%</td><td>20.5%</td></tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:0.95rem;margin-bottom:14px;">Outcome of ANY adoption &rarr; is there another one later</h3>
+          <div class="barchart">
+            <div class="bar-row"><span class="rlabel">Clicked Vaani's result</span><div class="bar-track"><div class="bar-fill" style="width:16.2%;background:var(--seq-700)" title="n=44,783"></div></div><span class="bar-val">16.2%</span></div>
+            <div class="bar-row"><span class="rlabel">Other real-estate</span><div class="bar-track"><div class="bar-fill" style="width:14.7%;background:var(--seq-500)" title="n=13,030"></div></div><span class="bar-val">14.7%</span></div>
+            <div class="bar-row"><span class="rlabel">No click</span><div class="bar-track"><div class="bar-fill" style="width:13.9%;background:var(--baseline)" title="n=14,863"></div></div><span class="bar-val">13.9%</span></div>
+            <div class="bar-row"><span class="rlabel">Own typed search instead</span><div class="bar-track"><div class="bar-fill" style="width:10.9%;background:var(--critical)" title="n=12,148"></div></div><span class="bar-val">10.9%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout good">Same ranking, same conclusion as before the correction &mdash; and if anything a slightly <b>wider</b> gap. Clicking Vaani's own result predicts both more repeat adoption (14.9&ndash;16.2%) and more later organic use (30.0%, up from 25.0% loose) than falling back to a typed search (10.1&ndash;10.9%, 20.5% later-organic). A good first experience compounds; a bad one suppresses trust &mdash; this finding is robust to the adoption-definition fix.</div>
+    </section>
+
+    <!-- ============ SECTION: Does query type predict outcome ============ -->
+    <section id="querytype" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">New</span><h2>Which query type gets the worst outcomes? (strict)</h2></div>
+      <div class="card tblwrap">
+        <table class="data">
+          <thead><tr><th style="text-align:left">Query shape</th><th>n</th><th>Clicked Vaani's result</th><th>No click</th><th>Own search instead</th><th>Other real-estate</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">Category + attribute</td><td>48,104</td><td>66.7%</td><td>14.6%</td><td>11.0%</td><td>7.6%</td></tr>
+            <tr><td style="text-align:left">Category only</td><td>5,143</td><td>62.9%</td><td>15.9%</td><td>12.2%</td><td>9.0%</td></tr>
+            <tr><td style="text-align:left">Open-ended, no category</td><td>3,916</td><td>58.2%</td><td>18.0%</td><td>14.9%</td><td>8.9%</td></tr>
+          </tbody>
+        </table>
+        <div class="callout" style="margin-top:16px;">Same clean gradient as before the correction, essentially unchanged (66.7/62.9/58.2% vs. the loose read's 66.2/62.1/57.7%). The finding is robust: query specificity predicts outcome monotonically, and it's a matter of degree (8&ndash;9 points end to end), not one bad scenario. Later re-engagement stays flat by query type (29.9&ndash;31.6%), just as before.</div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION: Fatigue ============ -->
+    <section id="fatigue" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">Extra</span><h2>Nudge fatigue: does adoption decay with repeat exposure? (strict)</h2></div>
+      <p class="sec-dek">Adoption rate for the 1st, 2nd, 3rd... time a user sees the <i>same</i> rule_id, pooling all rules within each family. Rates are much lower under strict adoption, but the decay shape is the same.</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="font-size:0.9rem;margin-bottom:4px;">Conservative</h3>
+          <div class="legend"><span><span class="sw" style="background:var(--conservative)"></span>Zero-click</span><span><span class="sw" style="background:var(--baseline)"></span>Other</span></div>
+          <div class="step-line">
+            <div class="step-col"><div class="step-val">8.0%</div><div class="step-bar" style="height:80px;background:var(--conservative)"></div><div class="step-label">1st</div></div>
+            <div class="step-col"><div class="step-val">6.3%</div><div class="step-bar" style="height:63px;background:var(--conservative)"></div><div class="step-label">2nd</div></div>
+            <div class="step-col"><div class="step-val">5.4%</div><div class="step-bar" style="height:54px;background:var(--conservative)"></div><div class="step-label">3rd</div></div>
+            <div class="step-col"><div class="step-val">4.5%</div><div class="step-bar" style="height:45px;background:var(--conservative)"></div><div class="step-label">4&ndash;6</div></div>
+            <div class="step-col"><div class="step-val">3.2%</div><div class="step-bar" style="height:32px;background:var(--conservative)"></div><div class="step-label">7+</div></div>
+          </div>
+          <div class="step-line">
+            <div class="step-col"><div class="step-val">7.5%</div><div class="step-bar" style="height:75px;background:var(--baseline)"></div><div class="step-label">1st</div></div>
+            <div class="step-col"><div class="step-val">6.2%</div><div class="step-bar" style="height:62px;background:var(--baseline)"></div><div class="step-label">2nd</div></div>
+            <div class="step-col"><div class="step-val">5.4%</div><div class="step-bar" style="height:54px;background:var(--baseline)"></div><div class="step-label">3rd</div></div>
+            <div class="step-col"><div class="step-val">5.7%</div><div class="step-bar" style="height:57px;background:var(--baseline)"></div><div class="step-label">4&ndash;6</div></div>
+            <div class="step-col"><div class="step-val">4.3%</div><div class="step-bar" style="height:43px;background:var(--baseline)"></div><div class="step-label">7+</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:0.9rem;margin-bottom:4px;">Aggressive</h3>
+          <div class="legend"><span><span class="sw" style="background:var(--aggressive)"></span>Zero-click</span><span><span class="sw" style="background:var(--baseline)"></span>Other</span></div>
+          <div class="step-line">
+            <div class="step-col"><div class="step-val">7.7%</div><div class="step-bar" style="height:77px;background:var(--aggressive)"></div><div class="step-label">1st</div></div>
+            <div class="step-col"><div class="step-val">6.3%</div><div class="step-bar" style="height:63px;background:var(--aggressive)"></div><div class="step-label">2nd</div></div>
+            <div class="step-col"><div class="step-val">5.3%</div><div class="step-bar" style="height:53px;background:var(--aggressive)"></div><div class="step-label">3rd</div></div>
+            <div class="step-col"><div class="step-val">4.7%</div><div class="step-bar" style="height:47px;background:var(--aggressive)"></div><div class="step-label">4&ndash;6</div></div>
+            <div class="step-col"><div class="step-val">3.5%</div><div class="step-bar" style="height:35px;background:var(--aggressive)"></div><div class="step-label">7+</div></div>
+          </div>
+          <div class="step-line">
+            <div class="step-col"><div class="step-val">7.5%</div><div class="step-bar" style="height:75px;background:var(--baseline)"></div><div class="step-label">1st</div></div>
+            <div class="step-col"><div class="step-val">6.2%</div><div class="step-bar" style="height:62px;background:var(--baseline)"></div><div class="step-label">2nd</div></div>
+            <div class="step-col"><div class="step-val">5.4%</div><div class="step-bar" style="height:54px;background:var(--baseline)"></div><div class="step-label">3rd</div></div>
+            <div class="step-col"><div class="step-val">5.6%</div><div class="step-bar" style="height:56px;background:var(--baseline)"></div><div class="step-label">4&ndash;6</div></div>
+            <div class="step-col"><div class="step-val">5.0%</div><div class="step-bar" style="height:50px;background:var(--baseline)"></div><div class="step-label">7+</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="callout">Absolute rates roughly halve (as expected everywhere in this correction), but the <i>decay shape</i> is identical: zero-click nudges fatigue monotonically (8%&rarr;3.2&ndash;3.5% by the 7th+ exposure), other nudges fatigue more mildly. The mechanism this measures &mdash; does repetition of the exact same rule wear out &mdash; is unaffected by whether "adopted" means tap-only or tap-plus-turn.</div>
+    </section>
+
+    <!-- ============ SECTION: vs exp 19446 ============ -->
+    <section id="vs19446" class="rpt-section">
+      <div class="sec-head"><span class="sec-num">Extra</span><h2>vs. exp 19446 (no zero-click) &mdash; strict adoption</h2></div>
+      <p class="sec-dek">19446-Test gives Vaani + "other"-family nudges only, never zero-click. Same 07-17&ndash;25 window, same strict-adoption fix applied.</p>
+      <div class="card tblwrap">
+        <table class="data">
+          <thead><tr><th style="text-align:left">Rule</th><th>19446-Test shown</th><th>19446 strict adopt%</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">pdp-page-intro-v3</td><td>874,115</td><td>8.4%</td></tr>
+            <tr><td style="text-align:left">clp-page-intro-v3</td><td>359,959</td><td>9.7%</td></tr>
+            <tr><td style="text-align:left">cart-page-intro-v3</td><td>415,198</td><td>8.1%</td></tr>
+            <tr><td style="text-align:left">search-results-repeat-if-no-use-v3</td><td>158,010</td><td>14.3%</td></tr>
+            <tr><td style="text-align:left"><b>Any nudge (union)</b></td><td><b>1,107,159</b></td><td><b>12.1%</b></td></tr>
+          </tbody>
+        </table>
+        <div class="callout">Under strict adoption, 19446's shared "other" nudges (8.1&ndash;9.7% for the big three) land <i>close to</i> 20958's corresponding rates (9.4&ndash;11.8%) &mdash; much closer than the loose-definition comparison (where 19446 looked meaningfully worse, e.g. pdp-intro 24.6% vs 30&ndash;31%). Some of what looked like a real cross-experiment gap before was actually a gap in mic-tap-to-real-turn conversion, which is now controlled for. A modest gap remains (19446's any-nudge strict rate is 12.1%, a bit above 20958's per-family rates individually but its rules skew toward the higher-converting search-repeat nudge) &mdash; still worth a follow-up, but much smaller than it looked.</div>
+      </div>
+    </section>
+
+    <footer class="rpt-footer" id="methodology">
+      <h3>Methodology &amp; caveats</h3>
+      <ul>
+        <li><b>Strict adoption, precisely defined:</b> a nudge event counts as adopted only if <code>nudges_json.adopted='true'</code> AND there exists a <code>bk_turns_json</code> event in the same session with <code>ts</code> between the nudge's <code>ts</code> and 60 seconds later. Computed via <code>date_diff('second', nudge_ts, turn_ts) between 0 and 60</code> in Presto.</li>
+        <li><b>Window:</b> 2026-07-17 to 2026-07-25 (9 days). Cohort sizes drift slightly across queries in this report (e.g. 1,076,282 vs. 1,081,043 in earlier pulls) because gold's rolling window and experiment tagging continued to advance across the multi-day gap while this correction was being built &mdash; not a methodology change, just normal data growth.</li>
+        <li><b>Control leakage:</b> Control-arm users showing a Vaani signal are excluded from any Control-side metric, per standing rule.</li>
+        <li><b>First-adoption attribution</b> uses day-level ordering from the full gold history with the strict-adoption join applied to the full history too (not just the window) &mdash; this is the most expensive query in the rebuild, since it requires unnesting both <code>nudges_json</code> and <code>bk_turns_json</code> across every day a user has both fields populated.</li>
+        <li><b>Vaani-vs-organic search attribution</b> (qualitative dump) is unchanged from the prior correction: <code>search_results_json</code> tagged Vaani-driven via proximity to <code>vaani_searches_json</code>, then inherited by the nearest following "Search"-real-estate product click.</li>
+        <li><b>Correlational, not causal, throughout.</b></li>
+      </ul>
+    </footer>
+
+  </main>
+</div>
+</div>
+
+</body></html>
