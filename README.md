@@ -1,0 +1,46 @@
+# Vaani Dashboards
+
+Static HTML analysis dashboards for Vaani, hosted via GitHub Pages at
+https://ishanmeesho.github.io/vaani/
+
+## Structure
+
+- `index.html` — the landing page. Cards are grouped into a "Combined Views"
+  block (synthesis reports that read across multiple dashboards) and a
+  "Dashboards" block (four numbered sections: usage & outcomes, where/when
+  Vaani is used, alternate discovery & revisits, understanding users).
+- `01-vaani-usage-and-outcomes/`, `02-where-and-when-vaani-is-used/`,
+  `03-alternate-discovery-and-revisits/`, `04-understanding-vaani-users/` —
+  one folder per numbered section, holding that section's dashboard files.
+- `combined-views/` — cross-dashboard synthesis reports.
+
+## Adding a new dashboard
+
+1. Drop the dashboard's HTML file into the folder for the section it belongs
+   to (or create a new numbered folder if it's a new section).
+2. Give the file a clean, descriptive, lowercase-hyphenated name — it becomes
+   part of the public URL.
+3. Add a `<link>` card for it in `index.html`, inside the right section's
+   `<ul class="grid">`, following the existing `doc-name` / `doc-desc` /
+   `doc-date` pattern. `doc-date` is optional — use it for the data window or
+   compile date if the report states one.
+4. Every dashboard page gets a fixed "← Vaani Dashboards" banner injected at
+   the top, linking back to `../index.html`. If the file doesn't already have
+   one, add right after the opening `<body>` tag:
+
+   ```html
+   <body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
+   ```
+
+   (Adjust the `../` prefix if the file sits more than one folder deep.)
+5. Commit and push to `main` — GitHub Pages rebuilds automatically within a
+   minute or two.
+
+## Notes
+
+- Dashboards are independent, self-contained HTML files — each may bring its
+  own theme, fonts, and charting approach. The landing page and the injected
+  back-link banner are the only shared/consistent layer across all of them.
+- Keep dashboards self-contained (inline CSS/JS or CDN `<script>`/`<link>`
+  tags are fine on GitHub Pages — this is not the same environment as a
+  Claude Artifact, which blocks external requests).
