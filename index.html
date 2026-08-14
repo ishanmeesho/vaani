@@ -8,7 +8,7 @@
   :root {
     --bg: #0f1115; --card-bg: #171a21; --card-border: #262b36;
     --text: #e8eaed; --text-dim: #9aa3b2;
-    --accent: #7c9eff; --amber: #fbbf24;
+    --accent: #7c9eff;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -27,10 +27,6 @@
   li a:hover { border-color: var(--accent); }
   .doc-name { font-size: 14.5px; font-weight: 600; }
   .doc-desc { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 3px; font-weight: 400; }
-  .pending { opacity: 0.55; cursor: default; }
-  .pending:hover { border-color: var(--card-border); }
-  .badge { display: inline-block; font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
-           margin-left: 8px; vertical-align: middle; letter-spacing: .03em; background: rgba(251,191,36,0.15); color: var(--amber); }
 </style>
 </head>
 <body>
@@ -81,9 +77,9 @@
         <span class="doc-name">PDP Turn — Nudge Analysis</span>
         <span class="doc-desc">How Vaani's zero-click nudge is used on the product detail page.</span>
       </a></li>
-      <li class="pending"><a class="pending" href="02-where-and-when-vaani-is-used/pdp-research-conversion-impact.html">
-        <span class="doc-name">PDP Research — Conversion Impact<span class="badge">needs re-export</span></span>
-        <span class="doc-desc">What happens when a user re-searches (DECIDE/FIND) from PDP — impact on conversion. File is a broken browser snapshot; needs a clean re-export.</span>
+      <li><a href="02-where-and-when-vaani-is-used/pdp-research-conversion-impact.html">
+        <span class="doc-name">PDP Research — Conversion Impact</span>
+        <span class="doc-desc">Does a Vaani re-search after a DECIDE turn increase same-category purchase?</span>
       </a></li>
     </ul>
   </section>
@@ -94,10 +90,6 @@
       <p class="sec-desc">User behavior around discovering alternate products and returning to PDPs.</p>
     </div>
     <ul>
-      <li class="pending"><a class="pending" href="03-alternate-discovery-and-revisits/alternate-product-discovery.html">
-        <span class="doc-name">Alternate Product Discovery<span class="badge">needs re-export</span></span>
-        <span class="doc-desc">How users discover alternate products via Vaani. File is a broken browser snapshot; needs a clean re-export.</span>
-      </a></li>
       <li><a href="03-alternate-discovery-and-revisits/pdp-revisit-deep-dive.html">
         <span class="doc-name">PDP Revisit Deep Dive</span>
         <span class="doc-desc">Experiment 19446 — revisit behavior on the product detail page.</span>
