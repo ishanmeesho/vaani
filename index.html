@@ -13,6 +13,9 @@
     --text-dim: #6b7280;
     --accent: #4f46e5;
     --accent-soft: #eef2ff;
+    --combined: #b45309;
+    --combined-soft: #fffbeb;
+    --combined-border: #fde68a;
     --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
     --shadow-hover: 0 4px 10px rgba(16,24,40,0.06), 0 2px 6px rgba(16,24,40,0.05);
   }
@@ -64,6 +67,32 @@
   .grid li a:hover .doc-name::after { opacity: 1; transform: translateX(0); }
   .doc-desc { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 5px; font-weight: 400; line-height: 1.5; }
 
+  /* Top-level groups: "Combined Views" and "Dashboards" are separate families —
+     combined views synthesize across multiple dashboards and aren't part of the
+     1/2/3/4 sequence, so they get their own group heading and, below, their own
+     numberless card style rather than a slot in that numbering. */
+  .group-block { margin-bottom: 52px; }
+  .group-head { margin-bottom: 20px; }
+  .group-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-dim); margin: 0 0 4px 0; }
+  .group-sub { font-size: 13px; color: var(--text-dim); margin: 0; max-width: 620px; line-height: 1.5; }
+  .group-block + .group-block { padding-top: 8px; border-top: 1px solid var(--border); }
+
+  .combined-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 680px) { .combined-grid { grid-template-columns: 1fr; } }
+  .combined-grid li a {
+    display: block; height: 100%; padding: 18px 20px; background: var(--combined-soft);
+    border: 1px solid var(--combined-border); border-radius: 12px; color: var(--text);
+    text-decoration: none; box-shadow: var(--shadow); transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .combined-grid li a:hover { border-color: var(--combined); box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+  .combined-grid .doc-name { font-size: 15px; }
+  .combined-grid .doc-name::after { color: var(--combined); }
+  .combined-badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .07em; color: var(--combined); background: #fff;
+    border: 1px solid var(--combined-border); padding: 3px 8px; border-radius: 20px; margin-bottom: 10px;
+  }
+
   footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--text-dim); }
 </style>
 </head>
@@ -74,6 +103,26 @@
     <h1>Vaani Dashboards</h1>
     <p class="sub">Analysis dashboards for Vaani — how it's used, its outcomes, and what we know about the users behind it.</p>
   </div>
+
+  <div class="group-block">
+    <div class="group-head">
+      <p class="group-title">Combined Views</p>
+      <p class="group-sub">Synthesis reports that read across multiple dashboards below to answer one strategic question. Not numbered like the dashboards — this list grows independently as new combined views are added.</p>
+    </div>
+    <ul class="combined-grid">
+      <li><a href="combined-views/how-vaani-can-help-in-exploit-journeys.html">
+        <span class="combined-badge">Combined view</span>
+        <span class="doc-name">How Vaani Can Help in Exploit Journeys</span>
+        <span class="doc-desc">Buyers anchor on a product, then hunt for a fairly-priced alternative of the same type — pulling together the buying-session, comparison, and PDP-turn dashboards to make the case for what Vaani should do about it.</span>
+      </a></li>
+    </ul>
+  </div>
+
+  <div class="group-block">
+    <div class="group-head">
+      <p class="group-title">Dashboards</p>
+      <p class="group-sub">The underlying analyses, grouped by what they cover.</p>
+    </div>
 
   <section>
     <div class="sec-head">
@@ -174,6 +223,7 @@
       </a></li>
     </ul>
   </section>
+  </div>
 
   <footer>Vaani Dashboards — internal analytics, ishanmeesho/vaani</footer>
 </div>
