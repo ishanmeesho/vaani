@@ -9,6 +9,7 @@
 <html lang="en">
 <head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vaani PDP Clicks Before Turn — Exp 19446</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
@@ -19,7 +20,7 @@
 body {
   margin: 0; padding: 28px 36px 60px;
   font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #fafafa; color: #1c1c1e;
+  background: #f6f7f9; color: #1c1c1e;
 }
 h1 { font-size: 23px; margin: 0 0 4px; }
 h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padding-bottom: 6px; }
@@ -38,7 +39,7 @@ h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padd
   padding: 10px 18px; border-radius: 8px 8px 0 0; border-bottom: 3px solid transparent; margin-bottom: -2px;
 }
 .tabbtn:hover { background: #f0f0f2; color: #1c1c1e; }
-.tabbtn.active { color: #1f6feb; border-bottom-color: #1f6feb; background: #fff; }
+.tabbtn.active { color: #4f46e5; border-bottom-color: #4f46e5; background: #fff; }
 .tabpane { display: none; }
 .tabpane.active { display: block; }
 .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0 8px; }
@@ -47,7 +48,7 @@ h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padd
   padding: 12px 18px; min-width: 130px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 .stat-card .num { font-size: 21px; font-weight: 650; }
-.stat-card .num.find { color: #1f6feb; } .stat-card .num.decide { color: #8250df; }
+.stat-card .num.find { color: #4f46e5; } .stat-card .num.decide { color: #7c3aed; }
 .stat-card .lbl { font-size: 11.5px; color: #8a8a8e; margin-top: 2px; }
 .charts-row { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0 8px; }
 .chart-box {
@@ -57,7 +58,7 @@ h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padd
 .chart-box.tall { height: 380px; }
 .chart-box .ct { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #3a3a3c; }
 .insight {
-  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #1f6feb;
+  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #4f46e5;
   border-radius: 8px; padding: 10px 16px; margin: 6px 0 20px;
   font-size: 12.5px; line-height: 1.55; color: #24344d; max-width: 1100px;
 }
@@ -68,6 +69,10 @@ h2 { font-size: 17px; margin: 32px 0 6px; border-bottom: 2px solid #e5e5ea; padd
 .gridjs-th { font-size: 12px !important; }
 .gridjs-td { font-size: 12.5px !important; }
 .footer-note { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e5e5ea; color: #a0a0a5; font-size: 11.5px; max-width: 1100px; line-height: 1.5; }
+@media (max-width: 640px) {
+  .chart-box { min-width: 0; width: 100%; }
+  body { padding-left: 16px; padding-right: 16px; }
+}
 </style>
 </head>
 <body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
@@ -202,7 +207,7 @@ const D = {"meta":{"warehouse_rows":2012690,"deduped_joined_tagged":880981,"excl
 
 const fmt = n => n.toLocaleString();
 const BK = ['1','2','3-5','6-10','11+'];
-const C = { FIND:'#1f6feb', DECIDE:'#8250df', sh:'#1a7f37', snh:'#bf3989', overall:'#57606a' };
+const C = { FIND:'#4f46e5', DECIDE:'#7c3aed', sh:'#16a34a', snh:'#6b7280', overall:'#374151' };
 const SPLITS = [['overall','overall',C.overall],['search_happened','search happened',C.sh],['search_not_happened','no search',C.snh]];
 const rendered = {};
 Chart.defaults.font.size = 11;
@@ -279,7 +284,7 @@ function renderCohort(sfx){
       data:{ labels:['FIND overall','FIND search','FIND no-search','DECIDE overall','DECIDE search','DECIDE no-search'],
         datasets:[
           { label:'all users', data: SPLITS.map(s=>D.all_users.FIND[s[0]].mean_same_sscat).concat(SPLITS.map(s=>D.all_users.DECIDE[s[0]].mean_same_sscat)), backgroundColor:'#c4cad1', borderRadius:3 },
-          { label:'power users', data: SPLITS.map(s=>D.power_users.FIND[s[0]].mean_same_sscat).concat(SPLITS.map(s=>D.power_users.DECIDE[s[0]].mean_same_sscat)), backgroundColor:'#1a7f37', borderRadius:3 }] },
+          { label:'power users', data: SPLITS.map(s=>D.power_users.FIND[s[0]].mean_same_sscat).concat(SPLITS.map(s=>D.power_users.DECIDE[s[0]].mean_same_sscat)), backgroundColor:'#16a34a', borderRadius:3 }] },
       options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
         scales:{ y:{ grid:{color:'#eee'} }, x:{ grid:{display:false}, ticks:{font:{size:10}} } } } });
   }
@@ -313,7 +318,7 @@ function renderTrend(){
       { label:'DECIDE', data:POS.map(p=>B[p].DECIDE.overall.n), backgroundColor:C.DECIDE, stack:'s', borderRadius:2 } ] },
     options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top'}},
       scales:{ y:{ stacked:true, grid:{color:'#eee'} }, x:{ stacked:true, grid:{display:false} } } } });
-  const PALS = { F:['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff','#e8f1ff'], D:['#8250df','#a98eea','#c5b3f1','#d9cdf7','#efe9fb'] };
+  const PALS = { F:['#4f46e5','#6ea8fe','#9ec5fe','#cfe2ff','#e8f1ff'], D:['#7c3aed','#a98eea','#c5b3f1','#d9cdf7','#efe9fb'] };
   for (const [l1,cv,pal] of [['FIND','tr_bkF',PALS.F],['DECIDE','tr_bkD',PALS.D]]){
     new Chart(document.getElementById(cv), { type:'bar',
       data:{ labels:POS, datasets: BK.map((b,i)=>({ label:(b==='1'?'1st':b==='2'?'2nd':b+'th'), data:POS.map(p=>B[p][l1].overall.buckets[b]), backgroundColor:pal[i], stack:'s' })) },
@@ -336,7 +341,7 @@ const ORD = {"part12":{"FIND":{"not_ordered":{"n":318997,"mean":4.66,"median":2,
 function renderL2(){
   if (rendered.l2) return; rendered.l2=true;
   const DEPTHS=['1st','2nd','3-5','6-10','11+'];
-  const PALS={FIND:['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff'],DECIDE:['#8250df','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']};
+  const PALS={FIND:['#4f46e5','#6ea8fe','#9ec5fe','#cfe2ff'],DECIDE:['#7c3aed','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']};
   for (const [l1,cv] of [['FIND','l2F'],['DECIDE','l2D']]){
     const l2s=Object.keys(L2D[l1]['1st'].mix);
     new Chart(document.getElementById(cv), { type:'bar',
@@ -346,9 +351,9 @@ function renderL2(){
         scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, min:0, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#eee'}} } } });
   }
   const mover=(l1,k,col)=>({type:'line',label:k,data:['1st','2nd','3-5','6-10','11+'].map(d=>L2D[l1][d].mix[k]),borderColor:col,backgroundColor:col,borderWidth:2.2,pointRadius:3,tension:0.25});
-  new Chart(document.getElementById('l2FM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('FIND','category_with_attributes','#1f6feb'),mover('FIND','no_category','#bf3989')]},
+  new Chart(document.getElementById('l2FM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('FIND','category_with_attributes','#4f46e5'),mover('FIND','no_category','#6b7280')]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}},x:{grid:{display:false}}}} });
-  new Chart(document.getElementById('l2DM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('DECIDE','how_to_use','#bf3989'),mover('DECIDE','size_fit','#1a7f37'),mover('DECIDE','quantity_pack_contents','#c9782f')]},
+  new Chart(document.getElementById('l2DM'), { data:{labels:['1st','2nd','3-5','6-10','11+'],datasets:[mover('DECIDE','how_to_use','#6b7280'),mover('DECIDE','size_fit','#16a34a'),mover('DECIDE','quantity_pack_contents','#ea580c')]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:'#eee'}},x:{grid:{display:false}}}} });
   const rows=[];
   for (const l1 of ['FIND','DECIDE']) for (const d of DEPTHS){
@@ -380,7 +385,7 @@ function renderOrders(){
    ['FIND: order rate at 11+ PDPs','15.2%','find'],['DECIDE: order rate at 11+ PDPs','24.3%','decide']]
   .forEach(([lbl,num,cls])=>{ const d=document.createElement('div'); d.className='stat-card';
     d.innerHTML=`<div class="num ${cls}">${num}</div><div class="lbl">${lbl}</div>`; document.getElementById('stats_conv').appendChild(d); });
-  const CCLS=[['same_product','ordered turn\'s product','#1a7f37'],['same_sscat_diff_product','same sscat, diff product','#c9782f'],['diff_sscat','diff sscat','#8c959f'],['no_order','no order','#ececef']];
+  const CCLS=[['same_product','ordered turn\'s product','#16a34a'],['same_sscat_diff_product','same sscat, diff product','#ea580c'],['diff_sscat','diff sscat','#8c959f'],['no_order','no order','#ececef']];
   for (const [l1,cv] of [['FIND','convF'],['DECIDE','convD']]){
     new Chart(document.getElementById(cv), { type:'bar',
       data:{ labels:['1st','2nd','3-5th','6-10th','11+th'],
@@ -399,7 +404,7 @@ function renderOrders(){
   new gridjs.Grid({ columns:[{name:'L1',formatter:(c)=>gridjs.html(`<span class="pill ${c}">${c}</span>`)},'Turn depth','sessions','no order','ordered anything','turn\'s product','same sscat, diff product','diff sscat'],
     data:rc, sort:false, search:false, style:{table:{'font-size':'12.5px'}} }).render(document.getElementById('grid_conv'));
   // pre-turn depth distributions by order outcome (mirrors All Users bucket charts)
-  const DGRP=[['not_ordered','did not order','#c4cad1'],['ordered_same_product','ordered turn\'s product','#1a7f37'],['ordered_same_sscat_diff_product','same sscat, diff product','#c9782f'],['ordered_diff_product','diff product (any sscat)','#bf3989']];
+  const DGRP=[['not_ordered','did not order','#c4cad1'],['ordered_same_product','ordered turn\'s product','#16a34a'],['ordered_same_sscat_diff_product','same sscat, diff product','#ea580c'],['ordered_diff_product','diff product (any sscat)','#6b7280']];
   for (const [l1,cv] of [['FIND','ordDistF'],['DECIDE','ordDistD']]){
     new Chart(document.getElementById(cv), { type:'bar',
       data:{ labels:['1st','2nd','3-5th','6-10th','11+th'],
@@ -410,7 +415,7 @@ function renderOrders(){
   }
   const G3=[['same_product','bought same product'],['diff_product','bought different product']];
   // post-turn clicks-until-order distributions
-  const G3C=[['same_product','bought same product','#1a7f37'],['diff_product','bought different product','#bf3989']];
+  const G3C=[['same_product','bought same product','#16a34a'],['diff_product','bought different product','#6b7280']];
   for (const [l1,cv] of [['FIND','ordPostDistF'],['DECIDE','ordPostDistD']]){
     new Chart(document.getElementById(cv), { type:'bar',
       data:{ labels:['0','1','2','3-5','6-10','11+'],
