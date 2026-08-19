@@ -81,11 +81,23 @@
   .search-input::placeholder { color: var(--text-dim); }
   .no-results { display: none; color: var(--text-dim); font-size: 13.5px; padding: 24px 0; }
 
+  .tabbar { display: flex; gap: 6px; margin-top: 22px; border-bottom: 1px solid var(--border); }
+  .tabbar button {
+    appearance: none; background: none; border: none; cursor: pointer;
+    font: inherit; font-size: 13.5px; font-weight: 600; color: var(--text-dim);
+    padding: 10px 4px; margin-bottom: -1px; border-bottom: 2px solid transparent;
+  }
+  .tabbar button:hover { color: var(--text); }
+  .tabbar button.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .group-block[data-tab] { display: none; }
+  .group-block[data-tab].tab-active { display: block; }
+
   /* Top-level groups: "Combined Views" and "Dashboards" are separate families —
      combined views synthesize across multiple dashboards and aren't part of the
      1/2/3/4 sequence, so they get their own group heading and, below, their own
      numberless card style rather than a slot in that numbering. */
   .group-block { margin-bottom: 52px; }
+  .group-block[data-tab] + .group-block[data-tab] { padding-top: 0; border-top: none; }
   .group-head { margin-bottom: 20px; }
   .group-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--text-dim); margin: 0 0 4px 0; }
   .group-sub { font-size: 13px; color: var(--text-dim); margin: 0; max-width: 620px; line-height: 1.5; }
@@ -117,12 +129,17 @@
     <h1>Vaani Dashboards</h1>
     <p class="sub">Analysis dashboards for Vaani — how it's used, its outcomes, and what we know about the users behind it.</p>
     <div class="search-wrap">
-      <input type="text" id="dashSearch" class="search-input" placeholder="Search dashboards…" autocomplete="off">
+      <input type="text" id="dashSearch" class="search-input" placeholder="Search this tab…" autocomplete="off">
     </div>
+    <nav class="tabbar" id="tabbar">
+      <button type="button" data-tab="dashboards">Dashboards</button>
+      <button type="button" data-tab="docs">Product &amp; Strategy Docs</button>
+      <button type="button" data-tab="combined">Combined Views</button>
+    </nav>
   </div>
   <p class="no-results" id="noResults">No dashboards match "<span id="noResultsQuery"></span>".</p>
 
-  <div class="group-block">
+  <div class="group-block" data-tab="combined">
     <div class="group-head">
       <p class="group-title">Combined Views</p>
       <p class="group-sub">Synthesis reports that read across multiple dashboards below to answer one strategic question. Not numbered like the dashboards — this list grows independently as new combined views are added.</p>
@@ -136,7 +153,7 @@
     </ul>
   </div>
 
-  <div class="group-block">
+  <div class="group-block" data-tab="docs">
     <div class="group-head">
       <p class="group-title">Product &amp; Strategy Docs</p>
       <p class="group-sub">KRDs, product notes, and BHAG docs, imported from the team's planning doc and rendered natively (not an embedded Google Docs viewer) &mdash; each with its own sidebar to browse between all of them &mdash; plus notes written here on what we could build next.</p>
@@ -166,7 +183,7 @@
     </ul>
   </div>
 
-  <div class="group-block">
+  <div class="group-block" data-tab="dashboards">
     <div class="group-head">
       <p class="group-title">Dashboards</p>
       <p class="group-sub">The underlying analyses, grouped by what they cover.</p>
@@ -293,22 +310,51 @@
   var input = document.getElementById('dashSearch');
   var noResults = document.getElementById('noResults');
   var noResultsQuery = document.getElementById('noResultsQuery');
-  var groupBlocks = Array.prototype.slice.call(document.querySelectorAll('.group-block'));
+  var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tabbar button'));
+  var tabBlocks = Array.prototype.slice.call(document.querySelectorAll('.group-block[data-tab]'));
+  var validTabs = tabBlocks.map(function (b) { return b.getAttribute('data-tab'); });
+
+  function resetFilter(block) {
+    Array.prototype.forEach.call(block.querySelectorAll('li'), function (li) { li.style.display = ''; });
+    Array.prototype.forEach.call(block.querySelectorAll('section'), function (sec) { sec.style.display = ''; });
+    noResults.style.display = 'none';
+  }
+
+  function activateTab(tab, opts) {
+    opts = opts || {};
+    if (validTabs.indexOf(tab) === -1) tab = 'dashboards';
+    tabBlocks.forEach(function (block) {
+      var isActive = block.getAttribute('data-tab') === tab;
+      block.classList.toggle('tab-active', isActive);
+      if (isActive) resetFilter(block);
+    });
+    tabButtons.forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tab);
+    });
+    if (!opts.skipInputReset) input.value = '';
+    if (!opts.skipHash) history.replaceState(null, '', '#' + tab);
+  }
+
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () { activateTab(btn.getAttribute('data-tab')); });
+  });
+
+  activateTab((location.hash || '').replace('#', ''), { skipInputReset: true, skipHash: true });
 
   input.addEventListener('input', function () {
     var q = input.value.trim().toLowerCase();
+    var activeBlock = document.querySelector('.group-block.tab-active');
     var anyVisible = false;
 
-    groupBlocks.forEach(function (block) {
-      var blockHasVisible = false;
-      var items = block.querySelectorAll('ul.grid li, ul.combined-grid li');
+    if (activeBlock) {
+      var items = activeBlock.querySelectorAll('ul.grid li, ul.combined-grid li');
       Array.prototype.forEach.call(items, function (li) {
         var match = !q || li.textContent.toLowerCase().indexOf(q) !== -1;
         li.style.display = match ? '' : 'none';
-        if (match) blockHasVisible = true;
+        if (match) anyVisible = true;
       });
 
-      var sections = block.querySelectorAll('section');
+      var sections = activeBlock.querySelectorAll('section');
       Array.prototype.forEach.call(sections, function (sec) {
         var lis = sec.querySelectorAll('li');
         var sectionHasVisible = Array.prototype.some.call(lis, function (li) {
@@ -316,10 +362,7 @@
         });
         sec.style.display = sectionHasVisible ? '' : 'none';
       });
-
-      block.style.display = blockHasVisible ? '' : 'none';
-      if (blockHasVisible) anyVisible = true;
-    });
+    }
 
     noResultsQuery.textContent = input.value.trim();
     // The stylesheet sets .no-results { display: none }, so clearing the inline
