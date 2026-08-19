@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html><head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><meta charset='utf-8'><title>PDP revisit deep dive — exp 19446 — 2026-07-24</title>
+<html><head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><meta charset='utf-8'><meta name="viewport" content="width=device-width, initial-scale=1"><title>PDP revisit deep dive — exp 19446 — 2026-07-24</title>
 <style>
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:20px;color:#111;background:#fff;max-width:1200px}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:20px;color:#111;background:#fff;max-width:1200px}
+  @media (max-width:640px){ body{margin:20px 10px} }
   h1{margin:0 0 4px 0;font-size:22px}
   h2{margin:26px 0 6px 0;font-size:17px}
   .sub{color:#555;font-size:13px;margin-bottom:14px;max-width:1100px}
@@ -14,21 +15,21 @@
   .cohort-no   {background:#fee2e2}
   .writeup{background:#f8fafc;border-left:4px solid #0ea5e9;padding:10px 14px;margin:6px 0 10px 0;
            font-size:13px;line-height:1.5;color:#1f2937;max-width:1100px;border-radius:4px}
-  .writeup b{color:#0c4a6e}
+  .writeup b{color:#3730a3}
   small{font-weight:normal;color:#666;display:block;font-size:10px;margin-top:2px}
   /* --- tabs --- */
   .tabs{border-bottom:2px solid #cbd5e1;margin:16px 0 0 0;padding:0}
   .tabs button{background:none;border:none;border-bottom:2px solid transparent;
                margin-bottom:-2px;padding:8px 16px;cursor:pointer;font-size:14px;color:#475569;
                font-weight:600}
-  .tabs button.active{color:#0c4a6e;border-bottom:2px solid #0ea5e9;background:#f8fafc}
+  .tabs button.active{color:#3730a3;border-bottom:2px solid #0ea5e9;background:#f8fafc}
   .tabs button:hover:not(.active){background:#f1f5f9;color:#0f172a}
   .tab-panel{display:none;padding-top:12px}
   .tab-panel.active{display:block}
   /* outcome tab specific */
   td.big{font-size:15px;font-weight:600}
   .kpi{display:inline-block;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;
-       padding:10px 14px;margin:0 8px 8px 0;font-size:13px;color:#0c4a6e;min-width:150px;vertical-align:top}
+       padding:10px 14px;margin:0 8px 8px 0;font-size:13px;color:#3730a3;min-width:150px;vertical-align:top}
   .kpi .val{display:block;font-size:20px;font-weight:700;color:#0369a1}
   .kpi .lbl{font-size:11px;color:#0284c7;font-weight:500}
 </style></head><body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
@@ -53,10 +54,10 @@
 </div>
 
 <h2>Cohort headline</h2>
-<table><tr><th class='rowh'>cohort</th><th>sessions</th><th>share</th></tr>
+<div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th>sessions</th><th>share</th></tr>
 <tr><td class='rowh cohort-order'>order_placed</td><td class='num'>2,785,814</td><td class='num'>3.50%</td></tr>
 <tr><td class='rowh cohort-no'>no_order</td><td class='num'>76,750,378</td><td class='num'>96.50%</td></tr>
-</table>
+</table></div>
 <h2>Session activity headline</h2>
 
 <div class='writeup'>
@@ -65,17 +66,17 @@ and <b>any</b> product revisit. Read across the row to compare cohorts; the lift
 how over-represented that behavior is among order-placing sessions vs no-order sessions.
 </div>
 
-<table><tr><th class='rowh'>metric</th><th class='cohort-order'>order_placed</th><th class='cohort-no'>no_order</th><th>lift</th></tr>
+<div style="overflow-x:auto;"><table><tr><th class='rowh'>metric</th><th class='cohort-order'>order_placed</th><th class='cohort-no'>no_order</th><th>lift</th></tr>
 <tr><td class='rowh'>≥1 PDP click<br><small>session had at least one click_json event</small></td><td class='num cohort-order'>99.43%<small>2,770,051 / 2,785,814 sessions</small></td><td class='num cohort-no'>66.88%<small>51,328,319 / 76,750,378 sessions</small></td><td class='num' style='background:#dcfce7'>1.49x</td></tr>
 <tr><td class='rowh'>≥5 PDP clicks<br><small>click_bucket ∈ {5-9, 10-19, 20+}</small></td><td class='num cohort-order'>59.88%<small>1,668,170 / 2,785,814 sessions</small></td><td class='num cohort-no'>19.99%<small>15,339,349 / 76,750,378 sessions</small></td><td class='num' style='background:#bbf7d0;font-weight:600'>3.00x</td></tr>
 <tr><td class='rowh'>≥10 PDP clicks<br><small>click_bucket ∈ {10-19, 20+}</small></td><td class='num cohort-order'>35.07%<small>977,059 / 2,785,814 sessions</small></td><td class='num cohort-no'>9.66%<small>7,412,794 / 76,750,378 sessions</small></td><td class='num' style='background:#bbf7d0;font-weight:600'>3.63x</td></tr>
 <tr><td class='rowh'>≥1 product revisit<br><small>at least one product was opened more than once</small></td><td class='num cohort-order'>56.48%<small>1,573,415 / 2,785,814 sessions</small></td><td class='num cohort-no'>12.22%<small>9,375,303 / 76,750,378 sessions</small></td><td class='num' style='background:#bbf7d0;font-weight:600'>4.62x</td></tr>
-</table>
-<h2>Click volume distribution</h2><div class='writeup'>Number of PDP clicks per session. Order-placing sessions cluster in the higher buckets — users who buy tend to open more products before deciding.</div><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2-4</th><th>5-9</th><th>10-19</th><th>20+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>0.57%<small>15,763</small></td><td class='num'>12.38%<small>344,905</small></td><td class='num'>27.17%<small>756,976</small></td><td class='num'>24.81%<small>691,111</small></td><td class='num'>20.30%<small>565,562</small></td><td class='num'>14.77%<small>411,497</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>33.12%<small>25,422,059</small></td><td class='num'>27.86%<small>21,383,459</small></td><td class='num'>19.03%<small>14,605,511</small></td><td class='num'>10.33%<small>7,926,555</small></td><td class='num'>6.25%<small>4,799,046</small></td><td class='num'>3.41%<small>2,613,748</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.02x</td><td class='num' style='background:#fecaca;font-weight:600'>0.44x</td><td class='num' style='background:#dcfce7'>1.43x</td><td class='num' style='background:#bbf7d0;font-weight:600'>2.40x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.25x</td><td class='num' style='background:#bbf7d0;font-weight:600'>4.34x</td><td></td></tr></table>
-<h2>Distinct products revisited per session</h2><div class='writeup'>Among all products the user opened, how many did they open <b>more than once</b>? 0 = no revisit, 1 = one repeat-visited product, etc. Tail grouped at 5+.</div><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>43.52%<small>1,212,399</small></td><td class='num'>30.02%<small>836,172</small></td><td class='num'>12.19%<small>339,452</small></td><td class='num'>5.66%<small>157,663</small></td><td class='num'>2.98%<small>83,003</small></td><td class='num'>5.64%<small>157,125</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>87.78%<small>67,375,075</small></td><td class='num'>7.91%<small>6,068,470</small></td><td class='num'>2.15%<small>1,646,786</small></td><td class='num'>0.85%<small>652,720</small></td><td class='num'>0.42%<small>319,008</small></td><td class='num'>0.90%<small>688,319</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.50x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.80x</td><td class='num' style='background:#bbf7d0;font-weight:600'>5.68x</td><td class='num' style='background:#bbf7d0;font-weight:600'>6.65x</td><td class='num' style='background:#bbf7d0;font-weight:600'>7.17x</td><td class='num' style='background:#bbf7d0;font-weight:600'>6.29x</td><td></td></tr></table>
-<h2>Revisit event count per session</h2><div class='writeup'>A revisit event = every click on a product the user has already opened <i>this session</i>. Count = 0 means every click was a fresh product; higher counts = more back-and-forth.</div><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2-4</th><th>5-9</th><th>10+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>43.52%<small>1,212,399</small></td><td class='num'>22.89%<small>637,811</small></td><td class='num'>22.92%<small>638,556</small></td><td class='num'>7.43%<small>207,120</small></td><td class='num'>3.23%<small>89,928</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>87.78%<small>67,375,075</small></td><td class='num'>7.03%<small>5,394,373</small></td><td class='num'>3.87%<small>2,967,824</small></td><td class='num'>0.88%<small>673,000</small></td><td class='num'>0.44%<small>340,106</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.50x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.26x</td><td class='num' style='background:#bbf7d0;font-weight:600'>5.93x</td><td class='num' style='background:#bbf7d0;font-weight:600'>8.48x</td><td class='num' style='background:#bbf7d0;font-weight:600'>7.28x</td><td></td></tr></table>
-<h2>Time between first visit and revisit (per revisit event)</h2><div class='writeup'>For every revisit event, we measure the time from that product's <i>first</i> open in the session to this repeat open. Buckets are stacked short → long. Sub-2-minute revisits are typical of a user comparing across a few open PDPs; 30m+ suggests the user came back to the app later in the same session.</div><table><tr><th class='rowh'>cohort</th><th><30s</th><th>30s–2m</th><th>2–10m</th><th>10–30m</th><th>30m–2h</th><th>2h+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>17.47%<small>897,740</small></td><td class='num'>27.95%<small>1,436,357</small></td><td class='num'>40.29%<small>2,070,244</small></td><td class='num'>12.09%<small>621,012</small></td><td class='num'>2.11%<small>108,291</small></td><td class='num'>0.09%<small>4,477</small></td><td class='num'>5,138,121</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>31.63%<small>7,235,954</small></td><td class='num'>26.60%<small>6,084,935</small></td><td class='num'>30.53%<small>6,984,343</small></td><td class='num'>9.68%<small>2,213,538</small></td><td class='num'>1.52%<small>346,701</small></td><td class='num'>0.04%<small>9,838</small></td><td class='num'>22,875,309</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.55x</td><td class='num' style=''>1.05x</td><td class='num' style='background:#dcfce7'>1.32x</td><td class='num' style='background:#dcfce7'>1.25x</td><td class='num' style='background:#dcfce7'>1.39x</td><td class='num' style='background:#bbf7d0;font-weight:600'>2.03x</td><td></td></tr></table>
-<h2>Which real-estate is contributing revisits?</h2><div class='writeup'><code>real_estate</code> from <code>clicks_json.events[].real_estate</code> — the surface the user was on when they re-opened the product. Shows what UI is driving revisit behavior for each cohort.</div><table><tr><th class='rowh'>cohort</th><th>FY Feed</th><th>Recommendations</th><th>Search</th><th>CLP/Collections</th><th>Wishlist</th><th>Recently Viewed</th><th>Others</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>7.39%<small>379,488</small></td><td class='num'>39.26%<small>2,017,284</small></td><td class='num'>14.18%<small>728,374</small></td><td class='num'>7.06%<small>362,875</small></td><td class='num'>8.75%<small>449,613</small></td><td class='num'>0.20%<small>10,043</small></td><td class='num'>23.17%<small>1,190,444</small></td><td class='num'>5,138,121</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>9.11%<small>2,084,682</small></td><td class='num'>48.48%<small>11,089,507</small></td><td class='num'>13.76%<small>3,147,552</small></td><td class='num'>7.04%<small>1,610,636</small></td><td class='num'>8.56%<small>1,959,021</small></td><td class='num'>0.25%<small>58,220</small></td><td class='num'>12.79%<small>2,925,691</small></td><td class='num'>22,875,309</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fee2e2'>0.81x</td><td class='num' style='background:#fee2e2'>0.81x</td><td class='num' style=''>1.03x</td><td class='num' style=''>1.00x</td><td class='num' style=''>1.02x</td><td class='num' style='background:#fee2e2'>0.77x</td><td class='num' style='background:#bbf7d0;font-weight:600'>1.81x</td><td></td></tr></table>
+</table></div>
+<h2>Click volume distribution</h2><div class='writeup'>Number of PDP clicks per session. Order-placing sessions cluster in the higher buckets — users who buy tend to open more products before deciding.</div><div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2-4</th><th>5-9</th><th>10-19</th><th>20+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>0.57%<small>15,763</small></td><td class='num'>12.38%<small>344,905</small></td><td class='num'>27.17%<small>756,976</small></td><td class='num'>24.81%<small>691,111</small></td><td class='num'>20.30%<small>565,562</small></td><td class='num'>14.77%<small>411,497</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>33.12%<small>25,422,059</small></td><td class='num'>27.86%<small>21,383,459</small></td><td class='num'>19.03%<small>14,605,511</small></td><td class='num'>10.33%<small>7,926,555</small></td><td class='num'>6.25%<small>4,799,046</small></td><td class='num'>3.41%<small>2,613,748</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.02x</td><td class='num' style='background:#fecaca;font-weight:600'>0.44x</td><td class='num' style='background:#dcfce7'>1.43x</td><td class='num' style='background:#bbf7d0;font-weight:600'>2.40x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.25x</td><td class='num' style='background:#bbf7d0;font-weight:600'>4.34x</td><td></td></tr></table></div>
+<h2>Distinct products revisited per session</h2><div class='writeup'>Among all products the user opened, how many did they open <b>more than once</b>? 0 = no revisit, 1 = one repeat-visited product, etc. Tail grouped at 5+.</div><div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>43.52%<small>1,212,399</small></td><td class='num'>30.02%<small>836,172</small></td><td class='num'>12.19%<small>339,452</small></td><td class='num'>5.66%<small>157,663</small></td><td class='num'>2.98%<small>83,003</small></td><td class='num'>5.64%<small>157,125</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>87.78%<small>67,375,075</small></td><td class='num'>7.91%<small>6,068,470</small></td><td class='num'>2.15%<small>1,646,786</small></td><td class='num'>0.85%<small>652,720</small></td><td class='num'>0.42%<small>319,008</small></td><td class='num'>0.90%<small>688,319</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.50x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.80x</td><td class='num' style='background:#bbf7d0;font-weight:600'>5.68x</td><td class='num' style='background:#bbf7d0;font-weight:600'>6.65x</td><td class='num' style='background:#bbf7d0;font-weight:600'>7.17x</td><td class='num' style='background:#bbf7d0;font-weight:600'>6.29x</td><td></td></tr></table></div>
+<h2>Revisit event count per session</h2><div class='writeup'>A revisit event = every click on a product the user has already opened <i>this session</i>. Count = 0 means every click was a fresh product; higher counts = more back-and-forth.</div><div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th>0</th><th>1</th><th>2-4</th><th>5-9</th><th>10+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>43.52%<small>1,212,399</small></td><td class='num'>22.89%<small>637,811</small></td><td class='num'>22.92%<small>638,556</small></td><td class='num'>7.43%<small>207,120</small></td><td class='num'>3.23%<small>89,928</small></td><td class='num'>2,785,814</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>87.78%<small>67,375,075</small></td><td class='num'>7.03%<small>5,394,373</small></td><td class='num'>3.87%<small>2,967,824</small></td><td class='num'>0.88%<small>673,000</small></td><td class='num'>0.44%<small>340,106</small></td><td class='num'>76,750,378</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.50x</td><td class='num' style='background:#bbf7d0;font-weight:600'>3.26x</td><td class='num' style='background:#bbf7d0;font-weight:600'>5.93x</td><td class='num' style='background:#bbf7d0;font-weight:600'>8.48x</td><td class='num' style='background:#bbf7d0;font-weight:600'>7.28x</td><td></td></tr></table></div>
+<h2>Time between first visit and revisit (per revisit event)</h2><div class='writeup'>For every revisit event, we measure the time from that product's <i>first</i> open in the session to this repeat open. Buckets are stacked short → long. Sub-2-minute revisits are typical of a user comparing across a few open PDPs; 30m+ suggests the user came back to the app later in the same session.</div><div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th><30s</th><th>30s–2m</th><th>2–10m</th><th>10–30m</th><th>30m–2h</th><th>2h+</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>17.47%<small>897,740</small></td><td class='num'>27.95%<small>1,436,357</small></td><td class='num'>40.29%<small>2,070,244</small></td><td class='num'>12.09%<small>621,012</small></td><td class='num'>2.11%<small>108,291</small></td><td class='num'>0.09%<small>4,477</small></td><td class='num'>5,138,121</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>31.63%<small>7,235,954</small></td><td class='num'>26.60%<small>6,084,935</small></td><td class='num'>30.53%<small>6,984,343</small></td><td class='num'>9.68%<small>2,213,538</small></td><td class='num'>1.52%<small>346,701</small></td><td class='num'>0.04%<small>9,838</small></td><td class='num'>22,875,309</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fecaca;font-weight:600'>0.55x</td><td class='num' style=''>1.05x</td><td class='num' style='background:#dcfce7'>1.32x</td><td class='num' style='background:#dcfce7'>1.25x</td><td class='num' style='background:#dcfce7'>1.39x</td><td class='num' style='background:#bbf7d0;font-weight:600'>2.03x</td><td></td></tr></table></div>
+<h2>Which real-estate is contributing revisits?</h2><div class='writeup'><code>real_estate</code> from <code>clicks_json.events[].real_estate</code> — the surface the user was on when they re-opened the product. Shows what UI is driving revisit behavior for each cohort.</div><div style="overflow-x:auto;"><table><tr><th class='rowh'>cohort</th><th>FY Feed</th><th>Recommendations</th><th>Search</th><th>CLP/Collections</th><th>Wishlist</th><th>Recently Viewed</th><th>Others</th><th>row total</th></tr><tr><td class='rowh cohort-order'>order_placed</td><td class='num'>7.39%<small>379,488</small></td><td class='num'>39.26%<small>2,017,284</small></td><td class='num'>14.18%<small>728,374</small></td><td class='num'>7.06%<small>362,875</small></td><td class='num'>8.75%<small>449,613</small></td><td class='num'>0.20%<small>10,043</small></td><td class='num'>23.17%<small>1,190,444</small></td><td class='num'>5,138,121</td></tr><tr><td class='rowh cohort-no'>no_order</td><td class='num'>9.11%<small>2,084,682</small></td><td class='num'>48.48%<small>11,089,507</small></td><td class='num'>13.76%<small>3,147,552</small></td><td class='num'>7.04%<small>1,610,636</small></td><td class='num'>8.56%<small>1,959,021</small></td><td class='num'>0.25%<small>58,220</small></td><td class='num'>12.79%<small>2,925,691</small></td><td class='num'>22,875,309</td></tr><tr><td class='rowh'>lift (order / no order)</td><td class='num' style='background:#fee2e2'>0.81x</td><td class='num' style='background:#fee2e2'>0.81x</td><td class='num' style=''>1.03x</td><td class='num' style=''>1.00x</td><td class='num' style=''>1.02x</td><td class='num' style='background:#fee2e2'>0.77x</td><td class='num' style='background:#bbf7d0;font-weight:600'>1.81x</td><td></td></tr></table></div>
 
 <div class='sub' style='margin-top:22px'>
   Source aggregates:
@@ -108,7 +109,7 @@ tracks with conversion on a same-day snapshot.
 <b>Conversion</b> = share of that bucket that placed an order.
 Cohort denominators: total first-click sessions = <b>1,013,017</b>, total orders = <b>56,161</b>.
 </div>
-<table>
+<div style="overflow-x:auto;"><table>
   <tr>
     <th class='rowh'>revisit in this session</th>
     <th>quantum<br><small>% of 1,013,017 total first-click sessions</small></th>
@@ -143,7 +144,7 @@ Cohort denominators: total first-click sessions = <b>1,013,017</b>, total orders
       4.93x
     </td>
   </tr>
-</table>
+</table></div>
 
 <h2>Merged: revisit × re-discovery quantum + conversion</h2>
 <div class='writeup'>
@@ -157,7 +158,7 @@ sessions with real clicks — no-click / garbage sessions are skipped.
 </ul>
 Quantum = share of the same 1,013,017 first-click sessions in each (revisit × re-discovery) combo. Conversion = share of that combo that placed an order.
 </div>
-<table>
+<div style="overflow-x:auto;"><table>
   <tr>
     <th class='rowh'>revisit × re-discovery</th>
     <th>quantum<br><small>% of 1,013,017 first-click sessions</small></th>
@@ -171,7 +172,7 @@ Quantum = share of the same 1,013,017 first-click sessions in each (revisit × r
 <tr><td class='rowh cohort-order'>revisit_yes · rediscovery_yes</td><td class='num big'>6.06%<small>61,369 sessions</small></td><td class='num'>8,833</td><td class='num big'>14.39%</td><td class='num'>15.73%</td></tr>
 <tr><td class='rowh cohort-order'>revisit_yes · rediscovery_no</td><td class='num big'>8.89%<small>90,078 sessions</small></td><td class='num'>12,429</td><td class='num big'>13.80%</td><td class='num'>22.13%</td></tr>
 <tr><td class='rowh cohort-order'>revisit_yes · no_3_priors</td><td class='num big'>4.80%<small>48,623 sessions</small></td><td class='num'>9,521</td><td class='num big'>19.58%</td><td class='num'>16.95%</td></tr>
-<tr><td class='rowh'>overall</td><td class='num'>100.00%<small>1,013,017 sessions</small></td><td class='num'>56,161</td><td class='num big'>5.54%</td><td class='num'>100.00%</td></tr></table>
+<tr><td class='rowh'>overall</td><td class='num'>100.00%<small>1,013,017 sessions</small></td><td class='num'>56,161</td><td class='num big'>5.54%</td><td class='num'>100.00%</td></tr></table></div>
 
 <h2>Revisit clicks — contribution by real_estate</h2>
 <div class='writeup'>
@@ -180,7 +181,7 @@ Population = revisit-yes final sessions (first click session per user on 2026-07
 and bucket by the <code>real_estate</code> of that revisit click — i.e. the surface the user came back to
 the PDP from. Split into order-placed vs no-order cohorts. Percentages are share of that cohort's revisit clicks.
 </div>
-<table>
+<div style="overflow-x:auto;"><table>
   <tr><th class='rowh'>real_estate</th>
 <th class='cohort-order'>order_placed<br><small>93,136 revisit clicks</small></th>
 <th class='cohort-no'>no_order<br><small>386,978 revisit clicks</small></th>
@@ -192,7 +193,7 @@ the PDP from. Split into order-placed vs no-order cohorts. Percentages are share
 <tr><td class='rowh'>Wishlist</td><td class='num'>8.19%<small>7,627 clicks</small></td><td class='num'>7.51%<small>29,057 clicks</small></td><td class='num' style=''>1.09x</td></tr>
 <tr><td class='rowh'>Recently Viewed</td><td class='num'>0.17%<small>162 clicks</small></td><td class='num'>0.27%<small>1,035 clicks</small></td><td class='num' style='background:#fecaca;font-weight:600'>0.65x</td></tr>
 <tr><td class='rowh'>Others</td><td class='num'>23.88%<small>22,237 clicks</small></td><td class='num'>13.04%<small>50,452 clicks</small></td><td class='num' style='background:#bbf7d0;font-weight:600'>1.83x</td></tr>
-</table>
+</table></div>
 
 <h2>Ordered PIDs — real_estate of the last click before the order</h2>
 <div class='writeup'>
@@ -201,7 +202,7 @@ we find the <b>most recent click on that PID in the same session, with click_ts 
 <code>real_estate</code>. Each column below is a (revisit × re-discovery) combo; each cell is share of the
 ordered-PID last-clicks for that combo. Denominator per column shown in the header.
 </div>
-<table>
+<div style="overflow-x:auto;"><table>
   <tr><th class='rowh'>real_estate</th>
 <th class='cohort-order'>revisit_yes<br>· rediscovery_yes<br><small>10,100 ordered pids</small></th>
 <th class='cohort-order'>revisit_yes<br>· rediscovery_no<br><small>13,659 ordered pids</small></th>
@@ -256,7 +257,7 @@ ordered-PID last-clicks for that combo. Denominator per column shown in the head
 <td class='num'>100.00%<small>5,235</small></td>
 <td class='num'>100.00%<small>10,774</small></td>
 </tr>
-</table>
+</table></div>
 
 <h2>DECIDE-turn share per (revisit × re-discovery × order) combo</h2>
 <div class='writeup'>
@@ -269,7 +270,7 @@ sessions are a small share of all sessions. Percentages below are computed again
 Overall: <b>2,691 of 7,890</b> tagged sessions had a DECIDE turn
 = <b>34.11%</b>.
 </div>
-<table>
+<div style="overflow-x:auto;"><table>
   <tr>
     <th class='rowh'>revisit × re-discovery</th>
     <th class='cohort-order'>order placed<br><small>% w/ DECIDE (tagged sess)</small></th>
@@ -283,7 +284,7 @@ Overall: <b>2,691 of 7,890</b> tagged sessions had a DECIDE turn
 <tr><td colspan='4' style='background:#fafafa;color:#666;font-size:11px;text-align:left;padding:4px 10px'><i>no_3_priors combos (users w/o enough prior click history) — kept for reference:</i></td></tr>
 <tr style='color:#666'><td class='rowh' style='background:#f9f9fb'>revisit_yes · no_3_priors</td><td class='num'>39.68%<small>25 / 63 tagged</small></td><td class='num'>40.09%<small>89 / 222 tagged</small></td><td class='num'>-0.4 pp</td></tr>
 <tr style='color:#666'><td class='rowh' style='background:#f9f9fb'>revisit_no · no_3_priors</td><td class='num'>51.06%<small>24 / 47 tagged</small></td><td class='num'>31.04%<small>158 / 509 tagged</small></td><td class='num'>+20.0 pp</td></tr>
-</table>
+</table></div>
 
 <div class='sub' style='margin-top:20px'>
   Snapshot day: <b>2026-07-15</b>. Users: exp 19446 control + test.

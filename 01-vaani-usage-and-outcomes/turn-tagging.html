@@ -2,6 +2,7 @@
 <html lang="en">
 <head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vaani Turn Tagging — Distribution Trees</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
@@ -12,7 +13,7 @@
 body {
   margin: 0; padding: 32px 40px 60px;
   font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: #fafafa; color: #1c1c1e;
+  background: #f6f7f9; color: #1c1c1e;
 }
 h1 { font-size: 24px; margin: 0 0 4px; }
 h2 { font-size: 18px; margin: 36px 0 6px; color: #1c1c1e; border-bottom: 2px solid #e5e5ea; padding-bottom: 6px; }
@@ -28,7 +29,7 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: #3a3a3c; }
   margin-bottom: -2px;
 }
 .tabbtn:hover { background: #f0f0f2; color: #1c1c1e; }
-.tabbtn.active { color: #1f6feb; border-bottom-color: #1f6feb; background: #fff; }
+.tabbtn.active { color: #4f46e5; border-bottom-color: #4f46e5; background: #fff; }
 .tabpane { display: none; }
 .tabpane.active { display: block; }
 .stats-row { display: flex; gap: 14px; flex-wrap: wrap; margin: 18px 0 8px; }
@@ -46,7 +47,7 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: #3a3a3c; }
 .chart-box.tall { height: 340px; }
 .chart-box.xtall { height: 430px; }
 .insight {
-  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #1f6feb;
+  background: #f3f8ff; border: 1px solid #cfe3ff; border-left: 4px solid #4f46e5;
   border-radius: 8px; padding: 10px 16px; margin: 4px 0 22px;
   font-size: 12.5px; line-height: 1.55; color: #24344d; max-width: 1100px;
 }
@@ -68,11 +69,11 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: #3a3a3c; }
 .node:hover { box-shadow: 0 3px 8px rgba(20,30,50,0.18); }
 .node .cnt { display: block; font-size: 11px; opacity: 0.85; margin-top: 2px; }
 .node.root { color: #fff; font-weight: 600; min-width: 190px; font-size: 13.5px; }
-.node.find-root { background: #1f6feb; }
-.node.decide-root { background: #8250df; }
-.node.others-root { background: #57606a; }
-.node.sh-root { background: #1a7f37; }
-.node.snh-root { background: #bf3989; }
+.node.find-root { background: #4f46e5; }
+.node.decide-root { background: #7c3aed; }
+.node.others-root { background: #374151; }
+.node.sh-root { background: #16a34a; }
+.node.snh-root { background: #6b7280; }
 .node.find-l2 { background: #eaf1ff; color: #0b3a91; border-color: #cfe3ff; }
 .node.decide-l2 { background: #f1eafb; color: #4a2380; border-color: #e0d0f7; }
 .node.others-l2 { background: #eeeff0; color: #3a3f44; border-color: #dcdee0; }
@@ -89,6 +90,10 @@ h3 { font-size: 15px; margin: 22px 0 10px; color: #3a3a3c; }
 .gridjs-th { font-size: 12px !important; }
 .gridjs-td { font-size: 12.5px !important; vertical-align: top !important; }
 .footer-note { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e5e5ea; color: #a0a0a5; font-size: 11.5px; }
+@media (max-width: 640px) {
+  .chart-box { min-width: 0; width: 100%; }
+  body { padding-left: 16px; padding-right: 16px; }
+}
 </style>
 </head>
 <body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
@@ -355,7 +360,7 @@ const rendered = {};
 
 function fmt(n){ return n.toLocaleString(); }
 function pct(n, d){ return (100*n/d).toFixed(1) + '%'; }
-const PALETTE = ['#1f6feb','#8250df','#57606a','#1a7f37','#bf3989','#c9782f','#0aa5a5','#a83279','#6b8e23','#7a5cff','#d1495b','#2a9d8f','#e07a5f','#3d5a80'];
+const PALETTE = ['#4f46e5','#7c3aed','#374151','#16a34a','#6b7280','#ea580c','#0aa5a5','#a83279','#6b8e23','#7a5cff','#d1495b','#2a9d8f','#e07a5f','#3d5a80'];
 
 function pie(id, labels, counts, colors){
   new Chart(document.getElementById(id), {
@@ -372,7 +377,7 @@ function pie(id, labels, counts, colors){
 function hbar(id, labels, counts, total, color){
   new Chart(document.getElementById(id), {
     type: 'bar',
-    data: { labels, datasets: [{ data: counts.map(c => 100*c/total), backgroundColor: color || '#1f6feb', borderRadius: 4 }] },
+    data: { labels, datasets: [{ data: counts.map(c => 100*c/total), backgroundColor: color || '#4f46e5', borderRadius: 4 }] },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false },
@@ -457,13 +462,13 @@ function renderDashboard(sfx){
     statsRow.appendChild(d);
   });
 
-  pie('chartUserL1_' + sfx, D.userL1.labels, D.userL1.counts, ['#1f6feb','#8250df','#57606a']);
-  pie('chartVaaniL1_' + sfx, D.vaaniL1.labels, D.vaaniL1.counts, ['#1a7f37','#bf3989']);
+  pie('chartUserL1_' + sfx, D.userL1.labels, D.userL1.counts, ['#4f46e5','#7c3aed','#374151']);
+  pie('chartVaaniL1_' + sfx, D.vaaniL1.labels, D.vaaniL1.counts, ['#16a34a','#6b7280']);
 
   const cwaTotal = D.findL2.counts[1], aoTotal = D.findL2.counts[2];
   document.getElementById('ctCwa_' + sfx).textContent = `category_with_attributes → attribute_types (multi-label, % of ${fmt(cwaTotal)} turns)`;
   document.getElementById('ctAo_' + sfx).textContent = `attributes_only → attribute_types (multi-label, % of ${fmt(aoTotal)} turns)`;
-  hbar('chartCwa_' + sfx, D.cwaAttrs.labels, D.cwaAttrs.counts, cwaTotal, '#1f6feb');
+  hbar('chartCwa_' + sfx, D.cwaAttrs.labels, D.cwaAttrs.counts, cwaTotal, '#4f46e5');
   hbar('chartAo_' + sfx, D.aoAttrs.labels, D.aoAttrs.counts, aoTotal, '#3a86ff');
 
   document.getElementById('hFind_' + sfx).textContent = `FIND branch (${pct(D.userL1.counts[0], T)} of all turns)`;
@@ -577,11 +582,11 @@ function renderTrend(sfx){
     data: {
       labels: T.labels,
       datasets: [
-        { type: 'bar', label: 'FIND', data: pctArr(T.find), backgroundColor: '#1f6feb', stack: 's' },
-        { type: 'bar', label: 'DECIDE', data: pctArr(T.decide), backgroundColor: '#8250df', stack: 's' },
-        { type: 'bar', label: 'OTHERS', data: pctArr(T.others), backgroundColor: '#57606a', stack: 's' },
-        { type: 'line', label: 'search_happened rate', data: shPct, borderColor: '#1a7f37',
-          backgroundColor: '#1a7f37', borderWidth: 2.5, pointRadius: 3, tension: 0.25, yAxisID: 'y' },
+        { type: 'bar', label: 'FIND', data: pctArr(T.find), backgroundColor: '#4f46e5', stack: 's' },
+        { type: 'bar', label: 'DECIDE', data: pctArr(T.decide), backgroundColor: '#7c3aed', stack: 's' },
+        { type: 'bar', label: 'OTHERS', data: pctArr(T.others), backgroundColor: '#374151', stack: 's' },
+        { type: 'line', label: 'search_happened rate', data: shPct, borderColor: '#16a34a',
+          backgroundColor: '#16a34a', borderWidth: 2.5, pointRadius: 3, tension: 0.25, yAxisID: 'y' },
       ]
     },
     options: {
@@ -601,7 +606,7 @@ function renderTrend(sfx){
 
   new Chart(document.getElementById('chartRet_' + sfx), {
     type: 'bar',
-    data: { labels: T.labels, datasets: [{ label: 'sessions', data: T.sessions, backgroundColor: '#c9782f', borderRadius: 4 }] },
+    data: { labels: T.labels, datasets: [{ label: 'sessions', data: T.sessions, backgroundColor: '#ea580c', borderRadius: 4 }] },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false },
@@ -635,9 +640,9 @@ function renderTrend(sfx){
       }
     });
   }
-  stackedL2('chartL2Find_' + sfx, 'FIND', ['#1f6feb','#6ea8fe','#9ec5fe','#cfe2ff']);
-  stackedL2('chartL2Decide_' + sfx, 'DECIDE', ['#8250df','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']);
-  stackedL2('chartL2Others_' + sfx, 'OTHERS', ['#57606a','#8c959f','#c4cad1']);
+  stackedL2('chartL2Find_' + sfx, 'FIND', ['#4f46e5','#6ea8fe','#9ec5fe','#cfe2ff']);
+  stackedL2('chartL2Decide_' + sfx, 'DECIDE', ['#7c3aed','#a98eea','#c5b3f1','#d9cdf7','#6f42c1','#59359a','#432874','#e0d0f7']);
+  stackedL2('chartL2Others_' + sfx, 'OTHERS', ['#374151','#8c959f','#c4cad1']);
 
   new gridjs.Grid({
     columns: ['Session #', 'Sessions', 'Turns', 'FIND %', 'DECIDE %', 'OTHERS %', 'search_happened %'],
@@ -656,7 +661,7 @@ function renderScreen(sfx){
   if (rendered[sfx]) return;
   rendered[sfx] = true;
   const T = SCRTRENDS[sfx];
-  const SCRPAL = ['#1f6feb','#0aa5a5','#c9782f','#8250df','#6b8e23','#bf3989','#57606a'];
+  const SCRPAL = ['#4f46e5','#0aa5a5','#ea580c','#7c3aed','#6b8e23','#6b7280','#374151'];
 
   const totTurns = T.labels.map((_, i) => T.screens.reduce((a, s) => a + T.share[s][i], 0));
   document.getElementById('smeta_' + sfx).textContent =
@@ -690,9 +695,9 @@ function renderScreen(sfx){
       data: {
         labels: T.labels,
         datasets: [
-          { label: 'FIND', data: m.FIND.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#1f6feb', stack: 's' },
-          { label: 'DECIDE', data: m.DECIDE.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#8250df', stack: 's' },
-          { label: 'OTHERS', data: m.OTHERS.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#57606a', stack: 's' },
+          { label: 'FIND', data: m.FIND.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#4f46e5', stack: 's' },
+          { label: 'DECIDE', data: m.DECIDE.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#7c3aed', stack: 's' },
+          { label: 'OTHERS', data: m.OTHERS.map((v,i) => tot[i] ? 100*v/tot[i] : 0), backgroundColor: '#374151', stack: 's' },
         ]
       },
       options: {

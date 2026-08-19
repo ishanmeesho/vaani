@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html><head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><meta charset='utf-8'><title>First-ask outcome → same-ask repeat probability — 2026-07-24</title>
+<html><head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png"><meta charset='utf-8'><meta name="viewport" content="width=device-width, initial-scale=1"><title>First-ask outcome → same-ask repeat probability — 2026-07-24</title>
 <script src='https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'></script>
 <style>
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin:20px;color:#111;background:#fff}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:20px;color:#111;background:#fff}
   h1{margin:0 0 4px 0;font-size:22px}
   h2{margin:24px 0 6px 0;font-size:17px}
   .sub{color:#555;font-size:13px;margin-bottom:14px;max-width:1100px}
@@ -53,7 +53,7 @@ or clicks-void window) are excluded from the good/bad comparison but shown in th
   const goodBar = {
     label: 'first outcome was good — P(repeats same ask)',
     data:  rows.map(r => r.repeat_pct_good),
-    backgroundColor: '#22c55e',
+    backgroundColor: '#16a34a',
   };
   const badBar = {
     label: 'first outcome was bad — P(repeats same ask)',
@@ -127,7 +127,7 @@ or clicks-void window) are excluded from the good/bad comparison but shown in th
   const goodBar = {
     label: 'first outcome was good — P(repeats same ask)',
     data:  rows.map(r => r.repeat_pct_good),
-    backgroundColor: '#22c55e',
+    backgroundColor: '#16a34a',
   };
   const badBar = {
     label: 'first outcome was bad — P(repeats same ask)',
@@ -186,6 +186,7 @@ or clicks-void window) are excluded from the good/bad comparison but shown in th
     be empty here — this section is included only for completeness and to surface the
     <b>~103k na-first users</b> counted for OTHERS tags.</div>
 <h2>Detail table</h2>
+<div style="overflow-x:auto;">
 <table>
 
 <tr>
@@ -217,4 +218,5 @@ or clicks-void window) are excluded from the good/bad comparison but shown in th
 <tr><td class='rowh'>OTHERS::off_journey</td><td>0</td><td class='g'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='g'>–</td><td>0</td><td class='b'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='b'>–</td><td class=''>–</td><td class=''>–</td><td>27,648</td></tr>
 <tr><td class='rowh'>OTHERS::unresolved</td><td>0</td><td class='g'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='g'>–</td><td>0</td><td class='b'>–<br><small style='color:#555;font-weight:normal'>0 repeated</small></td><td class='b'>–</td><td class=''>–</td><td class=''>–</td><td>52,701</td></tr>
 </table>
+</div>
 </body></html>
