@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aug BHAG — Vaani Product Docs</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e5e7eb;
+    --text: #111827; --text-dim: #6b7280; --accent: #4f46e5; --accent-soft: #eef2ff;
+    --code-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .pd-topbar {
+    position: sticky; top: 0; z-index: 50; height: 44px; display: flex; align-items: center;
+    gap: 10px; padding: 0 20px; background: #111827; color: #fff; font-size: 13px; font-weight: 600;
+  }
+  .pd-topbar a { color: #fff; text-decoration: none; opacity: 0.92; }
+  .pd-topbar a:hover { opacity: 1; text-decoration: underline; }
+  .pd-topbar-sep { opacity: 0.4; }
+  .pd-shell { display: flex; max-width: 1180px; margin: 0 auto; align-items: flex-start; }
+  .pd-sidebar {
+    flex: 0 0 260px; position: sticky; top: 44px; max-height: calc(100vh - 44px);
+    overflow-y: auto; padding: 24px 16px 40px 20px; border-right: 1px solid var(--border);
+  }
+  .pd-group { margin-bottom: 22px; }
+  .pd-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-dim); margin: 0 0 8px 0;
+  }
+  .pd-sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pd-sidebar a {
+    display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); text-decoration: none;
+    font-size: 13px; line-height: 1.4; border-left: 2px solid transparent;
+  }
+  .pd-sidebar a:hover { background: var(--accent-soft); }
+  .pd-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+  .pd-content { flex: 1 1 auto; min-width: 0; padding: 40px 48px 80px; }
+  .pd-doc { max-width: 760px; }
+  .pd-doc h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pd-doc h1:not(:first-child) { margin-top: 40px; }
+  .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
+  .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
+  .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
+  .pd-doc li { margin-bottom: 4px; }
+  .pd-doc li p { margin: 0 0 4px; }
+  .pd-doc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .pd-doc a:hover { border-bottom-color: var(--accent); }
+  .pd-doc em { color: var(--text-dim); }
+  .pd-doc strong { font-weight: 700; }
+  .pd-doc table {
+    width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .pd-doc th, .pd-doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .pd-doc thead th { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .pd-doc tbody tr:nth-child(even) { background: #fafafb; }
+  .pd-doc pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; margin: 0 0 18px;
+  }
+  .pd-doc code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .pd-doc p code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  @media (max-width: 860px) {
+    .pd-shell { flex-direction: column; }
+    .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .pd-content { padding: 28px 20px 60px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
+<div class="pd-shell">
+  <nav class="pd-sidebar">
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="nudging-rules-reference.html">Nudging Rules — Configuration Reference</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="nudge-filter-placeholder.html">Vaani Nudge — Filter Placeholder Requirements</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="quick-priority.html">Quick Priority — Experiment &amp; Build Sequencing</a></li><li><a href="fallback-experiment.html">Fallback Experiment</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html" class="active">Aug BHAG</a></li></ul></div>
+  </nav>
+  <main class="pd-content">
+    <article class="pd-doc">
+    <h1>H2 update</h1>
+<p><strong>Executive Summary</strong></p>
+<table>
+<thead><tr><th>Learning Leaps/ Unknown</th><th>Converted to Known</th><th>Progress/ update?</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>How are power users using Vaani?</strong></td>
+<td style="text-align: center;"><strong>They use Vaani after intent has already formed, across three connected jobs:</strong> start or restart a mission, refine/find an alternative, and decide whether to buy.Power-user cohort: <strong>16,684 users, 1.07M turns and 195.6K sessions</strong>. Their mix is <strong>56.0% FIND / 33.4% DECIDE / 10.5% OTHERS</strong>.  In session 1, <strong>54.0% of power-user turns are on PDP</strong>; <strong>54.4% of PDP asks are DECIDE</strong>, and <strong>64.6% of DECIDE is price</strong>.  Search-Page  asks are 84.6%-88.3% FIND; homepage asks are 76.5%-79.5% FIND.   
+  
+</td>
+<td style="text-align: center;"><strong>Converted to known:</strong> Vaani is not primarily blank-slate inspiration. The power-user journey is <strong>self-discover/deep-exploit -&gt; ask Vaani to launch or refine -&gt; use PDP as a decision desk -&gt; branch to a constrained alternative only when the current product fails.</strong> <strong>Zero-click nudge experiment shows  unmet-feed need.</strong> Of users shown the nudge, <strong>12.9–14.1% strictly adopted it</strong> by completing a real Vaani turn. Once the interaction began, <strong>67.4% used Vaani to search</strong>, and <strong>52.8% clicked Vaani’s own result</strong>. A separate homepage Vaani based  searches shows that <strong>84.8% searched an SSCAT absent from the pre-search feed</strong>, including <strong>51.2% who switched broad category</strong>.   
+  
+Together they show the same need moment: after the feed fails to surface a clickable option, users use Vaani to articulate a product or variant they have not been able to find on-screen. On the search page, 44% of search actions refine the existing mission; on PDP, 25% of turns trigger a search, and 42% of those searches ask for the same type of product with a different attribute.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>What behavior is habit forming at the moment?</strong></td>
+<td style="text-align: center;"><strong>Only mission start/refinement currently clears both bars of a productive habit: users repeat it and it often produces a useful action.</strong>  Fresh search is the most self-reinforcing behavior on every surface (<strong>49%-74% self-repeat</strong>).  Category-only and category-with-attributes FIND average <strong>~5.1 turns/user</strong>, and <strong>23%-24%</strong> of users do 6+ turns. Users who eventually go deep have a much denser first session: <strong>16.7 vs 5.9 searches</strong>, 9.1 vs 2.4 turns; In power users, homepage share grows <strong>6.6% -&gt; 15.1%</strong>, and ~80% of homepage asks are FIND. <strong>Price is repeated, but not yet a healthy habit:</strong> it is the stickiest ask (<strong>8.7 turns/user; 35% do 6+</strong>) while its overall successful-outcome rate is only <strong>29.6%</strong>. Quality, delivery, size, pack and usage are mostly one-shot lookups (1.7-2.9 turns/user; 55%-70% ask once).</td>
+<td style="text-align: center;"><strong>Habit funnel remains narrow:</strong> 97,646 adopters -&gt; 33,918 repeat -&gt; 16,869 engaged -&gt; <strong>6,361 habit users (6.5%)</strong>; 64.5% are one-and-done in-window. Once a user reaches 5+ sessions, <strong>P(next session)=68%, 89.6% self-initiate and 64.6% use Vaani in the next five opens.</strong> <strong>Decision support is an outcome-sensitive emerging habit.</strong> For DECIDE, a good outcome means that the user progresses on the existing shopping mission—the same product is ordered or added to cart, or the user selects another product in the same SSCAT. With a specific answer, successful-outcome rates are <strong>31.6% for price, 29.3% for size/fit, 23.4% for pack contents, 21.5% for other product information, 21.3% for quality, 19.4% for delivery and 17.8% for usage questions</strong>.Good first outcomes also consistently increase future reuse: price repetition rises from <strong>62.8% after a bad outcome to 84.0% after a good one</strong>, while quality, product information, delivery, size, pack and usage show <strong>1.14–1.37× repeat-rate lifts</strong>. The opportunity is therefore not to create more repetitive bargaining; it is to make grounded DECIDE answers reliably produce same-product or same-mission progress,</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>What will improve outcomes for users?</strong></td>
+<td style="text-align: center;"><strong>Two outcome are required.</strong>   
+  
+First, make the active mission respond visibly to constraints: surface the highest-priority filters, let the user answer by voice, and auto-apply them to the same feed. Direct search succeeds on <strong>74.4%</strong> of graded turns when a clear FIND ask gets only clarification question /no action, outcomes collapse to <strong>9.7%-16.2%</strong>.  
+Second, build confidence around the anchor product: final payable price, quality evidence, size/fit, pack contents, delivery, seller/return/review signals and the user's own order history. If still dissatisfied, branch from the pinned product into a curated 5-10 item set using recommendation filtering, carry the exact constraint, and support comparison/revisit.  
+Today same-SSCAT re-search after price DECIDE is associated with <strong>39.0% -&gt; 30.7%</strong> conversion; only <strong>4.6%-14.8%</strong> of re-searches carry the discussed constraint. Revisit sessions convert at <strong>15.39% vs 3.12%</strong> without revisit.</td>
+<td style="text-align: center;"><strong>LL2 is now organized into four build milestones:</strong>  (1) filter application on an active mission, (2) contextual/personalized filter nudges, (3) grounded decision information, and (4) context-preserving alternatives + comparison. <strong>Current marginal efficiency makes outcome per turn the binding metric.</strong> At the present measured lift, approximately <strong>40  incremental Vaani turns correspond to 1  incremental orders.</strong>  This is an aggregate efficiency ratio, not a claim that an individual user needs 40 turns to order or that any 40 turns cause an order. It shows that raw conversation growth is commercially expensive: each initiative must increase original-mission progress—useful result clicks, filter application, comparison/revisit, same-product or same-SSCAT ATC and order—per incremental turn.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Learning Leaps Status</strong></p>
+<p><strong>Learning Leap 1:</strong> <strong>How are people using Vaani, and which behaviors are becoming habitual?</strong></p>
+<table>
+<thead><tr><th>Learning Milestones / KRs</th><th>Status</th><th>Success metric</th><th>Success Metrics (Target)</th><th>Success Metrics (Current)</th><th>Key Updates/ Details</th><th>Next steps (8 weeks)</th><th>Key reflections (max 3 per leap)</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>M1 - Establish the jobs, surfaces and power-user behavior</strong></td>
+<td style="text-align: center;">COMPLETE</td>
+<td style="text-align: center;">FIND / DECIDE / OTHERS mix; surface role; fresh vs refine vs alternative vs decision; power-user evolution</td>
+<td style="text-align: center;">A stable user-job model that explains where, when and why Vaani is invoked</td>
+<td style="text-align: center;"><strong>2.20M tagged turns / 519K sessions / 167K users.</strong>  Overall: 58.6% FIND, 29.9% DECIDE.  Power users: 56.0% FIND, 33.4% DECIDE.  Power-user S1: 54.0% turns on PDP; PDP 54.4% DECIDE; price 64.6% of DECIDE.</td>
+<td style="text-align: center;">Three jobs are now clear: <strong>launch/restart a mission; refine/find a constrained alternative; build confidence on an anchor product.</strong>  Homepage and search are launch/refine surfaces; PDP is the decision and anchor-and-branch surface.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1. Users invoke Vaani after intent exists, not mainly for blank-slate exploration.  
+  2. Mission start/refinement is the only productive habit today; price repetition is often unresolved.  
+  3. The correct action changes by stage: execute for FIND, answer and preserve context for DECIDE.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M2 - Identify which behavior is actually habit forming</strong></td>
+<td style="text-align: center;">COMPLETE</td>
+<td style="text-align: center;">Self-repeat; mean turns/user; 6+ turn reach; 5-session progression; first-session predictors</td>
+<td style="text-align: center;">Separate productive habit from repeated friction</td>
+<td style="text-align: center;">Fresh search self-repeat <strong>49%-74%</strong>. Category FIND: <strong>~5.1 turns/user; 23%-24% do 6+</strong>. Price: <strong>8.7 turns/user; 35% do 6+</strong>, but only 29.6% successful outcome. Only <strong>6.5% of adopters reach 5+ sessions</strong>.</td>
+<td style="text-align: center;">Search-led, multi-turn first sessions predict depth. Power users initially spend more of their volume on PDP DECIDE, but their homepage share more than doubles as Vaani becomes a habitual mission launcher.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M3 - Link Vaani action quality to immediate outcome and future reuse</strong></td>
+<td style="text-align: center;">COMPLETE</td>
+<td style="text-align: center;">Successful-outcome rate by ask x action; same-ask repeat after good vs bad first outcome</td>
+<td style="text-align: center;">Define the correct response policy for each job.  <strong>For FIND:</strong> execute the intent. Good = direct/inferred search or refinement that preserves the active query/anchor and applies the user's stated constraint; bad = no action, generic answer, refusal/context-lock or unnecessary clarification. Direct search succeeds <strong>74.4% overall / 77.1% for category+attribute asks</strong>, versus only <strong>5.9–16.2%</strong> for common no-action responses.<strong>For DECIDE:</strong> resolve uncertainty without resetting the mission. Good = a grounded, specific answer that preserves the current product and leads to <strong>same-product order/ATC or a constrained same-SSCAT alternative</strong>. Search only when the user explicitly wants to branch, carrying the anchor + constraint. Bad = generic/unsupported answers or a broad fresh search that discards the current product.</td>
+<td style="text-align: center;"><strong>FIND</strong>  
+  
+- Direct search: <strong>74.4%</strong> success;   
+  
+- inferred search 45.4%;   
+- clarification 12.6%;   
+  
+<strong>DECIDE</strong>  
+  -specific answer 28.4%;   
+  
+- generic 15.5%;  
+  
+- refusal 8.8%;   
+- context-lock 6.3%.   
+  
+Price repeat after good first outcome: <strong>84.0% vs 62.8%</strong> after bad.</td>
+<td style="text-align: center;">For FIND, failing to search is the main failure. Asking clarifying question is not a good approach.  For DECIDE, broad re-search can destroy the anchor; useful, grounded answers create more future use. The same "search" behavior cannot be optimized uniformly.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M4 - Validate the need moment through pre-DECIDE same-SSCAT depth, zero-click nudge, revisit and LODs</strong></td>
+<td style="text-align: center;">COMPLETE</td>
+<td style="text-align: center;">Same-SSCAT distinct products visited before the first PDP DECIDE turn; strict nudge adoption; result click; revisit; qualitative concordance</td>
+<td style="text-align: center;">Locate the distinct assistance moments: before an anchor exists, after a consideration set has formed, and when purchase certainty is missing</td>
+<td style="text-align: center;">Power-user journey cut:  <strong>22,131 sessions</strong> with a first PDP DECIDE-shaped turn. Before that turn, users had visited a mean <strong>2.55 distinct products from the same SSCAT</strong> (median 1); <strong>42.3% had visited 2+</strong>, 25.7% 3+, 13.1% 5+, and 4.0% 10+.  In the stricter <strong>13,416 sessions where the first Vaani turn itself was PDP DECIDE</strong>, mean same-SSCAT depth was 2.33; 38.1% had 2+ and 10.9% had 5+.</td>
+<td style="text-align: center;">The need moment is stage-specific. Zero-click nudge identifies users before a product anchor exists; PDP DECIDE happens after users have already sampled products in the same SSCAT and formed an anchor or consideration set.  LODs match this: users then want certainty on price, quality, fit or pack, or a tightly bounded alternative - not a generic feed reset.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Learning Leap 2:</strong> <strong>What can potentially improve the outcome of Vaani for users?</strong></p>
+<table>
+<thead><tr><th>Learning Milestones / KRs</th><th>Status</th><th>Success metric</th><th>Success Metrics (Target)</th><th>Success Metrics (Current)</th><th>Key Updates/ Details</th><th>Next steps (8 weeks)</th><th>Key reflections (max 3 per leap)</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>M1 - Refine an active mission by applying filters through Vaani</strong></td>
+<td style="text-align: center;">IN DEV</td>
+<td style="text-align: center;">Filter-answer rate; filter application; same-feed click/PDP open; zero-click recovery; ATC/order on original mission</td>
+<td style="text-align: center;">Results visibly change with the spoken constraint, without losing query/category context or reducing original-mission conversion</td>
+<td style="text-align: center;">Refine-type queries are <strong>44% of search-page search actions</strong>. Direct category+attribute search reaches <strong>77.1%</strong> success; attributes-only reaches 75.6%. When Vaani only clarifies/no-ops, comparable FIND outcomes are 9.7%-16.2%.</td>
+<td style="text-align: center;">Treat voice as a control layer on the current search feed: convert "sasta", "green", "XL", "cotton", "party wear" into visible filter chips; preserve the query/SSCAT, show what changed, allow undo, and learn which next question performs best.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1. A response is not enough; the feed must visibly improve.  
+2. Anchor + constraint + action is the common primitive across all four milestones.  
+3. Optimize productive actions/order, not raw turns.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M2 - Nudge users toward the highest-priority contextual and personalized filters or search feed</strong></td>
+<td style="text-align: center;">IN DEV</td>
+<td style="text-align: center;">Nudge -&gt; real turn -&gt; filter answer -&gt; filter applied; 2+ turn depth; post-nudge click; fatigue/exit guardrails</td>
+<td style="text-align: center;">Prompt only when intent/friction is strong and ask the one or two filters most likely to improve the current result set</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Use current query, viewed products, category, prior preferences and the personalized-filter-value infra to ask a context-specific question - not generic "can I help?" copy. The nudge should hand off directly into filter application.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M3 - Give grounded information that helps the user decide on the current product</strong></td>
+<td style="text-align: center;">ONGOING</td>
+<td style="text-align: center;">Grounded-field coverage; factual accuracy; good-first DECIDE outcome; productive click/ATC/order; unsupported-claim rate</td>
+<td style="text-align: center;">Zero unsupported claims; materially lift DECIDE usefulness and final-purchase confidence</td>
+<td style="text-align: center;">Specific-answer success: <strong>price 31.6%, size/fit 29.3%, quality 21.3%, pack 23.4%, delivery 19.4%</strong>. A good first price answer produces <strong>84.0% repeat vs 62.8%</strong> after bad; delivery has a 1.37x repeat lift after good.</td>
+<td style="text-align: center;">Bring final payable price, delivery date, return rate and reason mix, review/photo evidence, units sold, seller history, size/fit, pack contents, past order/return context and category-relative benchmarks into Vaani, with "stay silent" rules for weak samples.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M4 - Improve alternative discovery and final certainty with contextual recommendations and comparison</strong></td>
+<td style="text-align: center;">PRODUCT DEFINITION</td>
+<td style="text-align: center;">Anchor retention; constraint carry-forward; curated-list click; compare/revisit; same-product and same-SSCAT conversion; any-purchase salvage</td>
+<td style="text-align: center;">Increase constrained-alternative closure without reducing the current product's 39.0% no-search same-SSCAT baseline</td>
+<td style="text-align: center;">After price DECIDE, same-SSCAT conversion is <strong>39.0% without re-search vs 30.7% after same-SSCAT re-search</strong>. Same-product closure falls 34.0% -&gt; 20.8%-23.7%; alternate same-SSCAT doubles 5.0% -&gt; 10.0%. Only <strong>4.6%-14.8%</strong> of searches preserve the discussed constraint.</td>
+<td style="text-align: center;">Pin the anchor product; show a curated 5-10 item set by filtering PDP recommendations; label exactly what changed and what stayed same; enable side-by-side comparison and easy return to the anchor. Revisit is already a strong intent pattern (15.39% vs 3.12% conversion).</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>LoDs and CPDs</strong></p>
+<p><em>(Spoke to 15 users who were power Vaani users (more than 100 turns, and 6 sessions with Vaani)</em> </p>
+<table>
+<thead><tr><th>Problem discovered</th><th>Explanation/ Hypothesis</th><th>Next steps</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>LOD - Users invoke Vaani when the mission exists but the screen does not surface it.</strong></td>
+<td style="text-align: center;">Without Vaani, users scroll, open CLPs or do repeated basic searches. Vaani removes typing/spelling effort once they can state the need.<em>
+</em><em>Kumar Singh: "Isse fayda kya hua ki matlab thoda sa samay ki bachat hai aur matlab typing karne se chutkara hai."</em><em>
+</em><em>Shraddha Pandey: "Spelling nahi aati hai toh ... bol karke phir aa jaati hai."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - An alternative means the same anchor with one parameter changed, not a fresh broad search.</strong></td>
+<td style="text-align: center;">Users want five to ten items in the same range, style and variety, with a specific improvement - cheaper, better quality, different size/color/material. Losing the current product makes them stop using Vaani for alternatives. <em>Kumar Singh: "Ek pasand aa gaya usme kya paanch das dikha de phir usi range mein usi variety mein."</em> <em>Raja Bazar Road User: "Jab hum aise karta hai toh wo jo hum dekh rahe the wo toh chala gaya."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - The PDP is a decision-confidence desk.</strong></td>
+<td style="text-align: center;">By PDP, users have already formed a visual preference and price anchor. They ask about material, quality, final price, size and everything included; the job is to decide "lena hai ya nahi". <em>Adampur User: "Agar aapko isse ke baare mein kuch jaanna ho ... kya material hai wo ye bata sakta hai."</em> <em>Pinki: "Accha hai, bura hai, kharab hai, kaisa hai, lena hai, nahi lena hai."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - Price anxiety is about final payable amount and value-for-money, not only a lower sticker price.</strong></td>
+<td style="text-align: center;">Users fear COD or checkout may add charges, often believe higher price automatically means better quality, and expect Vaani to explain whether the selected product is worth the money. <em>Pinki: "Online ka 312 hai... Cash on delivery karenge toh aur dena padega."</em> <em>Kumar Singh: "Value for money toh wahi batayega... hum kya batayein?"</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - Human-readable quality evidence beats abstract platform metrics.</strong></td>
+<td style="text-align: center;">Units sold, buyer photos and the number of people who liked the product are intuitive. Rating scores and seller age are often misread; return information can create fear unless translated relative to category and reason. <em>Pooja Devi: "Ise bahut log khareed rahe hain ... wo humare liye important hai."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - The first failure teaches users not to ask again; post-delivery truth builds trust.</strong></td>
+<td style="text-align: center;">A missed or hallucinated answer shrinks the future capability model. Confidence is earned only when what arrives matches what Vaani said; cautious fit/quality language can build more trust than false certainty. <em>Shibu Keshari: "Pooche the nahi bataya tha ... ab hum aage se kabhi nahi poochooge kyunki hume lagta hai ki nahi bata sakta."</em> <em>Adampur User: "Agar wahi cheez hum mangwaya aa gaya toh hamein aur bhi bharosa ho jayega."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LOD - Users notice and miss the conversational capability when it is removed.</strong></td>
+<td style="text-align: center;">Removed users returned to mic search/scrolling, noticed the loss and asked for Vaani on relatives' phones. The value is being able to ask follow-up questions, not simply place an order by voice. <em>Pinki: "Beech mein hat gaya tha ... mic se bol ke manga rahe the lekin isse accha tha ki sawal kar le rahe the."</em></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - Power users begin on PDP and gradually make the homepage a mission launcher.</strong></td>
+<td style="text-align: center;">Power-user sample = <strong>16,684 users, 1.07M turns, 195.6K sessions</strong>.  
+  
+ They are more DECIDE-heavy than the overall population (33.4% vs 29.9%).   
+  
+<strong>54.0% of S1 turns are on PDP</strong>, where 54.4% are DECIDE; price is 64.6% of DECIDE.   
+  Across sessions, MAIN share rises <strong>6.6% -&gt; 15.1%</strong>, and homepage asks become ~80% FIND. The established behavior is not generic chat: inspect a product, question it, then increasingly use Vaani to launch the next mission.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - Homepage Vaani is primarily a new/restarted mission at precise intent level.</strong></td>
+<td style="text-align: center;">Surface analysis shows <strong>57.5% of homepage searches are fresh starts/restarts</strong>. In the broader first-search cut, only <strong>24.37%</strong> match any previously viewed SSCAT, though 59.13% match at broad category grain - users may stay in "fashion" while changing the exact mission.  - One-word searches match prior SSCAT only <strong>6.78%</strong>, versus 48.11% for 4+ words; -explicit-attribute queries match 32.11% vs 20.36% generic.   
+  
+Homepage should be treated as a launcher, with resume offered only when intent evidence is strong.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - PDP DECIDE is downstream of same-SSCAT product exploration, not a cold-start interaction.</strong></td>
+<td style="text-align: center;">The relevant depth measure is products opened in the anchor SSCAT before the first PDP DECIDE turn - not homepage impressions before first search.  Across <strong>22,131 power-user sessions</strong>, users had already visited <strong>2.55 distinct same-SSCAT products on average</strong> (median 1): <strong>42.3% had visited 2+</strong>, 25.7% 3+, 13.1% 5+, and 4.0% 10+. The pattern remains in the strict cut where the first Vaani turn itself is PDP DECIDE (<strong>13,416 sessions</strong>): mean 2.33, 38.1% at 2+, 22.4% at 3+, and 10.9% at 5+. Vaani is entering after a consideration set has formed; the job is to validate the anchor, compare candidates, or change one constraint without restarting discovery.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - For a clear FIND intent, not searching immediately is the largest outcome failure.</strong></td>
+<td style="text-align: center;">Across <strong>2.20M graded turns</strong>, directly rendered search has a <strong>74.4% successful-outcome rate</strong>; category-with-attributes reaches 77.1%, category-only 71.4% and attributes-only 75.6%.  When Vaani does not act, clarification questions  is 12.6% overall, context-lock 6.3% and refusal 8.8%.  The product rule is explicit: when the ask is actionable FIND, execute or apply the constraint now - do not trap the user in another generic question.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - When Vaani answers DECIDE well, the same behavior repeats.</strong></td>
+<td style="text-align: center;">A good first price outcome raises same-ask repeat to <strong>84.0% vs 62.8%</strong> after a bad one and total price turns to 10.67 vs 8.19. Quality, delivery, size, pack and usage show <strong>1.14x-1.37x repeat-rate lifts</strong> after a good first outcome.  The zero-click experiment shows the same mechanism: users who clicked Vaani's first result had <strong>30.0% later organic use</strong>, versus 21.8% after no click and 20.5% after falling back to typed search. First-answer usefulness is an activation metric.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - Revisit is a high-intent compare-return-reconsider pattern.</strong></td>
+<td style="text-align: center;">Across 79.5M sessions, <strong>56.48% of order sessions</strong> had a product revisit vs 12.22% of no-order sessions (4.62x over-representation).  In the controlled same-day first-click snapshot, revisit appears in only <strong>19.75%</strong> of sessions but produces <strong>54.81% of orders</strong>; conversion is <strong>15.39% vs 3.12%</strong>, a 4.93x observational association.  Vaani should remember the anchor, preserve a shortlist and help users compare, rather than forcing a linear funnel.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - Re-search after DECIDE currently breaks the original mission more than it rescues it.</strong></td>
+<td style="text-align: center;">Across <strong>4.14M turns / 978.5K sessions</strong>, price is 60.3% of DECIDE and negotiation is 44.6% of price.  After price negotiation, same-SSCAT conversion is <strong>39.0% with no later search vs 30.7% after same-SSCAT search</strong>.  Same-product closure falls 34.0% -&gt; 20.8%-23.7%; alternative same-SSCAT doubles 5.0% -&gt; 10.0% but cannot offset anchor loss.  Only 11.6%-12.2% of price, 7.2% of quality and 4.6% of usage re-searches carry the discussed constraint. This is correlational - re-search marks a harder thread - but it defines the intervention: constrained branch, not reset.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - The behavior that repeats most is not yet the behavior that converts best.</strong></td>
+<td style="text-align: center;">Surface cuts show FIND sessions order at <strong>8.2% on search and 8.9% on homepage</strong>, below DECIDE at 9.7%-13.2%. On PDP, FIND sessions order the discussed product at only <strong>1.2% vs 8.5% for DECIDE</strong>.  Vaani has a repeatable acquisition/habit loop around search, but the next 10x comes from better refinement outcomes and stronger decision confidence after an anchor exists.</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>CPD - Current turn economics make outcome quality the binding constraint.</strong></td>
+<td style="text-align: center;">Current internal efficiency read: <strong>~1 incremental order per ~40 additional Vaani turns</strong>. More turns are not automatically value: some are productive refinement, others are repeated bargaining, clarification or recovery from context loss.</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Next Steps</strong></p>
+<table>
+<thead><tr><th>Leap</th><th>Action Items</th><th>Owner</th><th>Timelines</th><th>Details</th><th>Status</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>LL2 - M3</strong></td>
+<td style="text-align: center;">Add more decision-making information in Vaani</td>
+<td style="text-align: center;">Kartik</td>
+<td style="text-align: center;">Next 1 weeks</td>
+<td style="text-align: center;">Ground answers in final payable price, delivery date, return rate/reasons, review, seller history, size/fit, pack contents and relevant past-order context; add suppression rules for weak data.</td>
+<td style="text-align: center;">In progress</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2 - M2</strong></td>
+<td style="text-align: center;">Nudge context-relevant filters on the search feed</td>
+<td style="text-align: center;">Jayesh Jha + Harsh</td>
+<td style="text-align: center;">Next 2 weeks</td>
+<td style="text-align: center;">Consume personalized filter-value infra and ask the highest-priority missing filter for the current query/category. Measure nudge -&gt; real turn -&gt; filter answer -&gt; applied feed, plus fatigue/exit guardrails.</td>
+<td style="text-align: center;">In progress</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2 - M1</strong></td>
+<td style="text-align: center;">Apply filters on the user's active search feed through Vaani</td>
+<td style="text-align: center;">Mukul + Harsh</td>
+<td style="text-align: center;">Next 2 weeks</td>
+<td style="text-align: center;">Translate spoken price, color, size, material, design, occasion and recipient constraints into visible applied filters; preserve the active query/SSCAT, show what changed and allow undo.</td>
+<td style="text-align: center;">In progress</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2 - M4</strong></td>
+<td style="text-align: center;">Create the curated alternative and comparison experience</td>
+<td style="text-align: center;">Vedant + Ishan + Pragyansh</td>
+<td style="text-align: center;">Current cycle + Test MVP for this !</td>
+<td style="text-align: center;">Use product-recommendation filtering to pin the anchor and show 5-10 contextually constrained alternatives. Highlight  differences, support side-by-side comparison and let the user return to the original product to build final purchase certainty.</td>
+<td style="text-align: center;">Definition</td>
+</tr>
+</tbody>
+</table>
+    </article>
+  </main>
+</div>
+</body>
+</html>

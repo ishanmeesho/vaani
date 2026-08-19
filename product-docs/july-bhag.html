@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>July BHAG — Vaani Product Docs</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e5e7eb;
+    --text: #111827; --text-dim: #6b7280; --accent: #4f46e5; --accent-soft: #eef2ff;
+    --code-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .pd-topbar {
+    position: sticky; top: 0; z-index: 50; height: 44px; display: flex; align-items: center;
+    gap: 10px; padding: 0 20px; background: #111827; color: #fff; font-size: 13px; font-weight: 600;
+  }
+  .pd-topbar a { color: #fff; text-decoration: none; opacity: 0.92; }
+  .pd-topbar a:hover { opacity: 1; text-decoration: underline; }
+  .pd-topbar-sep { opacity: 0.4; }
+  .pd-shell { display: flex; max-width: 1180px; margin: 0 auto; align-items: flex-start; }
+  .pd-sidebar {
+    flex: 0 0 260px; position: sticky; top: 44px; max-height: calc(100vh - 44px);
+    overflow-y: auto; padding: 24px 16px 40px 20px; border-right: 1px solid var(--border);
+  }
+  .pd-group { margin-bottom: 22px; }
+  .pd-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-dim); margin: 0 0 8px 0;
+  }
+  .pd-sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pd-sidebar a {
+    display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); text-decoration: none;
+    font-size: 13px; line-height: 1.4; border-left: 2px solid transparent;
+  }
+  .pd-sidebar a:hover { background: var(--accent-soft); }
+  .pd-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+  .pd-content { flex: 1 1 auto; min-width: 0; padding: 40px 48px 80px; }
+  .pd-doc { max-width: 760px; }
+  .pd-doc h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pd-doc h1:not(:first-child) { margin-top: 40px; }
+  .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
+  .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
+  .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
+  .pd-doc li { margin-bottom: 4px; }
+  .pd-doc li p { margin: 0 0 4px; }
+  .pd-doc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .pd-doc a:hover { border-bottom-color: var(--accent); }
+  .pd-doc em { color: var(--text-dim); }
+  .pd-doc strong { font-weight: 700; }
+  .pd-doc table {
+    width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .pd-doc th, .pd-doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .pd-doc thead th { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .pd-doc tbody tr:nth-child(even) { background: #fafafb; }
+  .pd-doc pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; margin: 0 0 18px;
+  }
+  .pd-doc code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .pd-doc p code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  @media (max-width: 860px) {
+    .pd-shell { flex-direction: column; }
+    .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .pd-content { padding: 28px 20px 60px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
+<div class="pd-shell">
+  <nav class="pd-sidebar">
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="nudging-rules-reference.html">Nudging Rules — Configuration Reference</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="nudge-filter-placeholder.html">Vaani Nudge — Filter Placeholder Requirements</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="quick-priority.html">Quick Priority — Experiment &amp; Build Sequencing</a></li><li><a href="fallback-experiment.html">Fallback Experiment</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html" class="active">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+  </nav>
+  <main class="pd-content">
+    <article class="pd-doc">
+    <h2>H2 update</h2>
+<h1>Executive Summary</h1>
+<table>
+
+<tbody>
+<tr>
+<td style="text-align: center;">Key Unknown</td>
+<td style="text-align: center;">Major Takeaways</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Are users adopting Vaani, and is deeper usage worth chasing?</strong></td>
+<td style="text-align: center;"><strong>YES.</strong> 7.7% of Test users adopt Vaani. But only 6.5% adopters reach 5 session+  
+  Holding exposure constant (same runway of app opens since first use), users who reach 5+ Vaani sessions place <strong>~35% more orders</strong> and click <strong>~43% more products</strong> per session than single-session users, with a lower zero-click rate (27.4% vs 34.9%).</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>What separates users who come back from those who don't?</strong></td>
+<td style="text-align: center;"><strong>Engagement depth in the very first conversation</strong> turns (9.1 vs 2.4), searches (16.7 vs 5.9), more screens touched, lesser session time, not purchase intent (flat), not technical friction, not adoption channel. A search-led first session bounces far less than a non-search one (41.7% vs 60.2%).</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>What are users actually using Vaani for?</strong></td>
+<td style="text-align: center;"><strong>Overwhelmingly to  (FIND).</strong> Find is 70.7% of turns on the search page and 63.7% on the homepage; on PDP, 1 in 4 turns redirects to a new search.  
+  Fresh search is also the single most self-reinforcing behavior on every surface (49–74% self-repeat) users who return  on Vaani come back to search again.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Are outcomes good on that search behavior? Where is the constraint?</strong></td>
+<td style="text-align: center;"><strong>No — Find converts worst everywhere:</strong> session order rate 8.2–8.9% vs Decide's 9.7 -- 13.2%; on PDP, Find sessions order the product discussed at just 1.2% vs 8.5% for Decide.  
+  On the search page, 30% of turns where Vaani took no action were real Find intents it failed to act on. Users keep searching but we aren't showing the right results. Improving search outcomes (refine / switch / resume) is the constraint to break next.</td>
+</tr>
+</tbody>
+</table>
+<h1>Learning Leaps Status</h1>
+<h2>Learning Leap 1:</h2>
+<p><strong>Are Meesho users adopting Vaani, is deeper usage forming, what does deeper usage deliver, and what predicts it? (Includes the interventions we are building to increase session-level adoption and progression to repeat usage.)</strong></p>
+<table>
+<thead><tr><th>Learning Milestones / KRs</th><th>Status</th><th>Success metric</th><th>Target</th><th>Current</th><th>Key Updates / Details</th><th>Next steps (8 weeks)</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>M1 · Establish whether Vaani is being adopted and whether deeper usage delivers better outcomes</strong></td>
+<td style="text-align: center;">DONE</td>
+<td style="text-align: center;">Adoption rate;  exposure matched depth distribution;  orders, clicks &amp; zero-click rate by depth stage</td>
+<td style="text-align: center;"><strong>Clean exposure matched read</strong> every user compared has the same runway (app opens / days) since first use</td>
+<td style="text-align: center;">7.7% adoption  
+6.4% of adopters reach 5+ sessions within their first 10 app opens.  
+Stage 1 → 5+:   
+  
+<strong>orders/session</strong>   
+0.51 → 0.69 (+35%),   
+  
+<strong>clicks/session</strong> 4.2 → 6.0 (+43%),   
+  
+<strong>zero-click session</strong>   
+34.9% → 27.4%</td>
+<td style="text-align: center;">I<strong>f a user does 5+ session then: at N=5,</strong>   
+  
+(1) P(N+1)=68%,   
+(2) self-init=89.6%,   
+(3) P(Vaani in next 5 opens)=64.6%,   
+(4) gap=0.48d.  
+  
+Metrics plateau post 5 session.   
+  <strong>Funnel:</strong>   
+97,646 adopters → 33,918 repeat (34.7%) → 16,869 engaged (17.3%) → 6,361 habit (6.5%).   
+  
+63,006 (64.5%) are one-and-done in-window.  
+<strong>Adoption paths:</strong>   
+  
+(1) 75.0% in-flow (61,648);  
+  
+(2)  25.0% intro-screen (20,526), of which 68% never returned.</td>
+<td style="text-align: center;">Institutionalise exposure-matched 5-session reach as the north-star depth metric for every intervention below.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M2 · Characterise what a FIRST session looks like for users who go deep</strong></td>
+<td style="text-align: center;">DONE</td>
+<td style="text-align: center;">First-session signals split by eventual depth stage;</td>
+<td style="text-align: center;">Signals that cleanly separate stage-5+ from stage-1 users</td>
+<td style="text-align: center;">Stage-5+ vs stage-1 first sessions:   
+  
+<strong>9.1 vs 2.4 turns</strong>,   
+  
+16.7 vs 5.9 searches,   
+  
+72.4% vs 61.0% search-led.  
+Search-led first sessions bounce far less: 41.7% vs 60.2%   
+within-session;</td>
+<td style="text-align: center;">The differentiator is engagement depth inside the first conversation not purchase intent (order-in-session flat at ~12%), not adoption</td>
+<td style="text-align: center;">“get the user searching and iterating in session 1” as the design spec for all triggers and nudge content.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M3 · Ship the contextual TRIGGER — scroll-based zero-click nudge</strong></td>
+<td style="text-align: center;">LIVE (launched 02 Jul 2026, two variants)</td>
+<td style="text-align: center;"><strong>Primary:</strong>  5-session forward Vaani continuation (exposure-matched)non-nudged;  <strong>guardrail:</strong> bounce rate</td>
+<td style="text-align: center;">Depth-reach lift vs holdout;  bounce no worse than organic sessions</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>Zero-click prevalence:</strong>  35% of all sessions have no clicks; organic app-open contributes ~28pp of that.  FY-only: 67.7% no-click; FY-dominant: 30.6%; Search-dominant: 26.7%. <strong>Depth signature:</strong> no-clickers stop at ~27–28 PID views; clickers click at ~33–35 (first click after 62–70s vs 38–45s for no-click sessions). <strong>Nudge thresholds chosen off this:</strong> FY-only fire at 20 FY views no-click; FY-dominant 25 product views; Search-dominant 20 Search views.</td>
+<td style="text-align: center;">Tune per-real-estate thresholds. Kill or scale variants on readout.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M4 · Ship the contextual CONTENT — personalized, context-aware nudge engine</strong></td>
+<td style="text-align: center;">IN DEVELOPMENT</td>
+<td style="text-align: center;">Search rate in nudged sessions; % of nudged sessions reaching 2+ turns (depth signal)</td>
+<td style="text-align: center;">Nudged sessions elicit search + iteration materially above organic</td>
+<td style="text-align: center;">Build in progress.</td>
+<td style="text-align: center;">Content personalised to what the user is seeing now or was seeing in the previous session.  <strong>Rationale from M2:</strong> search-led, multi-turn first sessions are the strongest depth signal we have and nudge content should elicit exactly that.</td>
+<td style="text-align: center;">Ship first personalised-content variants behind the live scroll trigger.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M5 · Break the session 1 → 2 drop-off (Trial → Commitment)</strong></td>
+<td style="text-align: center;">PLANNED</td>
+<td style="text-align: center;">P(session 2 | session 1), exposure-matched</td>
+<td style="text-align: center;">Meaningful lift over the current 44.1% session-2 reach</td>
+<td style="text-align: center;">55.9% of adopters never reach a 2nd Vaani session even with 10 app opens of runway.64% of all repeat-session gaps are under 24 hours. Repeat use happens inside the same shopping window, not as a spaced ritual.</td>
+<td style="text-align: center;">Search-led first sessions return more (46.5% vs 39.8%)  ; re-entry content should resume the search thread from session 1 and land within the same/next-day window while the intent is still alive.</td>
+<td style="text-align: center;">Design &amp; scope the session-2 re-entry nudge (24–48h post session 1), seeded with the user's open intent.</td>
+</tr>
+</tbody>
+</table>
+<h2>Learning Leap 2</h2>
+<p><strong>Are session-level outcomes improving for repeat users, and what will we solve to improve them? (Focus: Vaani is used primarily used for FIND so improving search outcomes on the three surfaces where it happens [product page / search page / homepage] is where the leverage sits)</strong></p>
+<table>
+<thead><tr><th>Learning Milestones / KRs</th><th>Status</th><th>Success metric</th><th>Target</th><th>Current</th><th>Key Updates / Details</th><th>Next steps (8 weeks)</th><th>Key reflections (max 3 per leap)</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>M1 · Establish what users use Vaani for and what session outcomes they get</strong></td>
+<td style="text-align: center;">DONE</td>
+<td style="text-align: center;">FIND / DECIDE / Other share of turns per surface;  self-repeat rates;  session conversion by dominant behavior type</td>
+<td style="text-align: center;">-</td>
+<td style="text-align: center;">Vaani is overwhelmingly a <strong>search alternative</strong>: Find is 70.7% of search-page turns  63.7% of homepage turns; on PDP, 1 in 4 turns redirects to a new search. Fresh search is the most self-reinforcing behavior on every surface (49–74% self-repeat) — returning users come back to search again.</td>
+<td style="text-align: center;">But search outcomes are the weakest:  FIND sessions convert worst everywhere — order rate 8.2% (search page) / 8.9% (homepage) vs Decide's 9.7–13.2%; on PDP,  FIND sessions order the product discussed at 1.2% vs 8.5% for Decide. On the search page, 30% of no-action turns were real Find intents Vaani failed to act on.</td>
+<td style="text-align: center;">Freeze “improve search outcomes” as the LL2 improvement surface.</td>
+<td style="text-align: center;">1. Repeat usage ≠ good outcomes users come back to search again, but search is where we convert worst. 2. Users don't “graduate” to higher-intent Decide behavior with experience; the mix is structural per surface. 3. So this is a results-quality problem, not an adoption problem. We aren't showing the right results.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M2 · Locate the leverage which query types, on which surfaces</strong></td>
+<td style="text-align: center;">DONE</td>
+<td style="text-align: center;">Sizing of refine vs fresh vs resume intents per surface; missed-intent rate</td>
+<td style="text-align: center;">Pick the biggest volume × biggest outcome gap behaviors</td>
+<td style="text-align: center;"><strong>Search page</strong> (738K turns): refine-type queries (similar / budget / cheaper / better quality) are 44% of search-action turns; 30% of no-action turns are missed Find intents. <strong>PDP</strong> (1.04M turns): 25% fire a new search, of which 42% are “same thing, different attribute” refinements. <strong>Homepage</strong> (292K turns): 57.5% fresh search where users start and re-start intents.</td>
+<td style="text-align: center;">Three focus behaviors chosen: (1) user refines an intent from the product page,  (2) user refines an intent on the search page, (3) user resumes or opens an intent on the homepage. Intent switches get a separate, lighter handling: help the user save current products for later, or capture what they didn't like.</td>
+<td style="text-align: center;">Build the interventions per surface (M3).</td>
+<td style="text-align: center;">1. When Vaani fires a search it's almost always a real FIND  intent (91.7%)  the gap is in what we show next, plus the 30% of silent turns where we do not search are also FIND intent – here we are failing  to act.  2. Refinement queries carry an explicit user constraint that we currently aren’t able to utilise best  because our default mode is to rely on search only.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M3 · Improve FIND outcomes on the three focus behaviors (refine on PDP, refine on search page, resume on homepage)</strong></td>
+<td style="text-align: center;">PLANNED</td>
+<td style="text-align: center;">Session order rate and zero-click rate on refine / resume sessions</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><strong>PDP refine:</strong> open a results surface that keeps the anchor product's context while applying the stated constraint. <strong>Search-page refine:</strong> voice out the right filters for the query and auto-apply them; for each search, maintain the next set of important questions to ask — questions that perform well automatically surface higher.  <strong>Homepage resume:</strong> proactively offer to continue the user's open intent at app-open; feed answers back into the feed so results visibly improve.</td>
+<td style="text-align: center;">Design conversation flow, UI and results per surface;</td>
+<td style="text-align: center;">TBD</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>M4 · Information enrichment — ground Vaani's answers in real product, user &amp; region data</strong></td>
+<td style="text-align: center;">PLANNED</td>
+<td style="text-align: center;">Order rate on enriched turns (primary focus: DECIDE turns); % of turns where an enriched field is surfaced vs suppressed</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Vaani today answers in generic language because it lacks grounded per-user / per-product / per-region signal. 33 fields enumerated across 8 clusters (seller &amp; product trust, social proof, visual truth, personalization, commercial context, order state, alternates, memory), priority-tiered P0 (21) / P1 (10) / P2 (2).</td>
+<td style="text-align: center;">Every field is defined as field × shape: what it is, all shapes the LLM can consume it in (absolute / comparative / trend / reassurance / warning), when to surface it, and when to stay silent — thin samples return null, not noise. Highest-impact examples: return rate vs category norm, return-reason mix ("mostly size, not quality"), size reco from the user's own order + return history, price ladder &amp; sale calendar, delivery ETA, in-session memory ("wo laal wali").</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1. Better answers need better inputs — most of Vaani's generic responses trace to missing context, not model quality. 2. Silent-when rules matter as much as surfacing rules — a field with no suppression threshold is noise in the context window.</td>
+</tr>
+</tbody>
+</table>
+<h2>Next Steps</h2>
+<table>
+<thead><tr><th>Learning Leap</th><th>Action Items</th><th>Owner</th><th>Timelines</th><th>Details</th><th>Status</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;"><strong>LL1</strong></td>
+<td style="text-align: center;">Scroll-based zero-click nudge experiment readout</td>
+<td style="text-align: center;">Nikhil</td>
+<td style="text-align: center;">1 week</td>
+<td style="text-align: center;">Primary metric = 5-session forward Vaani continuation (exposure-matched depth signal); guardrail = bounce rate.</td>
+<td style="text-align: center;">In progress</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL1</strong></td>
+<td style="text-align: center;">Personalized nudge engine build</td>
+<td style="text-align: center;">Jayesh + Harsh</td>
+<td style="text-align: center;">2 weeks</td>
+<td style="text-align: center;">Content personalised to what user is seeing or was seeing in previous session.</td>
+<td style="text-align: center;">In development</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2</strong></td>
+<td style="text-align: center;">PDP intent-refinement: a results surface that keeps the product's context while applying the user's new constraint</td>
+<td style="text-align: center;">Ishan + Vedant + Mukul</td>
+<td style="text-align: center;">2–3 weeks</td>
+<td style="text-align: center;"><strong>Early Thought</strong> Design the conversation flow, UI, and results for refine-from-PDP queries. (42% of PDP-triggered searches are attribute refinements).</td>
+<td style="text-align: center;">Brainstorming Phase</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2</strong></td>
+<td style="text-align: center;">Search-page refinement: voice out the right filters and auto-apply them</td>
+<td style="text-align: center;">Ishan + Vedant + Mukul</td>
+<td style="text-align: center;">2–3 weeks</td>
+<td style="text-align: center;"><strong>Early Thought</strong>Per-search set of next-best questions to ask; questions that perform well automatically surface higher.</td>
+<td style="text-align: center;">In Developement</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2</strong></td>
+<td style="text-align: center;">Homepage resume-intent: help users continue an open intent on app-open</td>
+<td style="text-align: center;">Ishan + Vedant + Mukul</td>
+<td style="text-align: center;">2–3 weeks</td>
+<td style="text-align: center;"><strong>Early Thought</strong> Resume prompt for open intents; for intent-switchers, save products for later / capture what they didn't like.</td>
+<td style="text-align: center;">Brainstorming Phase</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>LL2</strong></td>
+<td style="text-align: center;">Information enrichment: ground Vaani's answers in real product, user &amp; region data</td>
+<td style="text-align: center;">Ishan + Mukul</td>
+<td style="text-align: center;">2 Weeks</td>
+<td style="text-align: center;">Early Thought — 33 fields across 8 clusters (trust, social proof, personalization, price, delivery, order state), each with defined framings and silent-when guardrails; P0 = 21 fields for launch. Next: align on field list → KRD → backend fetch spec.</td>
+<td style="text-align: center;">In Development</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>Both</strong></td>
+<td style="text-align: center;">LODs with Habit Formed Users</td>
+<td style="text-align: center;">Ishan + Nikhil</td>
+<td style="text-align: center;">23rd July</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">In Process.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Some Sample User Journey’s</strong></p>
+    </article>
+  </main>
+</div>
+</body>
+</html>

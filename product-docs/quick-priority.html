@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Priority — Experiment &amp; Build Sequencing — Vaani Product Docs</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e5e7eb;
+    --text: #111827; --text-dim: #6b7280; --accent: #4f46e5; --accent-soft: #eef2ff;
+    --code-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .pd-topbar {
+    position: sticky; top: 0; z-index: 50; height: 44px; display: flex; align-items: center;
+    gap: 10px; padding: 0 20px; background: #111827; color: #fff; font-size: 13px; font-weight: 600;
+  }
+  .pd-topbar a { color: #fff; text-decoration: none; opacity: 0.92; }
+  .pd-topbar a:hover { opacity: 1; text-decoration: underline; }
+  .pd-topbar-sep { opacity: 0.4; }
+  .pd-shell { display: flex; max-width: 1180px; margin: 0 auto; align-items: flex-start; }
+  .pd-sidebar {
+    flex: 0 0 260px; position: sticky; top: 44px; max-height: calc(100vh - 44px);
+    overflow-y: auto; padding: 24px 16px 40px 20px; border-right: 1px solid var(--border);
+  }
+  .pd-group { margin-bottom: 22px; }
+  .pd-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-dim); margin: 0 0 8px 0;
+  }
+  .pd-sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pd-sidebar a {
+    display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); text-decoration: none;
+    font-size: 13px; line-height: 1.4; border-left: 2px solid transparent;
+  }
+  .pd-sidebar a:hover { background: var(--accent-soft); }
+  .pd-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+  .pd-content { flex: 1 1 auto; min-width: 0; padding: 40px 48px 80px; }
+  .pd-doc { max-width: 760px; }
+  .pd-doc h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pd-doc h1:not(:first-child) { margin-top: 40px; }
+  .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
+  .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
+  .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
+  .pd-doc li { margin-bottom: 4px; }
+  .pd-doc li p { margin: 0 0 4px; }
+  .pd-doc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .pd-doc a:hover { border-bottom-color: var(--accent); }
+  .pd-doc em { color: var(--text-dim); }
+  .pd-doc strong { font-weight: 700; }
+  .pd-doc table {
+    width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .pd-doc th, .pd-doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .pd-doc thead th { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .pd-doc tbody tr:nth-child(even) { background: #fafafb; }
+  .pd-doc pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; margin: 0 0 18px;
+  }
+  .pd-doc code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .pd-doc p code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  @media (max-width: 860px) {
+    .pd-shell { flex-direction: column; }
+    .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .pd-content { padding: 28px 20px 60px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
+<div class="pd-shell">
+  <nav class="pd-sidebar">
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="nudging-rules-reference.html">Nudging Rules — Configuration Reference</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="nudge-filter-placeholder.html">Vaani Nudge — Filter Placeholder Requirements</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="quick-priority.html" class="active">Quick Priority — Experiment &amp; Build Sequencing</a></li><li><a href="fallback-experiment.html">Fallback Experiment</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+  </nav>
+  <main class="pd-content">
+    <article class="pd-doc">
+    <h1>Experiment Priority</h1>
+<h2>First Experiment</h2>
+<p>Experiment: Search-results / FY zero-click nudge</p>
+<p>Trigger: 6 distinct product views + 10 seconds + no product click</p>
+<p>Gate: no Vaani use in session, no previous zero-click nudge in session</p>
+<p>Copy: “xxxx”</p>
+<p>Metric: PDP open/product click within 2 minutes of eligibility</p>
+<p>Guardrail: app exit within 30 seconds</p>
+<pre><code>{
+  "zero_click_nudge_mvp": {
+    "enabled": true,
+    "rule_id": "EXP-VAANI-ZERO-CLICK-SEARCH-RESULTS-MVP",
+    "allowed_surfaces": ["CATALOG_SEARCH_RESULTS"],
+    "min_distinct_product_views": 6,
+    "min_surface_time_seconds": 10,
+    "require_session_product_clicks_zero": true,
+    "require_surface_product_clicks_zero": true,
+    "require_vaani_not_used_current_session": true,
+    "max_zero_click_nudges_per_session": 1,
+    "delay_ms": 1000,
+    "copy_id": "search_refine_short_hindi_v1",
+    "content": "सही सामान नहीं मिल रहा? Price, size या design बोलकर बताइए।"
+  }
+}
+</code></pre>
+<h1>Strict priority stack</h1>
+<h2>Principle</h2>
+<p>First prove the zero-click moment is worth nudging.</p>
+<p>Then make it configurable.</p>
+<p>Then make it personalized.</p>
+<p>Then make it predictive.</p>
+<h2>Must do now</h2>
+<ol>
+<li>Search-results/FY zero-click experiment with Android-side counter</li>
+</ol>
+<h2>Build next</h2>
+<ol>
+<li>
+<p>Global cooldown</p>
+</li>
+<li>
+<p>Session-wide nudge count</p>
+</li>
+<li>
+<p>First nudge delay</p>
+</li>
+<li>
+<p>Configurable zero_click_product_exposure trigger</p>
+</li>
+<li>
+<p>Surface-level product view and click counters</p>
+</li>
+</ol>
+<h2>Build after proof of signal</h2>
+<ol start="6">
+<li>
+<p>Previous-session no-click summary</p>
+</li>
+<li>
+<p>Short-reopen unresolved mission rules</p>
+</li>
+<li>
+<p>Previous strong-intent rules</p>
+</li>
+<li>
+<p>SSCAT overlap rules</p>
+</li>
+</ol>
+<h2>Build later</h2>
+<ol start="10">
+<li>
+<p>Backend-generated personalized content</p>
+</li>
+<li>
+<p>Full intent-strength scoring</p>
+</li>
+<li>
+<p>Ignored nudges and lifetime fatigue controls</p>
+</li>
+<li>
+<p>Session-number lifecycle rules</p>
+</li>
+<li>
+<p>ML drop-off prediction</p>
+</li>
+</ol>
+    </article>
+  </main>
+</div>
+</body>
+</html>
