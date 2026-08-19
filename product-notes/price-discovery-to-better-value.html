@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><link rel="icon" href="../favicon.ico" sizes="any"><link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta charset="UTF-8">
+<title>The Price-Discovery Turn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  color-scheme: light;
+  --paper:#eff1f5;
+  --surface:#ffffff;
+  --surface-2:#f7f8fb;
+  --surface-3:#eef1f6;
+  --ink:#13141c;
+  --ink-2:#4c5266;
+  --ink-3:#82889b;
+  --hairline:#dfe2ea;
+  --hairline-2:#eaecf1;
+  --c-accent:#0f8a7e;
+  --c-accent-ink:#0a6459;
+  --c-accent-soft:#e6f4f2;
+  --c-vaani:#5a45c9;
+  --c-vaani-soft:#eeebfb;
+  --c-user:#2a78d6;
+  --c-user-soft:#e8f1fc;
+  --c-warn:#b9820a;
+  --c-warn-soft:#fdf6e4;
+  --c-pole:#d1453f;
+  --c-good:#0e8f36;
+  --shadow: 0 1px 2px rgba(20,22,35,.04), 0 1px 1px rgba(20,22,35,.03);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#0f1013;
+    --surface:#17181d;
+    --surface-2:#1c1e24;
+    --surface-3:#22252c;
+    --ink:#f2f3f7;
+    --ink-2:#c3c7d6;
+    --ink-3:#888ea1;
+    --hairline:#2b2d35;
+    --hairline-2:#24262d;
+    --c-accent:#2bb3a3;
+    --c-accent-ink:#8fded5;
+    --c-accent-soft:#12312e;
+    --c-vaani:#9c8ef0;
+    --c-vaani-soft:#221e3c;
+    --c-user:#5fa3ec;
+    --c-user-soft:#152435;
+    --c-warn:#d69a2e;
+    --c-warn-soft:#2e2513;
+    --c-pole:#e97070;
+    --c-good:#38b85a;
+    --shadow: 0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#0f1013;
+  --surface:#17181d;
+  --surface-2:#1c1e24;
+  --surface-3:#22252c;
+  --ink:#f2f3f7;
+  --ink-2:#c3c7d6;
+  --ink-3:#888ea1;
+  --hairline:#2b2d35;
+  --hairline-2:#24262d;
+  --c-accent:#2bb3a3;
+  --c-accent-ink:#8fded5;
+  --c-accent-soft:#12312e;
+  --c-vaani:#9c8ef0;
+  --c-vaani-soft:#221e3c;
+  --c-user:#5fa3ec;
+  --c-user-soft:#152435;
+  --c-warn:#d69a2e;
+  --c-warn-soft:#2e2513;
+  --c-pole:#e97070;
+  --c-good:#38b85a;
+  --shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+::selection{background:var(--c-accent);color:#fff}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+.f-mono{font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace}
+h1,h2,h3{text-wrap:balance; font-weight:600}
+a{color:var(--c-accent-ink)}
+:focus-visible{outline:2px solid var(--c-accent); outline-offset:2px}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 28px 110px}
+@media (max-width:640px){.wrap{padding:0 18px 80px}}
+
+p{margin:0 0 15px; max-width:68ch; color:var(--ink-2)}
+p b, p strong, li b{color:var(--ink); font-weight:600}
+.term{border-bottom:1.5px dotted var(--ink-3); font-style:normal}
+code{
+  font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  font-size:.87em; background:var(--surface-3); border:1px solid var(--hairline-2);
+  padding:1px 5px; border-radius:4px; color:var(--ink);
+}
+
+/* ============ MASTHEAD ============ */
+.mast{padding:76px 0 36px}
+.eyebrow{
+  font:600 11.5px/1 ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 26px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--c-accent)}
+h1.mast-title{
+  font-size:clamp(36px,6vw,62px); line-height:1.03; letter-spacing:-.02em; margin:0 0 22px;
+  max-width:17ch; font-weight:600;
+}
+h1.mast-title em{font-style:italic;color:var(--c-accent-ink)}
+.dek{font-size:clamp(18px,2.4vw,21px); line-height:1.5; max-width:44ch; color:var(--ink); margin:0 0 20px; font-weight:400}
+.thesis{font-size:16.5px; color:var(--ink-2); max-width:66ch; margin:0}
+
+.notebox{
+  margin:34px 0 0; padding:18px 22px; background:var(--c-accent-soft);
+  border:1px solid var(--hairline); border-left:3px solid var(--c-accent);
+  border-radius:8px; font-size:14px; color:var(--ink-2); max-width:none;
+}
+.notebox b{color:var(--ink)}
+
+.vocab{
+  margin:20px 0 0; padding:18px 22px; background:var(--surface-2); border:1px solid var(--hairline);
+  border-radius:8px; font-size:13.5px; color:var(--ink-2); max-width:none;
+}
+.vocab b{color:var(--ink)}
+.vocab div{padding:5px 0}
+.vocab div + div{border-top:1px dashed var(--hairline-2)}
+
+/* ============ PART / SECTION ============ */
+.part{
+  margin:78px 0 34px; padding-top:26px; border-top:2px solid var(--ink);
+}
+.part-kicker{font:600 11.5px/1 ui-monospace,monospace; letter-spacing:.16em; text-transform:uppercase; color:var(--c-accent-ink); margin:0 0 12px}
+.part h2{font-size:clamp(25px,3.6vw,34px); line-height:1.15; letter-spacing:-.015em; margin:0 0 12px; max-width:26ch}
+.part .part-dek{font-size:15.5px; color:var(--ink-2); max-width:66ch; margin:0}
+
+section.blk{margin:44px 0 0; padding-top:26px; border-top:1px solid var(--hairline)}
+.blk-num{font:600 11.5px/1 ui-monospace,monospace; color:var(--ink-3); letter-spacing:.12em; margin:0 0 9px}
+.blk h3{font-size:20.5px; line-height:1.25; letter-spacing:-.01em; margin:0 0 10px; max-width:34ch}
+.blk .lede{font-size:15.5px; color:var(--ink-2); max-width:66ch; margin:0 0 20px}
+
+/* ============ STAGES ============ */
+.stages{margin:26px 0 0; padding:0; list-style:none; counter-reset:st}
+.stage{
+  position:relative; padding:0 0 26px 46px; counter-increment:st;
+}
+.stage::before{
+  content:counter(st); position:absolute; left:0; top:1px; width:28px; height:28px;
+  border-radius:50%; background:var(--c-accent); color:#fff;
+  font:700 12.5px/28px ui-monospace,monospace; text-align:center;
+}
+.stage::after{
+  content:""; position:absolute; left:13.5px; top:32px; bottom:2px; width:1.5px; background:var(--hairline);
+}
+.stage:last-child::after{display:none}
+.stage h4{margin:2px 0 6px; font-size:16.5px; font-weight:600; color:var(--ink); letter-spacing:-.005em}
+.stage p{margin:0 0 10px; font-size:15px}
+.io{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0}
+.chip{
+  font:600 11px/1 ui-monospace,monospace; letter-spacing:.02em; padding:5px 8px; border-radius:5px;
+  border:1px solid var(--hairline); background:var(--surface-2); color:var(--ink-2); white-space:nowrap;
+}
+.chip.in{border-color:var(--c-user); color:var(--c-user); background:var(--c-user-soft)}
+.chip.out{border-color:var(--c-accent); color:var(--c-accent-ink); background:var(--c-accent-soft)}
+
+/* ============ DIAGRAM ============ */
+.figure{margin:26px 0 8px; padding:20px; background:var(--surface); border:1px solid var(--hairline); border-radius:10px; box-shadow:var(--shadow)}
+.figure .cap{font-size:13px; color:var(--ink-3); margin:14px 0 0; max-width:70ch}
+.scroller{overflow-x:auto}
+.scroller svg{display:block; min-width:660px; width:100%; height:auto}
+
+/* ============ TRANSCRIPT ============ */
+.script{margin:24px 0 0; border:1px solid var(--hairline); border-radius:10px; background:var(--surface); overflow:hidden; box-shadow:var(--shadow)}
+.script-head{
+  padding:11px 16px; background:var(--surface-2); border-bottom:1px solid var(--hairline);
+  font:600 11px/1.4 ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+}
+.turn{padding:14px 16px; border-bottom:1px solid var(--hairline-2); display:flex; gap:12px; align-items:flex-start}
+.turn:last-child{border-bottom:none}
+.who{
+  flex:0 0 58px; font:700 10.5px/1.5 ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase;
+  padding-top:3px;
+}
+.turn.u .who{color:var(--c-user)}
+.turn.v .who{color:var(--c-vaani)}
+.turn.s{background:var(--surface-2)}
+.turn.s .who{color:var(--ink-3)}
+.said{flex:1 1 auto; font-size:15px; color:var(--ink); min-width:0}
+.turn.s .said{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:12.5px; color:var(--ink-2); line-height:1.65; word-break:break-word}
+.turn.s .said b{color:var(--ink)}
+
+/* ============ RULE CARDS ============ */
+.rules{display:grid; gap:12px; grid-template-columns:repeat(2,1fr); margin:24px 0 0}
+@media (max-width:700px){.rules{grid-template-columns:1fr}}
+.rule{padding:16px 18px; background:var(--surface); border:1px solid var(--hairline); border-radius:10px; box-shadow:var(--shadow)}
+.rule .rid{font:700 10.5px/1 ui-monospace,monospace; letter-spacing:.1em; color:var(--c-accent-ink); background:var(--c-accent-soft); border:1px solid var(--hairline); padding:4px 7px; border-radius:20px; display:inline-block; margin-bottom:10px}
+.rule h4{margin:0 0 7px; font-size:15.5px; font-weight:600; letter-spacing:-.005em; color:var(--ink)}
+.rule p{margin:0; font-size:13.8px; color:var(--ink-2); max-width:none}
+.rule .breaks{margin:10px 0 0; padding-top:9px; border-top:1px dashed var(--hairline); font-size:12.8px; color:var(--ink-3)}
+.rule .breaks b{color:var(--c-pole); font-weight:600}
+
+/* ============ TABLE ============ */
+.tblwrap{margin:24px 0 0; overflow-x:auto; border:1px solid var(--hairline); border-radius:10px; background:var(--surface); box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:13.8px}
+th,td{padding:11px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--hairline-2)}
+th{background:var(--surface-2); font:600 11px/1.4 ui-monospace,monospace; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+td b{color:var(--ink)}
+td .dir{font:600 10.5px/1 ui-monospace,monospace; white-space:nowrap; padding:4px 7px; border-radius:5px; border:1px solid var(--hairline); background:var(--surface-2); color:var(--ink-2)}
+td .dir.a2v{color:var(--c-accent-ink); background:var(--c-accent-soft); border-color:var(--c-accent)}
+td .dir.v2a{color:var(--c-vaani); background:var(--c-vaani-soft); border-color:var(--c-vaani)}
+
+/* ============ CODE BLOCK ============ */
+pre{
+  margin:22px 0 0; padding:18px 20px; overflow-x:auto; background:var(--surface);
+  border:1px solid var(--hairline); border-left:3px solid var(--c-vaani); border-radius:10px;
+  font-family:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  font-size:12.6px; line-height:1.7; color:var(--ink-2); box-shadow:var(--shadow);
+}
+pre b{color:var(--ink); font-weight:600}
+pre .cm{color:var(--ink-3)}
+
+/* ============ LISTS ============ */
+ul.tight, ol.tight{margin:14px 0 0; padding-left:22px; max-width:68ch}
+ul.tight li, ol.tight li{margin:0 0 9px; color:var(--ink-2); font-size:15px}
+
+/* ============ PHASES ============ */
+.phases{display:grid; gap:12px; grid-template-columns:repeat(3,1fr); margin:24px 0 0}
+@media (max-width:760px){.phases{grid-template-columns:1fr}}
+.phase{padding:18px; background:var(--surface); border:1px solid var(--hairline); border-radius:10px; box-shadow:var(--shadow); display:flex; flex-direction:column}
+.phase .tag{font:700 10.5px/1 ui-monospace,monospace; letter-spacing:.1em; color:var(--ink-3); margin-bottom:10px}
+.phase h4{margin:0 0 8px; font-size:15.5px; font-weight:600; color:var(--ink)}
+.phase p{margin:0 0 12px; font-size:13.6px; max-width:none}
+.phase ul{margin:0; padding-left:18px}
+.phase li{font-size:13.2px; color:var(--ink-2); margin-bottom:6px}
+.phase .why{margin-top:auto; padding-top:12px; border-top:1px dashed var(--hairline); font-size:12.6px; color:var(--ink-3)}
+
+/* ============ CALLOUTS ============ */
+.callout{margin:24px 0 0; padding:16px 20px; border-radius:10px; font-size:14.5px; border:1px solid var(--hairline); background:var(--surface-2); color:var(--ink-2)}
+.callout b{color:var(--ink)}
+.callout.warn{background:var(--c-warn-soft); border-left:3px solid var(--c-warn)}
+.callout.no{background:var(--surface-2); border-left:3px solid var(--c-pole)}
+
+/* ============ CLOSER ============ */
+.closer{margin:80px 0 0; padding:34px 0 0; border-top:2px solid var(--ink)}
+.closer h2{font-size:clamp(24px,3.4vw,32px); margin:0 0 14px; letter-spacing:-.015em; max-width:26ch}
+.asks{margin:26px 0 0; display:grid; gap:12px; grid-template-columns:repeat(2,1fr)}
+@media (max-width:700px){.asks{grid-template-columns:1fr}}
+.ask{padding:16px 18px; background:var(--surface); border:1px solid var(--hairline); border-radius:10px; box-shadow:var(--shadow)}
+.ask h4{margin:0 0 6px; font-size:15px; font-weight:600; color:var(--c-accent-ink)}
+.ask p{margin:0; font-size:13.6px; max-width:none}
+
+footer.meta{margin:70px 0 0; padding-top:22px; border-top:1px solid var(--hairline); font-size:13px; color:var(--ink-3)}
+footer.meta b{color:var(--ink-2)}
+footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
+</style>
+</head>
+<body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
+
+<div class="wrap">
+
+<!-- ============ MASTHEAD ============ -->
+<div class="mast">
+  <p class="eyebrow"><span class="dot"></span> Vaani product note &middot; price discovery &middot; August 2026</p>
+  <h1 class="mast-title">When the ask is <em>price</em>, answer with <em>value</em></h1>
+  <p class="dek">A buyer asking &ldquo;is this the best price?&rdquo; is not asking for a discount. They are asking whether they should buy <em>this</em> one.</p>
+  <p class="thesis">Today a price turn on the PDP gets a price answer &mdash; or a category re-dump. This note describes the alternative: Vaani takes the price ask as a signal to go find a better-value product of the same type, using the anchor's own image, the constraints the buyer already gave us, and a price band next to where they are standing. It reads the feed the app returns, forms a verdict, walks the buyer to it, and defends it.</p>
+
+  <div class="notebox">
+    <b>What this note is for.</b> To give a feel for the thing we could build &mdash; the turn shape, the pieces, and the app capabilities each piece needs. The problem is already documented in
+    <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">How Vaani Can Help in Exploit Journeys</a>; it is summarised here in five lines, not re-argued. Everything below is a proposal, not a spec &mdash; numbers like <code>k</code>, <code>m</code> and bucket widths are starting points to tune.
+  </div>
+
+  <div class="vocab">
+    <div><b>Anchor</b> &mdash; the PDP the buyer is standing on when the turn fires. Everything is measured against it.</div>
+    <div><b>Carry-over filter</b> &mdash; an attribute the buyer spoke, typed or tapped earlier in this session, in this same product type.</div>
+    <div><b>Adjacent price band</b> &mdash; the price filter immediately containing the anchor's price, not the cheapest one available.</div>
+    <div><b>Top-<code>k</code> / plus-<code>m</code></b> &mdash; the first <code>k</code> feed products Vaani reads to form a verdict, plus <code>m</code> more as the buyer scrolls.</div>
+    <div><b>Verdict</b> &mdash; Vaani's judgement of the best alternative, plus a short varied slate around it.</div>
+    <div><b>Dynamic CLP</b> &mdash; a Vaani-curated feed holding only the alternatives it stands behind.</div>
+  </div>
+</div>
+
+<!-- ============ PART 0: WHY ============ -->
+<div class="part">
+  <p class="part-kicker">The five lines of context</p>
+  <h2>The demand is already arriving, and we answer it badly</h2>
+  <p class="part-dek">From the exploit-journey analysis, across 879,571 Vaani PDP turns and all order-placing sessions.</p>
+</div>
+
+<ul class="tight">
+  <li><b>Price is the ask.</b> Price is roughly 70% of DECIDE turns at every hunt depth, and <b>44.6%</b> of those price turns are outright negotiation &mdash; &ldquo;make it cheaper.&rdquo;</li>
+  <li><b>Buyers want a fair price, not the floor.</b> The alternative they click before buying is priced above the eventual purchase about as often as below. They shop a band.</li>
+  <li><b>Missing the band is expensive.</b> Landing at 2&times; the price finally bought costs <b>+56%</b> more browsing. An exact match still costs <b>7.1</b> further same-type clicks.</li>
+  <li><b>We drop what they told us.</b> Fewer than <b>15%</b> of Vaani re-searches carry the discussed constraint forward.</li>
+  <li><b>And re-dumping the category is the worst available move</b> &mdash; a same-sub-category re-search converts worse than doing nothing at all.</li>
+</ul>
+
+<div class="callout">
+  <b>So the product question is narrow:</b> when a buyer raises price on an anchor, can Vaani come back &mdash; in one turn &mdash; with a specific, available, constraint-respecting product that is better value, and say why?
+</div>
+
+<!-- ============ PART I: THE TURN ============ -->
+<div class="part">
+  <p class="part-kicker">Part I</p>
+  <h2>The turn, end to end</h2>
+  <p class="part-dek">One price-discovery turn, from trigger to verdict to comparison. Six stages; the buyer sees three of them.</p>
+</div>
+
+<div class="figure">
+  <div class="scroller">
+  <svg viewBox="0 0 900 250" role="img" aria-label="Pipeline: anchor lock, query build, feed load, read top-k, verdict, delivery and comparison, with a scroll feedback loop feeding more products back into the read stage.">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g font-family="ui-monospace, SF Mono, Menlo, monospace" font-size="11">
+      <!-- boxes -->
+      <g>
+        <rect x="8"   y="70" width="128" height="66" rx="8" fill="var(--surface-2)" stroke="var(--hairline)"/>
+        <rect x="160" y="70" width="128" height="66" rx="8" fill="var(--surface-2)" stroke="var(--hairline)"/>
+        <rect x="312" y="70" width="128" height="66" rx="8" fill="var(--surface-2)" stroke="var(--hairline)"/>
+        <rect x="464" y="70" width="128" height="66" rx="8" fill="var(--surface-2)" stroke="var(--hairline)"/>
+        <rect x="616" y="70" width="128" height="66" rx="8" fill="var(--c-accent-soft)" stroke="var(--c-accent)"/>
+        <rect x="768" y="70" width="124" height="66" rx="8" fill="var(--c-accent-soft)" stroke="var(--c-accent)"/>
+      </g>
+      <g fill="var(--ink)" font-weight="700" font-size="11.5" text-anchor="middle">
+        <text x="72"  y="97">ANCHOR LOCK</text>
+        <text x="224" y="97">QUERY BUILD</text>
+        <text x="376" y="97">FEED LOAD</text>
+        <text x="528" y="97">READ k</text>
+        <text x="680" y="97">VERDICT</text>
+        <text x="830" y="97">DELIVER</text>
+      </g>
+      <g fill="var(--ink-3)" font-size="10" text-anchor="middle">
+        <text x="72"  y="114">pid &middot; image &middot; price</text>
+        <text x="72"  y="127">filters held</text>
+        <text x="224" y="114">image + hard</text>
+        <text x="224" y="127">filters + band</text>
+        <text x="376" y="114">visual search</text>
+        <text x="376" y="127">available only</text>
+        <text x="528" y="114">top-k cards</text>
+        <text x="528" y="127">+m on scroll</text>
+        <text x="680" y="114">best + slate</text>
+        <text x="680" y="127">with reasons</text>
+        <text x="830" y="114">scroll / CLP</text>
+        <text x="830" y="127">open PDP</text>
+      </g>
+      <!-- arrows -->
+      <g stroke="var(--ink-3)" fill="none" stroke-width="1.4" color="var(--ink-3)" marker-end="url(#ar)">
+        <path d="M138 103 H156"/>
+        <path d="M290 103 H308"/>
+        <path d="M442 103 H460"/>
+        <path d="M594 103 H612"/>
+        <path d="M746 103 H764"/>
+      </g>
+      <!-- silent / spoken bands -->
+      <g>
+        <rect x="150" y="46" width="452" height="1.5" fill="var(--hairline)"/>
+        <text x="376" y="38" fill="var(--ink-3)" font-size="10" text-anchor="middle">silent &mdash; the buyer sees a &ldquo;let me check&rdquo; state, nothing more</text>
+        <rect x="612" y="46" width="280" height="1.5" fill="var(--c-accent)"/>
+        <text x="752" y="38" fill="var(--c-accent-ink)" font-size="10" text-anchor="middle">spoken &mdash; verdict, then comparison</text>
+      </g>
+      <!-- trigger -->
+      <text x="72" y="34" fill="var(--c-user)" font-size="10" font-weight="700" text-anchor="middle">PRICE TURN FIRES</text>
+      <path d="M72 40 V64" stroke="var(--c-user)" fill="none" stroke-width="1.4" color="var(--c-user)" marker-end="url(#ar)"/>
+      <!-- feedback loop -->
+      <g stroke="var(--c-vaani)" fill="none" stroke-width="1.4" color="var(--c-vaani)" stroke-dasharray="4 3">
+        <path d="M818 142 V172 H528 V140" marker-end="url(#ar)"/>
+      </g>
+      <text x="640" y="190" fill="var(--c-vaani)" font-size="10" text-anchor="middle">buyer keeps scrolling &rarr; read m more, revise the verdict</text>
+      <!-- comparison -->
+      <g>
+        <rect x="616" y="208" width="276" height="26" rx="6" fill="var(--surface-2)" stroke="var(--hairline)"/>
+        <text x="754" y="225" fill="var(--ink-2)" font-size="10.5" text-anchor="middle">&ldquo;which should I buy?&rdquo; &rarr; compare vs. anchor</text>
+      </g>
+      <path d="M872 138 V204" stroke="var(--ink-3)" fill="none" stroke-width="1.4" color="var(--ink-3)" marker-end="url(#ar)"/>
+    </g>
+  </svg>
+  </div>
+  <p class="cap">The whole middle of the pipeline is invisible to the buyer. They say one thing and get one answer back &mdash; the search, the filtering and the reading happen underneath. Everything after the verdict is conversational and optional.</p>
+</div>
+
+<section class="blk">
+  <p class="blk-num">01</p>
+  <h3>Stage by stage</h3>
+  <p class="lede">Each stage below names what it needs in and what it must produce out. The chips are the contract, informally stated &mdash; Part III turns them into app capabilities.</p>
+
+  <ol class="stages">
+    <li class="stage">
+      <h4>Anchor lock &mdash; decide what &ldquo;this product&rdquo; means</h4>
+      <p>The turn fires on a PDP with a price intent: asking the price, asking whether it is a good price, or negotiating. Vaani freezes that PDP as the anchor and keeps it for the rest of the exchange &mdash; every later comparison is against it. If the buyer is scrolling the anchor's own recommendation feed when they ask for something else, <b>the anchor is still the PDP</b>, never a card in that feed.</p>
+      <div class="io">
+        <span class="chip in">in: price-intent turn</span>
+        <span class="chip in">in: current PDP</span>
+        <span class="chip out">out: AnchorContext.anchor</span>
+      </div>
+    </li>
+    <li class="stage">
+      <h4>Query build &mdash; image, hard filters, adjacent band</h4>
+      <p>Vaani composes a visual search from three parts. <b>The anchor's own catalog image</b>, passed whole &mdash; not a screen capture. <b>The carry-over filters</b>: every non-visual attribute the buyer has established in this product type this session, whether spoken (&ldquo;cotton, not polyester&rdquo;), typed, or tapped (choosing size L on a variant selector). Those go on as hard filters, because visual similarity cannot see them. And <b>a price band adjacent to the anchor</b> &mdash; for a &#8377;289 product, <em>under &#8377;299</em>, not <em>under &#8377;199</em>.</p>
+      <div class="io">
+        <span class="chip in">in: full catalog image</span>
+        <span class="chip in">in: session filter memory (this sscat)</span>
+        <span class="chip in">in: anchor price</span>
+        <span class="chip out">out: visual search request</span>
+      </div>
+    </li>
+    <li class="stage">
+      <h4>Feed load &mdash; let the app do what it is good at</h4>
+      <p>The app runs the search and renders the feed exactly as it would for any visual search, with the filters visibly applied so the buyer can see and edit them. Vaani does not build its own retrieval. One requirement: <b>the feed Vaani reads must contain only purchasable products</b> &mdash; in stock, servicable to this pincode. A verdict on something the buyer cannot buy is worse than no verdict.</p>
+      <div class="io">
+        <span class="chip in">in: visual search request</span>
+        <span class="chip out">out: rendered feed</span>
+        <span class="chip out">out: applied-filter state</span>
+      </div>
+    </li>
+    <li class="stage">
+      <h4>Read <code>k</code>, then <code>m</code> &mdash; judgement over the actual feed</h4>
+      <p>Vaani reads the first <code>k</code> products the app decided to show &mdash; the same ones the buyer's thumb would reach &mdash; with their price, rating, rating count, review-image presence, seller, badges and combo structure. If the buyer keeps scrolling instead of waiting, Vaani reads <code>m</code> more and revises. Judgement is incremental and always reflects what the buyer can actually see.</p>
+      <div class="io">
+        <span class="chip in">in: ordered top-k feed cards</span>
+        <span class="chip in">in: +m on scroll</span>
+        <span class="chip out">out: scored candidate set</span>
+      </div>
+    </li>
+    <li class="stage">
+      <h4>Verdict &mdash; name one, offer a few</h4>
+      <p>Vaani states the best alternative in one line, with the reason attached (&ldquo;same fabric, 4.2 stars on 900+ ratings, &#8377;40 less&rdquo;). Behind that single pick sits a short <b>varied slate</b> &mdash; not five near-identical cheapest items, but a spread along the axes buyers actually trade off: the best rating-for-price, the safest high-confidence pick, the cheapest that still clears the bar. If nothing in the feed genuinely beats the anchor, Vaani says so; &ldquo;stay where you are&rdquo; is a valid, trust-building verdict.</p>
+      <div class="io">
+        <span class="chip in">in: scored candidates + anchor</span>
+        <span class="chip out">out: best pid + slate + reasons</span>
+      </div>
+    </li>
+    <li class="stage">
+      <h4>Deliver, then defend</h4>
+      <p>The best product is rarely at the top of the feed, so Vaani must be able to <b>move the buyer to it</b>: scroll the feed to that position, open a Vaani-curated feed holding just the slate, or open the winner's PDP directly. Then it offers the follow-up that does not exist today &mdash; <em>&ldquo;want to know which one to buy?&rdquo;</em> &mdash; and answers it by comparing candidates against each other and against the anchor on product, seller and platform-performance signals.</p>
+      <div class="io">
+        <span class="chip in">in: verdict</span>
+        <span class="chip out">out: scroll-to / curated feed / open PDP</span>
+        <span class="chip out">out: comparison answer</span>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section class="blk">
+  <p class="blk-num">02</p>
+  <h3>What it sounds like</h3>
+  <p class="lede">A buyer on a &#8377;289 kurti. Earlier in the session they asked Vaani for &ldquo;red cotton kurti&rdquo; and tapped size L on a different PDP. Grey rows are what happens underneath.</p>
+
+  <div class="script">
+    <div class="script-head">Walkthrough &middot; price turn on an anchored PDP</div>
+    <div class="turn u"><div class="who">Buyer</div><div class="said">&ldquo;Isse sasta kuch hai? &#8377;289 zyada lag raha hai.&rdquo;</div></div>
+    <div class="turn s"><div class="who">System</div><div class="said"><b>anchor lock</b> &rarr; pid 44120 &middot; sscat Kurtis &middot; &#8377;289 &middot; 3.9&#9733; (212) &middot; seller S-8891<br><b>carry-over</b> &rarr; colour=red (spoken, turn 3) &middot; fabric=cotton (spoken, turn 3) &middot; size=L (tapped, pid 88231)<br><b>price band</b> &rarr; anchor &#8377;289 &rarr; bucket <b>under &#8377;299</b> <span style="opacity:.7">(not under &#8377;199 &mdash; too far, feed degrades)</span><br><b>query</b> &rarr; visual_search(image=catalog_full/44120.jpg, hard=[red, cotton, L], price=&lt;299, availability=in_stock)</div></div>
+    <div class="turn v"><div class="who">Vaani</div><div class="said">&ldquo;Ek second &mdash; isi jaisi kurtis dekh rahi hoon, aapke size aur cotton wali.&rdquo;</div></div>
+    <div class="turn s"><div class="who">System</div><div class="said"><b>feed rendered</b> &rarr; 3 filter chips visible &middot; 38 results &middot; all in-stock<br><b>read</b> &rarr; k=12 cards scored on price, rating, rating count, review images, seller quality, combo value<br><b>result</b> &rarr; best = pid 51907 at <b>rank 7</b> &middot; &#8377;249 &middot; 4.2&#9733; (938) &middot; review images present &middot; seller S-1120 (higher rated, lower returns)</div></div>
+    <div class="turn v"><div class="who">Vaani</div><div class="said">&ldquo;Isse behtar mila &mdash; &#8377;249, same cotton, size L available, aur 938 logon ne 4.2 rating di hai. Aapki current wali pe sirf 212 rating hain. Dikhaun?&rdquo;</div></div>
+    <div class="turn u"><div class="who">Buyer</div><div class="said">&ldquo;Haan dikhao.&rdquo;</div></div>
+    <div class="turn s"><div class="who">System</div><div class="said"><b>deliver</b> &rarr; scroll_to(rank 7) <span style="opacity:.7">&mdash; or open curated feed with the 4-product slate</span></div></div>
+    <div class="turn v"><div class="who">Vaani</div><div class="said">&ldquo;Yeh hai. Do aur options bhi rakhe hain &mdash; ek &#8377;219 wali, aur ek &#8377;279 jiska fabric review sabse acha hai. Batau kaunsi leni chahiye?&rdquo;</div></div>
+    <div class="turn u"><div class="who">Buyer</div><div class="said">&ldquo;Haan, kaunsi lu?&rdquo;</div></div>
+    <div class="turn s"><div class="who">System</div><div class="said"><b>comparison</b> &rarr; fetch seller + platform metrics for [44120 (anchor), 51907, 60233, 47781]<br>axes &rarr; price &middot; rating &times; volume &middot; review-image evidence &middot; seller return/cancellation rate &middot; category-level performance &middot; effective price after combo</div></div>
+    <div class="turn v"><div class="who">Vaani</div><div class="said">&ldquo;&#8377;249 wali leni chahiye. &#8377;219 wali sasti hai par uske seller ke returns zyada hain, aur &#8377;279 wali mein sirf &#8377;30 ka fark hai lekin rating kam hai. Ek baat &mdash; &#8377;249 wali ka 2-piece combo &#8377;449 ka hai, matlab &#8377;225 per piece.&rdquo;</div></div>
+  </div>
+  <p style="margin-top:16px;font-size:14.5px">Note what the buyer never had to do: re-state the colour, re-pick the size, set a price filter, scroll to rank 7, or open four PDPs in sequence to compare them. That is the whole point of the note.</p>
+</section>
+
+<section class="blk">
+  <p class="blk-num">03</p>
+  <h3>The state Vaani has to hold</h3>
+  <p class="lede">Most of the difficulty is not the model &mdash; it is remembering the right things across the session and across surfaces. One object, populated before the decision turn happens, not at it.</p>
+
+<pre><b>AnchorContext</b> {
+  <b>anchor</b>: {
+    pid, catalog_id, sscat_id,
+    image: <span class="cm">// full catalog asset, not a screenshot</span>
+    price, rating, rating_count, has_review_images,
+    seller_id, selected_variant, badges: [ <span class="cm">mall?</span> ],
+    source: <span class="cm">// how the buyer got here: search | widget | recs</span>
+  },
+
+  <b>filters</b>: [                        <span class="cm">// everything established in THIS sscat, this session</span>
+    { attr: "colour", value: "red",    source: "spoken",   turn: 3       },
+    { attr: "fabric", value: "cotton", source: "spoken",   turn: 3       },
+    { attr: "size",   value: "L",      source: "tapped",   pid: 88231    },
+    { attr: "brand",  value: "...",    source: "searched", query_id: ... },
+  ],
+
+  <b>price_rule</b>: { anchor_price: 289, band: "under_299", strategy: "adjacent" },
+
+  <b>read</b>: { k: 12, m_step: 10, read_pids: [...], scroll_depth: n },
+
+  <b>verdict</b>: null | {
+    best_pid, slate: [ { pid, why, axis } ], vs_anchor: { ... },
+    revised_at_scroll_depth: n
+  }
+}
+</pre>
+
+  <ul class="tight">
+    <li><b>Filters are append-only within an sscat and scoped to it.</b> A size tapped on kurtis must not travel to a search for shoes.</li>
+    <li><b>Source matters.</b> A tapped size is a harder constraint than a colour mentioned in passing; the strength affects whether it becomes a hard filter or a ranking preference.</li>
+    <li><b>The anchor survives navigation.</b> The buyer can scroll the reco feed, open the curated feed, come back &mdash; the anchor only changes when they genuinely land on a new PDP and start a new hunt there.</li>
+  </ul>
+</section>
+
+<!-- ============ PART II: RULES ============ -->
+<div class="part">
+  <p class="part-kicker">Part II</p>
+  <h2>Design rules learned the hard way</h2>
+  <p class="part-dek">These come out of poking at the current app flow. Each one is a decision that looks arbitrary until you get it wrong.</p>
+</div>
+
+<div class="rules">
+  <div class="rule">
+    <span class="rid">R1</span>
+    <h4>Pass the image, not the screen</h4>
+    <p>Visual search must receive the anchor's whole catalog image. A screenshot of the PDP is not reliable input &mdash; it carries chrome, overlays, crops and compression, and the match quality drops noticeably.</p>
+    <p class="breaks"><b>Breaks as:</b> plausible-looking but wrong-category results, and no way to debug why.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R2</span>
+    <h4>Nearest price band, never the floor</h4>
+    <p>Pick the price filter that just contains the anchor's price &mdash; &#8377;289 &rarr; under &#8377;299. Jumping to the cheapest available band is a bigger divergence than the buyer asked for.</p>
+    <p class="breaks"><b>Breaks as:</b> a feed of low-quality catalogs where the relevant product never appears at all.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R3</span>
+    <h4>The PDP is the anchor, not a reco card</h4>
+    <p>If the buyer asks for an alternative while scrolling the anchor's recommendation feed, run the search on the PDP they came from &mdash; not on whichever product happens to be on screen.</p>
+    <p class="breaks"><b>Breaks as:</b> silent anchor drift; comparisons against a product the buyer never chose.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R4</span>
+    <h4>Read <code>k</code> first, then <code>m</code> more</h4>
+    <p>Form a verdict from the top <code>k</code> so the answer is fast, and keep reading <code>m</code> more while the buyer scrolls. Judgement should deepen with their attention, not stall waiting for completeness.</p>
+    <p class="breaks"><b>Breaks as:</b> either a slow turn, or a shallow verdict the buyer disproves by scrolling.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R5</span>
+    <h4>Hold the anchor through the whole exchange</h4>
+    <p>Every claim Vaani makes is relative &mdash; cheaper than what, better rated than what. The anchor's own attributes must be in memory for the comparison turn, not re-fetched or guessed.</p>
+    <p class="breaks"><b>Breaks as:</b> vague verdicts &mdash; &ldquo;this is good&rdquo; instead of &ldquo;&#8377;40 less, 4&times; the ratings.&rdquo;</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R6</span>
+    <h4>Carry every filter, however it arrived</h4>
+    <p>Spoken, typed, tapped &mdash; all three are constraints. Non-visual attributes especially (colour, fabric, size, age, capacity) must go on as hard filters, because image similarity cannot enforce them.</p>
+    <p class="breaks"><b>Breaks as:</b> the &lt;15% carry-over failure we already measure &mdash; asking the buyer to repeat themselves.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R7</span>
+    <h4>Be able to walk them to it</h4>
+    <p>The best product is often mid-feed. A verdict Vaani cannot navigate to is just a claim. Scroll-to-position, curated feed, and open-PDP all need to be things Vaani can trigger.</p>
+    <p class="breaks"><b>Breaks as:</b> the buyer hunting for the product Vaani just recommended.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R8</span>
+    <h4>Available products only</h4>
+    <p>Out-of-stock and non-servicable products are filtered before Vaani reads the feed, not after. Availability is part of retrieval, not a post-hoc apology.</p>
+    <p class="breaks"><b>Breaks as:</b> a confident recommendation for something that cannot be bought.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R9</span>
+    <h4>A varied slate, not the cheapest five</h4>
+    <p>Buyers triangulate a fair price from both sides. Surface options spread across the trade-off &mdash; rating &times; price &mdash; and let the buyer pick their own point on it.</p>
+    <p class="breaks"><b>Breaks as:</b> a cheapest-first list that reads as a downgrade, not a find.</p>
+  </div>
+  <div class="rule">
+    <span class="rid">R10</span>
+    <h4>Do the value maths, including combos</h4>
+    <p>If a 2-piece combo lands at a lower effective per-unit price, that is the better-value answer and Vaani should compute and say it. Same for free-delivery thresholds.</p>
+    <p class="breaks"><b>Breaks as:</b> recommending a &#8377;249 single when a &#8377;449 pair was the actual win.</p>
+  </div>
+</div>
+
+<div class="callout no">
+  <b>Explicitly not in scope.</b> This is not a negotiation engine &mdash; Vaani does not change prices or promise discounts. It is not a replacement for search or for the ranking stack; it composes a query, reads what the app returns, and adds judgement on top. And it is not a cheapest-finder: the goal is better value at a comparable price point, which is what buyers are demonstrably doing by hand.
+</div>
+
+<!-- ============ PART III: CAPABILITIES ============ -->
+<div class="part">
+  <p class="part-kicker">Part III</p>
+  <h2>What the app has to hand Vaani</h2>
+  <p class="part-dek">The interesting build work is the seam between the assistant and the app. Roughly seven capabilities, each independently useful.</p>
+</div>
+
+<div class="tblwrap">
+<table>
+  <thead>
+    <tr><th>Capability</th><th>Direction</th><th>What it carries</th><th>Why it is needed</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Anchor snapshot</b></td>
+      <td><span class="dir a2v">app &rarr; Vaani</span></td>
+      <td>pid, catalog id, sscat, <b>full catalog image reference</b>, price, rating, rating count, review-image flag, seller, selected variant, badges, arrival surface</td>
+      <td>Everything downstream is relative to the anchor (R1, R5).</td>
+    </tr>
+    <tr>
+      <td><b>Session filter memory</b></td>
+      <td><span class="dir a2v">app &rarr; Vaani</span></td>
+      <td>Every attribute set in this sscat this session, each with value, source (spoken / typed / tapped) and where it came from</td>
+      <td>The carry-over gap is the single highest-leverage fix (R6).</td>
+    </tr>
+    <tr>
+      <td><b>Visual search invocation</b></td>
+      <td><span class="dir v2a">Vaani &rarr; app</span></td>
+      <td>Search by image reference + hard attribute filters + price band + availability constraint, rendered as a normal, user-editable feed</td>
+      <td>Vaani composes the query; the app owns retrieval and ranking (R2, R8).</td>
+    </tr>
+    <tr>
+      <td><b>Feed read-back</b></td>
+      <td><span class="dir a2v">app &rarr; Vaani</span></td>
+      <td>Ordered top-<code>k</code> cards with pid, price, rating, rating count, review images, seller, badges, combo structure, availability &mdash; then <code>m</code> more on scroll</td>
+      <td>Vaani must judge what the buyer is actually shown, in the order shown (R4).</td>
+    </tr>
+    <tr>
+      <td><b>Feed navigation control</b></td>
+      <td><span class="dir v2a">Vaani &rarr; app</span></td>
+      <td>Scroll to a feed position, open a PDP, open a Vaani-curated feed built from an explicit pid list</td>
+      <td>A verdict is only useful if Vaani can take the buyer there (R7).</td>
+    </tr>
+    <tr>
+      <td><b>Comparison data fetch</b></td>
+      <td><span class="dir a2v">app &rarr; Vaani</span></td>
+      <td>For a small pid set: seller quality and return/cancellation behaviour, catalog-level platform performance, price history/stability, combo and delivery economics</td>
+      <td>Powers the &ldquo;which one should I buy?&rdquo; turn, which does not exist today.</td>
+    </tr>
+    <tr>
+      <td><b>Filter surface sync</b></td>
+      <td><span class="dir v2a">Vaani &rarr; app</span></td>
+      <td>The filters Vaani applied are visible and editable in the feed UI; buyer edits flow back into filter memory</td>
+      <td>Trust. The buyer must see &mdash; and be able to loosen &mdash; what was assumed on their behalf.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout warn">
+  <b>The read-back is the piece worth designing carefully.</b> &ldquo;Give Vaani the top <code>k</code> cards the app decided to show, in order, with their commercial attributes&rdquo; is the capability that unlocks judgement over any feed &mdash; not just this turn. Once it exists, Vaani can form an opinion about a search feed, a CLP, a reco rail or a curated slate with the same machinery.
+</div>
+
+<!-- ============ PART IV: EXTENSIONS ============ -->
+<div class="part">
+  <p class="part-kicker">Part IV</p>
+  <h2>Where value hides</h2>
+  <p class="part-dek">Two extensions that fall out of the same pipeline once judgement over a feed exists.</p>
+</div>
+
+<section class="blk">
+  <p class="blk-num">04</p>
+  <h3>Combo maths</h3>
+  <p class="lede">A combo catalog can beat a single-unit listing on effective price, and no buyer computes this reliably while scrolling.</p>
+  <p>If the feed contains a 2-piece or 3-piece pack whose per-unit price undercuts every single listing &mdash; and the buyer's stated constraints still hold across the pack &mdash; that is the better-value answer, and Vaani should say it in per-unit terms: <em>&ldquo;&#8377;449 for two, so &#8377;225 each &mdash; cheaper than the &#8377;249 single.&rdquo;</em> The same arithmetic covers free-delivery thresholds and any per-unit vs. per-pack framing. This needs combo structure in the feed read-back, and a per-unit normalisation step before scoring.</p>
+</section>
+
+<section class="blk">
+  <p class="blk-num">05</p>
+  <h3>Mall cross-sell where trust dominates price</h3>
+  <p class="lede">In some categories the right answer to &ldquo;is this cheap enough?&rdquo; is &ldquo;spend slightly more and be sure.&rdquo;</p>
+  <p>Health and appliances are the clear cases: the cost of a bad unit is far higher than the price gap, so a Mall product a little above the anchor's band can be the genuinely better-value pick. Vaani should be able to break its own adjacent-band rule <em>upward</em> in these categories, and must say why when it does &mdash; the recommendation only works if the trust reason is stated. This needs category-level eligibility and Mall badges in the feed read-back, and should be gated to categories where we can defend the trade-off.</p>
+</section>
+
+<!-- ============ PART V: SHAPE OF THE BUILD ============ -->
+<div class="part">
+  <p class="part-kicker">Part V</p>
+  <h2>A shape for building it</h2>
+  <p class="part-dek">Each phase is shippable and readable on its own. The first one is deliberately small &mdash; it tests the riskiest assumption, which is whether a composed visual search returns a feed worth having an opinion about.</p>
+</div>
+
+<div class="phases">
+  <div class="phase">
+    <span class="tag">PHASE 1</span>
+    <h4>Carry the constraint</h4>
+    <p>On a price turn, run the anchored visual search with carry-over filters and the adjacent price band. No verdict, no comparison &mdash; just a better feed.</p>
+    <ul>
+      <li>Anchor snapshot</li>
+      <li>Session filter memory</li>
+      <li>Visual search invocation</li>
+      <li>Filter surface sync</li>
+    </ul>
+    <p class="why">Tests the retrieval assumption, and closes the carry-over gap on its own.</p>
+  </div>
+  <div class="phase">
+    <span class="tag">PHASE 2</span>
+    <h4>Have an opinion</h4>
+    <p>Read top-<code>k</code>, score against the anchor, state one best alternative with a reason, and be able to scroll or deep-link the buyer to it.</p>
+    <ul>
+      <li>Feed read-back (<code>k</code>, then <code>m</code>)</li>
+      <li>Scoring + varied slate</li>
+      <li>Feed navigation control</li>
+      <li>Combo per-unit normalisation</li>
+    </ul>
+    <p class="why">This is where the turn stops being a search and starts being an answer.</p>
+  </div>
+  <div class="phase">
+    <span class="tag">PHASE 3</span>
+    <h4>Defend the pick</h4>
+    <p>The &ldquo;which one should I buy?&rdquo; turn: compare candidates and anchor on product, seller and platform performance, and hold a curated feed of the slate.</p>
+    <ul>
+      <li>Comparison data fetch</li>
+      <li>Dynamic CLP / curated feed</li>
+      <li>Mall cross-sell in eligible categories</li>
+    </ul>
+    <p class="why">Revives a demand that went extinct because we never offered it.</p>
+  </div>
+</div>
+
+<section class="blk">
+  <p class="blk-num">06</p>
+  <h3>How we would know it worked</h3>
+  <p class="lede">Judged on effort and same-type conversion &mdash; never on within-Vaani order rate, which is selection rather than lift.</p>
+  <ul class="tight">
+    <li><b>Constraint carry-over rate</b> &mdash; share of price turns whose search preserved the stated attributes and a sane price band. Today under 15%; this should be near-total by construction.</li>
+    <li><b>Clicks to decision after the turn</b> &mdash; the exploit grind is 7.1 same-type clicks after the anchor. A working alternative engine cuts it.</li>
+    <li><b>Verdict follow-through</b> &mdash; how often the buyer accepts the walk-me-there, and how often the product they buy is the one Vaani named.</li>
+    <li><b>Comparison turn uptake</b> &mdash; whether &ldquo;which one should I buy?&rdquo; gets asked once it becomes answerable.</li>
+    <li><b>Text-search fallback</b> &mdash; how often the buyer abandons Vaani for raw search after the turn. Down is good.</li>
+  </ul>
+</section>
+
+<section class="blk">
+  <p class="blk-num">07</p>
+  <h3>Open questions</h3>
+  <ul class="tight">
+    <li><b>When is a price turn a negotiation and nothing else?</b> Some buyers want a coupon, not an alternative. Does the alternative land as the first answer, or after a short acknowledgement?</li>
+    <li><b>How hard is a hard filter?</b> If hard filters empty the feed, which one loosens first &mdash; and does Vaani say that it loosened it?</li>
+    <li><b>What are <code>k</code> and <code>m</code>?</b> Traded off against latency and cost per turn; needs measurement, not a guess.</li>
+    <li><b>Band edges.</b> What happens at the top of the bucket ladder, or when the anchor sits exactly on a boundary?</li>
+    <li><b>Scroll-to vs. curated feed.</b> Which delivery reads as more helpful &mdash; showing the winner in context, or a clean slate of Vaani's picks?</li>
+    <li><b>Where the verdict is &ldquo;stay put.&rdquo;</b> Saying &ldquo;this is already the right buy&rdquo; may be the highest-trust outcome available; it needs its own bar.</li>
+  </ul>
+</section>
+
+<!-- ============ CLOSER ============ -->
+<div class="closer">
+  <h2>The shape of it, in one paragraph</h2>
+  <p>A buyer standing on a product asks about price. Vaani takes that as the cue to go looking &mdash; using the product's own image, everything the buyer has already told us, and a price band right next to where they are. The app returns a feed; Vaani reads the top of it, decides what the best available option actually is, says so with a reason, walks the buyer there, and then answers the question nobody can answer for them today: <em>which of these should I buy?</em></p>
+
+  <div class="asks">
+    <div class="ask"><h4>One turn, not a mode</h4><p>This lives inside the existing price turn on the PDP. Nothing new to discover, no new entry point to teach.</p></div>
+    <div class="ask"><h4>Judgement over the app's own feed</h4><p>We do not rebuild retrieval. We compose a better query and add an opinion on top of what the app already ranks.</p></div>
+    <div class="ask"><h4>Memory is the feature</h4><p>Most of the perceived intelligence comes from carrying constraints and the anchor forward &mdash; not from a smarter model.</p></div>
+    <div class="ask"><h4>The read-back generalises</h4><p>Once Vaani can read a feed, it can hold an opinion about any feed. That capability outlives this note.</p></div>
+  </div>
+</div>
+
+<footer class="meta">
+  <p><b>Status.</b> Product note &mdash; a proposal for discussion, not a committed spec. Flow, thresholds and capability boundaries are all open.</p>
+  <p><b>Sources.</b> Behavioural framing and all cited figures come from <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">How Vaani Can Help in Exploit Journeys</a> (Vaani PDP turns and order-placing sessions, Aug 2026). The app-flow learnings in Part II come from hands-on exploration of the current Meesho app rather than from logged data.</p>
+  <p><b>Caveat.</b> The report's cohort comparisons are descriptive and selection-shaped, not causal. The case for this build rests on the demand and the mechanism; the lift itself would be confirmed against a holdout.</p>
+</footer>
+
+</div>
+</body>
+</html>

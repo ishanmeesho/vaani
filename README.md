@@ -6,15 +6,28 @@ https://ishanmeesho.github.io/vaani/
 ## Structure
 
 - `index.html` — the landing page. Cards are grouped into a "Combined Views"
-  block (synthesis reports that read across multiple dashboards) and a
-  "Dashboards" block (four numbered sections: usage & outcomes, where/when
-  Vaani is used, alternate discovery & revisits, understanding users).
+  block (synthesis reports that read across multiple dashboards), a "Product &
+  Strategy Docs" block (KRDs, notes and BHAGs imported from the team's planning
+  doc, plus product notes written here), and a "Dashboards" block (four
+  numbered sections: usage & outcomes, where/when Vaani is used, alternate
+  discovery & revisits, understanding users).
 - `01-vaani-usage-and-outcomes/`, `02-where-and-when-vaani-is-used/`,
   `03-alternate-discovery-and-revisits/`, `04-understanding-vaani-users/` —
   one folder per numbered section, holding that section's dashboard files.
 - `combined-views/` — cross-dashboard synthesis reports.
+- `product-notes/` — product notes written here: what we could build,
+  described so a developer gets a feel for the turn shape, the pieces, and the
+  app capabilities each piece needs. These are proposals, not specs, and they
+  lean on the dashboards for the problem rather than re-arguing it. They are
+  listed on the landing page inside the "Product & Strategy Docs" group, but
+  kept in their own folder so the planning-doc import can't overwrite them.
+- `product-docs/` — KRDs, product notes and BHAG docs imported from the
+  team's shared planning doc, each with its own browse sidebar.
 
 ## Adding a new dashboard
+
+(Same steps for a product note — drop it in `product-notes/` and add its card
+to the `<ul class="grid">` list in the "Product & Strategy Docs" group.)
 
 1. Drop the dashboard's HTML file into the folder for the section it belongs
    to (or create a new numbered folder if it's a new section).

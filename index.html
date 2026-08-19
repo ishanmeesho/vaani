@@ -139,7 +139,7 @@
   <div class="group-block">
     <div class="group-head">
       <p class="group-title">Product &amp; Strategy Docs</p>
-      <p class="group-sub">KRDs, product notes, and BHAG docs, imported from the team's planning doc and rendered natively (not an embedded Google Docs viewer). Each page has its own sidebar to browse between all of them.</p>
+      <p class="group-sub">KRDs, product notes, and BHAG docs, imported from the team's planning doc and rendered natively (not an embedded Google Docs viewer) &mdash; each with its own sidebar to browse between all of them &mdash; plus notes written here on what we could build next.</p>
     </div>
     <ul class="grid">
       <li><a href="product-docs/index.html">
@@ -157,6 +157,11 @@
       <li><a href="product-docs/june-bhag.html">
         <span class="doc-name">BHAG</span>
         <span class="doc-desc">Monthly BHAG updates — June, July, and August — tracking learning leaps toward habit formation.</span>
+      </a></li>
+      <li><a href="product-notes/price-discovery-to-better-value.html">
+        <span class="doc-name">Price Discovery &rarr; Better Value</span>
+        <span class="doc-desc">Product note &mdash; when a buyer asks about price on a PDP, Vaani runs an anchored visual search with their carried-over filters and an adjacent price band, reads the feed, names the best alternative, and defends it.</span>
+        <span class="doc-date">Written here &middot; Aug 2026</span>
       </a></li>
     </ul>
   </div>
@@ -317,7 +322,9 @@
     });
 
     noResultsQuery.textContent = input.value.trim();
-    noResults.style.display = (!anyVisible && q) ? '' : 'none';
+    // The stylesheet sets .no-results { display: none }, so clearing the inline
+    // style isn't enough to show it — set an explicit value.
+    noResults.style.display = (!anyVisible && q) ? 'block' : 'none';
   });
 })();
 </script>
