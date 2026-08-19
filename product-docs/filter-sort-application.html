@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRD — Vaani Filter &amp; Sort Application in Search — Vaani Product Docs</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e5e7eb;
+    --text: #111827; --text-dim: #6b7280; --accent: #4f46e5; --accent-soft: #eef2ff;
+    --code-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .pd-topbar {
+    position: sticky; top: 0; z-index: 50; height: 44px; display: flex; align-items: center;
+    gap: 10px; padding: 0 20px; background: #111827; color: #fff; font-size: 13px; font-weight: 600;
+  }
+  .pd-topbar a { color: #fff; text-decoration: none; opacity: 0.92; }
+  .pd-topbar a:hover { opacity: 1; text-decoration: underline; }
+  .pd-topbar-sep { opacity: 0.4; }
+  .pd-shell { display: flex; max-width: 1180px; margin: 0 auto; align-items: flex-start; }
+  .pd-sidebar {
+    flex: 0 0 260px; position: sticky; top: 44px; max-height: calc(100vh - 44px);
+    overflow-y: auto; padding: 24px 16px 40px 20px; border-right: 1px solid var(--border);
+  }
+  .pd-group { margin-bottom: 22px; }
+  .pd-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-dim); margin: 0 0 8px 0;
+  }
+  .pd-sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pd-sidebar a {
+    display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); text-decoration: none;
+    font-size: 13px; line-height: 1.4; border-left: 2px solid transparent;
+  }
+  .pd-sidebar a:hover { background: var(--accent-soft); }
+  .pd-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+  .pd-content { flex: 1 1 auto; min-width: 0; padding: 40px 48px 80px; }
+  .pd-doc { max-width: 760px; }
+  .pd-doc h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pd-doc h1:not(:first-child) { margin-top: 40px; }
+  .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
+  .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
+  .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
+  .pd-doc li { margin-bottom: 4px; }
+  .pd-doc li p { margin: 0 0 4px; }
+  .pd-doc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .pd-doc a:hover { border-bottom-color: var(--accent); }
+  .pd-doc em { color: var(--text-dim); }
+  .pd-doc strong { font-weight: 700; }
+  .pd-doc table {
+    width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .pd-doc th, .pd-doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .pd-doc thead th { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .pd-doc tbody tr:nth-child(even) { background: #fafafb; }
+  .pd-doc pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; margin: 0 0 18px;
+  }
+  .pd-doc code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .pd-doc p code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  @media (max-width: 860px) {
+    .pd-shell { flex-direction: column; }
+    .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .pd-content { padding: 28px 20px 60px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
+<div class="pd-shell">
+  <nav class="pd-sidebar">
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="nudging-rules-reference.html">Nudging Rules — Configuration Reference</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="nudge-filter-placeholder.html">Vaani Nudge — Filter Placeholder Requirements</a></li><li><a href="filter-sort-application.html" class="active">KRD — Vaani Filter &amp; Sort Application in Search</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="quick-priority.html">Quick Priority — Experiment &amp; Build Sequencing</a></li><li><a href="fallback-experiment.html">Fallback Experiment</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+  </nav>
+  <main class="pd-content">
+    <article class="pd-doc">
+    <h1>KRD — Vaani Filter &amp; Sort Application in Search</h1>
+<p><em>Extending Vaani from search-only to search + filter + sort, with session-aware state management.</em></p>
+<table>
+<thead><tr><th>Field</th><th>Value</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">Current Version</td>
+<td style="text-align: center;">v1</td>
+</tr>
+<tr>
+<td style="text-align: center;">Current Status</td>
+<td style="text-align: center;">Draft for engineering handoff</td>
+</tr>
+<tr>
+<td style="text-align: center;">Last Updated</td>
+<td style="text-align: center;">15 July 2026</td>
+</tr>
+<tr>
+<td style="text-align: center;">POD</td>
+<td style="text-align: center;">Vaani for 1+</td>
+</tr>
+<tr>
+<td style="text-align: center;">Contributors</td>
+<td style="text-align: center;">PM: Ishan | Engineers: Mukul |</td>
+</tr>
+<tr>
+<td style="text-align: center;">Builds on</td>
+<td style="text-align: center;">Vaani — Filter Application in Search (Product Note v2); Anurag Singh Slack thread on search+filter routing</td>
+</tr>
+<tr>
+<td style="text-align: center;">Companion (separate)</td>
+<td style="text-align: center;">Vaani V1 Prompt Spec — prompt/intent changes will ship in a separate KRD</td>
+</tr>
+</tbody>
+</table>
+<h2>Section I: Executive Summary</h2>
+<h3>1. Problem Statement</h3>
+<p>Vaani today can only decide whether to search on the user's behalf. Filters and sort remain user-driven on the app. Every search-like turn ("black cotton kurti under 150", "sasta saree dikhao", "white main dikhao") is collapsed into a raw text query, which loses category recall (compound-attribute queries under-serve sscat retrieval).</p>
+<p>This KRD ships the capability that lets Vaani, in the same turn, resolve the sscat, decide the filter and sort operations to apply against the current session state, and emit a strip-clean search query. It also defines the session-scoped state (per-sscat cache, user-removed set, suppress-filters flag) that keeps that behavior coherent across turns, and the dependencies on the sscat resolution API, the filter dictionary per sscat, and the app-to-Vaani state sync that engineering must build.</p>
+<h3>2. Product Thinking</h3>
+<p>The instrumented Vaani we shipped told us that habit-formed users lean heavily on FIND turns (81.8% of habitual turns; six sticky FIND sub-moves carry the surface). Filter application is the single most common act these users perform after seeing search results. Today Vaani abandons them at that step. Three claims we want the launch to support or reject:</p>
+<ul>
+<li>
+<p>Structured filter/sort raises the ceiling on Vaani search turns. A Vaani turn that emits filters/sort should convert more (click-through, session order rate, ITT) than a Vaani search-only turn, because it lands the user closer to intent-matched inventory.</p>
+</li>
+<li>
+<p>Sscat-as-query preserves category recall. EBR retrieval  compound queries lose category context; sscat-as-query + structured filters recovers it. Text-search fallback rate should fall on Vaani turns where this pattern applies.</p>
+</li>
+<li>
+<p>State-aware filter continuity is a habit accelerator. Auto-restoring last-known filters on sscat return, and respecting user-removed values, prevents the "Vaani keeps re-applying stuff I removed" frustration pattern that would otherwise emerge the moment filters ship.</p>
+</li>
+</ul>
+<h3>3. NSM — Success &amp; Check Metrics</h3>
+<h4>3.1 Primary Success Metric</h4>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">Vaani-search → click-through rate lift</td>
+<td style="text-align: center;">% of Vaani search turns that result in a product click within the same turn, for Treatment (filter+sort enabled) vs Holdout (search-only current Vaani). ITT.</td>
+</tr>
+</tbody>
+</table>
+<h4>3.2 Secondary Metrics</h4>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">Vaani-applied filter/sort share</td>
+<td style="text-align: center;">% of Vaani search turns that emit at least one filter_op or sort_op.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Filter-turn session order rate</td>
+<td style="text-align: center;">Session order rate for sessions that included ≥1 Vaani-applied filter/sort turn (Treatment vs Holdout, ITT).</td>
+</tr>
+<tr>
+<td style="text-align: center;">Text-search fallback rate</td>
+<td style="text-align: center;">Same top-line metric as the Vaani baseline — expected to fall as the search+filter pattern lands on turns where compound attributes are present.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Sscat-return restore accuracy</td>
+<td style="text-align: center;">% of sscat-return turns where the cached filter/sort set is correctly re-applied.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Nudge-accept rate (filter suggestions)</td>
+<td style="text-align: center;">accept / (accept + dismiss) for filter suggestions routed via the delay-based nudge infra.</td>
+</tr>
+</tbody>
+</table>
+<h4>3.3 Guardrail Metrics</h4>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">User-removed re-apply rate</td>
+<td style="text-align: center;">% of Vaani turns that re-add a filter value present in the current sscat's user_removed set. Target ≈ 0.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Query/filter double-count rate</td>
+<td style="text-align: center;">% of Vaani turns where an attribute appears in both search_query and filter_ops for the same sscat. Target ≈ 0.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Sscat drift on follow-up</td>
+<td style="text-align: center;">% of follow-up turns where Vaani switches sscat unexpectedly (relative to a labelled ground-truth sample). Watch; alert on spike.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Response latency (P95)</td>
+<td style="text-align: center;">End-to-end turn latency for Vaani-with-filter vs Vaani-search-only. Target: no more than +150ms over baseline.</td>
+</tr>
+</tbody>
+</table>
+<h2>Section II: Product Requirement Document</h2>
+<h3>1. User Stories &amp; Capabilities</h3>
+<table>
+<thead><tr><th>ID</th><th>Persona</th><th>As a...</th><th>I want to...</th><th>So that I can...</th><th>Value if solved</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">US-201</td>
+<td style="text-align: center;">User in search</td>
+<td style="text-align: center;">shopper who spoke a compound query</td>
+<td style="text-align: center;">have Vaani apply the attributes I said as filters (colour, material, price) instead of stuffing them into the query</td>
+<td style="text-align: center;">get category-relevant results narrowed to what I actually asked</td>
+<td style="text-align: center;">Higher click-through on Vaani search turns</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-202</td>
+<td style="text-align: center;">User in a follow-up</td>
+<td style="text-align: center;">shopper narrowing an existing feed</td>
+<td style="text-align: center;">say "100 se kam" or "white main dikhao" and have Vaani add/replace filters without me touching the drawer</td>
+<td style="text-align: center;">keep the conversation going in one modality</td>
+<td style="text-align: center;">Reduces fallback-to-manual on refinement turns</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-203</td>
+<td style="text-align: center;">User seeking cheap</td>
+<td style="text-align: center;">budget-first shopper</td>
+<td style="text-align: center;">say "sasta kurti" and see cheapest-first, then be asked what budget I actually want</td>
+<td style="text-align: center;">converge on the right price band fast</td>
+<td style="text-align: center;">Sort application + bounded sort clarifier</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-204</td>
+<td style="text-align: center;">User seeking quality</td>
+<td style="text-align: center;">quality-first shopper</td>
+<td style="text-align: center;">say "achhi quality" and see top-rated, then be asked what rating threshold</td>
+<td style="text-align: center;">find a good product without knowing filter chip names</td>
+<td style="text-align: center;">Sort application + bounded sort clarifier</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-205</td>
+<td style="text-align: center;">User who removed a filter</td>
+<td style="text-align: center;">shopper who explicitly cleared a colour</td>
+<td style="text-align: center;">have Vaani respect that removal even when I later refine the search in the same sscat</td>
+<td style="text-align: center;">not feel that Vaani ignores my clicks</td>
+<td style="text-align: center;">User-removed-sticky safety guardrail</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-206</td>
+<td style="text-align: center;">User switching category</td>
+<td style="text-align: center;">shopper moving shirt → saree → shirt</td>
+<td style="text-align: center;">have my prior shirt filters come back automatically when I return to shirt</td>
+<td style="text-align: center;">not re-do the narrowing from scratch</td>
+<td style="text-align: center;">Per-sscat cache &amp; restore</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-207</td>
+<td style="text-align: center;">User done with filters</td>
+<td style="text-align: center;">shopper who wants a broad view</td>
+<td style="text-align: center;">say "koi filter nahi lagao" and have Vaani stop applying filters until I ask again</td>
+<td style="text-align: center;">be in control of the narrowing behaviour</td>
+<td style="text-align: center;">suppress_filters meta-flag</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-208</td>
+<td style="text-align: center;">PM</td>
+<td style="text-align: center;">PM</td>
+<td style="text-align: center;">ship every op with a state contract enforced by the orchestrator</td>
+<td style="text-align: center;">prevent Vaani from overwriting manual UI actions or re-adding removed values, regardless of prompt drift</td>
+<td style="text-align: center;">Contract-driven safety, not prompt-driven</td>
+</tr>
+</tbody>
+</table>
+<h3>2. Scope</h3>
+<h4>2.1 In Scope</h4>
+<ul>
+<li>
+<p>Per-turn Vaani output extended from a single search_query string to a structured object: { search_query, filter_ops[], sort_op?, response_clarifier? } — see 3.1.</p>
+</li>
+<li>
+<p>Seven filter operations: add, replace, append (OR-within-attribute), remove, clear, no-op; plus one sort_op per turn. Sort dictionary extendable (v1: sasta → price_asc, achhi quality → rating_desc). Full catalogue in 3.1.</p>
+</li>
+<li>
+<p>Session-scoped Vaani state: current_sscat, active_filters, active_sort, sscat_cache, user_removed (per sscat), suppress_filters. See 3.2.</p>
+</li>
+<li>
+<p>Auto-strip: attributes applied as structured filters are removed from the search_query string in the same turn. No double-constraining. See 3.3.</p>
+</li>
+<li>
+<p>Cross-sscat behaviour: sscat switch clears active state and caches prior; sscat return in the same session restores cache. See 3.4.</p>
+</li>
+<li>
+<p>User-removal stickiness: a value the user explicitly removed does not auto-reapply for the rest of the session. See 3.5.</p>
+</li>
+<li>
+<p>Nudge integration: after every search action (Vaani- or user-initiated), the delay-based nudge infra receives the current state and fires a delayed next-filter suggestion. Filter suggestions do NOT live in the response LLM. See 3.6.</p>
+</li>
+<li>
+<p>Sort clarifier (in-response): after sasta / achhi quality, the response asks a single bounded clarifier. This is the only clarifier permitted inside the response LLM. See 3.7.</p>
+</li>
+<li>
+<p>App → Vaani filter-state sync every turn: the app pushes the current active filter/sort state (including any manual drawer toggles) into Vaani's context at the start of every Vaani turn. See 4.</p>
+</li>
+<li>
+<p>Instrumentation for every op emitted, every state transition, and every nudge fire. See 7.</p>
+</li>
+<li>
+<p>A/B experiment plumbing: Treatment (filter+sort enabled) vs Holdout (Vaani search-only, current). See 5.</p>
+</li>
+</ul>
+<h4>2.2 Out of Scope</h4>
+<ul>
+<li>
+<p>Prompt / intent changes — shipped in a separate KRD.</p>
+</li>
+<li>
+<p>Negation filters ("not black", "red ke alawa") — v1 drops to search_query; proper NOT support is a fast-follow.</p>
+</li>
+<li>
+<p>Multi-sscat clarification turn ("kurti and saree under 500") — v1 uses dominant-sscat heuristic (first mentioned) and puts the other in the query.</p>
+</li>
+<li>
+<p>Cross-session persistence of the sscat cache — cache lives per app-open only.</p>
+</li>
+<li>
+<p>Free-form range queries beyond the canonical grammar defined in 4. "Under 100", "100-200", "around 150" supported; open-ended arithmetic is not.</p>
+</li>
+<li>
+<p>New UX surfaces (e.g., a filter-chip strip generated by Vaani) — filters are applied against the existing filter service; the UX layer is unchanged.</p>
+</li>
+</ul>
+<h3>3. Product Decision Framework</h3>
+<h4>3.1 Operation Catalogue (Filter &amp; Sort)</h4>
+<p>Every op below carries: trigger cues, semantics, and priority. Same-attribute values are OR; cross-attribute values are AND — enforced by the filter execution layer, not by Vaani.</p>
+<p><strong>Filter operations</strong></p>
+<table>
+<thead><tr><th>ID</th><th>Priority</th><th>Op</th><th>Trigger cues</th><th>Semantics</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">F1</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">add</td>
+<td style="text-align: center;">"black kurti", "add cotton"</td>
+<td style="text-align: center;">New attribute, not previously active. Push value onto the attribute's value set.</td>
+</tr>
+<tr>
+<td style="text-align: center;">F2</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">replace</td>
+<td style="text-align: center;">"only", "instead", "change to", "-hi dikhao"</td>
+<td style="text-align: center;">Same attribute already active. Overwrite the value set with the new value(s).</td>
+</tr>
+<tr>
+<td style="text-align: center;">F3</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">append (OR)</td>
+<td style="text-align: center;">"also", "and", "dono", "or", "aur"</td>
+<td style="text-align: center;">Same attribute already active. Add the new value to the existing value set.</td>
+</tr>
+<tr>
+<td style="text-align: center;">F4</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">remove</td>
+<td style="text-align: center;">"any X", "remove X", "koi bhi X"</td>
+<td style="text-align: center;">Drop the attribute. All previously-active values for that attribute are pushed into user_removed for the current sscat.</td>
+</tr>
+<tr>
+<td style="text-align: center;">F5</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">clear</td>
+<td style="text-align: center;">"reset", "start fresh", "kuch aur dikhao"</td>
+<td style="text-align: center;">Drop all filters and sort. Does NOT populate user_removed (clear is a fresh start, not a targeted rejection).</td>
+</tr>
+<tr>
+<td style="text-align: center;">F6</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">no-op</td>
+<td style="text-align: center;">Utterance not a filter attribute for this sscat</td>
+<td style="text-align: center;">Filters unchanged. Token stays in search_query. Log fall-through for dictionary growth.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sort operations</strong></p>
+<table>
+<thead><tr><th>ID</th><th>Priority</th><th>Signal</th><th>Sort op</th><th>Response clarifier</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">S1</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">"sasta", "cheapest", "sabse sasta"</td>
+<td style="text-align: center;">sort = price_asc</td>
+<td style="text-align: center;">"Maine sabse saste products dikhaye hain. Koi specific budget hai — under 100, 200, 500?"</td>
+</tr>
+<tr>
+<td style="text-align: center;">S2</td>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">"achhi quality", "best rated", "sabse acha"</td>
+<td style="text-align: center;">sort = rating_desc</td>
+<td style="text-align: center;">"Top-rated products dikhaye hain. Kya specific rating threshold chahiye — 4+, 4.5+?"</td>
+</tr>
+<tr>
+<td style="text-align: center;">S3</td>
+<td style="text-align: center;">P1</td>
+<td style="text-align: center;">(extendable dictionary — latest, popular, newest, discount%)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">Dictionary owned by PM + search; extendable without code change.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>Sort applies in the same turn as the utterance. Sort replaces prior sort — there is no "append sort".</p>
+</li>
+<li>
+<p>Sort + filter coexist (e.g., filter color=black + sort=price_asc). If sort=price_asc coexists with filter=price:&lt;X (explicit user budget), both apply — sort ascending within the budget.</p>
+</li>
+<li>
+<p>The sort clarifier is the only clarifier permitted inside the response LLM. All other filter suggestions go through the nudge infra (3.6).</p>
+</li>
+</ul>
+<h4>3.2 Session State Contract</h4>
+<p>Vaani owns state. Every Vaani turn is invoked with the following session-scoped object; the response LLM reads it, and the orchestrator writes the delta back at turn end.</p>
+<p><strong>SessionState {</strong></p>
+<p>current_sscat: string | null,</p>
+<p>active_filters: Map&lt;attribute, Set&lt;value&gt;&gt;,     // e.g. {color: {black}, material: {cotton}}</p>
+<p>active_sort:    SortOp | null,</p>
+<p>sscat_cache:    Map&lt;sscat, {filters, sort, user_removed}&gt;,</p>
+<p>user_removed:   Map&lt;attribute, Set&lt;value&gt;&gt;,      // sticky for current sscat, session-scoped</p>
+<p>suppress_filters: boolean</p>
+<p><strong>}</strong></p>
+<ul>
+<li>
+<p>active_filters, active_sort, and user_removed are scoped to current_sscat.</p>
+</li>
+<li>
+<p>On sscat switch: (a) write current active_filters/active_sort/user_removed to sscat_cache[old_sscat]; (b) reset active state; (c) load sscat_cache[new_sscat] if present.</p>
+</li>
+<li>
+<p>user_removed for a given attribute is cleared only when (i) the user explicitly re-applies that attribute in the same session, or (ii) the session ends.</p>
+</li>
+<li>
+<p>suppress_filters is toggled true when the user says a meta-instruction like "koi filter nahi lagao". Toggled off when the user asks for a filter again or the session ends.</p>
+</li>
+<li>
+<p>Session = one app-open. All state persists for the app-open duration and resets on app close.</p>
+</li>
+</ul>
+<h4>3.3 Query-Stripping Rule</h4>
+<ul>
+<li>
+<p>Whenever an attribute is applied as a structured filter, that attribute must be stripped from the search_query string in the same turn.</p>
+</li>
+<li>
+<p>search_query in v1 = sscat term + any residual attribute tokens (those NOT representable as a filter/sort for this sscat).</p>
+</li>
+<li>
+<p>Example: user says "black kurti" → search_query = "kurti"; filter_ops = [+color:black]. Not "black kurti" + [+color:black].</p>
+</li>
+</ul>
+<h4>3.4 Cross-Sscat Behaviour</h4>
+<ul>
+<li>
+<p>On switch (shirt → saree): clear active_filters and active_sort. Fresh sscat, fresh slate. Prior sscat filters/sort/user_removed are cached in sscat_cache.</p>
+</li>
+<li>
+<p>On return in the same session (saree → shirt): auto-restore the cached filters, sort, and user_removed for shirt.</p>
+</li>
+<li>
+<p>sscat_cache lives for the session (app-open) only.</p>
+</li>
+</ul>
+<h4>3.5 Continuity &amp; User-Removal Rule</h4>
+<p>Within the same sscat, filters accumulate incrementally across turns unless the user explicitly asks to remove or replace them — with one critical exception:</p>
+<p><strong>If the user has explicitly removed a filter value earlier in the session (via Vaani or via the manual filter drawer), Vaani must NOT silently re-apply it later, even if a subsequent user utterance would otherwise re-trigger it. The current filter state (which reflects the removal via app-to-Vaani sync) is the source of truth. The user_removed set is a defence-in-depth backstop.</strong></p>
+<h4>3.6 Nudges — Next-Best Filter Suggestion</h4>
+<ul>
+<li>
+<p>After every search action (Vaani-initiated OR user-initiated), the delay-based nudge infra is passed the search context and fires a delayed suggestion for the next unapplied filter.</p>
+</li>
+<li>
+<p>Filter suggestions do NOT live in the response LLM call. Rationale: keeps the response fast and single-purpose; delay / templating / dismissal already exist in nudge infra.</p>
+</li>
+<li>
+<p>The nudge module must skip any filter value that is already in active_filters OR in user_removed for the current sscat. It walks down the priority list to the next unapplied, non-rejected value.</p>
+</li>
+<li>
+<p>Nudge infra payload from Vaani: { sscat, active_filters, active_sort, user_removed, ranked_filter_recommendations }.</p>
+</li>
+</ul>
+<h4>3.7 Sort Clarifier (in-response, bounded)</h4>
+<ul>
+<li>
+<p>Only after S1 (sasta) or S2 (achhi quality), the response emits one bounded clarifier asking for a specific budget / rating threshold.</p>
+</li>
+<li>
+<p>Clarifier is not asked when sort coexists with an explicit user filter (e.g., "500 tak sasta kurti" → sort applied, no clarifier because budget is already specified).</p>
+</li>
+<li>
+<p>This is the ONLY clarifier permitted inside the response LLM. All other suggestions must go through nudge infra (3.6).</p>
+</li>
+</ul>
+<h3>4. Technical Requirements — Data &amp; System Dependencies</h3>
+<p>The remainder of this section is what engineering needs to build against. Detailed solutioning goes in 6.</p>
+<h4>4.1 Source APIs &amp; Dependencies (assumed pre-existing)</h4>
+<table>
+<thead><tr><th>Source</th><th>Grain</th><th>Used by</th><th>Notes</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">sscat_resolution_api</td>
+<td style="text-align: center;">utterance → sscat_id, confidence</td>
+<td style="text-align: center;">Vaani turn front-half</td>
+<td style="text-align: center;">Ishan: "for each search query we already get sscat mapped to it." Confidence field to be exposed.</td>
+</tr>
+<tr>
+<td style="text-align: center;">filter_dictionary_api</td>
+<td style="text-align: center;">sscat_id → available filters, values, sort options</td>
+<td style="text-align: center;">Vaani turn front-half</td>
+<td style="text-align: center;">Needs to be exposed to Vaani; must include sort dictionary and range grammar per attribute.</td>
+</tr>
+<tr>
+<td style="text-align: center;">active_filter_state</td>
+<td style="text-align: center;">user × session → current filters + sort</td>
+<td style="text-align: center;">Every Vaani turn</td>
+<td style="text-align: center;">App-side; must be synced into Vaani context at turn start (see 4.3).</td>
+</tr>
+<tr>
+<td style="text-align: center;">filter_execution_service</td>
+<td style="text-align: center;">query + filters + sort → results</td>
+<td style="text-align: center;">Every Vaani search turn</td>
+<td style="text-align: center;">Existing service; must accept the structured filter_ops output and the sort_op output verbatim.</td>
+</tr>
+<tr>
+<td style="text-align: center;">nudge_infra</td>
+<td style="text-align: center;">search context → delayed nudge</td>
+<td style="text-align: center;">Post-search</td>
+<td style="text-align: center;">Existing delay-based nudge infrastructure; must accept Vaani's payload shape (3.6).</td>
+</tr>
+<tr>
+<td style="text-align: center;">filter_recommendation_ranker</td>
+<td style="text-align: center;">search result → top-N filter values</td>
+<td style="text-align: center;">nudge infra input</td>
+<td style="text-align: center;">Existing data source (top-x filter values users are likely to apply). Must be able to accept &amp; honour Vaani's user_removed set.</td>
+</tr>
+</tbody>
+</table>
+<h4>4.2 Filter Dictionary Contract</h4>
+<ul>
+<li>
+<p>Per sscat_id, Vaani must be able to fetch: list of available filter attributes; acceptable values (or value grammar for numeric ranges); whether the attribute supports OR (same-attribute multi-value); list of available sort options; canonical mappings from user cues (sasta, achhi quality, latest, popular …) to sort ops.</p>
+</li>
+<li>
+<p>Attribute values the user mentions that are NOT in the sscat's dictionary fall through to search_query. Every such fall-through is logged so the dictionary can be grown.</p>
+</li>
+<li>
+<p>Numeric-range grammar (canonical; shared between Vaani prompt few-shot and the filter API): { op: "lt" | "lte" | "gt" | "gte" | "between", value: number | [number, number] }. Phrases: "under 100" → {lt, 100}; "100 se kam" → {lt, 100}; "100-200" → {between, [100,200]}; "around 150" → {between, [135,165]} (±10% band, tunable).</p>
+</li>
+</ul>
+<h4>4.3 App → Vaani State Sync Contract</h4>
+<ul>
+<li>
+<p>The app must sync the current active filter and sort state — including any manual toggles the user made in the filter drawer since the last Vaani turn — into Vaani's context at the start of every Vaani turn.</p>
+</li>
+<li>
+<p>If the user has cleared a filter in the UI between Vaani turns, Vaani reads it as removed in the incoming payload. Vaani must not silently re-apply it (see 3.5). The clearing must also push the cleared values into user_removed for that sscat.</p>
+</li>
+<li>
+<p>This is a hard dependency. Without it, Vaani will overwrite user actions. Recommendation: turn-start payload push (not polling).</p>
+</li>
+</ul>
+<h4>4.4 Sscat Confidence Threshold</h4>
+<ul>
+<li>
+<p>Vaani applies filters and sort only when sscat confidence ≥ threshold. Default: 0.7 (needs calibration on live sample; see 8).</p>
+</li>
+<li>
+<p>Below threshold → plain search on the raw utterance; no filter_ops, no sort_op. This preserves current behaviour on ambiguous queries.</p>
+</li>
+</ul>
+<h4>4.5 Vaani Turn Output Contract</h4>
+<p>The response LLM emits, per turn:</p>
+<pre><code>{
+  search_query: string,          // sscat term + residual (non-filterable) attribute tokens
+  filter_ops:  FilterOp[],       // add | replace | append | remove | clear (0..n)
+  sort_op:     SortOp | null,   // 0 or 1
+  response_clarifier: string?    // only when sort_op is set (3.7)
+}
+</code></pre>
+<ul>
+<li>
+<p>The orchestrator applies filter_ops and sort_op against the current SessionState (3.2) and forwards search_query + resulting filters + sort to the filter execution service.</p>
+</li>
+<li>
+<p>State delta is persisted back to SessionState at turn end.</p>
+</li>
+</ul>
+<h3>5. Experimentation Strategy</h3>
+<table>
+<thead><tr><th>Item</th><th>Detail</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">Experimented?</td>
+<td style="text-align: center;">Yes.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Type</td>
+<td style="text-align: center;">User-level sticky A/B with an eligible-Holdout arm.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Arms</td>
+<td style="text-align: center;">Treatment (filter+sort enabled + state contract + nudge integration) · Holdout (Vaani search-only, current) · optional Control (no Vaani, text search).</td>
+</tr>
+<tr>
+<td style="text-align: center;">Attribution</td>
+<td style="text-align: center;">Per-turn logging; assignment sticky at user level; ITT measurement.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Duration</td>
+<td style="text-align: center;">4 weeks minimum; longer if filter/sort emission rate is thin on the Treatment arm.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Success threshold</td>
+<td style="text-align: center;">+3% relative lift in Vaani-search → click-through rate (I.3.1) at p&lt;0.05.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Guardrails</td>
+<td style="text-align: center;">See I.3.3; any red = pause release.</td>
+</tr>
+</tbody>
+</table>
+<h3>6. Tech Solutioning</h3>
+<p><strong>[to be added by Engineering]</strong></p>
+<h3>7. Logging Requirements</h3>
+<p>Emit the following events for every Vaani turn. Purpose is to check filter/sort emission behaviour, verify state contract compliance, and diagnose user-removed guardrail hits.</p>
+<table>
+<thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">vaani_filter_turn_input</td>
+<td style="text-align: center;">user_id, session_id, sscat_id, sscat_confidence, active_filters_before, active_sort_before, user_removed_before, suppress_filters, app_sync_delta</td>
+<td style="text-align: center;">Verify state contract; audit app-sync inputs</td>
+</tr>
+<tr>
+<td style="text-align: center;">vaani_filter_turn_output</td>
+<td style="text-align: center;">search_query, filter_ops, sort_op, response_clarifier_present, dict_fallthrough_tokens</td>
+<td style="text-align: center;">Verify emission; grow filter dictionary</td>
+</tr>
+<tr>
+<td style="text-align: center;">vaani_fitler_state_delta</td>
+<td style="text-align: center;">active_filters_after, active_sort_after, user_removed_after, sscat_cache_snapshot</td>
+<td style="text-align: center;">Verify state persistence; sscat return correctness</td>
+</tr>
+</tbody>
+</table>
+<h3>8. Open Questions (to close before build)</h3>
+<ul>
+<li>
+<p>Search Query → SSCAT prediction ? </p>
+</li>
+<li>
+<p>Canonical numeric-range grammar (4.2) — final schema signed off jointly by Vaani + search + filter service.</p>
+</li>
+<li>
+<p>App → Vaani sync mechanism (4.3) — turn-start payload push vs event stream vs state-on-request. Recommend push.</p>
+</li>
+<li>
+<p>Dictionary fall-through hint — should we surface a "we don't filter by X yet" hint or stay silent? Recommend silent for v1.</p>
+</li>
+<li>
+<p>Multi-sscat query — v1 dominant-sscat heuristic (first-mentioned). Confirm rule with search team.</p>
+</li>
+<li>
+<p>Ambiguous follow-up ("isse acha kuch dikhao") — v1 keeps filters + applies sort=rating_desc + brief clarifier. Confirm.</p>
+</li>
+</ul>
+<h2>Section III: Testing &amp; Launch Checklist</h2>
+<h3>1. Functional Testing</h3>
+<h4>1.1 Test Cases</h4>
+<table>
+<thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">TC-301</td>
+<td style="text-align: center;">Fresh apply — "black cotton kurti under 150"</td>
+<td style="text-align: center;">query=kurti; filter_ops=[+color:black, +material:cotton, +price:&lt;150]; sort=null</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-302</td>
+<td style="text-align: center;">Add on top — sscat=kurti, filters={color:black,material:cotton}; utt="100 se kam"</td>
+<td style="text-align: center;">filter_ops=[+price:&lt;100]; other filters unchanged</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-303</td>
+<td style="text-align: center;">Non-filter attribute → query — sscat=kurti, filters={color:black,material:cotton}; utt="korean style"</td>
+<td style="text-align: center;">query="korean style kurti"; filter_ops=[]; dict-fallthrough logged</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-304</td>
+<td style="text-align: center;">Replace within attribute — sscat=kurti, filters={color:black}; utt="white main dikhao"</td>
+<td style="text-align: center;">filter_ops=[replace color:{white}]</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-305</td>
+<td style="text-align: center;">Append within attribute (OR) — sscat=kurti, filters={color:black}; utt="white aur black dono"</td>
+<td style="text-align: center;">filter_ops=[append color:{white}]; state color:{black,white}</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-306</td>
+<td style="text-align: center;">Sort — sasta — utt="sasta kurti"</td>
+<td style="text-align: center;">query=kurti; sort=price_asc; response_clarifier asks for budget range</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-307</td>
+<td style="text-align: center;">Sort — best rated — utt="achhi quality ke kurti"</td>
+<td style="text-align: center;">query=kurti; sort=rating_desc; response_clarifier asks rating threshold</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-308</td>
+<td style="text-align: center;">Sort + explicit budget coexistence — utt="500 tak sasta kurti"</td>
+<td style="text-align: center;">filter_ops=[+price:&lt;500]; sort=price_asc; no clarifier (budget already specified)</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-309</td>
+<td style="text-align: center;">Sscat switch clears state, caches old — sscat=shirt, filters={color:blue,price:&lt;500}; utt="saree dikhao"</td>
+<td style="text-align: center;">query=saree; active_filters=∅; sscat_cache[shirt]={color:blue,price:&lt;500}</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-310</td>
+<td style="text-align: center;">Sscat return restores cache — sscat=saree (post-TC-309), shirt cached; utt="wapas shirt dikhao"</td>
+<td style="text-align: center;">query=shirt; active_filters={color:blue,price:&lt;500} restored from cache</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-311</td>
+<td style="text-align: center;">Respect user removal (the critical guardrail) — sscat=kurti, user_removed={color:{black}}; utt="cotton kurti"</td>
+<td style="text-align: center;">filter_ops=[+material:cotton]; color:black NOT re-added; guardrail_hit NOT fired</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-312</td>
+<td style="text-align: center;">Explicit removal populates user_removed — sscat=kurti, filters={color:red}; utt="any color chalega"</td>
+<td style="text-align: center;">filter_ops=[remove color]; user_removed={color:{red}}</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-313</td>
+<td style="text-align: center;">Removal via UI is respected — app-sync between turns says color:black was cleared by user in drawer; utt="aur options"</td>
+<td style="text-align: center;">filter_ops=[]; user_removed reflects app-sync; no re-add</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-314</td>
+<td style="text-align: center;">Clear all — sscat=kurti, filters={color:black,material:cotton}; utt="reset karo"</td>
+<td style="text-align: center;">filter_ops=[clear]; active_filters=∅; sort=null; user_removed unchanged</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-315</td>
+<td style="text-align: center;">suppress_filters meta — sscat=kurti; utt="koi filter mat lagao"</td>
+<td style="text-align: center;">suppress_filters=true; no filter action this turn</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-316</td>
+<td style="text-align: center;">suppress_filters holds — sscat=kurti, suppress_filters=true; utt="black kurti"</td>
+<td style="text-align: center;">query="black kurti"; filter_ops=[]</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-317</td>
+<td style="text-align: center;">Low-confidence sscat degrades — sscat_confidence=0.5; utt="something red"</td>
+<td style="text-align: center;">query="something red"; no filter/sort; degrade path logged</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-318</td>
+<td style="text-align: center;">Attribute not in sscat dict — "silk" not a material value for kurti; utt="silk kurti"</td>
+<td style="text-align: center;">query="silk kurti"; filter_ops=[]; dict-fallthrough logged</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-319</td>
+<td style="text-align: center;">Ambiguous "acha kuch aur" — sscat=kurti, filters={color:black}; utt="isse acha kuch dikhao"</td>
+<td style="text-align: center;">filters preserved; sort=rating_desc; brief clarifier in response</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-320</td>
+<td style="text-align: center;">Multi-sscat dominant heuristic — utt="kurti and saree under 500"</td>
+<td style="text-align: center;">sscat=kurti (first mentioned); filter_ops=[+price:&lt;500]; query="saree kurti"</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-321</td>
+<td style="text-align: center;">Negation drops to query (v1) — utt="non-black kurti"</td>
+<td style="text-align: center;">query="non-black kurti"; filter_ops=[] (fast-follow: proper NOT support)</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-322</td>
+<td style="text-align: center;">Contradiction: "black white but only white" — sscat=kurti</td>
+<td style="text-align: center;">filter_ops=[replace color:{white}] ("only" overrides "and")</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-323</td>
+<td style="text-align: center;">Query stripping — utt="black kurti"</td>
+<td style="text-align: center;">query="kurti" (NOT "black kurti"); filter_ops=[+color:black]</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-324</td>
+<td style="text-align: center;">Nudge skips already-active — sscat=kurti, filters={color:black}; ranker suggests color:black</td>
+<td style="text-align: center;">nudge walks to next value, skip_reason=active</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-325</td>
+<td style="text-align: center;">Nudge skips user_removed — sscat=kurti, user_removed={color:{black}}; ranker suggests color:black</td>
+<td style="text-align: center;">nudge walks to next value, skip_reason=user_removed</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-326</td>
+<td style="text-align: center;">Turn latency SLO — Vaani-with-filter P95</td>
+<td style="text-align: center;">End-to-end turn latency ≤ baseline + 150ms</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-327</td>
+<td style="text-align: center;">App-sync failure — sync payload missing at turn start</td>
+<td style="text-align: center;">Vaani proceeds with last-known state; guardrail_hit fires; alert</td>
+</tr>
+</tbody>
+</table>
+<h3>2. Launch Checklist</h3>
+<ul>
+<li>
+<p>☐ sscat_resolution_api exposes confidence field; threshold set (default 0.7, calibrated).</p>
+</li>
+<li>
+<p>☐ filter_dictionary_api live per sscat: attributes, values, range grammar, sort options, user-cue mappings.</p>
+</li>
+<li>
+<p>☐ App → Vaani state-sync payload contract signed off; turn-start push implemented and tested.</p>
+</li>
+<li>
+<p>☐ SessionState persistence layer live; sscat_cache and user_removed tested across app-open boundary (must reset on close).</p>
+</li>
+<li>
+<p>☐ Query-stripping enforced in the orchestrator (defence-in-depth over the LLM output).</p>
+</li>
+<li>
+<p>☐ Nudge infra integration: payload accepted; user_removed honoured in skip logic; fatigue policy live.</p>
+</li>
+<li>
+<p>☐ Instrumentation events (7) firing for every Vaani turn; guardrail_hit alerts wired.</p>
+</li>
+<li>
+<p>☐ A/B experiment configuration approved; sticky assignment tested.</p>
+</li>
+<li>
+<p>☐ Latency SLO measured over 3 days of shadow traffic before flip.</p>
+</li>
+<li>
+<p>☐ Kill-switch verified (single toggle disables filter/sort emission, falls back to search-only).</p>
+</li>
+<li>
+<p>☐ Test cases TC-301 through TC-327 pass in shadow eval.</p>
+</li>
+<li>
+<p>☐ Sign-off from Product, Tech, Search Relevance, Nudge Infra, QA.</p>
+</li>
+</ul>
+<h3>3. Post-Launch Governance</h3>
+<h2>Section IV: Mentor Sign Off</h2>
+<table>
+<thead><tr><th>Function</th><th>Name</th><th>Status</th></tr></thead>
+<tbody>
+
+<tr>
+<td style="text-align: center;">Product</td>
+<td style="text-align: center;">Madhurita Mahapatra</td>
+<td style="text-align: center;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: center;">Tech</td>
+<td style="text-align: center;">Shubham Maheshwari</td>
+<td style="text-align: center;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: center;">Search Relevance</td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: center;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: center;">Nudge Infra</td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: center;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: center;">Analytics / DS</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: center;">QA</td>
+<td style="text-align: center;">TBD</td>
+<td style="text-align: center;">Pending</td>
+</tr>
+</tbody>
+</table>
+<h2>Summary</h2>
+<p>V1 extends Vaani from search-only to search + filter + sort, with session-aware state. Required build:</p>
+<ul>
+<li>
+<p>Structured per-turn output — { search_query, filter_ops, sort_op, response_clarifier } — replacing the current single search-query string.</p>
+</li>
+<li>
+<p>Six filter ops (add, replace, append, remove, clear, no-op) + one sort op, with linguistic cues catalogued for prompt few-shot.</p>
+</li>
+<li>
+<p>Session state contract — current_sscat, active_filters, active_sort, sscat_cache, user_removed, suppress_filters — owned by Vaani, synced with the app on every turn.</p>
+</li>
+<li>
+<p>Query-stripping rule — no attribute appears in both search_query and filter_ops.</p>
+</li>
+<li>
+<p>Per-sscat cache + auto-restore on sscat return; user-removed stickiness for the current sscat.</p>
+</li>
+<li>
+<p>Nudge integration — filter suggestions routed via the delay-based nudge infra, honouring active_filters and user_removed.</p>
+</li>
+<li>
+<p>Sort clarifier — the ONE clarifier permitted inside the response LLM (after sasta / achhi quality).</p>
+</li>
+<li>
+<p>Instrumentation for every op, every state delta.</p>
+</li>
+<li>
+<p>A/B with sticky user assignment — Treatment (filter+sort) vs Holdout (Vaani search-only</p>
+</li>
+</ul>
+<p>Prompt/intent changes ship in a separate KRD. Negation, multi-sscat clarification, cross-session filter persistence are fast-follows.</p>
+    </article>
+  </main>
+</div>
+</body>
+</html>
