@@ -597,7 +597,7 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
     <span class="rid">R6</span>
     <h4>Carry every filter, however it arrived</h4>
     <p>Spoken, typed, tapped &mdash; all three are constraints. Non-visual attributes especially (colour, fabric, size, age, capacity) must go on as hard filters, because image similarity cannot enforce them.</p>
-    <p class="breaks"><b>Breaks as:</b> the &lt;15% carry-over failure we already measure &mdash; asking the buyer to repeat themselves. <b>Deferred past Scope 3</b> (Part V) &mdash; scoping keeps only the price filter for now.</p>
+    <p class="breaks"><b>Breaks as:</b> the &lt;15% carry-over failure we already measure &mdash; asking the buyer to repeat themselves. <b>Deferred past Scope 3</b> (Part V) &mdash; scoping keeps only the price filter, plus the anchor's own selected variant from Scope 2.</p>
   </div>
   <div class="rule">
     <span class="rid">R7</span>
@@ -670,13 +670,13 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
       <td><b>Feed navigation control</b></td>
       <td><span class="dir v2a">Vaani &rarr; app</span></td>
       <td>Scroll to a feed position, open a PDP, open a Vaani-curated feed built from an explicit pid list</td>
-      <td>A verdict is only useful if Vaani can take the buyer there (R7).</td>
+      <td><b>Out of scope 1&ndash;3.</b> Reranking puts the answer at the top instead, and the buyer opens products themselves.</td>
     </tr>
     <tr>
       <td><b>Comparison data fetch</b></td>
       <td><span class="dir a2v">app &rarr; Vaani</span></td>
       <td>For a small pid set: seller quality and return/cancellation behaviour, catalog-level platform performance, price history/stability, combo and delivery economics</td>
-      <td>Powers the &ldquo;which one should I buy?&rdquo; turn, which does not exist today.</td>
+      <td>Powers the verdict &mdash; and already exists as the P1/P2 enrichment fields (Part V), so this is a read, not a new build.</td>
     </tr>
     <tr>
       <td><b>Filter surface sync</b></td>
@@ -724,48 +724,102 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
   <div class="phase">
     <span class="tag">SCOPE 1</span>
     <h4>Rerank the feed. No LLM.</h4>
-    <p>The price turn fires the image search with its price filter. Before the feed is generated, the backend pulls the <b>top 50 candidates</b> and reorders them with hand-written logic, so the genuinely good products land at the top of what the buyer sees.</p>
+    <p>The price turn fires the image search with its price filter. The backend takes the <b>top 50 candidates from the already-filtered set</b> and reorders them with hand-written rules before the feed renders, so the good products land at the top of what the buyer sees.</p>
     <ul>
-      <li>Custom rules, not a model &mdash; cheaper <em>and</em> better rated, and similar combinations over the signals available at scoring time</li>
-      <li>Reuses the existing image-search feed &mdash; no new surface</li>
-      <li>No verdict, no narration, no comparison</li>
+      <li>Rules read <b>P0 signals only</b> &mdash; price, rating, rating count, seller rating, availability, Mall/Gold</li>
+      <li><b>Fewer than 4 candidates survive the filter &rarr; no rerank.</b> The feed goes out in its default order</li>
+      <li>A candidate <b>does not have to beat the anchor</b> to rank &mdash; this stage only produces an ordered list</li>
+      <li><b>Silent.</b> Existing image-search feed, reordered, no copy and no new surface</li>
     </ul>
     <p class="why">Cheapest path: backend-only, no Android or design work. Reranking also removes the need to walk the buyer anywhere &mdash; if the right product is at rank 1, nothing has to scroll to rank 7.</p>
   </div>
   <div class="phase">
     <span class="tag">SCOPE 2</span>
-    <h4>Narrate the top of it.</h4>
-    <p>Same reranked feed. The top <code>k</code> products it produced are passed to an LLM with their product IDs, and Vaani reads out what they are &mdash; the first is this, the second is that, the third is that &mdash; so the buyer can choose.</p>
+    <h4>Speak the verdict.</h4>
+    <p>Same reranked feed. The <b>top 6&ndash;7</b> products go to an LLM with their product IDs, and it decides which of them are worth talking about. Vaani says it <b>out loud</b>. This is where the anchor finally enters &mdash; the verdict compares it against the ranked products.</p>
     <ul>
-      <li>The LLM <b>explains</b> the order the custom logic produced; it does not pick or re-order</li>
-      <li>It speaks only when there is something meaningful to say</li>
-      <li>The buyer selects from the list themselves and buys</li>
+      <li><b>No fixed <code>k</code>.</b> The model gets a 6&ndash;7 product window and picks what to mention; a prompt governs what counts as worth saying</li>
+      <li>Adds <b>P1</b> (review images present) and <b>P2</b> (return rate, seller tenure, delivery promise) on top of P0 &mdash; already available from the information-enrichment work</li>
+      <li>The anchor's <b>selected variant</b> (a size tapped on the PDP itself) is in scope here, for the comparison</li>
+      <li><b>Voice only.</b> No deep-link, no scroll-to &mdash; the buyer opens the product themselves</li>
     </ul>
-    <p class="why">Adds the answer without handing ranking to a model. The verdict becomes a readout over a deterministic ranking, which is far easier to trust and to debug.</p>
+    <p class="why">Ranking stays deterministic; the model only explains and compares. Easier to trust, and cheap to debug when a verdict reads wrong.</p>
   </div>
   <div class="phase">
     <span class="tag">SCOPE 3</span>
-    <h4>A grouped custom CLP.</h4>
-    <p>Instead of rules picking an order, the <b>top 50 go to an LLM</b>, which groups them by what a shopper might want, and the groups are rendered on a custom surface layered above the image-search result &mdash; not the image-search feed itself.</p>
+    <h4>An SDUI custom CLP.</h4>
+    <p>The <b>top 50 go to the LLM</b>, which sorts them into groups from a <b>taxonomy we define and instruct</b> &mdash; not invented per query. The CLP <b>opens every time</b>, and is <b>SDUI-driven</b>, so the backend can place whatever content it needs into it.</p>
     <ul>
-      <li>Groups like: arrives faster &middot; better quality &middot; low return risk &middot; experienced seller &middot; absolutely cheapest &middot; has real review images</li>
-      <li>Can pin the <b>anchor product</b> in view, so the comparison the buyer is actually making is on screen</li>
-      <li>Works on the image-search path <em>and</em> on the existing reco feed</li>
+      <li>Groups: arrives faster &middot; better quality &middot; low return risk &middot; experienced seller &middot; absolutely cheapest &middot; has real review images</li>
+      <li>Can pin the <b>anchor product</b>, and is the real estate comparison eventually lives in</li>
+      <li><b>Source-agnostic:</b> image search becomes just one source into the CLP; the <b>reco feed</b> is another</li>
+      <li>If nothing in the alternatives is meaningful, Vaani can say so and offer reco-sourced suggestions instead</li>
     </ul>
-    <p class="why">The most useful and the most expensive &mdash; this is the one that needs Android and design work, so it only makes sense once the cheaper scopes have proved the demand.</p>
+    <p class="why">The most useful and the most expensive &mdash; the one that needs Android and design work. The SDUI surface is the durable asset here, not this one flow.</p>
   </div>
-</div>
-
-<div class="callout warn">
-  <b>Deliberately out of scope for all three.</b> <b>Carry-over filters</b> &mdash; replaying the colour, fabric or size the buyer established earlier in the session (R6, and the &lt;15% gap in Part 0) &mdash; are held back for a later scope, because they widen the build too far. Scopes 1&ndash;3 carry <em>only</em> the price filter forward. That is a real capability gap to keep in mind when reading Parts I&ndash;III: the anchored search here is visual-plus-price, not visual-plus-everything-they-said.
-</div>
-
-<div class="callout">
-  <b>What moves, relative to Parts I&ndash;III.</b> The pipeline earlier in this note assumes Vaani reads a feed and forms its own verdict. Under this scoping, <b>the choosing moves into deterministic backend logic</b> and the model's job shrinks to explaining that choice (Scope 2) or organising the candidate pool into intent groups (Scope 3). The candidate pool is fixed at <b>50</b>; <code>k</code> is only how many of the reranked results we talk about. And most of the &ldquo;walk the buyer there&rdquo; machinery is designed away rather than built &mdash; reranking puts the answer where the buyer already is.
 </div>
 
 <section class="blk">
   <p class="blk-num">06</p>
+  <h3>Signals, and which scope can see them</h3>
+  <p class="lede">Settled with tech. The tiering is the real constraint on Scope 1 &mdash; the rerank rules can only be as good as P0.</p>
+
+  <div class="tblwrap">
+  <table>
+    <thead><tr><th>Tier</th><th>Signals</th><th>Read by</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>P0</b></td>
+        <td>Price &middot; rating &middot; rating count &middot; seller rating &middot; availability &middot; Mall / Gold flag</td>
+        <td><span class="dir a2v">backend rerank</span> <span class="dir v2a">+ LLM verdict</span></td>
+        <td>The only signals Scope 1 can rank on. Availability is a gate, not a ranking term.</td>
+      </tr>
+      <tr>
+        <td><b>P1</b></td>
+        <td>Review images present or not</td>
+        <td><span class="dir v2a">LLM verdict</span></td>
+        <td>Already enriched. Note the tension: this is the <em>most</em> lopsided signal in the buyer data (bought products almost always have review images) and the rerank cannot see it.</td>
+      </tr>
+      <tr>
+        <td><b>P2</b></td>
+        <td>Return rate &middot; seller tenure &middot; delivery promise</td>
+        <td><span class="dir v2a">LLM verdict</span></td>
+        <td>Already enriched. These are what make a verdict sound like advice rather than a price readout.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout">
+    <b>The six Scope 3 groups map one-to-one onto these tiers</b> &mdash; cheapest and better quality from P0, real review images from P1, arrives faster / low return risk / experienced seller from P2. The taxonomy needs no data we do not already have.
+  </div>
+</section>
+
+<section class="blk">
+  <p class="blk-num">07</p>
+  <h3>Settled mechanics</h3>
+  <ul class="tight">
+    <li><b>Candidate pool:</b> top 50, taken <em>after</em> the price filter is applied.</li>
+    <li><b>Rerank floor:</b> under 4 surviving candidates, do not rerank at all.</li>
+    <li><b>Anchor:</b> irrelevant to ranking (Scope 1); central to the verdict (Scope 2).</li>
+    <li><b>Spoken set:</b> a 6&ndash;7 product window in, model-chosen subset out, prompt-governed.</li>
+    <li><b>Output channel:</b> voice. No deep-links, no scroll-to, no Vaani-driven navigation at all.</li>
+    <li><b>CLP:</b> opens on every turn, SDUI-driven, source-agnostic.</li>
+    <li><b>Mall cross-sell:</b> in.</li>
+    <li><b>Carry-over filters:</b> out, except the anchor's own selected variant in Scope 2.</li>
+  </ul>
+</section>
+
+<div class="callout warn">
+  <b>Deliberately out of scope.</b> <b>Carry-over filters</b> &mdash; replaying the colour, fabric or size the buyer established earlier in the session (R6, and the &lt;15% gap in Part 0) &mdash; are held back for a later scope. Scopes 1&ndash;3 carry <em>only</em> the price filter, with one exception: the <b>variant already selected on the anchor PDP itself</b> is in from Scope 2, since it sits on the anchor rather than in session memory. Read Parts I&ndash;III with that in mind &mdash; the anchored search here is visual-plus-price, not visual-plus-everything-they-said.
+</div>
+
+<div class="callout">
+  <b>What moves, relative to Parts I&ndash;III.</b> The pipeline earlier in this note assumes Vaani reads a feed and forms its own verdict. Under this scoping <b>the choosing moves into deterministic backend logic</b>, and the model's job shrinks to explaining that choice (Scope 2) or grouping the candidate pool against a taxonomy we set (Scope 3). Two capabilities in Part III are struck rather than deferred: <b>feed navigation control</b> is out entirely &mdash; the buyer opens products themselves &mdash; and <b>comparison data</b> is not a new fetch, it is the P1/P2 enrichment that already exists. And by Scope 3 the CLP, not the image-search feed, is the surface: <b>image search becomes a source feeding it</b>, alongside reco.
+</div>
+
+<section class="blk">
+  <p class="blk-num">08</p>
   <h3>How we would know it worked</h3>
   <p class="lede">Judged on effort and same-type conversion &mdash; never on within-Vaani order rate, which is selection rather than lift.</p>
   <ul class="tight">
@@ -778,7 +832,7 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
 </section>
 
 <section class="blk">
-  <p class="blk-num">07</p>
+  <p class="blk-num">09</p>
   <h3>Open questions</h3>
   <ul class="tight">
     <li><b>When is a price turn a negotiation and nothing else?</b> Some buyers want a coupon, not an alternative. Does the alternative land as the first answer, or after a short acknowledgement?</li>
