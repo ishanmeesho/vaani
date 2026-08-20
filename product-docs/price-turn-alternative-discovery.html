@@ -94,7 +94,8 @@
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
-    <h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
+    <h1>Alternate Product Discovery</h1>
+<h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
 <p><em>When a buyer questions or negotiates the price of the product they are on, Vaani runs an anchored image search with a price filter, the backend reranks the candidate pool on P0 signals, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked results.</em></p>
 <table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
@@ -311,7 +312,7 @@
 <li><p>Image-search invocation with the anchor's full catalog image, the adjacent price filter, and an availability constraint. See 3.3.</p></li>
 <li><p>Candidate pool of the top 50 <em>after</em> the price filter, with the 4-candidate rerank floor. See 3.4.</p></li>
 <li><p>Deterministic P0 rerank applied before the feed renders, with config-driven weights. See 3.5.</p></li>
-<li><p>Mall/Gold priority lift in the rerank plus a client badge on Mall/Gold cards. See 3.6.</p></li>
+<li><p>Mall priority lift in the rerank plus a client badge on Mall/Gold cards. See 3.6.</p></li>
 <li><p>Instrumentation across trigger, pool, rerank and feed render. See 7.</p></li>
 </ul>
 
@@ -382,7 +383,7 @@
 <li><p><strong>Nothing else.</strong> No attribute filters in Scopes 1–3 (see 2.2).</p></li>
 <li><p><strong>Visibility:</strong> the applied price filter renders as a normal, user-editable filter chip. If the buyer edits it, the feed re-runs as an ordinary search and the rerank re-applies to the new pool.</p></li>
 </ul>
-<p><em>Boundary case to close in build: an anchor priced exactly at a bucket edge, and an anchor above the top bucket. See 8.</em></p>
+<p><em>Boundary case to close in build: an anchor priced exactly at a bucket edge, and an anchor above the top bucket &mdash; to close in build.</em></p>
 
 <h3>3.4 Candidate Pool &amp; Rerank Eligibility</h3>
 <ul>
@@ -416,7 +417,7 @@
 </ul>
 
 <h4>3.5.3 Default configuration — v1 starting point</h4>
-<p>These are the values to ship with, and every one of them is config rather than code. They are a considered starting point, not a tuned answer; expect the first weight set to be wrong and plan to move it (see 8, Q3).</p>
+<p>These are the values to ship with, and every one of them is config rather than code. They are a considered starting point, not a tuned answer; expect the first weight set to be wrong and plan to move it.</p>
 <table>
 <thead><tr><th>Constant</th><th>Default</th><th>Note</th></tr></thead>
 <tbody>
@@ -467,6 +468,8 @@ where
   norm(x)            = (x - pool_min) / (pool_max - pool_min)   # 0..1 within the surviving pool
   tie-break          = stable, by pid</code></pre>
 <ul>
+<li><p><strong>All weights and <code>C</code> are config, not code.</strong> They must be tunable without a release, because the first weight set will be wrong.</p></li>
+<li><p><strong>Suggested starting intent</strong> (not final): value dominates, evidence gates it, price breaks near-ties. Ship with rating and volume carrying most of the weight, price as a modest term, seller rating as a smaller one.</p></li>
 <li><p><strong>P1 and P2 are not available here.</strong> Review-image presence, return rate, seller tenure and delivery promise cannot enter the rerank. This is a known limitation, and it is why the verdict is allowed to disagree with the rank order (3.7).</p></li>
 </ul>
 <h3>3.6 Mall / Gold Handling</h3>
@@ -480,11 +483,11 @@ where
 <p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the feed.</p>
 <ul>
 <li><p><strong>Input window: the top 6–7 reranked products.</strong> There is no fixed <code>k</code> for output — the model receives the window and decides which of them are worth mentioning. The bar for "worth mentioning" is set by prompt, not by code.</p></li>
-<li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build.</p></li>
+<li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build. <strong>[info enrichment v0 processors which we have built]</strong></p></li>
 <li><p><strong>The anchor is in the payload</strong>, with the same fields plus the buyer's selected variant. Without it the model cannot say "₹40 cheaper" or "four times the ratings", and the verdict degrades into a description.</p></li>
 <li><p><strong>The verdict may disagree with the rank order.</strong> The rerank sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
 <li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — in a visual-similarity feed the candidates share their visible attributes, so "the red cotton one" identifies nothing. Never by pid.</p></li>
-<li><p><strong>Position means rank in the rendered feed</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the feed is a guardrail failure (3.9).</p></li>
+<li><p><strong>Position means rank in the rendered feed</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the feed is a guardrail failure.</p></li>
 <li><p><strong>Silence is a valid output.</strong> If nothing in the window is a meaningfully better buy than the anchor, Vaani says so plainly — "yeh theek hai, isse behtar kuch khaas nahi mila" — rather than inventing a reason to move the buyer. That case is US-507, and it is trust-building rather than a failure.</p></li>
 </ul>
 
@@ -558,7 +561,7 @@ no restating the question.
 OUTPUT
 Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying.</code></pre>
 
-<h3>3.9 Verdict Validators</h3>
+<h3>3.9 Verdict Validators <em>[optional / we can debate this]</em></h3>
 <p>Run before the verdict is spoken. Both are cheap, deterministic, and protect the two guardrails in 3.3 of Section I.</p>
 <table>
 <thead><tr><th>Validator</th><th>Check</th><th>On failure</th></tr></thead>
@@ -709,7 +712,7 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 </tbody>
 </table>
-<p><strong>Known limitation worth stating plainly.</strong> Review-image presence is the most lopsided signal in the buyer data — the product a session buys almost always has review images, while price and rating split near-evenly around the purchase. It sits in P1, so the Scope 1 rerank cannot see the strongest predictor we have. Scope 2 is where that signal finally enters, which is part of why the verdict is allowed to disagree with the rank (3.7). If the P1 flag can be promoted to P0 cheaply, it is the single highest-value change to this KRD.</p>
+
 
 <h3>4.2 System Dependencies</h3>
 <table>
@@ -723,7 +726,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">Price-bucket resolution</td>
 <td style="text-align: center;">Scope 1</td>
-<td style="text-align: center;">Given an anchor price, return the containing bucket. Edge behaviour to be closed (see 8).</td>
+<td style="text-align: center;">Given an anchor price, return the containing bucket. Edge behaviour to be closed in build.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Pre-feed rerank hook</td>
@@ -855,52 +858,6 @@ the single field value that justifies inclusion }.</code></pre>
 </tbody>
 </table>
 
-<h2>8. Open Questions (to close before build)</h2>
-<table>
-<thead><tr><th>#</th><th>Question</th><th>Owner</th></tr></thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">Price-band edges: what happens when the anchor sits exactly on a bucket boundary, and when it is above the top bucket? Proposal — on-boundary takes the bucket containing it; above the ladder falls back to a ±% band around the anchor price.</td>
-<td style="text-align: center;">Product + Backend</td>
-</tr>
-<tr>
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">Can the P1 review-image flag be promoted to P0? It is the strongest predictor we have and the rerank currently cannot see it (4.1).</td>
-<td style="text-align: center;">Backend + DS</td>
-</tr>
-<tr>
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">Starting weight set and <code>C</code> (the rating-count confidence floor) for the rerank. Needs an offline replay against historical price turns before a first release, not a guess.</td>
-<td style="text-align: center;">DS</td>
-</tr>
-<tr>
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">Is <code>w_mall</code> a weighted lift or a hard top-slot reservation? This KRD assumes a bounded lift (3.6).</td>
-<td style="text-align: center;">Product</td>
-</tr>
-<tr>
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">On a repeat price turn on the same anchor, should the verdict change its answer or restate it? Restating risks sounding stuck; changing risks looking arbitrary.</td>
-<td style="text-align: center;">Product</td>
-</tr>
-<tr>
-<td style="text-align: center;">6</td>
-<td style="text-align: center;">Verdict suppression is silent in v1. Should a suppressed verdict fall back to a safe templated line, or say nothing at all?</td>
-<td style="text-align: center;">Product</td>
-</tr>
-<tr>
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">Does the rerank need an anchor-relative term at all, or is intrinsic P0 scoring sufficient? Current decision is intrinsic (3.5) — worth revisiting after T1b reads.</td>
-<td style="text-align: center;">Product + DS</td>
-</tr>
-<tr>
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">Combo catalogs: a 2-piece pack can beat every single listing on effective per-unit price. Out of v1 — which scope picks it up, and does combo structure become P0?</td>
-<td style="text-align: center;">Product</td>
-</tr>
-</tbody>
-</table>
 <h1>Section III: Testing &amp; Launch Checklist</h1>
 
 <h2>1. Functional Testing</h2>
@@ -1037,21 +994,10 @@ the single field value that justifies inclusion }.</code></pre>
 <li><p>Rerank weights and <code>C</code> replayed offline against historical price turns; the ordering change is inspected by hand on a sample before any live traffic.</p></li>
 <li><p>Rerank weights, prompt versions and the pool/floor constants are all live-tunable config. No hard-coded values.</p></li>
 <li><p>Added-latency guardrail measured on a canary before ramp — feed render for Scope 1, first spoken word for Scope 2.</p></li>
-<li><p>T1b (search without rerank) is live alongside T1, or the result is unattributable.</p></li>
-<li><p>Both verdict validators enabled from the first live verdict, not added after.</p></li>
 <li><p>A human-audited sample of spoken verdicts reviewed for unsupported claims before ramp past the canary.</p></li>
 <li><p>Availability gate verified end-to-end: no out-of-stock product can be ranked or spoken.</p></li>
 <li><p>Every event in section 7 firing and joinable on <code>turn_id</code>.</p></li>
 <li><p>Kill switch per scope, so the verdict can be disabled without disabling the rerank.</p></li>
-</ul>
-
-<h2>3. Post-Launch Governance</h2>
-<ul>
-<li><p><strong>Weekly:</strong> verdict-spoken rate, unsupported-claim and positional-mismatch counts, thin-pool rate, added latency. Any non-zero guardrail is triaged before further ramp.</p></li>
-<li><p><strong>Weekly sample audit:</strong> a fixed number of spoken verdicts read against their payloads. This is the only way to catch a verdict that is grounded but misleading — technically supported, practically wrong.</p></li>
-<li><p><strong>Fortnightly:</strong> rank-delta distribution, to confirm the rerank is still moving products rather than reproducing default order.</p></li>
-<li><p><strong>Per weight change:</strong> offline replay before ship, and the config version stamped into <code>alt_discovery_rerank</code> so any historical ranking can be reconstructed.</p></li>
-<li><p><strong>Watch item:</strong> anchor abandonment without purchase. If it rises, we are talking buyers out of purchases they were happy with.</p></li>
 </ul>
 
 <h1>Section IV: Mentor Sign Off</h1>
