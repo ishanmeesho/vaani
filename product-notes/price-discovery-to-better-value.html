@@ -597,7 +597,7 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
     <span class="rid">R6</span>
     <h4>Carry every filter, however it arrived</h4>
     <p>Spoken, typed, tapped &mdash; all three are constraints. Non-visual attributes especially (colour, fabric, size, age, capacity) must go on as hard filters, because image similarity cannot enforce them.</p>
-    <p class="breaks"><b>Breaks as:</b> the &lt;15% carry-over failure we already measure &mdash; asking the buyer to repeat themselves.</p>
+    <p class="breaks"><b>Breaks as:</b> the &lt;15% carry-over failure we already measure &mdash; asking the buyer to repeat themselves. <b>Deferred past Scope 3</b> (Part V) &mdash; scoping keeps only the price filter for now.</p>
   </div>
   <div class="rule">
     <span class="rid">R7</span>
@@ -713,49 +713,55 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
   <p>Health and appliances are the clear cases: the cost of a bad unit is far higher than the price gap, so a Mall product a little above the anchor's band can be the genuinely better-value pick. Vaani should be able to break its own adjacent-band rule <em>upward</em> in these categories, and must say why when it does &mdash; the recommendation only works if the trust reason is stated. This needs category-level eligibility and Mall badges in the feed read-back, and should be gated to categories where we can defend the trade-off.</p>
 </section>
 
-<!-- ============ PART V: SHAPE OF THE BUILD ============ -->
+<!-- ============ PART V: SCOPES ============ -->
 <div class="part">
   <p class="part-kicker">Part V</p>
-  <h2>A shape for building it</h2>
-  <p class="part-dek">Each phase is shippable and readable on its own. The first one is deliberately small &mdash; it tests the riskiest assumption, which is whether a composed visual search returns a feed worth having an opinion about.</p>
+  <h2>Three scopes, from least effort up</h2>
+  <p class="part-dek">From the tech discussion. Parts I&ndash;III describe the full-fat turn; these are the three ways it can actually land, smallest first. Each is shippable on its own, and each one keeps the same trigger &mdash; a price ask or a negotiation on the PDP &mdash; and the same first move: an image search with a price filter applied.</p>
 </div>
 
 <div class="phases">
   <div class="phase">
-    <span class="tag">PHASE 1</span>
-    <h4>Carry the constraint</h4>
-    <p>On a price turn, run the anchored visual search with carry-over filters and the adjacent price band. No verdict, no comparison &mdash; just a better feed.</p>
+    <span class="tag">SCOPE 1</span>
+    <h4>Rerank the feed. No LLM.</h4>
+    <p>The price turn fires the image search with its price filter. Before the feed is generated, the backend pulls the <b>top 50 candidates</b> and reorders them with hand-written logic, so the genuinely good products land at the top of what the buyer sees.</p>
     <ul>
-      <li>Anchor snapshot</li>
-      <li>Session filter memory</li>
-      <li>Visual search invocation</li>
-      <li>Filter surface sync</li>
+      <li>Custom rules, not a model &mdash; cheaper <em>and</em> better rated, and similar combinations over the signals available at scoring time</li>
+      <li>Reuses the existing image-search feed &mdash; no new surface</li>
+      <li>No verdict, no narration, no comparison</li>
     </ul>
-    <p class="why">Tests the retrieval assumption, and closes the carry-over gap on its own.</p>
+    <p class="why">Cheapest path: backend-only, no Android or design work. Reranking also removes the need to walk the buyer anywhere &mdash; if the right product is at rank 1, nothing has to scroll to rank 7.</p>
   </div>
   <div class="phase">
-    <span class="tag">PHASE 2</span>
-    <h4>Have an opinion</h4>
-    <p>Read top-<code>k</code>, score against the anchor, state one best alternative with a reason, and be able to scroll or deep-link the buyer to it.</p>
+    <span class="tag">SCOPE 2</span>
+    <h4>Narrate the top of it.</h4>
+    <p>Same reranked feed. The top <code>k</code> products it produced are passed to an LLM with their product IDs, and Vaani reads out what they are &mdash; the first is this, the second is that, the third is that &mdash; so the buyer can choose.</p>
     <ul>
-      <li>Feed read-back (<code>k</code>, then <code>m</code>)</li>
-      <li>Scoring + varied slate</li>
-      <li>Feed navigation control</li>
-      <li>Combo per-unit normalisation</li>
+      <li>The LLM <b>explains</b> the order the custom logic produced; it does not pick or re-order</li>
+      <li>It speaks only when there is something meaningful to say</li>
+      <li>The buyer selects from the list themselves and buys</li>
     </ul>
-    <p class="why">This is where the turn stops being a search and starts being an answer.</p>
+    <p class="why">Adds the answer without handing ranking to a model. The verdict becomes a readout over a deterministic ranking, which is far easier to trust and to debug.</p>
   </div>
   <div class="phase">
-    <span class="tag">PHASE 3</span>
-    <h4>Defend the pick</h4>
-    <p>The &ldquo;which one should I buy?&rdquo; turn: compare candidates and anchor on product, seller and platform performance, and hold a curated feed of the slate.</p>
+    <span class="tag">SCOPE 3</span>
+    <h4>A grouped custom CLP.</h4>
+    <p>Instead of rules picking an order, the <b>top 50 go to an LLM</b>, which groups them by what a shopper might want, and the groups are rendered on a custom surface layered above the image-search result &mdash; not the image-search feed itself.</p>
     <ul>
-      <li>Comparison data fetch</li>
-      <li>Dynamic CLP / curated feed</li>
-      <li>Mall cross-sell in eligible categories</li>
+      <li>Groups like: arrives faster &middot; better quality &middot; low return risk &middot; experienced seller &middot; absolutely cheapest &middot; has real review images</li>
+      <li>Can pin the <b>anchor product</b> in view, so the comparison the buyer is actually making is on screen</li>
+      <li>Works on the image-search path <em>and</em> on the existing reco feed</li>
     </ul>
-    <p class="why">Revives a demand that went extinct because we never offered it.</p>
+    <p class="why">The most useful and the most expensive &mdash; this is the one that needs Android and design work, so it only makes sense once the cheaper scopes have proved the demand.</p>
   </div>
+</div>
+
+<div class="callout warn">
+  <b>Deliberately out of scope for all three.</b> <b>Carry-over filters</b> &mdash; replaying the colour, fabric or size the buyer established earlier in the session (R6, and the &lt;15% gap in Part 0) &mdash; are held back for a later scope, because they widen the build too far. Scopes 1&ndash;3 carry <em>only</em> the price filter forward. That is a real capability gap to keep in mind when reading Parts I&ndash;III: the anchored search here is visual-plus-price, not visual-plus-everything-they-said.
+</div>
+
+<div class="callout">
+  <b>What moves, relative to Parts I&ndash;III.</b> The pipeline earlier in this note assumes Vaani reads a feed and forms its own verdict. Under this scoping, <b>the choosing moves into deterministic backend logic</b> and the model's job shrinks to explaining that choice (Scope 2) or organising the candidate pool into intent groups (Scope 3). The candidate pool is fixed at <b>50</b>; <code>k</code> is only how many of the reranked results we talk about. And most of the &ldquo;walk the buyer there&rdquo; machinery is designed away rather than built &mdash; reranking puts the answer where the buyer already is.
 </div>
 
 <section class="blk">
