@@ -292,9 +292,11 @@ footer.meta p{max-width:none; color:var(--ink-3); font-size:13px}
 .pd-sidebar a.active { background: var(--c-accent-soft); color: var(--c-accent-ink); font-weight: 600; border-left-color: var(--c-accent); }
 .pd-content { flex: 1 1 auto; min-width: 0; padding: 32px 0 0; }
 @media (max-width: 860px) {
-  .pd-shell { flex-direction: column; }
+  /* align-items:flex-start makes children shrink-wrap their content once the axis
+     flips to column, so the page scrolled sideways. Stretch instead. */
+  .pd-shell { flex-direction: column; align-items: stretch; }
   .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--hairline); }
-  .pd-content { padding: 20px 0 0; }
+  .pd-content { padding: 20px 0 0; max-width: 100%; min-width: 0; }
 }
 </style>
 </head>

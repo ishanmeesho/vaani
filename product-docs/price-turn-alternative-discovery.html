@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRD — Vaani Alternative Discovery on Price Turns — Vaani Product Docs</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+
+  :root {
+    --bg: #f6f7f9; --surface: #ffffff; --border: #e5e7eb;
+    --text: #111827; --text-dim: #6b7280; --accent: #4f46e5; --accent-soft: #eef2ff;
+    --code-bg: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .pd-topbar {
+    position: sticky; top: 0; z-index: 50; height: 44px; display: flex; align-items: center;
+    gap: 10px; padding: 0 20px; background: #111827; color: #fff; font-size: 13px; font-weight: 600;
+  }
+  .pd-topbar a { color: #fff; text-decoration: none; opacity: 0.92; }
+  .pd-topbar a:hover { opacity: 1; text-decoration: underline; }
+  .pd-topbar-sep { opacity: 0.4; }
+  .pd-shell { display: flex; max-width: 1180px; margin: 0 auto; align-items: flex-start; }
+  .pd-sidebar {
+    flex: 0 0 260px; position: sticky; top: 44px; max-height: calc(100vh - 44px);
+    overflow-y: auto; padding: 24px 16px 40px 20px; border-right: 1px solid var(--border);
+  }
+  .pd-group { margin-bottom: 22px; }
+  .pd-group-title {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+    color: var(--text-dim); margin: 0 0 8px 0;
+  }
+  .pd-sidebar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .pd-sidebar a {
+    display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); text-decoration: none;
+    font-size: 13px; line-height: 1.4; border-left: 2px solid transparent;
+  }
+  .pd-sidebar a:hover { background: var(--accent-soft); }
+  .pd-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+  .pd-content { flex: 1 1 auto; min-width: 0; padding: 40px 48px 80px; }
+  .pd-doc { max-width: 760px; }
+  .pd-doc h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .pd-doc h1:not(:first-child) { margin-top: 40px; }
+  .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
+  .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
+  .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
+  .pd-doc li { margin-bottom: 4px; }
+  .pd-doc li p { margin: 0 0 4px; }
+  .pd-doc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .pd-doc a:hover { border-bottom-color: var(--accent); }
+  .pd-doc em { color: var(--text-dim); }
+  .pd-doc strong { font-weight: 700; }
+  .pd-doc table {
+    width: 100%; border-collapse: collapse; margin: 6px 0 22px; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .pd-doc th, .pd-doc td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; vertical-align: top; }
+  .pd-doc thead th { background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .pd-doc tbody tr:nth-child(even) { background: #fafafb; }
+  .pd-doc pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; margin: 0 0 18px;
+  }
+  .pd-doc code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .pd-doc p code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+  @media (max-width: 860px) {
+    /* align-items:flex-start on .pd-shell makes children shrink-wrap their content
+       once the axis flips to column, so .pd-doc's 760px max-width became the page
+       width and the whole page scrolled sideways. Stretch instead, and let wide
+       content (tables, pre blocks) scroll inside its own box. */
+    .pd-shell { flex-direction: column; align-items: stretch; }
+    .pd-sidebar { position: static; max-height: none; width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+    .pd-content { padding: 28px 20px 60px; max-width: 100%; min-width: 0; }
+    .pd-doc { max-width: 100%; min-width: 0; }
+    .pd-doc table { display: block; overflow-x: auto; }
+  }
+
+</style>
+</head>
+<body>
+<div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
+<div class="pd-shell">
+  <nav class="pd-sidebar">
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html" class="active">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+  </nav>
+  <main class="pd-content">
+    <article class="pd-doc">
+    <h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
+<p><em>When a buyer questions or negotiates the price of the product they are on, Vaani runs an anchored image search with a price filter, the backend reranks the candidate pool on P0 signals, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked results.</em></p>
+<table>
+<thead><tr><th>Field</th><th>Value</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Current Version</td>
+<td style="text-align: center;">v1</td>
+</tr>
+<tr>
+<td style="text-align: center;">Current Status</td>
+<td style="text-align: center;">Draft for engineering handoff</td>
+</tr>
+<tr>
+<td style="text-align: center;">Last Updated</td>
+<td style="text-align: center;">20 August 2026</td>
+</tr>
+<tr>
+<td style="text-align: center;">POD</td>
+<td style="text-align: center;">Vaani for 1+</td>
+</tr>
+<tr>
+<td style="text-align: center;">Contributors</td>
+<td style="text-align: center;">PM: Ishan | Engineering: TBD</td>
+</tr>
+<tr>
+<td style="text-align: center;">Builds on</td>
+<td style="text-align: center;">Product note — <a href="../product-notes/price-discovery-to-better-value.html">Price Discovery → Better Value</a>; combined view — <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">How Vaani Can Help in Exploit Journeys</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Depends on</td>
+<td style="text-align: center;">KRD — Vaani V0 Data Enrichment (P0 + P1) — supplies the P1/P2 fields the verdict reads</td>
+</tr>
+<tr>
+<td style="text-align: center;">Ships in</td>
+<td style="text-align: center;">Three scopes. Scope 1 is backend-only. Scope 2 adds the LLM verdict. Scope 3 adds the SDUI CLP and needs Android + design.</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Section I: Executive Summary</h1>
+
+<h2>1. Problem Statement</h2>
+<p>Price is the dominant ask on PDP Vaani turns — roughly 70% of DECIDE turns at every hunt depth — and <strong>44.6%</strong> of those price turns are outright negotiation. Today that ask gets a price answer or, worse, a re-search of the same sub-category. Measured across 879,571 Vaani PDP turns, a same-sscat re-search after a DECIDE turn converts <em>worse than doing nothing at all</em>, and fewer than 15% of Vaani re-searches preserve the constraint the buyer just stated.</p>
+<p>The behaviour underneath the ask is well established. Buyers anchor on one product and then grind through <strong>7.1</strong> more clicks of the same product type before ordering. They are not chasing the price floor — the alternative they click before buying is priced above the eventual purchase about as often as below — but any gap between where they land and what they buy multiplies the work: landing at 2× the price finally paid costs <strong>+56%</strong> more browsing.</p>
+<p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, run an anchored image search with a price filter, rerank the candidate pool so genuinely good products land at the top, and — from Scope 2 — say out loud which one is the better buy and why.</p>
+
+<h2>2. Product Thinking</h2>
+<p>Four claims this KRD wants to support or reject:</p>
+<ul>
+<li>
+<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a reranked alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount.</p>
+</li>
+<li>
+<p><strong>Deterministic reranking on P0 alone is enough to beat default order.</strong> Six fields — price, rating, rating count, seller rating, availability, Mall/Gold — should be sufficient to move a better product into the first screen. This is testable without any LLM in the path.</p>
+</li>
+<li>
+<p><strong>A spoken verdict converts better than a silent reorder.</strong> Scope 1 changes what the buyer sees; Scope 2 changes what they understand. The delta between them is the value of the verdict, and is measurable as an isolated increment.</p>
+</li>
+<li>
+<p><strong>Buyers can act on a voice reference without a deep-link.</strong> With no scroll-to and no deep-link, the buyer must locate the product Vaani described. If product-open rate from the top three is weak, the navigation capability we deliberately cut has to come back.</p>
+</li>
+</ul>
+
+<h2>3. NSM — Success &amp; Check Metrics</h2>
+
+<h3>3.1 Primary Success Metric</h3>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Same-sscat alternate purchase rate</td>
+<td style="text-align: center;">Share of price turns whose session goes on to a cart-add or order within the anchor's sscat. Measured against the current price-turn behaviour as control.</td>
+</tr>
+</tbody>
+</table>
+<p><em>Explicitly not the primary metric: within-Vaani order rate. That is selection, not lift — buyers who reach Vaani late in the hunt already convert better. Judge this feature on effort and same-type conversion.</em></p>
+
+<h3>3.2 Secondary Metrics</h3>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Clicks to decision after the turn</td>
+<td style="text-align: center;">Same-sscat product clicks between the price turn and the order. Baseline is 7.1 post-anchor clicks; a working alternative engine cuts it.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Rerank coverage</td>
+<td style="text-align: center;">% of price turns where the pool cleared the 4-candidate floor and a rerank actually ran. Bounds how much of the population the feature can affect at all.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Top-3 product open rate</td>
+<td style="text-align: center;">Share of reranked feeds where the buyer opens one of the first three products. The direct read on whether reranking put the answer where the thumb is.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Verdict spoken rate</td>
+<td style="text-align: center;">Scope 2. % of reranked feeds where the model judged something worth saying and spoke. Both extremes are bad — near 100% means the meaningfulness bar is not working, near 0% means it is too strict.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Post-verdict open rate</td>
+<td style="text-align: center;">Scope 2. Share of spoken verdicts followed by the buyer opening a product Vaani named. Tests the no-deep-link decision directly.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Text-search fallback rate</td>
+<td style="text-align: center;">% of price turns where the buyer abandons Vaani for raw catalog search within the same session. Down is good.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Group engagement</td>
+<td style="text-align: center;">Scope 3. Opens per CLP group, so we learn which of the six intents buyers actually shop by.</td>
+</tr>
+</tbody>
+</table>
+
+<h3>3.3 Guardrail Metrics</h3>
+<table>
+<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Unsupported-claim rate</td>
+<td style="text-align: center;">Scope 2. % of spoken verdicts containing a factual claim not derivable from a field supplied in the prompt payload. <strong>Target 0.</strong> Sampled and human-audited.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Positional-mismatch rate</td>
+<td style="text-align: center;">Scope 2. % of verdicts where a stated position ("the second one") does not match the product's actual rank in the rendered feed. <strong>Target 0.</strong></td>
+</tr>
+<tr>
+<td style="text-align: center;">Unavailable recommendation rate</td>
+<td style="text-align: center;">% of ranked or spoken products that were out of stock or non-servicable at render. <strong>Target 0</strong> — availability is a gate before scoring, not a post-hoc apology.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Thin-pool rate</td>
+<td style="text-align: center;">% of price turns where fewer than 4 candidates survived the price filter, so no rerank ran. Diagnoses whether the price filter is too tight.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Added latency</td>
+<td style="text-align: center;">P95 added to feed render (Scope 1) and to first spoken word (Scope 2), versus a normal image search.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Anchor abandonment without purchase</td>
+<td style="text-align: center;">Share of price turns where the buyer leaves the anchor and buys nothing in the session. Catches the case where we talk buyers out of a fine purchase.</td>
+</tr>
+</tbody>
+</table>
+<h1>Section II: Product Requirement Document</h1>
+
+<h2>1. User Stories &amp; Capabilities</h2>
+<table>
+<thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Scope</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">US-501</td>
+<td style="text-align: center;">Buyer questioning price</td>
+<td style="text-align: center;">shopper on a PDP who thinks the price is too high</td>
+<td style="text-align: center;">see visually similar products in the same price range with the good ones first</td>
+<td style="text-align: center;">judge whether this price is fair without opening ten PDPs</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-502</td>
+<td style="text-align: center;">Buyer negotiating</td>
+<td style="text-align: center;">shopper asking Vaani to make it cheaper</td>
+<td style="text-align: center;">be shown a genuinely better-value option instead of a refusal</td>
+<td style="text-align: center;">get to a purchase I feel good about</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-503</td>
+<td style="text-align: center;">Buyer who wants a recommendation</td>
+<td style="text-align: center;">shopper looking at a feed of similar products</td>
+<td style="text-align: center;">hear which one is the better buy, and why, against the product I was already on</td>
+<td style="text-align: center;">decide without comparing seven listings myself</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-504</td>
+<td style="text-align: center;">Buyer with a specific variant</td>
+<td style="text-align: center;">shopper who already picked a size on the PDP</td>
+<td style="text-align: center;">have that size accounted for when Vaani tells me what to buy</td>
+<td style="text-align: center;">not be recommended something I cannot wear</td>
+<td style="text-align: center;">2</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-505</td>
+<td style="text-align: center;">Buyer with a priority</td>
+<td style="text-align: center;">shopper who cares most about delivery speed, or returns, or price</td>
+<td style="text-align: center;">see the options grouped by that priority</td>
+<td style="text-align: center;">shop the axis I actually care about</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-506</td>
+<td style="text-align: center;">Buyer wanting a trusted option</td>
+<td style="text-align: center;">shopper in a category where a bad unit is costly</td>
+<td style="text-align: center;">know when a Mall option exists</td>
+<td style="text-align: center;">trade a little price for confidence</td>
+<td style="text-align: center;">1 (badge) / 2 (spoken)</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-507</td>
+<td style="text-align: center;">Buyer whose product has no close match</td>
+<td style="text-align: center;">shopper on an item with a thin similar-product pool</td>
+<td style="text-align: center;">be told there is nothing better, rather than shown filler</td>
+<td style="text-align: center;">trust Vaani the next time it does have an answer</td>
+<td style="text-align: center;">2</td>
+</tr>
+</tbody>
+</table>
+
+<h2>2. Scope</h2>
+
+<h3>2.1 In Scope — Scope 1 (backend only)</h3>
+<ul>
+<li><p>Price-intent detection on PDP Vaani turns, firing the anchored image search. See 3.1.</p></li>
+<li><p>Anchor resolution, including the reco-feed case where the anchor remains the PDP. See 3.2.</p></li>
+<li><p>Image-search invocation with the anchor's full catalog image, the adjacent price filter, and an availability constraint. See 3.3.</p></li>
+<li><p>Candidate pool of the top 50 <em>after</em> the price filter, with the 4-candidate rerank floor. See 3.4.</p></li>
+<li><p>Deterministic P0 rerank applied before the feed renders, with config-driven weights. See 3.5.</p></li>
+<li><p>Mall/Gold priority lift in the rerank plus a client badge on Mall/Gold cards. See 3.6.</p></li>
+<li><p>Instrumentation across trigger, pool, rerank and feed render. See 7.</p></li>
+</ul>
+
+<h3>2.1b In Scope — Scope 2 (adds the spoken verdict)</h3>
+<ul>
+<li><p>Verdict payload assembly: the anchor (with its selected variant) plus the top 6–7 reranked products, each carrying P0 + P1 + P2 fields and its rank. See 3.7.</p></li>
+<li><p>LLM verdict generation under the v1 prompt, including the silence path and the product-reference rules. See 3.7 and 3.8.</p></li>
+<li><p>Voice delivery of the verdict. No deep-link, no scroll-to, no Vaani-driven navigation.</p></li>
+<li><p>Post-generation validators for unsupported claims and positional mismatch. See 3.9.</p></li>
+</ul>
+
+<h3>2.1c In Scope — Scope 3 (SDUI custom CLP)</h3>
+<ul>
+<li><p>SDUI-driven custom CLP that opens on every price turn, with backend-composed content slots. See 3.10.</p></li>
+<li><p>LLM grouping of the 50-candidate pool against the fixed six-group taxonomy. See 3.10 and 3.11.</p></li>
+<li><p>Anchor product pinned in the CLP for comparison.</p></li>
+<li><p>Reco feed as a second source into the same CLP, including the LLM's decision to use it. See 3.12.</p></li>
+</ul>
+
+<h3>2.2 Out of Scope</h3>
+<ul>
+<li><p><strong>Carry-over filters.</strong> Replaying the colour, fabric, size or other attributes the buyer established earlier in the session is deferred past Scope 3. Scopes 1–3 carry only the price filter. The single exception is the variant already selected on the anchor PDP itself, which enters at Scope 2 (US-504) because it sits on the anchor rather than in session memory.</p></li>
+<li><p><strong>Vaani-driven navigation.</strong> Scroll-to-position, deep-linking to a PDP, and opening a curated pid list are all cut, not deferred. Reranking is the substitute: put the answer at the top instead of walking the buyer to it. Revisit only if post-verdict open rate is weak (see 3.2 of Section I).</p></li>
+<li><p><strong>Price negotiation of any kind.</strong> Vaani never changes a price, promises a discount, or implies one is available.</p></li>
+<li><p><strong>LLM involvement in ranking.</strong> In Scopes 1 and 2 the order is deterministic. The model explains it; it never produces it. Scope 3's grouping is an organisation of the pool, not a re-ranking of the feed.</p></li>
+<li><p><strong>Combo per-unit value maths.</strong> Comparing a 2-piece pack's effective per-unit price against single listings is out of v1; combo structure is not in P0–P2.</p></li>
+<li><p><strong>Cross-session memory</strong> of any kind. Everything here is within the current session.</p></li>
+<li><p><strong>Non-PDP entry points.</strong> Home, CLP and search-result screens do not fire this flow in v1. Reco entry arrives only at Scope 3.</p></li>
+</ul>
+
+<h2>3. Product Decision Framework</h2>
+
+<h3>3.1 Trigger Definition</h3>
+<ul>
+<li><p><strong>Surface:</strong> PDP only, in v1.</p></li>
+<li><p><strong>Intent classes that fire:</strong> asking the price; asking whether the price is good/fair; negotiating ("make it cheaper", "isse sasta kuch hai"). All three are price intents on the product in hand.</p></li>
+<li><p><strong>Intent classes that do not fire:</strong> questions about the product itself (fit, material, how-to-use), delivery queries, order-status queries — even when a price is mentioned in passing.</p></li>
+<li><p><strong>Turn classification</strong> reuses the existing turn classifier. This KRD does not introduce a new classifier; it consumes the price sub-type already produced.</p></li>
+<li><p><strong>Repeat asks:</strong> a second price turn on the same anchor within the same session re-uses the existing pool if the filter and availability are unchanged, rather than re-running the search.</p></li>
+</ul>
+
+<h3>3.2 Anchor Resolution</h3>
+<p>The anchor is frozen at trigger and held for the whole exchange. Everything the verdict says is relative to it.</p>
+<table>
+<thead><tr><th>Situation</th><th>Anchor</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Buyer is on a PDP</td>
+<td style="text-align: center;">That PDP.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Buyer has scrolled into the PDP's recommendation feed and asks about price</td>
+<td style="text-align: center;"><strong>Still the PDP</strong> — never a card in the reco rail, and never whichever product is on screen.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Buyer opens a new PDP and asks again</td>
+<td style="text-align: center;">The new PDP. A genuine PDP landing starts a new hunt; scrolling does not.</td>
+</tr>
+</tbody>
+</table>
+<p>The anchor record carries: pid, catalog id, sscat, <strong>full catalog image reference</strong>, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. The image reference must be the catalog asset — <strong>a screen capture is not acceptable input</strong>; PDP chrome, overlays and crops measurably degrade match quality.</p>
+
+<h3>3.3 Query Construction</h3>
+<ul>
+<li><p><strong>Image:</strong> the anchor's full catalog image, passed by reference.</p></li>
+<li><p><strong>Price filter:</strong> the bucket that just contains the anchor's price. A ₹289 anchor takes <em>under ₹299</em>. <strong>Never jump to the cheapest available bucket</strong> — the divergence is larger than the buyer asked for and the resulting pool degrades into low-quality catalogs.</p></li>
+<li><p><strong>Availability:</strong> in-stock and servicable to the buyer's pincode, enforced at retrieval.</p></li>
+<li><p><strong>Nothing else.</strong> No attribute filters in Scopes 1–3 (see 2.2).</p></li>
+<li><p><strong>Visibility:</strong> the applied price filter renders as a normal, user-editable filter chip. If the buyer edits it, the feed re-runs as an ordinary search and the rerank re-applies to the new pool.</p></li>
+</ul>
+<p><em>Boundary case to close in build: an anchor priced exactly at a bucket edge, and an anchor above the top bucket. See 8.</em></p>
+
+<h3>3.4 Candidate Pool &amp; Rerank Eligibility</h3>
+<ul>
+<li><p><strong>Pool size: 50</strong>, taken from the results <em>after</em> the price filter is applied — not 50 raw visual matches subsequently filtered.</p></li>
+<li><p><strong>Rerank floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not rerank</strong>. The feed ships in its default order and the flow ends there for Scope 1.</p></li>
+<li><p>Under the floor in Scope 2, the verdict path is skipped as well — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
+<li><p>Availability is a <strong>gate</strong>, applied before scoring. An unavailable candidate is removed from the pool, not down-weighted, and does not count toward the 4.</p></li>
+</ul>
+
+<h3>3.5 Rerank Logic — P0 Scoring (Scope 1)</h3>
+<p>The rerank is deterministic, backend-side, and runs before the feed is generated. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
+<pre><code>score(c) =  w_rating  · norm(rating_adj(c))
+          + w_volume  · norm(log1p(rating_count(c)))
+          + w_seller  · norm(seller_rating(c))
+          + w_price   · norm(price_advantage(c))
+          + w_mall    · is_mall_or_gold(c)
+
+where
+  rating_adj(c)      = rating(c)               if rating_count(c) >= C
+                     = sscat_median_rating     otherwise      # neutralise thin-evidence ratings
+  price_advantage(c) = (band_ceiling - price(c)) / band_ceiling   # cheaper scores higher, within the band
+  norm(·)            = min-max over the surviving pool
+  tie-break          = stable, by pid, so repeat calls return identical order</code></pre>
+<ul>
+<li><p><strong>All weights and <code>C</code> are config, not code.</strong> They must be tunable without a release, because the first weight set will be wrong.</p></li>
+<li><p><strong>Why the confidence floor matters:</strong> a 5.0 rating on 3 ratings must not outrank a 4.2 on 900. <code>rating_adj</code> plus the volume term is what prevents the single most obvious failure of a naive "cheaper and better rated" rule.</p></li>
+<li><p><strong>Suggested starting intent</strong> (not final): value dominates, evidence gates it, price breaks near-ties. Ship with rating and volume carrying most of the weight, price as a modest term, seller rating as a smaller one.</p></li>
+<li><p><strong>P1 and P2 are not available here.</strong> Review-image presence, return rate, seller tenure and delivery promise cannot enter the rerank. This is a known limitation, and it is why the verdict is allowed to disagree with the rank order (3.7).</p></li>
+</ul>
+
+<h3>3.6 Mall / Gold Handling</h3>
+<ul>
+<li><p><strong>Rerank:</strong> Mall/Gold membership is a bounded priority lift (<code>w_mall</code>), so trusted stock rises in the stack without a much better non-Mall product being buried beneath a mediocre Mall one.</p></li>
+<li><p><strong>Feed:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything (works in silent Scope 1).</p></li>
+<li><p><strong>Verdict (Scope 2):</strong> when a Mall/Gold option is in the spoken set, Vaani may mention that the option is also available from Mall / the original brand.</p></li>
+<li><p><strong>Out of scope:</strong> injecting Mall products from <em>outside</em> the price band. The price filter stays hard in v1 — Mall handling is a lift and a highlight within the band, not a band exception.</p></li>
+</ul>
+<h3>3.7 Verdict Generation (Scope 2)</h3>
+<p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the feed.</p>
+<ul>
+<li><p><strong>Input window: the top 6–7 reranked products.</strong> There is no fixed <code>k</code> for output — the model receives the window and decides which of them are worth mentioning. The bar for "worth mentioning" is set by prompt, not by code.</p></li>
+<li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build.</p></li>
+<li><p><strong>The anchor is in the payload</strong>, with the same fields plus the buyer's selected variant. Without it the model cannot say "₹40 cheaper" or "four times the ratings", and the verdict degrades into a description.</p></li>
+<li><p><strong>The verdict may disagree with the rank order.</strong> The rerank sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
+<li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — in a visual-similarity feed the candidates share their visible attributes, so "the red cotton one" identifies nothing. Never by pid.</p></li>
+<li><p><strong>Position means rank in the rendered feed</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the feed is a guardrail failure (3.9).</p></li>
+<li><p><strong>Silence is a valid output.</strong> If nothing in the window is a meaningfully better buy than the anchor, Vaani says so plainly — "yeh theek hai, isse behtar kuch khaas nahi mila" — rather than inventing a reason to move the buyer. That case is US-507, and it is trust-building rather than a failure.</p></li>
+</ul>
+
+<h3>3.8 Verdict Prompt — v1</h3>
+<p>Ships as config, versioned, tunable without a release. Treat the copy below as the v1 baseline to iterate against, not as final wording.</p>
+<pre><code>ROLE
+You are Vaani, a shopping assistant inside the Meesho app. The shopper is looking at
+one product (the ANCHOR) and has just questioned or tried to negotiate its price.
+A ranked list of similar, in-stock products in the same price band is on their screen.
+Your job: tell them, out loud, whether one of these is a better buy than the anchor —
+and if so, which, and why.
+
+INPUT
+  anchor:      { price, rating, rating_count, seller_rating, is_mall_or_gold,
+                 has_review_images, return_rate, seller_tenure, delivery_promise,
+                 selected_variant }
+  candidates:  ordered list, each { rank, price, rating, rating_count, seller_rating,
+                 is_mall_or_gold, has_review_images, return_rate, seller_tenure,
+                 delivery_promise }
+  language:    the language the shopper is speaking
+
+WHAT COUNTS AS WORTH SAYING
+Speak only if at least one candidate is a materially better buy than the anchor.
+Material means a difference a shopper would act on — a clearly lower price for
+comparable or better evidence of quality, or a similar price with clearly stronger
+evidence (many more ratings, review images present, a better-rated seller, a lower
+return rate, a faster delivery promise).
+Do NOT speak just because a candidate is marginally cheaper, or because it is ranked
+first. A trivial price gap with weaker ratings is not worth saying.
+If nothing clears that bar, say so plainly and briefly. Do not invent a reason to move
+the shopper off the anchor. Telling them their current pick is already fine is a good
+outcome.
+
+HOW TO REFER TO A PRODUCT
+Refer to products by their POSITION in the list ("the first one", "the second one") or
+by their PRICE ("the ₹249 one"). Prefer price when it is unambiguous.
+Never refer to a product by its visible attributes — colour, fabric, print, style. Every
+product in this list looks similar, so attributes identify nothing.
+Never say a product ID.
+POSITION ALWAYS MEANS RANK IN THE LIST YOU WERE GIVEN — never the order you mention them
+in. If you discuss them out of order, state the position explicitly.
+
+RANK VS JUDGEMENT
+The list order was produced by rules that could only see price, rating, rating count and
+seller rating. You can also see review images, return rate, seller tenure and delivery
+promise. If a lower-ranked product is genuinely the better buy once those are considered,
+say so — name its position and the reason. You are not obliged to lead with the first one.
+
+GROUNDING
+Every factual claim must come from a field you were given. Never estimate, infer or
+invent a price, rating, count, delivery time, return rate or seller fact. If a field is
+missing, do not mention that dimension at all.
+Do not discuss discounts, coupons, offers or price reductions. You cannot change prices
+and must not imply that you can.
+
+MALL / GOLD
+If a candidate you are recommending is Mall or Gold, you may note that the option is
+also available from Mall / the original brand. Mention it as added confidence, never as
+a reason to spend beyond what the shopper signalled.
+
+VARIANT
+If the shopper has a variant selected on the anchor (e.g. a size), keep it in view — do
+not recommend an option that cannot serve it. If you cannot tell, do not claim it fits.
+
+STYLE
+Speak in the shopper's language, including Hinglish if that is what they used.
+This is voice: two to three short sentences. Mention at most three products.
+Lead with the recommendation, then the single strongest reason. No lists, no preamble,
+no restating the question.
+
+OUTPUT
+Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying.</code></pre>
+
+<h3>3.9 Verdict Validators</h3>
+<p>Run before the verdict is spoken. Both are cheap, deterministic, and protect the two guardrails in 3.3 of Section I.</p>
+<table>
+<thead><tr><th>Validator</th><th>Check</th><th>On failure</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Numeric grounding</td>
+<td style="text-align: center;">Every number in the output (price, rating, rating count, days) matches a value supplied in the payload for the anchor or a candidate.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>verdict_grounding_fail</code> with the offending span. Do not retry silently in v1.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Positional consistency</td>
+<td style="text-align: center;">Any positional phrase resolves to a rank present in the payload, and the product described at that position matches the payload's product at that rank.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>verdict_position_fail</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><em>Suppression is preferable to a wrong verdict: Scope 1's reranked feed is still on the screen and still useful without a voice line.</em></p>
+
+<h3>3.10 SDUI Custom CLP (Scope 3)</h3>
+<ul>
+<li><p><strong>Opens on every price turn</strong> — it is the landing surface for the flow, not an optional detour.</p></li>
+<li><p><strong>SDUI-driven:</strong> the backend composes what goes into it. This is the point of Scope 3 — the durable asset is a surface the backend can place content into, and comparison views and everything after them will live here.</p></li>
+<li><p><strong>Anchor pinned</strong> in the CLP, so the comparison the buyer is actually making is on screen rather than in memory.</p></li>
+<li><p><strong>Source-agnostic:</strong> the image search becomes one <em>source</em> feeding the CLP. The reco feed is a second source (3.12). Neither is the surface.</p></li>
+<li><p><strong>Groups come from a fixed taxonomy we define and instruct.</strong> The model assigns products to our groups; it never invents a group. Fixed groups are what make engagement measurable per intent and the output testable at all.</p></li>
+</ul>
+<table>
+<thead><tr><th>Group</th><th>Qualifying signal</th><th>Tier</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Arrives faster</td>
+<td style="text-align: center;">delivery promise</td>
+<td style="text-align: center;">P2</td>
+</tr>
+<tr>
+<td style="text-align: center;">Better quality</td>
+<td style="text-align: center;">rating, with rating count as evidence</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td style="text-align: center;">Low return risk</td>
+<td style="text-align: center;">return rate</td>
+<td style="text-align: center;">P2</td>
+</tr>
+<tr>
+<td style="text-align: center;">Experienced seller</td>
+<td style="text-align: center;">seller tenure, with seller rating</td>
+<td style="text-align: center;">P2 (+P0)</td>
+</tr>
+<tr>
+<td style="text-align: center;">Absolutely cheapest</td>
+<td style="text-align: center;">price</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td style="text-align: center;">Has real review images</td>
+<td style="text-align: center;">review images present</td>
+<td style="text-align: center;">P1</td>
+</tr>
+</tbody>
+</table>
+<p>The six groups map one-to-one onto P0/P1/P2 — <strong>the taxonomy needs no data we do not already have</strong>. Mall/Gold stays a badge across groups rather than a seventh group, so trust reads as an attribute of an option rather than a competing axis.</p>
+
+<h3>3.11 Grouping Prompt — v1</h3>
+<pre><code>ROLE
+You are organising a pool of similar, in-stock products for a shopper who has just
+questioned the price of the product they were looking at (the ANCHOR). Sort the pool
+into the fixed groups below so the shopper can shop by what they care about.
+
+INPUT
+  anchor:     same fields as candidates
+  candidates: up to 50 products, each { pid, price, rating, rating_count, seller_rating,
+              is_mall_or_gold, has_review_images, return_rate, seller_tenure,
+              delivery_promise }
+  context:    what the shopper has said so far this turn
+
+THE GROUPS — use these and only these
+  arrives_faster       qualify on delivery_promise
+  better_quality       qualify on rating, evidenced by rating_count
+  low_return_risk      qualify on return_rate
+  experienced_seller   qualify on seller_tenure, supported by seller_rating
+  cheapest             qualify on price
+  has_review_images    qualify on has_review_images
+
+RULES
+Never invent, rename or merge a group.
+A product may appear in more than one group where it genuinely qualifies.
+Put a product in a group only if the qualifying field actually supports it — a group is
+a claim, not a bucket to fill. Prefer a smaller, honest group over a padded one.
+Leave a group empty if nothing qualifies. Empty groups are dropped, not filled.
+Cap each group at 6 products, best-qualifying first.
+Order the groups by how relevant they are to what the shopper has said this turn; when
+they have signalled nothing, use the order listed above.
+Flag is_mall_or_gold products so the client can badge them. Do not create a Mall group.
+Never use a field that is absent. Never estimate a value.
+
+OUTPUT
+For each non-empty group: the group key, and its products as { pid, rank_in_group, and
+the single field value that justifies inclusion }.</code></pre>
+
+<h3>3.12 Reco Feed as a Second Source (Scope 3)</h3>
+<p>Image search finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters at Scope 3, through the same CLP.</p>
+<table>
+<thead><tr><th>Entry</th><th>Condition</th><th>Behaviour</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Buyer moves into the reco feed</td>
+<td style="text-align: center;">Buyer scrolls down from the PDP into recommendations</td>
+<td style="text-align: center;">Vaani may ask what they are looking for, and compose the CLP from reco stock against that answer.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Attribute absent on the anchor</td>
+<td style="text-align: center;">Mid-conversation the buyer asks for an attribute the anchor does not have (a different material, a different colour)</td>
+<td style="text-align: center;">Image search cannot serve this — visual similarity returns the attribute the buyer is trying to leave. Source from reco instead.</td>
+</tr>
+<tr>
+<td style="text-align: center;">No meaningful alternative</td>
+<td style="text-align: center;">The image-search pool is thin, or nothing clears the verdict bar</td>
+<td style="text-align: center;">Vaani says so, and may offer reco-sourced suggestions rather than ending empty-handed.</td>
+</tr>
+</tbody>
+</table>
+<p>Which source to use is a <strong>judgement the model makes from the conversation</strong>, not a hard rule — which is exactly why it belongs in Scope 3, behind two scopes of deterministic behaviour, and why source selection must be logged on every turn so the decision can be audited.</p>
+<h2>4. Technical Requirements — Data &amp; System Dependencies</h2>
+
+<h3>4.1 Signal Tiers</h3>
+<p>The tiering is the hard constraint on Scope 1: the rerank rules can only be as good as P0.</p>
+<table>
+<thead><tr><th>Tier</th><th>Signals</th><th>Read by</th><th>Availability</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">P0</td>
+<td style="text-align: center;">price, rating, rating count, seller rating, availability, Mall/Gold flag</td>
+<td style="text-align: center;">Backend rerank <strong>and</strong> LLM verdict</td>
+<td style="text-align: center;">Must be readable for 50 candidates at scoring time, pre-feed. Availability is a gate, not a scoring term.</td>
+</tr>
+<tr>
+<td style="text-align: center;">P1</td>
+<td style="text-align: center;">review images present or not</td>
+<td style="text-align: center;">LLM verdict only</td>
+<td style="text-align: center;">Already added by the data-enrichment work.</td>
+</tr>
+<tr>
+<td style="text-align: center;">P2</td>
+<td style="text-align: center;">return rate, seller tenure, delivery promise</td>
+<td style="text-align: center;">LLM verdict only</td>
+<td style="text-align: center;">Already added by the data-enrichment work.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Known limitation worth stating plainly.</strong> Review-image presence is the most lopsided signal in the buyer data — the product a session buys almost always has review images, while price and rating split near-evenly around the purchase. It sits in P1, so the Scope 1 rerank cannot see the strongest predictor we have. Scope 2 is where that signal finally enters, which is part of why the verdict is allowed to disagree with the rank (3.7). If the P1 flag can be promoted to P0 cheaply, it is the single highest-value change to this KRD.</p>
+
+<h3>4.2 System Dependencies</h3>
+<table>
+<thead><tr><th>Dependency</th><th>Needed by</th><th>Note</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Image search by catalog-image reference</td>
+<td style="text-align: center;">Scope 1</td>
+<td style="text-align: center;">Must accept the anchor's catalog asset. A PDP screenshot is not an acceptable input.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Price-bucket resolution</td>
+<td style="text-align: center;">Scope 1</td>
+<td style="text-align: center;">Given an anchor price, return the containing bucket. Edge behaviour to be closed (see 8).</td>
+</tr>
+<tr>
+<td style="text-align: center;">Pre-feed rerank hook</td>
+<td style="text-align: center;">Scope 1</td>
+<td style="text-align: center;">A point in feed generation where the surviving pool can be reordered before render.</td>
+</tr>
+<tr>
+<td style="text-align: center;">P0 read for 50 candidates</td>
+<td style="text-align: center;">Scope 1</td>
+<td style="text-align: center;">Must fit the added-latency guardrail.</td>
+</tr>
+<tr>
+<td style="text-align: center;">P1/P2 read for ~7 candidates + anchor</td>
+<td style="text-align: center;">Scope 2</td>
+<td style="text-align: center;">Existing enrichment fields.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Mall/Gold badge on feed cards</td>
+<td style="text-align: center;">Scope 1</td>
+<td style="text-align: center;">Client change; the only client work in Scope 1.</td>
+</tr>
+<tr>
+<td style="text-align: center;">SDUI CLP surface</td>
+<td style="text-align: center;">Scope 3</td>
+<td style="text-align: center;">Android + design. Backend-composed slots, anchor pin, grouped shelves.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Reco stock as a CLP source</td>
+<td style="text-align: center;">Scope 3</td>
+<td style="text-align: center;">Same P0–P2 fields required for reco candidates.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>5. Experimentation Strategy</h2>
+
+<h3>5.1 Will this feature be experimented?</h3>
+<p>Yes. Each scope is a separate read, because each changes a different thing: Scope 1 changes what the buyer sees, Scope 2 changes what they understand, Scope 3 changes where they stand.</p>
+
+<h3>5.2 Experiment Type</h3>
+<p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. Scope 2 runs as a second experiment layered on Scope 1's treatment, so the verdict's increment is isolated from the rerank's.</p>
+
+<h3>5.3 Variants</h3>
+<table>
+<thead><tr><th>Variant</th><th>Behaviour</th><th>Reads</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Control</td>
+<td style="text-align: center;">Current price-turn behaviour.</td>
+<td style="text-align: center;">Baseline for same-sscat conversion and clicks-to-decision.</td>
+</tr>
+<tr>
+<td style="text-align: center;">T1 — Scope 1</td>
+<td style="text-align: center;">Anchored image search + price filter + silent P0 rerank.</td>
+<td style="text-align: center;">Does a reordered feed alone move conversion and cut clicks?</td>
+</tr>
+<tr>
+<td style="text-align: center;">T1b — search without rerank</td>
+<td style="text-align: center;">Same search and filter, default order.</td>
+<td style="text-align: center;">Separates the value of <em>searching</em> from the value of <em>reranking</em>. Without this arm a win is unattributable.</td>
+</tr>
+<tr>
+<td style="text-align: center;">T2 — Scope 2</td>
+<td style="text-align: center;">Scope 1 + spoken verdict.</td>
+<td style="text-align: center;">The verdict's isolated increment, and the no-deep-link decision.</td>
+</tr>
+</tbody>
+</table>
+<p><em>T1b matters more than it looks. Scope 1 changes two things at once — the query and the order — and only the second one is what this KRD is really betting on.</em></p>
+
+<h2>6. Tech Solutioning</h2>
+<p><em>[to be added by Engineering]</em></p>
+
+<h2>7. Logging Requirements</h2>
+<p>Emit end-to-end for every price turn that enters this flow. Purpose is to attribute conversion, verify the gates, and audit every model output.</p>
+<table>
+<thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">alt_discovery_trigger</td>
+<td style="text-align: center;">session_id, turn_id, anchor_pid, anchor_sscat, anchor_price, price_intent_subtype, entry_surface (pdp / reco_scroll), ts_ms</td>
+<td style="text-align: center;">Trigger precision, and confirms anchor resolution in the reco-scroll case.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_discovery_query</td>
+<td style="text-align: center;">turn_id, image_ref, price_band, band_source (bucket / edge_case), availability_applied</td>
+<td style="text-align: center;">Verifies the adjacent-band rule and catches boundary handling.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_discovery_pool</td>
+<td style="text-align: center;">turn_id, raw_match_count, post_filter_count, pool_size, dropped_unavailable, below_floor (bool)</td>
+<td style="text-align: center;">Thin-pool guardrail and rerank coverage.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_discovery_rerank</td>
+<td style="text-align: center;">turn_id, weights_version, config_id, ordered_pids, score_components_top10, rank_delta_vs_default</td>
+<td style="text-align: center;">Lets us replay any ranking and measure how much the rerank actually moved.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_discovery_feed_render</td>
+<td style="text-align: center;">turn_id, rendered_pids, mall_badged_pids, latency_ms</td>
+<td style="text-align: center;">What the buyer actually saw, and added latency.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_verdict_request</td>
+<td style="text-align: center;">turn_id, prompt_version, window_size, candidate_pids_with_rank, anchor_payload, selected_variant</td>
+<td style="text-align: center;">Exact model input, for grounding audits.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_verdict_response</td>
+<td style="text-align: center;">turn_id, spoken (bool), no_verdict_reason, referenced_pids, referenced_positions, disagreed_with_rank (bool), latency_ms, text</td>
+<td style="text-align: center;">Verdict-spoken rate, and how often judgement overrode rank.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_verdict_validation</td>
+<td style="text-align: center;">turn_id, grounding_pass, position_pass, failed_span, suppressed (bool)</td>
+<td style="text-align: center;">The two guardrails in 3.3. Both target zero.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_discovery_outcome</td>
+<td style="text-align: center;">turn_id, opened_pid, opened_rank, was_referenced (bool), cart_add_pid, order_pid, same_sscat (bool), post_turn_click_count, text_search_after (bool)</td>
+<td style="text-align: center;">Primary and secondary metrics, including whether the buyer opened what Vaani named.</td>
+</tr>
+<tr>
+<td style="text-align: center;">alt_clp_render</td>
+<td style="text-align: center;">turn_id, source (image_search / reco), groups_with_counts, anchor_pinned, grouping_prompt_version</td>
+<td style="text-align: center;">Scope 3. Group engagement, and audits the model's source choice.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>8. Open Questions (to close before build)</h2>
+<table>
+<thead><tr><th>#</th><th>Question</th><th>Owner</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">Price-band edges: what happens when the anchor sits exactly on a bucket boundary, and when it is above the top bucket? Proposal — on-boundary takes the bucket containing it; above the ladder falls back to a ±% band around the anchor price.</td>
+<td style="text-align: center;">Product + Backend</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">Can the P1 review-image flag be promoted to P0? It is the strongest predictor we have and the rerank currently cannot see it (4.1).</td>
+<td style="text-align: center;">Backend + DS</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">Starting weight set and <code>C</code> (the rating-count confidence floor) for the rerank. Needs an offline replay against historical price turns before a first release, not a guess.</td>
+<td style="text-align: center;">DS</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">Is <code>w_mall</code> a weighted lift or a hard top-slot reservation? This KRD assumes a bounded lift (3.6).</td>
+<td style="text-align: center;">Product</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">On a repeat price turn on the same anchor, should the verdict change its answer or restate it? Restating risks sounding stuck; changing risks looking arbitrary.</td>
+<td style="text-align: center;">Product</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">Verdict suppression is silent in v1. Should a suppressed verdict fall back to a safe templated line, or say nothing at all?</td>
+<td style="text-align: center;">Product</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">Does the rerank need an anchor-relative term at all, or is intrinsic P0 scoring sufficient? Current decision is intrinsic (3.5) — worth revisiting after T1b reads.</td>
+<td style="text-align: center;">Product + DS</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">Combo catalogs: a 2-piece pack can beat every single listing on effective per-unit price. Out of v1 — which scope picks it up, and does combo structure become P0?</td>
+<td style="text-align: center;">Product</td>
+</tr>
+</tbody>
+</table>
+<h1>Section III: Testing &amp; Launch Checklist</h1>
+
+<h2>1. Functional Testing</h2>
+
+<h3>1.1 Test Cases</h3>
+<table>
+<thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;">TC-501</td>
+<td style="text-align: center;">Basic price turn — buyer on a ₹289 PDP asks "isse sasta kuch hai?"</td>
+<td style="text-align: center;">Image search fires with the anchor's catalog image, price filter <em>under ₹299</em>, availability applied. Feed renders reranked.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-502</td>
+<td style="text-align: center;">Band selection — anchor at ₹289 with buckets 199 / 299 / 399 available</td>
+<td style="text-align: center;">Band is <em>under ₹299</em>. Never <em>under ₹199</em>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-503</td>
+<td style="text-align: center;">Anchor in reco feed — buyer scrolls from the PDP into its recommendations, then asks about price</td>
+<td style="text-align: center;">Anchor is the PDP, not the on-screen reco card. <code>entry_surface = reco_scroll</code> logged.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-504</td>
+<td style="text-align: center;">Thin pool — only 3 candidates survive the price filter</td>
+<td style="text-align: center;">No rerank. Feed ships in default order. <code>below_floor = true</code>. Scope 2: no verdict attempted.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-505</td>
+<td style="text-align: center;">Exactly 4 candidates survive</td>
+<td style="text-align: center;">Rerank runs. Boundary is inclusive.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-506</td>
+<td style="text-align: center;">Availability gate — a candidate goes out of stock between retrieval and render</td>
+<td style="text-align: center;">Removed from the pool before scoring, does not count toward the floor of 4, never ranked or spoken.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-507</td>
+<td style="text-align: center;">Rating confidence — candidate A is 5.0★ on 3 ratings, candidate B is 4.2★ on 900</td>
+<td style="text-align: center;">B outranks A. A's rating is neutralised to the sscat median by <code>rating_adj</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-508</td>
+<td style="text-align: center;">Determinism — the same turn re-runs with an unchanged pool</td>
+<td style="text-align: center;">Identical order returned, tie-breaks included.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-509</td>
+<td style="text-align: center;">Mall lift — a Mall candidate and a clearly better-rated non-Mall candidate</td>
+<td style="text-align: center;">The Mall lift does not bury the materially better product. Mall card is badged.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-510</td>
+<td style="text-align: center;">Scope 1 silence — rerank runs and reorders the feed</td>
+<td style="text-align: center;">No copy, no voice, no new surface. The feed is simply in a different order.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-511</td>
+<td style="text-align: center;">Filter edit — buyer changes the price chip on the rendered feed</td>
+<td style="text-align: center;">Feed re-runs as an ordinary search; rerank re-applies to the new pool.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-512</td>
+<td style="text-align: center;">Verdict happy path — rank 1 is ₹40 cheaper with 4× the ratings</td>
+<td style="text-align: center;">Verdict spoken, references by price or position, states the comparison against the anchor, ≤3 sentences.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-513</td>
+<td style="text-align: center;">Verdict disagrees with rank — rank 2 has review images and a much lower return rate</td>
+<td style="text-align: center;">Model may recommend rank 2, naming its position. <code>disagreed_with_rank = true</code> logged. Not a failure.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-514</td>
+<td style="text-align: center;">Nothing better — every candidate is pricier with weaker evidence than the anchor</td>
+<td style="text-align: center;">Vaani says the current pick is fine. No invented reason to switch. <code>NO_VERDICT</code> path logged with reason.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-515</td>
+<td style="text-align: center;">Attribute reference attempt — candidates share colour and fabric</td>
+<td style="text-align: center;">Verdict references by position or price only. No attribute-based identification.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-516</td>
+<td style="text-align: center;">Grounding validator — model emits a rating not present in the payload</td>
+<td style="text-align: center;">Verdict suppressed, <code>verdict_grounding_fail</code> logged with the span. Reranked feed still shown.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-517</td>
+<td style="text-align: center;">Position validator — model says "the second one" but describes the product at rank 4</td>
+<td style="text-align: center;">Verdict suppressed, <code>verdict_position_fail</code> logged.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-518</td>
+<td style="text-align: center;">Negotiation boundary — buyer asks for a discount or coupon</td>
+<td style="text-align: center;">Vaani never offers, implies or invents a discount. Answers with alternatives.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-519</td>
+<td style="text-align: center;">Variant respected — buyer has size L selected on the anchor</td>
+<td style="text-align: center;">Verdict does not recommend an option that cannot serve size L, and makes no fit claim it cannot support.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-520</td>
+<td style="text-align: center;">Language match — buyer speaks Hinglish</td>
+<td style="text-align: center;">Verdict is spoken in Hinglish.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-521</td>
+<td style="text-align: center;">Non-price turn — buyer asks about fabric while mentioning the price in passing</td>
+<td style="text-align: center;">Flow does not fire.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-522</td>
+<td style="text-align: center;">CLP groups — pool has no candidate with a faster delivery promise</td>
+<td style="text-align: center;">Scope 3. <code>arrives_faster</code> is empty and dropped, not padded with non-qualifying products.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-523</td>
+<td style="text-align: center;">Absent attribute — buyer asks for a material the anchor does not have</td>
+<td style="text-align: center;">Scope 3. Source switches to reco; <code>source = reco</code> logged.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-524</td>
+<td style="text-align: center;">Group invention — model attempts a group outside the taxonomy</td>
+<td style="text-align: center;">Scope 3. Rejected at parse; only the six defined keys are accepted.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>2. Launch Checklist</h2>
+<ul>
+<li><p>Rerank weights and <code>C</code> replayed offline against historical price turns; the ordering change is inspected by hand on a sample before any live traffic.</p></li>
+<li><p>Rerank weights, prompt versions and the pool/floor constants are all live-tunable config. No hard-coded values.</p></li>
+<li><p>Added-latency guardrail measured on a canary before ramp — feed render for Scope 1, first spoken word for Scope 2.</p></li>
+<li><p>T1b (search without rerank) is live alongside T1, or the result is unattributable.</p></li>
+<li><p>Both verdict validators enabled from the first live verdict, not added after.</p></li>
+<li><p>A human-audited sample of spoken verdicts reviewed for unsupported claims before ramp past the canary.</p></li>
+<li><p>Availability gate verified end-to-end: no out-of-stock product can be ranked or spoken.</p></li>
+<li><p>Every event in section 7 firing and joinable on <code>turn_id</code>.</p></li>
+<li><p>Kill switch per scope, so the verdict can be disabled without disabling the rerank.</p></li>
+</ul>
+
+<h2>3. Post-Launch Governance</h2>
+<ul>
+<li><p><strong>Weekly:</strong> verdict-spoken rate, unsupported-claim and positional-mismatch counts, thin-pool rate, added latency. Any non-zero guardrail is triaged before further ramp.</p></li>
+<li><p><strong>Weekly sample audit:</strong> a fixed number of spoken verdicts read against their payloads. This is the only way to catch a verdict that is grounded but misleading — technically supported, practically wrong.</p></li>
+<li><p><strong>Fortnightly:</strong> rank-delta distribution, to confirm the rerank is still moving products rather than reproducing default order.</p></li>
+<li><p><strong>Per weight change:</strong> offline replay before ship, and the config version stamped into <code>alt_discovery_rerank</code> so any historical ranking can be reconstructed.</p></li>
+<li><p><strong>Watch item:</strong> anchor abandonment without purchase. If it rises, we are talking buyers out of purchases they were happy with.</p></li>
+</ul>
+
+<h1>Section IV: Mentor Sign Off</h1>
+<table>
+<thead><tr><th>Function</th><th>Name</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td style="text-align: center;">Product</td><td style="text-align: center;">Madhurita Mahapatra</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Tech — Client</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Tech — Backend</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Search / Visual Search</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Ranking / Relevance</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Design</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending (Scope 3)</td></tr>
+<tr><td style="text-align: center;">Analytics / DS</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">QA</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+</tbody>
+</table>
+
+<h1>Summary</h1>
+<p>On a PDP price turn, Vaani runs an anchored image search with an adjacent price filter, the backend reranks the surviving pool on P0 signals before the feed renders, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked products. Required build, by scope:</p>
+<ul>
+<li>
+<p><strong>Scope 1 — backend only.</strong> Price-intent trigger, anchor resolution (the PDP, even from the reco rail), image search by catalog image with the containing price bucket and an availability gate, a 50-candidate pool taken after the filter, a 4-candidate floor below which nothing is reranked, and a deterministic P0 score with config-driven weights and a rating-count confidence floor. Silent. One client change: the Mall/Gold badge.</p>
+</li>
+<li>
+<p><strong>Scope 2 — the spoken verdict.</strong> Assemble the anchor plus the top 6–7 reranked products with P0+P1+P2, generate a voice verdict under the v1 prompt in 3.8, and gate it behind a numeric-grounding and a positional-consistency validator. The model may disagree with the rank order, because it sees signals the rerank cannot. Silence is a valid, trust-building output. No deep-link, no scroll-to — the buyer opens the product themselves.</p>
+</li>
+<li>
+<p><strong>Scope 3 — the SDUI CLP.</strong> A backend-composed surface that opens every time, groups the 50-candidate pool against a fixed six-group taxonomy, and pins the anchor. Image search becomes one source into it; the reco feed is a second, chosen by the model from the conversation. Needs Android and design. The durable asset is the surface, not this flow.</p>
+</li>
+</ul>
+<p>Carry-over filters are out of all three scopes, except the variant already selected on the anchor PDP, which enters at Scope 2. Vaani-driven navigation is cut rather than deferred — reranking is the substitute. Ranking stays deterministic throughout Scopes 1 and 2; the model explains, it never ranks.</p>
+    </article>
+  </main>
+</div>
+</body>
+</html>

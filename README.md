@@ -23,8 +23,10 @@ https://ishanmeesho.github.io/vaani/
   listed in the shared `product-docs/` sidebar under "Product Notes" (as an
   external link) and on the landing page's "Product & Strategy Docs" tab, but
   kept in their own folder so the planning-doc import can't overwrite them.
-- `product-docs/` — KRDs, product notes and BHAG docs imported from the
-  team's shared planning doc, each with its own browse sidebar.
+- `product-docs/` — KRDs, product notes and BHAG docs, each with its own browse
+  sidebar. Most are imported from the team's shared planning doc; KRDs written
+  here (e.g. `price-turn-alternative-discovery.html`) use the same shell and are
+  listed in the same sidebar group.
 
 ## Adding a new dashboard
 
