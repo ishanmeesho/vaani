@@ -50,6 +50,7 @@
   .pd-doc h1:not(:first-child) { margin-top: 40px; }
   .pd-doc h2 { font-size: 19px; font-weight: 700; margin: 34px 0 12px; }
   .pd-doc h3 { font-size: 15.5px; font-weight: 700; margin: 26px 0 10px; color: #1f2937; }
+  .pd-doc h4 { font-size: 14px; font-weight: 700; margin: 20px 0 8px; color: #374151; }
   .pd-doc p { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; }
   .pd-doc ul, .pd-doc ol { line-height: 1.65; font-size: 14.5px; margin: 0 0 14px; padding-left: 24px; }
   .pd-doc li { margin-bottom: 4px; }
@@ -393,25 +394,81 @@
 
 <h3>3.5 Rerank Logic — P0 Scoring (Scope 1)</h3>
 <p>The rerank is deterministic, backend-side, and runs before the feed is generated. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
-<pre><code>score(c) =  w_rating  · norm(rating_adj(c))
-          + w_volume  · norm(log1p(rating_count(c)))
-          + w_seller  · norm(seller_rating(c))
-          + w_price   · norm(price_advantage(c))
-          + w_mall    · is_mall_or_gold(c)
 
-where
-  rating_adj(c)      = rating(c)               if rating_count(c) >= C
-                     = sscat_median_rating     otherwise      # neutralise thin-evidence ratings
-  price_advantage(c) = (band_ceiling - price(c)) / band_ceiling   # cheaper scores higher, within the band
-  norm(·)            = min-max over the surviving pool
-  tie-break          = stable, by pid, so repeat calls return identical order</code></pre>
+<h4>3.5.1 In plain terms</h4>
+<p>Every candidate gets a score out of 100. Four things earn points, and one adds a bonus. The pool is then sorted by that score.</p>
+<table>
+<thead><tr><th>Factor</th><th>Points</th><th>What earns them</th><th>Why it is weighted this way</th></tr></thead>
+<tbody>
+<tr><td><strong>Rating</strong></td><td>35</td><td>The best-rated product in the pool gets all 35; the worst gets 0.</td><td>Quality is the thing the buyer cannot see from the image, so it carries the most weight.</td></tr>
+<tr><td><strong>Rating volume</strong></td><td>25</td><td>How many people rated it — the most-rated product in the pool gets all 25.</td><td>A rating is only as good as the evidence behind it. This is what makes a well-established product beat a barely-reviewed one.</td></tr>
+<tr><td><strong>Price</strong></td><td>25</td><td>The cheapest product in the band gets all 25; the most expensive gets 0.</td><td>The buyer asked about price, so cheaper must count — but at 25 of 100 it cannot buy its way to the top on its own.</td></tr>
+<tr><td><strong>Seller rating</strong></td><td>15</td><td>The best-rated seller in the pool gets all 15.</td><td>Real but weaker signal than the product's own rating; it breaks near-ties rather than driving the order.</td></tr>
+<tr><td><strong>Mall / Gold</strong></td><td>+5 bonus</td><td>Flat bonus if the product is Mall or Gold.</td><td>Lifts trusted stock without letting a mediocre Mall product outrank a clearly better one.</td></tr>
+</tbody>
+</table>
+<p><strong>Points are relative to the pool, not absolute.</strong> Within each factor, the best candidate among the surviving 50 gets full points and the worst gets zero, with everyone else spread in between. We do this because absolute thresholds do not travel across categories — a 4.0 rating is strong in one sub-category and ordinary in another. The consequence to keep in mind: a zero on a factor means "worst in this pool", not "bad".</p>
+
+<h4>3.5.2 Two rules that stop the obvious failures</h4>
 <ul>
-<li><p><strong>All weights and <code>C</code> are config, not code.</strong> They must be tunable without a release, because the first weight set will be wrong.</p></li>
-<li><p><strong>Why the confidence floor matters:</strong> a 5.0 rating on 3 ratings must not outrank a 4.2 on 900. <code>rating_adj</code> plus the volume term is what prevents the single most obvious failure of a naive "cheaper and better rated" rule.</p></li>
-<li><p><strong>Suggested starting intent</strong> (not final): value dominates, evidence gates it, price breaks near-ties. Ship with rating and volume carrying most of the weight, price as a modest term, seller rating as a smaller one.</p></li>
-<li><p><strong>P1 and P2 are not available here.</strong> Review-image presence, return rate, seller tenure and delivery promise cannot enter the rerank. This is a known limitation, and it is why the verdict is allowed to disagree with the rank order (3.7).</p></li>
+<li><p><strong>Ignore ratings with too little evidence behind them.</strong> If a product has fewer than <strong>50 ratings</strong>, we do not trust its rating — we score it as the sub-category's median rating instead. Without this, a 5.0★ from 3 people beats a 4.2★ from 900, which is the single most obvious way a naive "cheaper and better rated" rule fails.</p></li>
+<li><p><strong>Score the scale of the rating count, not the raw number.</strong> The gap between 10 ratings and 100 matters far more than the gap between 900 and 990. So we score the order of magnitude (a log), which stops one viral product with 50,000 ratings from flattening every other candidate's volume score to nothing.</p></li>
 </ul>
 
+<h4>3.5.3 Default configuration — v1 starting point</h4>
+<p>These are the values to ship with, and every one of them is config rather than code. They are a considered starting point, not a tuned answer; expect the first weight set to be wrong and plan to move it (see 8, Q3).</p>
+<table>
+<thead><tr><th>Constant</th><th>Default</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>Rating weight</td><td>35</td><td rowspan="4">Weights sum to 100 so a score reads as a percentage.</td></tr>
+<tr><td>Rating-volume weight</td><td>25</td></tr>
+<tr><td>Price weight</td><td>25</td></tr>
+<tr><td>Seller-rating weight</td><td>15</td></tr>
+<tr><td>Mall / Gold bonus</td><td>+5</td><td>Flat, additive. Deliberately small — see 3.6.</td></tr>
+<tr><td>Rating-confidence floor</td><td>50 ratings</td><td>Below this, the rating is replaced by the sub-category median.</td></tr>
+<tr><td>Candidate pool</td><td>50</td><td>Taken after the price filter (3.4).</td></tr>
+<tr><td>Rerank floor</td><td>4 candidates</td><td>Below this, no rerank at all (3.4).</td></tr>
+<tr><td>Tie-break</td><td>By product ID</td><td>Two equal scores must always order the same way, so the feed does not reshuffle between identical calls.</td></tr>
+</tbody>
+</table>
+
+<h4>3.5.4 Worked example</h4>
+<p>Anchor: <strong>₹289</strong>, 3.9★ on 212 ratings. Price band: <em>under ₹299</em>. Five candidates survive the filter. Sub-category median rating is 4.0.</p>
+<table>
+<thead><tr><th>Rank</th><th>Candidate</th><th>Price</th><th>Rating</th><th>Ratings</th><th>Seller</th><th>Mall</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>A</td><td>₹249</td><td>4.2★</td><td>938</td><td>4.3</td><td>—</td><td><strong>86.1</strong></td></tr>
+<tr><td>2</td><td>C</td><td>₹279</td><td>4.1★</td><td>460</td><td>4.1</td><td>Yes</td><td><strong>68.8</strong></td></tr>
+<tr><td>3</td><td>B</td><td>₹219</td><td>4.4★</td><td>41</td><td>3.9</td><td>—</td><td><strong>57.5</strong></td></tr>
+<tr><td>4</td><td>D</td><td>₹199</td><td>3.6★</td><td>120</td><td>3.6</td><td>—</td><td><strong>39.0</strong></td></tr>
+<tr><td>5</td><td>E</td><td>₹289</td><td>4.6★</td><td>8</td><td>4.0</td><td>—</td><td><strong>31.9</strong></td></tr>
+</tbody>
+</table>
+<p>Three things this example is meant to demonstrate:</p>
+<ul>
+<li><p><strong>The highest-rated product finishes last.</strong> E is 4.6★ — the best rating in the pool — but on 8 ratings, so the confidence floor replaces it with the median and it earns nothing on volume. This is the behaviour we most want.</p></li>
+<li><p><strong>The cheapest product does not win.</strong> D at ₹199 takes all 25 price points and still finishes fourth, because it is the worst in the pool on both rating and seller rating. Price alone cannot carry a weak product.</p></li>
+<li><p><strong>B looks like a bargain and is not.</strong> ₹219 with 4.4★ is the most attractive-looking card in the feed, but 41 ratings puts it under the floor. It still places third on price strength — the rule dampens it rather than burying it.</p></li>
+</ul>
+<p><em>Caveat for QA and for tuning: with only five candidates the pool-relative scoring is jumpy, because one product sets the floor and another the ceiling on every factor. At a full pool of 50 the spread is much smoother. This is a further reason for the 4-candidate floor in 3.4 and for replaying weights offline before release.</em></p>
+
+<h4>3.5.5 The general form</h4>
+<p>The same thing, written for implementation. Weights, the confidence floor and the bonus are all config values; the shape below is what stays fixed.</p>
+<pre><code>score(c) =  w_rating  · norm(rating_adj(c))       # w_rating = 35
+          + w_volume  · norm(log1p(rating_count(c)))   # w_volume = 25
+          + w_price   · norm(price_advantage(c))   # w_price  = 25
+          + w_seller  · norm(seller_rating(c))     # w_seller = 15
+          + w_mall    · is_mall_or_gold(c)         # w_mall   = 5
+
+where
+  rating_adj(c)      = rating(c)             if rating_count(c) >= C     # C = 50
+                     = sscat_median_rating   otherwise
+  price_advantage(c) = (band_ceiling - price(c)) / band_ceiling
+  norm(x)            = (x - pool_min) / (pool_max - pool_min)   # 0..1 within the surviving pool
+  tie-break          = stable, by pid</code></pre>
+<ul>
+<li><p><strong>P1 and P2 are not available here.</strong> Review-image presence, return rate, seller tenure and delivery promise cannot enter the rerank. This is a known limitation, and it is why the verdict is allowed to disagree with the rank order (3.7).</p></li>
+</ul>
 <h3>3.6 Mall / Gold Handling</h3>
 <ul>
 <li><p><strong>Rerank:</strong> Mall/Gold membership is a bounded priority lift (<code>w_mall</code>), so trusted stock rises in the stack without a much better non-Mall product being buried beneath a mediocre Mall one.</p></li>
