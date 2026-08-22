@@ -1,0 +1,204 @@
+<title>Why Vaani Searches on a Decide Turn</title><style>
+:root{color-scheme:light;--bg:#fbfaf9;--panel:#fff;--ink:#1c1a17;--muted:#6b6560;
+ --line:#eae6e0;--rule:#ded9d2;--accent:#b4531f;--accent-soft:#faf3ee;--good:#2f6b4f;
+ --bad:#a63b2a;--barbg:#f4f1ec;--c1:#b4531f;--c2:#2b5c8a;--c3:#6a3f8f;--c4:#6b6560;
+ --c5:#a63b2a}
+*{box-sizing:border-box}html{background:var(--bg)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+ font:15px/1.7 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:1160px;margin:0 auto;padding:clamp(28px,4vw,52px) clamp(16px,3vw,28px) 90px}
+h1{font-size:clamp(1.35rem,2.4vw,1.7rem);line-height:1.3;margin:0 0 10px;
+ letter-spacing:-.02em;max-width:34ch}
+.sub2{color:var(--muted);font-size:.92rem;margin:0 0 4px;max-width:88ch}
+h2{font-size:1.02rem;margin:42px 0 4px;letter-spacing:-.01em}
+.note{font-size:.88rem;color:var(--muted);margin:4px 0 12px;max-width:94ch}
+.warn{background:#faf1d8;border:1px solid #eadfba;border-left:3px solid #8a6d1f;
+ border-radius:9px;padding:14px 18px;margin:22px 0;font-size:.9rem;max-width:104ch}
+.warn b{color:#8a6d1f}
+.verdict{background:#f2f7f4;border:1px solid #cfe3d8;border-left:3px solid var(--good);
+ border-radius:9px;padding:14px 18px;margin:22px 0 0;font-size:.9rem;max-width:104ch}
+.verdict b{color:var(--good)}
+.tabs{display:flex;gap:8px;margin:26px 0 0;flex-wrap:wrap}
+.tab{background:var(--panel);border:1px solid var(--rule);border-radius:10px;
+ padding:11px 18px;font:inherit;font-size:.9rem;font-weight:650;color:var(--muted);
+ cursor:pointer;text-align:left}
+.tab:hover{color:var(--accent);border-color:var(--accent)}
+.tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tab .cnt{display:block;font-weight:400;font-size:.76rem;opacity:.85;margin-top:2px}
+.pane{display:none}.pane.on{display:block}
+.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:600px;
+ background:var(--panel)}
+th,td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;
+ vertical-align:top}
+thead th{font-size:.74rem;letter-spacing:.03em;color:var(--ink);font-weight:700;
+ border-bottom:2px solid var(--rule);white-space:nowrap;background:var(--barbg)}
+thead th.n{text-align:right}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td .sub{display:block;font-size:.76rem;color:var(--muted);line-height:1.45;
+ margin-top:3px;max-width:60ch;font-weight:400}
+tbody tr:hover{background:var(--accent-soft)}
+tr.c1 td:first-child{border-left:3px solid var(--c1)}
+tr.c2 td:first-child{border-left:3px solid var(--c2)}
+tr.c3 td:first-child{border-left:3px solid var(--c3)}
+tr.c4 td:first-child{border-left:3px solid var(--c4)}
+tr.c5 td:first-child{border-left:3px solid var(--c5)}
+.badge{display:inline-block;font-size:.68rem;font-weight:650;padding:3px 9px;
+ border-radius:20px;vertical-align:middle;margin-left:8px;text-transform:none;
+ background:#e3efe7;color:#2f6b4f}
+footer{margin-top:46px;padding-top:22px;border-top:1px solid var(--rule);
+ color:var(--muted);font-size:.84rem;line-height:1.7;max-width:100ch}
+</style>
+<div class='wrap'>
+<h1>Why does a search get triggered on a DECIDE turn?</h1>
+<p class='sub2'>Vaani &middot; 2026-08-10 &rarr; 2026-08-18 &middot; 14,266 turns where the buyer
+deliberated on a product page and a search was then rendered &mdash; by Vaani on the same
+turn, or by the buyer asking on the next one</p>
+
+<div class='warn'><b>How category movement is measured.</b> Not by mapping the search query
+to an sscat &mdash; that fails audit here, because the taxonomy is granular enough that
+<code>Sarees</code> &rarr; &ldquo;cotton saree&rdquo; resolves to a <i>different</i> sscat,
+and the matcher also produces plain errors (&ldquo;denim co ord set&rdquo; &rarr;
+<code>Diwan Cover Sets</code>). Instead: the product in focus on the following turn where
+that is observable, falling back to whether the query shares any word with the anchor's own
+category name. The exact test is never overridden by the fallback.</div>
+
+<div class='tabs'><button class='tab on' data-p='all'>Both routes<span class='cnt'>14,266 turns</span></button><button class='tab' data-p='A'>Path A &middot; Vaani searched on the decide turn<span class='cnt'>7,801 turns</span></button><button class='tab' data-p='B'>Path B &middot; buyer asked to find on the next turn<span class='cnt'>6,465 turns</span></button></div>
+<div class='pane on' id='p_all'><h2>1. What the buyer was asking for <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>Rows sorted by size. Every turn lands in exactly one bucket, decided in this priority: price ask &rarr; another sscat &rarr; add-on &rarr; attribute added &rarr; feature/brand &rarr; different item of the same kind &rarr; bare restatement.</p>
+<div class='sc'><table><thead><tr><th>What the buyer asked for</th><th class='n'>turns</th><th class='n'>share</th></tr></thead><tbody>
+<tr class='c2'><td><b>asked for a product in another sscat</b><span class='sub'>either the next product in focus sits in a different sscat, or the query shares <b>no word</b> with the anchor's own category name</span></td><td class='n'>4,826</td><td class='n'><b>33.8%</b></td></tr>
+<tr class='c1'><td><b>asked for a cheaper product</b><span class='sub'>price language in the utterance or the query &mdash; &ldquo;sasta&rdquo;, &ldquo;kam daam&rdquo;, &ldquo;budget&rdquo;, &ldquo;under 300&rdquo;</span></td><td class='n'>4,401</td><td class='n'><b>30.8%</b></td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b><span class='sub'>same product type, a different specific item &mdash; <code>Shorts</code> &rarr; &ldquo;mens full length lower&rdquo;</span></td><td class='n'>1,919</td><td class='n'><b>13.5%</b></td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b><span class='sub'>the query carries a colour, fabric, size or gender word and the sscat did not move</span></td><td class='n'>1,856</td><td class='n'><b>13.0%</b></td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b><span class='sub'>the query adds nothing beyond the anchor's own category words</span></td><td class='n'>599</td><td class='n'><b>4.2%</b></td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b><span class='sub'>a capability (&ldquo;5 hour battery&rdquo;), a problem to solve (&ldquo;hair fall&rdquo;) or a brand</span></td><td class='n'>518</td><td class='n'><b>3.6%</b></td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b><span class='sub'>the query still names the anchor product and adds a part or accessory &mdash; <code>Sewing Machines</code> &rarr; &ldquo;bobbin case&rdquo;</span></td><td class='n'>147</td><td class='n'><b>1.0%</b></td></tr>
+</tbody></table></div>
+<h2>2. Primary cause, with the price ask split <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>The same buckets, with the price ask split by whether the buyer's constraint actually reached the search. <b>Median &Delta;price</b> is over the turns that ended in buying a different product.</p>
+<div class='sc'><table><thead><tr><th>Primary cause</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr class='c2'><td><b>asked for a product in another sscat</b></td><td class='n'>4,826</td><td class='n'><b>33.8%</b></td><td class='n'>-7.6%</td></tr>
+<tr class='c1'><td><b>price ask &mdash; constraint reached the search</b></td><td class='n'>3,131</td><td class='n'><b>21.9%</b></td><td class='n'>-17.4%</td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b></td><td class='n'>1,919</td><td class='n'><b>13.5%</b></td><td class='n'>-2.2%</td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b></td><td class='n'>1,856</td><td class='n'><b>13.0%</b></td><td class='n'>-2.1%</td></tr>
+<tr class='c5'><td><b>price ask &mdash; constraint lost on the way</b></td><td class='n'>1,270</td><td class='n'><b>8.9%</b></td><td class='n'>-14.7%</td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b></td><td class='n'>599</td><td class='n'><b>4.2%</b></td><td class='n'>-2.1%</td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b></td><td class='n'>518</td><td class='n'><b>3.6%</b></td><td class='n'>-1.2%</td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b></td><td class='n'>147</td><td class='n'><b>1.0%</b></td><td class='n'>-4.5%</td></tr>
+</tbody></table></div>
+<h2>3. By what the buyer actually asked <span class='badge part'>topic mix sums to 100%</span></h2>
+<p class='note'>Price is one row, deliberately &mdash; splitting negotiation from other price asks needs the taxonomy's L3 layer, which fails audit on this data. Topics under 30 turns are hidden.</p>
+<div class='sc'><table><thead><tr><th>Decide topic</th><th class='n'>turns</th><th class='n'>share of turns</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td><b>price</b></td><td class='n'>7,148</td><td class='n'>50.1%</td><td class='n'>-13.4%</td></tr>
+<tr><td><b>quality</b></td><td class='n'>2,675</td><td class='n'>18.8%</td><td class='n'>-4.0%</td></tr>
+<tr><td><b>other_product_information</b></td><td class='n'>1,532</td><td class='n'>10.7%</td><td class='n'>-1.2%</td></tr>
+<tr><td><b>size_fit</b></td><td class='n'>1,453</td><td class='n'>10.2%</td><td class='n'>-3.8%</td></tr>
+<tr><td><b>how_to_use</b></td><td class='n'>978</td><td class='n'>6.9%</td><td class='n'>-5.6%</td></tr>
+<tr><td><b>delivery_time</b></td><td class='n'>278</td><td class='n'>1.9%</td><td class='n'>+0.0%</td></tr>
+<tr><td><b>quantity_pack_contents</b></td><td class='n'>198</td><td class='n'>1.4%</td><td class='n'>+0.0%</td></tr>
+</tbody></table></div>
+<h2>4. Where the purchase actually landed <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<div class='sc'><table><thead><tr><th>Relative to the anchor product</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td>same sscat as the anchor</td><td class='n'>6,580</td><td class='n'><b>46.1%</b></td><td class='n'>+0.0%</td></tr>
+<tr><td>same portfolio, different sscat</td><td class='n'>1,609</td><td class='n'><b>11.3%</b></td><td class='n'>-11.2%</td></tr>
+<tr><td>different portfolio</td><td class='n'>4,168</td><td class='n'><b>29.2%</b></td><td class='n'>-19.2%</td></tr>
+<tr><td>no purchase after the turn</td><td class='n'>1,872</td><td class='n'><b>13.1%</b></td><td class='n'>&mdash;</td></tr>
+<tr><td>category unresolved</td><td class='n'>37</td><td class='n'><b>0.3%</b></td><td class='n'>+0.0%</td></tr>
+</tbody></table></div></div><div class='pane' id='p_A'><h2>1. What the buyer was asking for <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>Rows sorted by size. Every turn lands in exactly one bucket, decided in this priority: price ask &rarr; another sscat &rarr; add-on &rarr; attribute added &rarr; feature/brand &rarr; different item of the same kind &rarr; bare restatement.</p>
+<div class='sc'><table><thead><tr><th>What the buyer asked for</th><th class='n'>turns</th><th class='n'>share</th></tr></thead><tbody>
+<tr class='c1'><td><b>asked for a cheaper product</b><span class='sub'>price language in the utterance or the query &mdash; &ldquo;sasta&rdquo;, &ldquo;kam daam&rdquo;, &ldquo;budget&rdquo;, &ldquo;under 300&rdquo;</span></td><td class='n'>3,509</td><td class='n'><b>45.0%</b></td></tr>
+<tr class='c2'><td><b>asked for a product in another sscat</b><span class='sub'>either the next product in focus sits in a different sscat, or the query shares <b>no word</b> with the anchor's own category name</span></td><td class='n'>1,823</td><td class='n'><b>23.4%</b></td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b><span class='sub'>the query carries a colour, fabric, size or gender word and the sscat did not move</span></td><td class='n'>928</td><td class='n'><b>11.9%</b></td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b><span class='sub'>same product type, a different specific item &mdash; <code>Shorts</code> &rarr; &ldquo;mens full length lower&rdquo;</span></td><td class='n'>861</td><td class='n'><b>11.0%</b></td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b><span class='sub'>a capability (&ldquo;5 hour battery&rdquo;), a problem to solve (&ldquo;hair fall&rdquo;) or a brand</span></td><td class='n'>341</td><td class='n'><b>4.4%</b></td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b><span class='sub'>the query adds nothing beyond the anchor's own category words</span></td><td class='n'>269</td><td class='n'><b>3.4%</b></td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b><span class='sub'>the query still names the anchor product and adds a part or accessory &mdash; <code>Sewing Machines</code> &rarr; &ldquo;bobbin case&rdquo;</span></td><td class='n'>70</td><td class='n'><b>0.9%</b></td></tr>
+</tbody></table></div>
+<h2>2. Primary cause, with the price ask split <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>The same buckets, with the price ask split by whether the buyer's constraint actually reached the search. <b>Median &Delta;price</b> is over the turns that ended in buying a different product.</p>
+<div class='sc'><table><thead><tr><th>Primary cause</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr class='c1'><td><b>price ask &mdash; constraint reached the search</b></td><td class='n'>2,354</td><td class='n'><b>30.2%</b></td><td class='n'>-17.5%</td></tr>
+<tr class='c2'><td><b>asked for a product in another sscat</b></td><td class='n'>1,823</td><td class='n'><b>23.4%</b></td><td class='n'>-7.1%</td></tr>
+<tr class='c5'><td><b>price ask &mdash; constraint lost on the way</b></td><td class='n'>1,155</td><td class='n'><b>14.8%</b></td><td class='n'>-15.0%</td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b></td><td class='n'>928</td><td class='n'><b>11.9%</b></td><td class='n'>-3.0%</td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b></td><td class='n'>861</td><td class='n'><b>11.0%</b></td><td class='n'>-3.2%</td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b></td><td class='n'>341</td><td class='n'><b>4.4%</b></td><td class='n'>+0.0%</td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b></td><td class='n'>269</td><td class='n'><b>3.4%</b></td><td class='n'>+0.0%</td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b></td><td class='n'>70</td><td class='n'><b>0.9%</b></td><td class='n'>-4.8%</td></tr>
+</tbody></table></div>
+<h2>3. By what the buyer actually asked <span class='badge part'>topic mix sums to 100%</span></h2>
+<p class='note'>Price is one row, deliberately &mdash; splitting negotiation from other price asks needs the taxonomy's L3 layer, which fails audit on this data. Topics under 30 turns are hidden.</p>
+<div class='sc'><table><thead><tr><th>Decide topic</th><th class='n'>turns</th><th class='n'>share of turns</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td><b>price</b></td><td class='n'>4,244</td><td class='n'>54.4%</td><td class='n'>-14.7%</td></tr>
+<tr><td><b>quality</b></td><td class='n'>1,873</td><td class='n'>24.0%</td><td class='n'>-3.1%</td></tr>
+<tr><td><b>size_fit</b></td><td class='n'>833</td><td class='n'>10.7%</td><td class='n'>-3.7%</td></tr>
+<tr><td><b>how_to_use</b></td><td class='n'>641</td><td class='n'>8.2%</td><td class='n'>-5.9%</td></tr>
+<tr><td><b>other_product_information</b></td><td class='n'>157</td><td class='n'>2.0%</td><td class='n'>-8.5%</td></tr>
+<tr><td><b>quantity_pack_contents</b></td><td class='n'>37</td><td class='n'>0.5%</td><td class='n'>-5.4%</td></tr>
+</tbody></table></div>
+<h2>4. Where the purchase actually landed <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<div class='sc'><table><thead><tr><th>Relative to the anchor product</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td>same sscat as the anchor</td><td class='n'>3,465</td><td class='n'><b>44.4%</b></td><td class='n'>+0.0%</td></tr>
+<tr><td>same portfolio, different sscat</td><td class='n'>980</td><td class='n'><b>12.6%</b></td><td class='n'>-12.4%</td></tr>
+<tr><td>different portfolio</td><td class='n'>2,263</td><td class='n'><b>29.0%</b></td><td class='n'>-20.6%</td></tr>
+<tr><td>no purchase after the turn</td><td class='n'>1,070</td><td class='n'><b>13.7%</b></td><td class='n'>&mdash;</td></tr>
+<tr><td>category unresolved</td><td class='n'>23</td><td class='n'><b>0.3%</b></td><td class='n'>+0.0%</td></tr>
+</tbody></table></div></div><div class='pane' id='p_B'><h2>1. What the buyer was asking for <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>Rows sorted by size. Every turn lands in exactly one bucket, decided in this priority: price ask &rarr; another sscat &rarr; add-on &rarr; attribute added &rarr; feature/brand &rarr; different item of the same kind &rarr; bare restatement.</p>
+<div class='sc'><table><thead><tr><th>What the buyer asked for</th><th class='n'>turns</th><th class='n'>share</th></tr></thead><tbody>
+<tr class='c2'><td><b>asked for a product in another sscat</b><span class='sub'>either the next product in focus sits in a different sscat, or the query shares <b>no word</b> with the anchor's own category name</span></td><td class='n'>3,003</td><td class='n'><b>46.5%</b></td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b><span class='sub'>same product type, a different specific item &mdash; <code>Shorts</code> &rarr; &ldquo;mens full length lower&rdquo;</span></td><td class='n'>1,058</td><td class='n'><b>16.4%</b></td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b><span class='sub'>the query carries a colour, fabric, size or gender word and the sscat did not move</span></td><td class='n'>928</td><td class='n'><b>14.4%</b></td></tr>
+<tr class='c1'><td><b>asked for a cheaper product</b><span class='sub'>price language in the utterance or the query &mdash; &ldquo;sasta&rdquo;, &ldquo;kam daam&rdquo;, &ldquo;budget&rdquo;, &ldquo;under 300&rdquo;</span></td><td class='n'>892</td><td class='n'><b>13.8%</b></td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b><span class='sub'>the query adds nothing beyond the anchor's own category words</span></td><td class='n'>330</td><td class='n'><b>5.1%</b></td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b><span class='sub'>a capability (&ldquo;5 hour battery&rdquo;), a problem to solve (&ldquo;hair fall&rdquo;) or a brand</span></td><td class='n'>177</td><td class='n'><b>2.7%</b></td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b><span class='sub'>the query still names the anchor product and adds a part or accessory &mdash; <code>Sewing Machines</code> &rarr; &ldquo;bobbin case&rdquo;</span></td><td class='n'>77</td><td class='n'><b>1.2%</b></td></tr>
+</tbody></table></div>
+<h2>2. Primary cause, with the price ask split <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<p class='note'>The same buckets, with the price ask split by whether the buyer's constraint actually reached the search. <b>Median &Delta;price</b> is over the turns that ended in buying a different product.</p>
+<div class='sc'><table><thead><tr><th>Primary cause</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr class='c2'><td><b>asked for a product in another sscat</b></td><td class='n'>3,003</td><td class='n'><b>46.5%</b></td><td class='n'>-8.5%</td></tr>
+<tr class='c3'><td><b>asked for a different item of the same kind</b></td><td class='n'>1,058</td><td class='n'><b>16.4%</b></td><td class='n'>-1.4%</td></tr>
+<tr class='c3'><td><b>asked for the same thing with an attribute added</b></td><td class='n'>928</td><td class='n'><b>14.4%</b></td><td class='n'>-1.3%</td></tr>
+<tr class='c1'><td><b>price ask &mdash; constraint reached the search</b></td><td class='n'>777</td><td class='n'><b>12.0%</b></td><td class='n'>-17.2%</td></tr>
+<tr class='c4'><td><b>restated the same category, nothing new</b></td><td class='n'>330</td><td class='n'><b>5.1%</b></td><td class='n'>-3.4%</td></tr>
+<tr class='c5'><td><b>asked for a feature, use-case or brand</b></td><td class='n'>177</td><td class='n'><b>2.7%</b></td><td class='n'>-3.6%</td></tr>
+<tr class='c5'><td><b>price ask &mdash; constraint lost on the way</b></td><td class='n'>115</td><td class='n'><b>1.8%</b></td><td class='n'>-13.5%</td></tr>
+<tr class='c2'><td><b>asked for an add-on for the same product</b></td><td class='n'>77</td><td class='n'><b>1.2%</b></td><td class='n'>-2.2%</td></tr>
+</tbody></table></div>
+<h2>3. By what the buyer actually asked <span class='badge part'>topic mix sums to 100%</span></h2>
+<p class='note'>Price is one row, deliberately &mdash; splitting negotiation from other price asks needs the taxonomy's L3 layer, which fails audit on this data. Topics under 30 turns are hidden.</p>
+<div class='sc'><table><thead><tr><th>Decide topic</th><th class='n'>turns</th><th class='n'>share of turns</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td><b>price</b></td><td class='n'>2,904</td><td class='n'>44.9%</td><td class='n'>-10.9%</td></tr>
+<tr><td><b>other_product_information</b></td><td class='n'>1,375</td><td class='n'>21.3%</td><td class='n'>-0.5%</td></tr>
+<tr><td><b>quality</b></td><td class='n'>802</td><td class='n'>12.4%</td><td class='n'>-6.0%</td></tr>
+<tr><td><b>size_fit</b></td><td class='n'>620</td><td class='n'>9.6%</td><td class='n'>-3.9%</td></tr>
+<tr><td><b>how_to_use</b></td><td class='n'>337</td><td class='n'>5.2%</td><td class='n'>-4.9%</td></tr>
+<tr><td><b>delivery_time</b></td><td class='n'>265</td><td class='n'>4.1%</td><td class='n'>+0.0%</td></tr>
+<tr><td><b>quantity_pack_contents</b></td><td class='n'>161</td><td class='n'>2.5%</td><td class='n'>+0.2%</td></tr>
+</tbody></table></div>
+<h2>4. Where the purchase actually landed <span class='badge part'>partition &mdash; sums to 100%</span></h2>
+<div class='sc'><table><thead><tr><th>Relative to the anchor product</th><th class='n'>turns</th><th class='n'>share</th><th class='n'>median &Delta;price</th></tr></thead><tbody>
+<tr><td>same sscat as the anchor</td><td class='n'>3,115</td><td class='n'><b>48.2%</b></td><td class='n'>+0.0%</td></tr>
+<tr><td>same portfolio, different sscat</td><td class='n'>629</td><td class='n'><b>9.7%</b></td><td class='n'>-8.7%</td></tr>
+<tr><td>different portfolio</td><td class='n'>1,905</td><td class='n'><b>29.5%</b></td><td class='n'>-17.7%</td></tr>
+<tr><td>no purchase after the turn</td><td class='n'>802</td><td class='n'><b>12.4%</b></td><td class='n'>&mdash;</td></tr>
+<tr><td>category unresolved</td><td class='n'>14</td><td class='n'><b>0.2%</b></td><td class='n'>+0.0%</td></tr>
+</tbody></table></div>
+<div class='verdict'><b>Scope.</b> Of these 6,465 turns, <b>2,638 (40.8%)</b> were still on the anchor's own product page when the buyer asked, and <b>3,827</b> had moved onto the feed. Both are kept &mdash; the behaviour is the same, only the screen changed underneath them. Turn N+1 follow-ups that were themselves DECIDE questions are excluded: another question about the same product is not a search ask. The search must have actually rendered, which is what makes Vaani's own behaviour corroborate the FIND label.</div></div>
+<footer>Population: DECIDE turns on a product page (<code>SINGLE_PRODUCT</code> with a
+product in focus) that led to a rendered search. Prices are catalogue prices from the
+2026-08-18 snapshot, not amounts paid. Decide topic comes from a rule classifier (87.7%
+precision on the DECIDE branch, 95.5% on the topic); the taxonomy's L3 layer is not used
+anywhere on this page. No experiment filter &mdash; Control and Test are pooled. Every
+session here placed at least one order. Row data:
+<code>data-outputs/search_cause_rows_20260820.csv</code>.</footer>
+</div><script>
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+ document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');document.getElementById('p_'+b.dataset.p).classList.add('on');});
+</script>
