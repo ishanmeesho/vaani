@@ -41,17 +41,35 @@ to the `<ul class="grid">` list in the "Product & Strategy Docs" group.)
    `<ul class="grid">`, following the existing `doc-name` / `doc-desc` /
    `doc-date` pattern. `doc-date` is optional — use it for the data window or
    compile date if the report states one.
-4. Every dashboard page gets a fixed "← Vaani Dashboards" banner injected at
-   the top, linking back to `../index.html`. If the file doesn't already have
-   one, add right after the opening `<body>` tag:
+4. **Required — every page gets a fixed "← Vaani Dashboards" banner** at the
+   top, linking back to `../index.html`. Without it the page is a dead end: a
+   reader who opens the link directly has no back button to fall back on. Add
+   it right after the opening `<body>` tag:
 
    ```html
    <body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
    ```
 
    (Adjust the `../` prefix if the file sits more than one folder deep.)
-5. Commit and push to `main` — GitHub Pages rebuilds automatically within a
+5. Run `python3 tools/check-pages.py`. It fails, and names the file, if any
+   page is missing the back link, a document shell, a viewport meta or a title.
+6. Commit and push to `main` — GitHub Pages rebuilds automatically within a
    minute or two.
+
+## Checks
+
+`tools/check-pages.py` is the pre-publish check for the whole site. It asserts,
+for every page except the landing page:
+
+- a link back to the landing page, at the correct relative depth
+- a real document shell (`<!doctype>`, `<html>`, `<head>`, `<body>`) — a bare
+  fragment renders, but gets no tab title, no favicon and no viewport
+- a `viewport` meta, or the page renders desktop-width on a phone
+- a `<title>`, or the browser tab shows the file name
+
+It runs on every push and pull request via
+`.github/workflows/check-pages.yml`, so a page can't ship as a dead end. Run it
+locally before pushing.
 
 ## Notes
 

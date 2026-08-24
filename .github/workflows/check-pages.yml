@@ -1,0 +1,16 @@
+name: Check pages
+
+# Every page needs a way back to the Vaani Dashboards index. This runs on every
+# push and pull request so a new dashboard can't quietly ship as a dead end.
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  check-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check back links, document shell, viewport and title
+        run: python3 tools/check-pages.py
