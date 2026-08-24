@@ -249,11 +249,6 @@
         <span class="doc-desc">Does a Vaani re-search after a DECIDE turn increase same-category purchase?</span>
         <span class="doc-date">Compiled 30 Jul 2026</span>
       </a></li>
-      <li><a href="02-where-and-when-vaani-is-used/pdp-search-after-decide-turn.html">
-        <span class="doc-name">PDP Search — Why It Fires After a DECIDE Turn</span>
-        <span class="doc-desc">When a buyer deliberates on a PDP and a search follows, what caused it — split by whether Vaani searched unprompted or the buyer asked on the next turn.</span>
-        <span class="doc-date">Data: 10&ndash;18 Aug 2026</span>
-      </a></li>
       <li><a href="02-where-and-when-vaani-is-used/zero-click-nudge-analysis.html">
         <span class="doc-name">Zero-Click Nudges — Reach &amp; Adoption</span>
         <span class="doc-desc">What happened when we nudged users whose sessions were likely to end in zero clicks.</span>
@@ -280,6 +275,11 @@
         <span class="doc-name">Pre-Purchase Browsing Effort</span>
         <span class="doc-desc">How much buyers browse before buying — breadth vs. conversion, anchoring/wandering, and bought vs. clicked-alternative comparisons.</span>
         <span class="doc-date">Compiled 8 Aug 2026</span>
+      </a></li>
+      <li><a href="02-where-and-when-vaani-is-used/pdp-search-after-decide-turn.html">
+        <span class="doc-name">PDP Search — Why It Fires After a DECIDE Turn</span>
+        <span class="doc-desc">When a buyer deliberates on a PDP and a search follows, what caused it — split by whether Vaani searched unprompted or the buyer asked on the next turn.</span>
+        <span class="doc-date">Data: 10&ndash;18 Aug 2026</span>
       </a></li>
     </ul>
   </section>
@@ -316,6 +316,7 @@
   function resetFilter(block) {
     Array.prototype.forEach.call(block.querySelectorAll('li'), function (li) { li.style.display = ''; });
     Array.prototype.forEach.call(block.querySelectorAll('section'), function (sec) { sec.style.display = ''; });
+    block.style.display = '';
     noResults.style.display = 'none';
   }
 
@@ -342,15 +343,20 @@
 
   input.addEventListener('input', function () {
     var q = input.value.trim().toLowerCase();
-    var activeBlock = document.querySelector('.group-block.tab-active');
+    // A tab is made of SEVERAL .group-block elements (e.g. the dashboards tab is
+    // "Combined Views" plus the numbered "Dashboards" block), so filter every
+    // active block — querySelector would only ever reach the first one, leaving
+    // the rest unfiltered and miscounting anyVisible.
+    var activeBlocks = document.querySelectorAll('.group-block.tab-active');
     var anyVisible = false;
 
-    if (activeBlock) {
+    Array.prototype.forEach.call(activeBlocks, function (activeBlock) {
+      var blockHasVisible = false;
       var items = activeBlock.querySelectorAll('ul.grid li, ul.combined-grid li');
       Array.prototype.forEach.call(items, function (li) {
         var match = !q || li.textContent.toLowerCase().indexOf(q) !== -1;
         li.style.display = match ? '' : 'none';
-        if (match) anyVisible = true;
+        if (match) { anyVisible = true; blockHasVisible = true; }
       });
 
       var sections = activeBlock.querySelectorAll('section');
@@ -361,7 +367,11 @@
         });
         sec.style.display = sectionHasVisible ? '' : 'none';
       });
-    }
+
+      // Hide a group whose every card was filtered out, so its heading and blurb
+      // don't sit above an empty space.
+      activeBlock.style.display = (q && !blockHasVisible) ? 'none' : '';
+    });
 
     noResultsQuery.textContent = input.value.trim();
     // The stylesheet sets .no-results { display: none }, so clearing the inline
