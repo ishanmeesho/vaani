@@ -119,9 +119,15 @@ The agent itself remembers nothing between turns. Conversation history lives out
 
 ## 3. Functional Requirements
 
-Each row is a requirement. **Launch** is required for the first production release. **Next** is designed now, built after launch. **Open** needs a decision or a POC before it can be built. **Target** is where the design is heading, with launch phasing still to confirm.
+Each row is a requirement. **Launch** is required for the first production release. **Next** is designed now, built after launch. **Target** is where the design is heading, with launch phasing still to confirm.
+
+Open decisions are not listed here. Where a requirement depends on a value or a choice we have not made yet, the row states the behaviour we are committing to and names the decision in §8. §8 is the single place to look for what still needs deciding.
+
+Each sub-section opens with what a PM actually owns in it. If a sub-section says you own nothing, it is engineering mechanism — skim it.
 
 ### 3.1 Authoring, Versioning, and Release Lifecycle
+
+**What you own here:** who may publish and roll back, and which changes need a full evaluation versus a smoke check (LIF-006). The rest is mechanism.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -140,6 +146,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 | LIF-013 | A publishing outage does not stop conversations | Publishing and serving may share one service, but if publishing goes down, agents already serving traffic keep working. | Launch |
 
 ### 3.2 Agent Composition, Build, and Engine Abstraction
+
+**What you own here:** one line — CMP-001, the split between what you can tune yourself and what needs an engineer. Everything else is engineering structure.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -167,6 +175,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 
 ### 3.3 Dispatch, Experiments, API, and Turn Identity
 
+**What you own here:** that an experiment is decided once per conversation and never switches mid-chat (DSP-002, DSP-003), and that a second turn is refused rather than queued (API-008).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | DSP-001 | Declare the experiments an agent takes part in | An agent version declares which experiments it depends on, so the platform knows what to resolve when a conversation starts. | Launch |
@@ -190,6 +200,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 
 ### 3.4 Runtime Execution and Control
 
+**What you own here:** the voice reply-length and silence rules (RUN-015), and accepting that cancelling cannot undo an action already taken (RUN-012).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | RUN-001 | One turn, end to end | Take the input, establish who it is for, load the conversation's pinned version and history, assemble or reuse the agent, run the model-and-tool loop, translate if wired, send the messages, and save the completed turn. | Launch |
@@ -209,6 +221,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 | RUN-015 | Voice constraints at launch | While answers are returned complete rather than streamed, products keep replies to roughly 80–100 tokens and play a local filler line after about 1.5 s of silence. Both are provisional product rules, not platform constants. | Provisional |
 
 ### 3.5 Tools, Resources, Idempotency, and Pause/Resume
+
+**What you own here:** which actions are high-impact enough to need the user's confirmation, and that launch ships read-only (PRS-008).
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -234,6 +248,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 
 ### 3.6 Typed Output, Streaming, and SDK
 
+**What you own here:** the six message types, since they are what your product renders (OUT-001), and the fallback for users on an old app (SDK-003).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | OUT-001 | Six kinds of message | An agent replies with six message types only: text, structured data, a client action, a progress update, turn framing, and an error. | Launch |
@@ -243,7 +259,7 @@ Each row is a requirement. **Launch** is required for the first production relea
 | OUT-006 | Streaming sends the same messages sooner | Streaming emits messages and partial text as they become available, without changing what the messages mean. | Next |
 | OUT-007 | Product payloads pass through untouched | Structured data and client actions are carried through exactly as the product produced them. The platform does not define or validate product-specific shapes; the producing agent and consuming product own that contract at both ends. | Launch |
 | OUT-008 | Structured answers from the model are parsed against the prompt | When the model is asked to produce structured data, it is read using the shape declared on that prompt version. | Launch |
-| OUT-009 | What happens when the model's answer doesn't fit | Decide whether a mismatch is handed back to the model to retry or ends the turn. Structured model answers do not ship until this is settled. | Open |
+| OUT-009 | No structured model answers until we know what a mismatch does | A prompt that asks the model for structured data does not ship until the mismatch policy is agreed (DEC-005). Shipping it without one means a malformed answer has undefined behaviour in production. | Launch |
 | OUT-010 | Every response ends deliberately | Every response ends with an explicit end, interrupted, or error. A connection that simply stops is a failure, not a success. | Launch |
 | OUT-011 | Partial answers are not rewritten as successes | If something fails after part of the answer was sent, keep what the user already received and add a clear error. Never present it as complete. | Next |
 | OUT-012 | Big payloads don't block the conversation | Keep streamed messages small. Send a reference for large data and let the product fetch it separately, so nothing else waits behind it. | Next |
@@ -255,9 +271,10 @@ Each row is a requirement. **Launch** is required for the first production relea
 | SDK-001 | The SDK is for internal services | The SDK ships for internal product services. Device apps never call the platform directly and stay free to use their own protocols. | Launch/Next |
 | SDK-002 | The SDK absorbs the hard parts | Reconnect, replay, deduplication and ordering, detecting the end, handling an error after partial output, stall detection, and matching client-tool results are handled by the SDK, not by each consumer. | Next |
 | SDK-003 | Old app versions must still work | Any new server capability needs a plain-text or existing-type fallback, because app capabilities reach users at app-update speed, not config speed. | Launch |
-| SDK-004 | The streaming architecture is not decided | The proposed always-open-connection edge design is exploratory and needs its own POC before we commit. | Open POC |
 
 ### 3.7 Translation and LLM Gateway
+
+**What you own here:** which languages launch and to what quality bar (DEC-002). The gateway rows are the model platform's contract.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -266,13 +283,12 @@ Each row is a requirement. **Launch** is required for the first production relea
 | TRN-003 | Keep both versions of the text | Traces and the permanent record hold both the original and the translated text, so a speech-recognition problem, a translation problem and a model problem can be told apart. | Launch |
 | TRN-004 | Protect names | Brands, product names and addresses survive translation unchanged. Address flows may skip translation entirely and send the original text to the model. | Launch |
 | TRN-005 | Count the translation time | Each translation hop is measured separately and included in the turn's timing breakdown. | Launch |
-| TRN-006 | Which languages we launch with | The supported languages and the quality bar are a product decision, made before launch. | Open |
 | TRN-007 | Translation can move to the device later | Keep the step replaceable, so it can retire if speech recognition on the device handles translation in future. | Deferred |
 | GWT-001 | Every model call goes through the gateway | All model calls route through Meesho's LLM gateway. Tools and data sources do not. | Launch |
 | GWT-002 | A thin connector per framework | A small connector speaks the gateway's protocol, reads back usage, and maps gateway failures onto platform failure types. | Launch |
 | GWT-003 | Configs name gateway models, not providers | A provider change behind the gateway must not require a config change here, as long as the gateway's model name stays the same. | Launch |
 | GWT-004 | We never hold provider keys | Provider credentials never appear in a config or on a server running agents. | Launch |
-| GWT-005 | One place that knows what each model is | The gateway path resolves a model name to its provider, capabilities, pricing, context limit and whether it is being retired. Whether the gateway actually provides this must be confirmed by discovery. | Launch/Open |
+| GWT-005 | One place that knows what each model is | The gateway path resolves a model name to its provider, capabilities, pricing, context limit and whether it is being retired. Whether the gateway actually provides this must be confirmed by discovery (BLK-002). | Launch |
 | GWT-006 | Usage and cost on every call | Every model call returns tokens in and out and a computed cost, stamped with the pricing version used, so historical costs stay reproducible. | Launch |
 | GWT-007 | Quotas per tenant | Per-tenant rate limits are enforced. On breach, return a clear rate-limit error immediately rather than silently queueing. | Launch |
 | GWT-008 | Retry only when it is safe | Retry only when the connection failed or timed out before the model started answering. Never retry after generation has begun — that risks paying twice or sending a duplicate answer. | Launch |
@@ -282,14 +298,15 @@ Each row is a requirement. **Launch** is required for the first production relea
 | GWT-012 | Model retirement | Flag every config using a model being retired and produce a migration report before the provider shuts it off. | Post-launch |
 | GWT-013 | Room for a backup model | Leave the hook for a pre-tested backup model, but do not run a second provider at launch. | Deferred |
 | GWT-014 | Streaming through the gateway | Gateway streaming arrives with the platform's streaming phase. | Next |
-| GWT-015 | Gateway discovery | Confirm protocol, usage fields, model naming, retirement signals, caller identity, failure types, quotas and health data before locking the implementation. | Open blocker |
 
 ### 3.8 Data Stores, Deployment, and Scale
+
+**What you own here:** one trade — DAT-010. A conversation in flight may be lost in a rare failure; a confirmed approval may not.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | DAT-001 | Configs in a relational database | Tenants, agents, draft versions, released versions and prompt versions live in a standard relational database. Versions are never edited in place. | Launch |
-| DAT-002 | Whether we need our own model table | Keep the model as a name in config unless gateway discovery shows we need our own table for capabilities, cost, latency, context limits and retirement. | Open |
+| DAT-002 | The model is a name in config | The model stays a plain name in config. We build our own table of model capabilities, cost, latency, context limits and retirement only if gateway discovery shows we need one (DEC-003). | Launch |
 | DAT-003 | Live conversation history in a fast cache | Conversation history — and, in the streaming phase, the short replay buffer — lives in a highly available cache with a time limit, provisionally about an hour. | Launch/Next |
 | DAT-004 | What a normal turn actually reads | A normal turn reads the conversation record. Config is fetched only when a version is first assembled and then reused; the experiment service is not called again. | Launch |
 | DAT-005 | Pending approvals in durable storage | A paused approval or client-tool wait is stored durably, because a user's confirmed action must survive a cache failure. | Next |
@@ -302,6 +319,8 @@ Each row is a requirement. **Launch** is required for the first production relea
 | DAT-012 | What adding servers cannot fix | Adding servers handles our own compute. The real limits are the model providers' rate limits and the model bill; both are tracked as capacity constraints, not autoscaling problems. | Launch |
 
 ### 3.9 Trust, Safety, Privacy, and Operations
+
+**What you own here:** most of it. Four of the six launch blockers are in this table, plus the per-user cap and when a cost ceiling gets switched on. Read this one properly.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -316,7 +335,7 @@ Each row is a requirement. **Launch** is required for the first production relea
 | OPS-001 | One trace per conversation | One trace spans the whole multi-turn conversation — specialists, translation, model calls, tools, pauses and the messages sent. | Launch |
 | OPS-002 | Traces feed evaluation too | The same conversation record serves operations and, later, evaluation. We do not build a second pipeline for launch. | Launch |
 | OPS-003 | Cost we can act on | Usage and cost roll up by turn, conversation, agent, model and tool. From launch we watch cost against conversation length, but no user is ever cut off for cost. | Launch |
-| OPS-004 | A cost ceiling, defined but switched off | A per-conversation cost limit exists as a switch, left off until data and an owner decide the value and whether it advises or enforces. | Open |
+| OPS-004 | A cost ceiling exists, switched off | The per-conversation cost limit is built now and left off, so arming it later is a config change rather than a project. Its value and whether it advises or enforces are DEC-001. | Launch |
 | OPS-005 | A clear floor when things break | When the gateway, model, translation or runtime cannot finish, return a clear failure marked retryable or not, and let the product choose what the user sees. | Launch |
 | OPS-006 | Report our uptime honestly | Platform availability is reported separately from the availability of the model provider we do not control. Provider uptime is never presented as our guarantee. | Launch |
 | OPS-007 | Keep every trace until it costs too much | Trace everything at launch. Reduce retention only when tracing cost crosses an agreed threshold, and even then keep errors, slow turns and conversations flagged by evaluation. | Deferred trigger |
@@ -513,14 +532,14 @@ Each row is a question we must be able to answer, and the minimum data needed to
 | ID | Item | Decision / Work Required | Owner |
 | :-: | :-: | :-: | :-: |
 | BLK-001 | Per-user data authorisation | Design how tools declare what they touch, bind the trusted identity everywhere, make downstream services check ownership, and prove it holds under attack. Must close before launch. | Security + Platform |
-| BLK-002 | Gateway discovery | Confirm the protocol, usage and cost fields, model naming, quotas, failure types, health data, retirement signals and streaming support. | Model Platform |
+| BLK-002 | Gateway discovery | Confirm the protocol, usage and cost fields, model naming, quotas, failure types, health data, retirement signals and streaming support. Every gateway requirement in §3.7 assumes an answer here. | Model Platform |
 | BLK-003 | Conversation-record privacy | Legal sign-off, plus retention, access and deletion obligations for storing raw conversations. | Legal + Privacy |
 | DEC-001 | Cost ceilings | Who sets limits per agent, tenant or conversation, when the limit is switched on, and whether it advises or enforces. | Product + Finance + Platform |
-| DEC-002 | Launch languages | Which source languages we support and to what quality bar; validate protected names and added latency. | Product + Language |
+| DEC-002 | Launch languages | Which source languages we support and to what quality bar; validate protected names and added latency. Blocks turning translation on for anyone. | Product + Language |
 | DEC-003 | Model table | Whether gateway data is enough, or we need our own table for model capabilities, cost, latency, context and retirement. | Architecture |
 | DEC-004 | Observability backend | POC Langfuse against a self-hosted alternative on the platform's tracing seam. | SRE + Platform |
-| DEC-005 | Structured-answer failures | Retry with the error, or end the turn — and what the retry limit is. | Product + Tech |
-| DEC-006 | Streaming and SDK architecture | Validate the transport choices, proxy settings, replay store, drain behaviour, SDK state machine and the always-open-connection direction. | Platform |
+| DEC-005 | Structured-answer failures | Retry with the error, or end the turn — and what the retry limit is. Until this is settled, OUT-009 blocks any prompt that asks the model for structured data. | Product + Tech |
+| DEC-006 | Streaming and SDK architecture | Validate the transport choices, proxy settings, replay store, drain behaviour, SDK state machine and the always-open-connection direction. The proposed edge design is exploratory and needs its own POC before we commit. | Platform |
 | DEC-007 | Cold start and reuse | Measure assembly and model warm-up, and settle whether reuse is a launch or Next capability. Pre-warm only if the data demands it. | Platform |
 | DEC-008 | Config governance | Today's logged promotion API is enough for one team. Define the review and approval model before self-serve or a second tenant. | Product + Platform |
 | DEC-009 | Provisional timings | Confirm conversation cache lifetime (~1h), how long a resumed pause is kept (~1 day), keep-alive interval (~20s), silence filler (~1.5s), and voice reply length. | Tech + Product |

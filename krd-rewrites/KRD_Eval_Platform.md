@@ -137,9 +137,15 @@ Two things are true throughout and worth stating plainly. **No score ever change
 
 ## 3. Functional Requirements
 
-Each row is a requirement. **P1–P5** map to the phases above. **Later** is deferred. **Open** means the architecture has identified a decision or a risk but the final behaviour is not yet defined. Where the source gave a number it is kept; where it gave only a direction, the requirement stays qualitative rather than inventing a target. The Go interface, label names, mock format and store layout live in §4, where they are the contract.
+Each row is a requirement. **P1–P5** map to the phases above. **Later** is deferred. Where the source gave a number it is kept; where it gave only a direction, the requirement stays qualitative rather than inventing a target. The Go interface, label names, mock format and store layout live in §4, where they are the contract.
+
+Open decisions are not listed here. Where a requirement depends on a value we have not set yet, the row states the behaviour we are committing to and names the decision in §8. §8 is the single place to look for what still needs deciding.
+
+Each sub-section opens with what a PM actually owns in it. Four of the twelve are yours almost entirely; in the rest you own little or nothing — skim those.
 
 ### 3.1 Platform Foundation, Tenancy, and Access
+
+**What you own here:** who in your tenant can view, edit, run and promote (FND-010). Everything else is infrastructure.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -162,6 +168,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 
 ### 3.2 Go SDK and Trace Contract
 
+**What you own here:** nothing — this is the engineering seam. One row matters to you: SDK-020, because a dropped trace means a report is quietly missing a case.
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | SDK-001 | One package knows the vendor | Exactly one package knows the platform's wire format and endpoints. Everything else depends only on its Go surface, and no caller may make its own HTTP calls to the platform. The surface is in §4.2. | P2 |
@@ -181,6 +189,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | SDK-021 | Flush everything on shutdown | On shutdown: stop accepting work, drain what is in flight, then flush and close **every** active client before the process exits. | P2 |
 
 ### 3.3 Ingestion, Storage Write Path, and Trace Query
+
+**What you own here:** the filters you will actually search by and the dashboards you will read (QRY-002 through QRY-007). The write-path rows above them are mechanism.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -205,6 +215,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 
 ### 3.4 Dataset and Test-Case Management
 
+**What you own here:** all of it. This is your test set — what goes in, what the right answer is (DST-005), and catching the case where a production mistake got copied in as the expected answer (DST-015).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | DST-001 | Turn one conversation into a test case | An authorised user can add any eligible trace to a named test set, straight from the trace explorer. | P4 |
@@ -223,9 +235,11 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | DST-014 | Not text-only | Case input, expected answer, metadata and stored artefacts must accommodate image and audio references without a schema redesign. | P4 |
 | DST-015 | Show the inherited answer | During curation the UI must make the inherited expected answer visible, so an owner notices when a production mistake has been copied into the test. | P4 |
 | DST-016 | Expiring old traces never breaks a test case | Dropping an old partition of trace data cannot delete or invalidate a case minted from it. | P5 |
-| DST-017 | Watch how big recordings get | Measure recorded-world size per case and per project. Moving recordings to object storage with a pointer is an approved future migration if database growth requires it. | Open |
+| DST-017 | Watch how big recordings get | Measure recorded-world size per case and per project, so growth is visible before it becomes a storage problem. The migration trigger is DEP-020. | P5 |
 
 ### 3.5 Evaluators, Judge Authoring, and Score Configuration
+
+**What you own here:** all of it. This is where you define what "good" means for your agent. The two rows that decide whether reports are useful: one dimension per judge (JDG-012), and judge only what the trace actually contains (JDG-013).
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -248,9 +262,11 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | JDG-018 | Judge failures are never silent | Completed and errored jobs are visible with trace, evaluator, model, latency, parse result and failure reason. A missing score must always be explainable. | P3 |
 | JDG-019 | Judges do not judge judges | The platform's own judge traces are excluded from matching, so judging cannot trigger more judging. | P3 |
 | JDG-020 | Rules fire forward, not backward | Make clear that an evaluator only fires on traces arriving after it was activated, and provide the batch re-evaluation path for traces already stored. | P4 |
-| JDG-021 | Judge calibration | Reserve space for calibration status and human-agreement evidence, but treat the calibration workflow and its thresholds as a separate design. Until then, judge trust is an assumption, not a measurement. | Open |
+| JDG-021 | Leave room to prove a judge is trustworthy | Reserve space on a judge for calibration status and evidence of agreement with human review, so adding it later is not a schema change. Until the workflow exists (DEP-014), judge trust is an assumption, not a measurement — and reports should be read that way. | P4 |
 
 ### 3.6 Offline Sandbox, Bundle, and Eval Plane
+
+**What you own here:** nothing except the sign-off in DEP-001. Read it anyway once: this isolation is the reason an evaluation run cannot cancel a real customer's order.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -275,9 +291,10 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | SBX-019 | Return the trace ID | Every successful case returns its root trace ID, so the coordinator can confirm the evidence arrived. | P3 |
 | SBX-020 | Production can never replay mocks | The production runtime must never be able to take the mock-replay path. It is enabled only by a sandbox deployment and a validated evaluation request. | P3 |
 | SBX-021 | Tear down only after evidence is safe | The sandbox is destroyed only once its traces are confirmed durable. A teardown failure leaves cleanup debt, never lost evidence. | P3 |
-| SBX-022 | Sign off on where sandboxes run | Running isolated feature-branch sandboxes inside the production environment requires explicit architecture, security and platform sign-off before it is used. | Open |
 
 ### 3.7 Mock Recording, Replay, and Stateful Test Worlds
+
+**What you own here:** which dependencies run for real and which are replayed (MCK-010, MCK-013), and the maintenance cost in MCK-022 — when your agent takes a new path, someone has to update the recorded world and the expected answer.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -303,6 +320,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | MCK-023 | Validate the world before running | The complete contract — modes, strategies, rules, stateful claims and payload types — is validated before any case executes. | P3 |
 
 ### 3.8 Eval-Runner Lifecycle, Concurrency, and Failure Semantics
+
+**What you own here:** nothing. RUN-024 is the only row you will ever see the effect of — what the run status shows you while you wait.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -333,6 +352,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 
 ### 3.9 Eval Triggering, Scoring, Validity, and Reports
 
+**What you own here:** your score thresholds (EVL-021) and the minimum test-set size (DEP-013). EVL-019 is the one to internalise: an invalid run is not a failed run, and treating them the same is how a bad change ships.
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | EVL-001 | Judging is triggered by the trace arriving | Evaluation happens as a consequence of a correctly labelled trace being ingested. There is no separate "now run the judges" call. | P3 |
@@ -349,7 +370,7 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | EVL-012 | What a score contains | Name, value, the judge's explanation, the source evaluator and version, and its trace and run. | P3 |
 | EVL-013 | Every job ends visibly | Completed or errored, and inspectable either way. | P3 |
 | EVL-014 | One path for offline and online | Both converge on the same job execution and score storage. Only the trigger and whether a reference answer exists differ. | P4 |
-| EVL-015 | A minimum test-set size | A run is blocked before provisioning if the test set is below a configurable validity floor — a handful of cases cannot support a release decision. The architecture's example is 30; the production value needs alignment (DEP-013). | Open |
+| EVL-015 | A minimum test-set size | A run is blocked before anything is provisioned if the test set is below a configured floor, because a handful of cases cannot support a release decision. The floor is configurable; its production value is DEP-013. | P3 |
 | EVL-016 | Check the judge is ready first | Before the run, verify at least one required evaluator is active and matching. Switching one on afterwards does not repair the run. | P3 |
 | EVL-017 | Every case must have run | Validity requires every case to have either a result or an explicit failure. | P3 |
 | EVL-018 | Every case must be fully scored | Validity requires every executed case to have every required score. Judge errors make a run incomplete — never a misleading partial average. | P3 |
@@ -360,6 +381,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | EVL-023 | Every number links to its evidence | Each figure links through to the full trace, the expected answer, the judge's explanation, the config version, the prompt and tool attribution, and whether each call was mocked. | P4 |
 
 ### 3.10 Human Verdict, Promotion Gate, and Audit
+
+**What you own here:** all of it. This table is the gate — it is the reason this platform exists, and GAT-013 is the dependency that decides whether it covers anything.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -380,6 +403,8 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 
 ### 3.11 Online Evaluation and Production-to-Test-Set Loop
 
+**What you own here:** the sampling rate, which is a direct cost dial (ONL-003), and the weekly habit in ONL-011 and ONL-014 — a human turning real failures into test cases. Nothing here happens without that habit.
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | ONL-001 | Target live traffic | Online evaluation is an evaluator that targets production traces rather than test-set runs. | P4 |
@@ -397,9 +422,10 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | ONL-013 | Alerting we own | Add our own alerting over score trends where the self-hosted dashboards do not alert. Alerts link straight to the saved trace filter. | P5 |
 | ONL-014 | A person reviews, at launch | At launch a human reviews saved filters and picks candidate test cases. This limitation must be explicit in the operating guidance. | P4 |
 | ONL-015 | Automated review queue | Automatic surfacing, refresh cadence and staleness measurement need their own later design. | Later |
-| ONL-016 | Offline must not be starved | Define queue priority so online sampling cannot indefinitely delay an offline report that a release is waiting on. | Open |
 
 ### 3.12 Data Retention, Cost, Observability, and Scale
+
+**What you own here:** the four cost dials (OPS-010) and, with FinOps, how long evidence stays interactive (DEP-017).
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -420,9 +446,6 @@ Each row is a requirement. **P1–P5** map to the phases above. **Later** is def
 | OPS-020 | Ingestion capacity | Demonstrate **20,000–25,000 spans/s** at the stated 2,500-conversation/s target, without missing freshness targets. | P5 |
 | OPS-021 | Judge capacity | Demonstrate roughly **4,500–6,000 judge evaluations/s**, with tenant model rate limits tracked separately. | P5 |
 | OPS-022 | Growth planning | Plan for roughly **1.7–2.2 billion spans/day**, about **3 TB/day raw** before compression, and a few hundred GB/day stored. | P5 |
-| OPS-023 | Evaluation must not throttle production | Decide whether evaluation uses separate provider keys or quotas, so a heavy run cannot rate-limit live agents. | Open |
-| OPS-024 | A payload size policy | Define a maximum trace and span payload, and a visible truncation policy, before an oversized tool output threatens batching or storage. | Open |
-| OPS-025 | A deletion path for personal data | Design how a deletion request propagates into test cases and lake history. Until this exists, the platform cannot be treated as compliant with deletion obligations. | Open |
 
 ## 4. API and Data Contracts
 
@@ -672,7 +695,7 @@ Note how much of this depends on the orchestrator: the sandbox, the eval endpoin
 
 | ID | Item | Decision / Work Required | Owner |
 | :-: | :-: | :-: | :-: |
-| DEP-001 | Sandbox placement sign-off | Approve isolated feature-branch sandboxes running inside the production environment. | Architecture / Security / Platform |
+| DEP-001 | Sandbox placement sign-off | Explicit architecture, security and platform approval for running isolated feature-branch sandboxes inside the production environment. Nothing in §3.6 may be used in production before this is signed. | Architecture / Security / Platform |
 | DEP-002 | The platform estate | Provision and operate the stores, ingress, CI, images, secrets and backups. | Platform Engineering |
 | DEP-003 | Orchestrator tracing | Integrate the SDK, stamp the closed label set, and honour the root, context, end and shutdown rules. | AMP Runtime |
 | DEP-004 | Eval endpoint contract | Freeze bundle export, startup and execute semantics before the P3 coordinator build. | AMP Runtime + Eval Platform |
@@ -684,14 +707,14 @@ Note how much of this depends on the orchestrator: the sandbox, the eval endpoin
 | DEP-010 | Project provisioning | Automate organisation, project, role, key and model-connection creation. | Eval Platform / IAM |
 | DEP-011 | Model gateway | Allow approved sandbox and judge traffic, expose usage and cost, and clarify rate-limit isolation. | LLM Gateway |
 | DEP-012 | Non-production routes | Provide non-production routes for any surface allowed to run real. Production routes stay unreachable. | Owning Service Teams |
-| DEP-013 | Minimum test-set size | Choose the production default and the override policy. The architecture uses 30 only as an example. | Product / Data Science |
+| DEP-013 | Minimum test-set size | Choose the production default and the override policy. The architecture uses 30 only as an example. EVL-015 enforces whatever number you pick. | Product / Data Science |
 | DEP-014 | Judge calibration | Design calibration sets, agreement metrics, thresholds and a re-calibration cadence. Until this exists, judge trust is assumed rather than measured. | Data Science / Quality |
-| DEP-015 | Online versus offline priority | Decide queue and worker priority so online sampling cannot starve a release waiting on a report. | Platform Engineering |
-| DEP-016 | Evaluation model quotas | Decide separate keys or reserved quota so evaluation cannot throttle live agents. | LLM Gateway / Tenant Owners |
+| DEP-015 | Online versus offline priority | Decide queue and worker priority so online sampling cannot indefinitely starve an offline report that a release is waiting on. | Platform Engineering |
+| DEP-016 | Evaluation model quotas | Decide separate provider keys or reserved quota, so a heavy evaluation run cannot rate-limit live agents serving real users. | LLM Gateway / Tenant Owners |
 | DEP-017 | Interactive retention | Set the window from measured volume, query demand and cost. | Data Platform / FinOps |
-| DEP-018 | Deletion of personal data | Define how deletion propagates across traces, copied test cases, object storage, exports and lake tables. | Privacy / Legal / Data Platform |
-| DEP-019 | Payload cap | Define the maximum payload, the truncation and redaction rules, and how truncation is shown. | Architecture / Security |
-| DEP-020 | Recording storage | Monitor growth and define the trigger for moving recordings to object storage. | Eval Platform / Data |
+| DEP-018 | Deletion of personal data | Define how deletion propagates across traces, copied test cases, object storage, exports and lake tables. Until this exists the platform cannot be treated as compliant with deletion obligations — and test cases are copies, so they do not disappear when a trace does. | Privacy / Legal / Data Platform |
+| DEP-019 | Payload cap | Define the maximum trace and span payload, the truncation and redaction rules, and how truncation is shown — before an oversized tool output threatens batching or storage. | Architecture / Security |
+| DEP-020 | Recording storage | Using the measurements from DST-017, define the growth trigger for moving recorded worlds to object storage with a pointer. | Eval Platform / Data |
 | DEP-021 | Branch builds | Assign ownership, a caching strategy, a timing target and the status experience. | Developer Platform |
 | DEP-022 | Coordinator drain | Support deployment drain, so a planned restart does not routinely abandon a long run. | Eval Platform / Infra |
 | DEP-023 | Queue recovery | Define availability, depth ceilings, shedding and the replay-from-raw-copy procedure. | Platform Engineering |

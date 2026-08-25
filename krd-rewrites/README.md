@@ -100,3 +100,35 @@ enough.
 metric is defined by work owned in another KRD, say so in the blockers table and
 in the summary. A gate that depends on someone else's change classification is
 worth stating plainly, not leaving as one row among twenty-five.
+
+## The reading-path pass (v3)
+
+Language was only half the problem. Once the words were plain, the remaining
+issue was **flat priority**: a launch blocker and a metrics-emission row looked
+identical, so a PM had no way to know where to spend attention. Two changes fix
+that, and they apply to every KRD.
+
+**Open every §3.x sub-section with what the PM owns.** One line, naming the
+specific rows where their judgment is required — and saying plainly when the
+answer is "nothing here, this is engineering mechanism, skim it". A reader can
+now take the ~12 lines of a Functional Requirements section and know exactly
+which tables need them. Being honest about the sub-sections a PM does not own is
+what makes the claim credible on the ones they do.
+
+**Keep open decisions out of the requirement tables.** An "Open" phase inside
+Functional Requirements makes a reader stop and wonder whether it is their call
+or already tracked, and in practice it duplicated a row in §8 anyway (7 such
+duplications in Composition & Runtime, 9 in Eval Platform). The rule:
+
+- The row is purely a decision → delete it. §8 already owns it.
+- The row contains a requirement *plus* an undecided value → keep the
+  requirement with a real phase, and name the decision in §8. `EVL-015` still
+  blocks a run below the floor; only the number moved. `OUT-009` still blocks
+  shipping structured model answers; only the mismatch policy moved.
+
+Never delete a row that was carrying a commitment. The test is whether anything
+would stop being true if the row disappeared.
+
+Then make §8 earn its new weight: each absorbed decision says what it blocks, so
+"choose a number" reads as "EVL-015 enforces whatever number you pick".
+

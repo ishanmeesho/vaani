@@ -139,7 +139,11 @@ The current delivery is conversation memory. A generated summary follows in Phas
 
 Each row is a requirement. **P1** is the conversation foundation, **P2** the background summary, **P3** production readiness and the Vaani rollout, **All** applies across every delivered phase, and **Deferred** means the contract leaves room for it but nothing is committed. Storage shapes, key layouts and field names live in §4 and §6, where they are the contract; the rows below state what must be true.
 
+Open decisions are not listed here — §8 is the single place to look for what still needs deciding. Each sub-section opens with what a PM actually owns in it. If a sub-section says you own nothing, it is engineering mechanism — skim it.
+
 ### 3.1 Session Lifecycle and Turn Path
+
+**What you own here:** almost nothing — this is the mechanism that makes continuity work. The one row to know is SES-016: at launch the answer arrives complete, not streamed, which is why replies have to stay short.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -161,6 +165,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 
 ### 3.2 Redis State Model and Fixed TTL
 
+**What you own here:** the six-hour lifetime and its consequence — a user who comes back seven hours later starts fresh, and nothing they do extends the clock (RED-008, RED-009, ALIGN-001).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | RED-001 | One store on the serving path | The fast memory store is the only thing memory touches while the user is waiting. No database or archive work is added to the turn path. | P1 |
@@ -180,6 +186,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 | RED-019 | Prove it with real conversations | Performance tests must include realistically long conversations, to confirm that rewriting the conversation value still meets the write-latency target. | P3 |
 
 ### 3.3 Retry, Deduplication, and Concurrency
+
+**What you own here:** COR-015. Your tools must be safe to repeat, because a failed save can leave no record that the request ever completed.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -201,6 +209,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 | COR-016 | Retries do not extend the clock | Looking up a request, retrying a save, rebasing after a conflict and replaying an answer all preserve the original expiry. | P1 |
 
 ### 3.4 Availability, Emergency Revocation, and Checkpoints
+
+**What you own here:** the one decision this KRD forces you to make — when memory is unavailable, does the turn continue without history or fail outright (AVA-001). There is no default. Vaani continues.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -226,6 +236,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 
 ### 3.5 Memory Representations and Lifecycle
 
+**What you own here:** which optional representations you switch on and their limits (REP-016). Conversation memory is not optional and not yours to configure.
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | REP-001 | The conversation is not optional | Conversation memory is attempted for every completed turn. It is not something a product switches on. | P1 |
@@ -247,6 +259,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 
 ### 3.6 Node Memory Policies and Selection
 
+**What you own here:** all of it. What memory each part of your agent receives is your main quality and cost dial, and nothing gets memory unless you ask for it (SEL-002).
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | SEL-001 | Two levels of configuration | The conversation level decides what memory is *produced*; each part of the agent decides what it *receives*. Something is produced once and then shaped differently for each consumer. | All |
@@ -264,6 +278,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 | SEL-015 | Selection never writes | Selection shapes this turn's input only. It never modifies or deletes stored memory. | P1 |
 
 ### 3.7 Token Limits, Overflow, and Memory Trust Boundary
+
+**What you own here:** the order in which memory gets trimmed when it does not fit (LIM-003), and accepting the last resort — a turn that runs with no memory at all rather than failing (LIM-010).
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -284,6 +300,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 | LIM-017 | Don't claim more safety than we have | We do not claim that filtering or classifying natural-language memory makes it safe. The protection is structural — separating memory from instructions — and adversarial tests must attack exactly that. | P1/P2 |
 
 ### 3.8 Asynchronous Summary Generation
+
+**What you own here:** whether to enable a summary at all, the threshold that triggers it, and the quality bar it has to clear (SUM-019, BLK-007). None of this is in the Vaani launch.
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
@@ -308,6 +326,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 
 ### 3.9 Data-Lake Archival and Durability
 
+**What you own here:** nothing — this is a data-platform contract. ARC-013 is the row that concerns you: it says what a failed save actually costs.
+
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
 | ARC-001 | Everything is archived before it expires | Every conversation is scheduled for background archiving to permanent storage before its fast copy expires. | P1 |
@@ -326,6 +346,8 @@ Each row is a requirement. **P1** is the conversation foundation, **P2** the bac
 | ARC-014 | The ingestion path is a hard gate | The chosen ingestion path, and its acknowledgement and duplicate-safety contract, are required before Phase 1 goes to production. | P1 |
 
 ### 3.10 Observability, Performance, Capacity, and Cost
+
+**What you own here:** one threshold — how often a turn running without its memory is acceptable before someone gets paged (OPS-011, OPS-015).
 
 | Req ID | Capability | Required Behaviour / Acceptance | Phase |
 | :-: | :-: | :-: | :-: |
