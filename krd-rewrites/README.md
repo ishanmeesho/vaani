@@ -65,8 +65,9 @@ definitions and their numbers. Owners. Anything in Section IV.
 | --- | --- | --- |
 | `KRD_Agent_Composition_and_Runtime.md` | AMP Architecture, Part One — Composition & Runtime | `KRD_Agent_Composition_and_Runtime` (Drive) |
 | `KRD_Short_Term_Memory.md` | AMP Architecture, Part Two A — Memory | `KRD_Short_Term_Memory` (Drive) |
+| `KRD_Eval_Platform.md` | AMP Architecture, Part Three — Evaluation | `KRD_Eval_Platform` (Drive) |
 
-## One more rule, learned on the Short-Term Memory pass
+## Rules learned on later passes
 
 **Infrastructure design belongs in §6, not §3.** An infrastructure-heavy KRD will
 try to put key layouts, storage primitives and field lists into Functional
@@ -80,3 +81,22 @@ engineer still has the spec.
 another KRD, say so in the blocker row, in both documents, naming what each one
 claims and why they cannot both be true. Simplifying language must never soften a
 blocker into an open question.
+
+**A vendor's name is not a requirement.** An adopted-platform KRD will name the
+vendor and its component stores in every other requirement row. Name it once,
+where the decision is made (§6.1) and where the layout is the contract (§4). A
+requirement row says what must be true — "one tenant's query never scans
+another's data" — not which product provides it. The exception is a requirement
+*about* the vendor relationship, like "forking the core is prohibited", where the
+constraint is the point.
+
+**State what the requirement is protecting against.** A guardrail whose reason is
+missing gets negotiated away. "A dropped span raises an alert" is a nag; "a
+dropped span silently removes a case from a report, so a release decision gets
+made on incomplete data" is a rule someone will defend. One clause is usually
+enough.
+
+**Name a cross-KRD dependency where it actually bites.** Where a KRD's headline
+metric is defined by work owned in another KRD, say so in the blockers table and
+in the summary. A gate that depends on someone else's change classification is
+worth stating plainly, not leaving as one row among twenty-five.
