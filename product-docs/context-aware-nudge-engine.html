@@ -90,13 +90,13 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html" class="active">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html" class="active">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
     <h1>KRD — Vaani Context-Aware Personalized Nudge Engine</h1>
 <p><em>Personalization &amp; prior-session memory layer on the Zero-Click Nudge MVP</em></p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
 
@@ -125,7 +125,7 @@
 <td style="text-align: center;">KRD — Vaani Zero-Click Nudge MVP (v1)</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section I: Executive Summary</h1>
 <h2>1. Problem Statement</h2>
 <p>In v1  we built capability to  fire a client-side zero-click nudge when a user views enough products without clicking.The nudge content was deliberately blunt: one static Hindi line, the same copy for everyone, no memory of who the user is or what they did in prior sessions. Every eligible user hears the same thing regardless of whether they were deep in one category yesterday, are shopping in a category for the first time, or are browsing wide with no clear intent.</p>
@@ -153,7 +153,7 @@
 </ol>
 <h2>3. NSM — Success &amp; Check Metrics</h2>
 <h3>3.1 Primary Success Metric (causal anchor: ITT)</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -162,9 +162,9 @@
 <td style="text-align: center;">% eligible zero-click sessions where the user eventually clicks ≥1 product in the same session.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.2 Secondary Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -185,9 +185,9 @@
 <td style="text-align: center;">For D-hook nudges (E1-RV, cart/payment carry-over): click / order on the re-surfaced item or category.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.3 Guardrail Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -220,10 +220,10 @@
 <td style="text-align: center;">sscat-tagged impression counting must not degrade app performance.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section II: Product Requirement Document</h1>
 <h2>1. User Stories and Capabilities</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Value if solved</th></tr></thead>
 <tbody>
 
@@ -276,7 +276,7 @@
 <td style="text-align: center;">Personalization without per-copy engineering</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>2. Scope</h2>
 <h3>2.1 In Scope</h3>
 <ol>
@@ -322,7 +322,7 @@
 </ol>
 <h2>3. Product Decision Framework</h2>
 <p>Every nudge leaf is a cell in a MECE decision tree over four axes. The backend supplies A and D at session start; the client evaluates B and C from live counters.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Axis</th><th>Values</th><th>Meaning / source</th></tr></thead>
 <tbody>
 
@@ -347,11 +347,11 @@
 <td style="text-align: center;">Backend-pushed prior-session state; produces override nudges evaluated at app open.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.1 Nudge Catalogue &amp; Hypotheses</h3>
 <p>Copy is Hindi-forward with English retail terms, consistent with shipped v1 nudges. Curly-brace tokens are placeholders resolved from the context payload (§II.6). The Priority column drives the resolver (§II.5).</p>
 <h3>Exploit user (dominant sscat S known)</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Trigger condition</th><th>Hypothesis</th><th>Copy (placeholder)</th><th>Priority</th></tr></thead>
 <tbody>
 
@@ -405,9 +405,9 @@
 <td style="text-align: center;">base</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>Explore user (no dominant sscat; predicted basket Z)</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Trigger condition</th><th>Hypothesis</th><th>Copy (placeholder)</th><th>Priority</th></tr></thead>
 <tbody>
 
@@ -426,7 +426,7 @@
 <td style="text-align: center;">base (explore, fallback)</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>DECISION</strong> <strong>Z−Y predicted-basket set arithmetic — pre-push + client subtraction.</strong></p>
 <p>Z (predicted basket, category-level) is pushed at session start with a confidence score. The client tracks Y (categories actually viewed this session) via the sscat→category rollup map, and computes Z−Y locally to name only unseen predicted categories. Gate: only speak the predicted list (X1) when Z-confidence ≥ threshold (start 0.6). Below it, or when Z−Y is empty, fall to X2's open question — never assert a weak propensity guess as if it were known intent.</p>
 <h3>3.2 Suppression &amp; Back-off</h3>
@@ -460,7 +460,7 @@
 <h3>4.1  Backend ↔ Client Split &amp; Session-Start Payload</h3>
 <p>The backend computes anything that needs history or cross-session state and pushes a per-user payload at session start; the client evaluates live-session state and fills templates. No fire-time backend call in v2.</p>
 <h3>Backend-supplied data points (session-start payload)</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Type</th><th>Purpose</th></tr></thead>
 <tbody>
 
@@ -510,7 +510,7 @@
 <td style="text-align: center;">Config; default 0.6.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>Client-derived state (live session)</h3>
 <ul>
 <li>
@@ -524,7 +524,7 @@
 </li>
 </ul>
 <h3>Bankable User-Profile Placeholders</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Group</th><th>Field(s)</th><th>Token</th></tr></thead>
 <tbody>
 
@@ -569,11 +569,11 @@
 <td style="text-align: center;">{device}</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>4.2 Counter Requirements (v2 additions)</h3>
 <p>v1 session / surface / surface-visit counters are carried forward unchanged. v2 adds sscat-tagged maps and derived counters.</p>
 <h3>sscat-tagged maps (client)</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Counter</th><th>Type</th><th>Reset</th><th>Description</th></tr></thead>
 <tbody>
 
@@ -602,7 +602,7 @@
 <td style="text-align: center;">Breadth signal for E4b / explore.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>Derived counters</h3>
 <ul>
 <li>
@@ -684,7 +684,7 @@
 </code></pre>
 <p><em>Resolver reads priority (higher wins): D-override 90 &gt; E1-RV 80 &gt; E1-NTC 60 &gt; E1/E2/E3/E4 40 &gt; X1 30 &gt; X2 20 &gt; C1 static 10.</em></p>
 <h2>5 Experimentation Strategy</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Item</th><th>Detail</th></tr></thead>
 <tbody>
 
@@ -701,7 +701,7 @@
 <td style="text-align: center;">Treatment (v2 personalized catalogue) · Holdout (eligible, no nudge) · optional v1-static (isolates the personalization delta over the shipped MVP).</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>6. Tech Solutioning</h2>
 <p>[to be added by Engineering] — expected components: </p>
 <p>(1) session-start payload delivery + caching; </p>
@@ -729,7 +729,7 @@
 <h1>Section III: Testing &amp; Launch Checklist</h1>
 <h2>1. Functional Testing</h2>
 <h3>1.1 Test Cases</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
 <tbody>
 
@@ -794,9 +794,9 @@
 <td style="text-align: center;">No crash / ANR; counts consistent; performance guardrail holds.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>2. Launch Checklist</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Theme</th><th>Prompt</th><th>Owner / Notes</th></tr></thead>
 <tbody>
 
@@ -831,7 +831,7 @@
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>3. Post-Launch Governance</h2>
 <ul>
 <li>
@@ -845,7 +845,7 @@
 </li>
 </ul>
 <h1>Section IV: Mentor Sign Off</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Function</th><th>Name</th><th>Status</th></tr></thead>
 <tbody>
 
@@ -880,7 +880,7 @@
 <td style="text-align: center;">Pending</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Summary</h1>
 <p>v2 layers personalization and prior-session memory onto the validated Zero-Click Nudge MVP. Required build:</p>
 <ol>
