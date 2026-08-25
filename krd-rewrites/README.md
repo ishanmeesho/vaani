@@ -64,3 +64,19 @@ definitions and their numbers. Owners. Anything in Section IV.
 | File | Source architecture doc | Source KRD |
 | --- | --- | --- |
 | `KRD_Agent_Composition_and_Runtime.md` | AMP Architecture, Part One — Composition & Runtime | `KRD_Agent_Composition_and_Runtime` (Drive) |
+| `KRD_Short_Term_Memory.md` | AMP Architecture, Part Two A — Memory | `KRD_Short_Term_Memory` (Drive) |
+
+## One more rule, learned on the Short-Term Memory pass
+
+**Infrastructure design belongs in §6, not §3.** An infrastructure-heavy KRD will
+try to put key layouts, storage primitives and field lists into Functional
+Requirements. Those are real contracts, but they are §4 and §6 contracts. A
+requirement row says what must be true — "everything for one conversation is
+stored together, so a multi-part update stays all-or-nothing" — and points at the
+section that carries the layout. That way the PM can defend the guarantee and the
+engineer still has the spec.
+
+**Surface real contradictions, don't smooth them.** Where a KRD contradicts
+another KRD, say so in the blocker row, in both documents, naming what each one
+claims and why they cannot both be true. Simplifying language must never soften a
+blocker into an open question.
