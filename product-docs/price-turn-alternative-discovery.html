@@ -90,14 +90,14 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html" class="active">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html" class="active">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
     <h1>Alternate Product Discovery</h1>
 <h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
 <p><em>When a buyer questions or negotiates the price of the product they are on, Vaani runs an anchored image search with a price filter, the backend reranks the candidate pool on P0 signals, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked results.</em></p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
 <tr>
@@ -133,7 +133,7 @@
 <td style="text-align: center;">Three scopes. Scope 1 is backend-only. Scope 2 adds the LLM verdict. Scope 3 adds the SDUI CLP and needs Android + design.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h1>Section I: Executive Summary</h1>
 
@@ -162,7 +162,7 @@
 <h2>3. NSM — Success &amp; Check Metrics</h2>
 
 <h3>3.1 Primary Success Metric</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 <tr>
@@ -170,11 +170,11 @@
 <td style="text-align: center;">Share of price turns whose session goes on to a cart-add or order within the anchor's sscat. Measured against the current price-turn behaviour as control.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><em>Explicitly not the primary metric: within-Vaani order rate. That is selection, not lift — buyers who reach Vaani late in the hunt already convert better. Judge this feature on effort and same-type conversion.</em></p>
 
 <h3>3.2 Secondary Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 <tr>
@@ -206,10 +206,10 @@
 <td style="text-align: center;">Scope 3. Opens per CLP group, so we learn which of the six intents buyers actually shop by.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h3>3.3 Guardrail Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 <tr>
@@ -237,11 +237,11 @@
 <td style="text-align: center;">Share of price turns where the buyer leaves the anchor and buys nothing in the session. Catches the case where we talk buyers out of a fine purchase.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section II: Product Requirement Document</h1>
 
 <h2>1. User Stories &amp; Capabilities</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Scope</th></tr></thead>
 <tbody>
 <tr>
@@ -301,7 +301,7 @@
 <td style="text-align: center;">2</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>2. Scope</h2>
 
@@ -356,7 +356,7 @@
 
 <h3>3.2 Anchor Resolution</h3>
 <p>The anchor is frozen at trigger and held for the whole exchange. Everything the verdict says is relative to it.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Situation</th><th>Anchor</th></tr></thead>
 <tbody>
 <tr>
@@ -372,7 +372,7 @@
 <td style="text-align: center;">The new PDP. A genuine PDP landing starts a new hunt; scrolling does not.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>The anchor record carries: pid, catalog id, sscat, <strong>full catalog image reference</strong>, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. The image reference must be the catalog asset — <strong>a screen capture is not acceptable input</strong>; PDP chrome, overlays and crops measurably degrade match quality.</p>
 
 <h3>3.3 Query Construction</h3>
@@ -398,7 +398,7 @@
 
 <h4>3.5.1 In plain terms</h4>
 <p>Every candidate gets a score out of 100. Four things earn points, and one adds a bonus. The pool is then sorted by that score.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Factor</th><th>Points</th><th>What earns them</th><th>Why it is weighted this way</th></tr></thead>
 <tbody>
 <tr><td><strong>Rating</strong></td><td>35</td><td>The best-rated product in the pool gets all 35; the worst gets 0.</td><td>Quality is the thing the buyer cannot see from the image, so it carries the most weight.</td></tr>
@@ -407,7 +407,7 @@
 <tr><td><strong>Seller rating</strong></td><td>15</td><td>The best-rated seller in the pool gets all 15.</td><td>Real but weaker signal than the product's own rating; it breaks near-ties rather than driving the order.</td></tr>
 <tr><td><strong>Mall / Gold</strong></td><td>+5 bonus</td><td>Flat bonus if the product is Mall or Gold.</td><td>Lifts trusted stock without letting a mediocre Mall product outrank a clearly better one.</td></tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Points are relative to the pool, not absolute.</strong> Within each factor, the best candidate among the surviving 50 gets full points and the worst gets zero, with everyone else spread in between. We do this because absolute thresholds do not travel across categories — a 4.0 rating is strong in one sub-category and ordinary in another. The consequence to keep in mind: a zero on a factor means "worst in this pool", not "bad".</p>
 
 <h4>3.5.2 Two rules that stop the obvious failures</h4>
@@ -418,7 +418,7 @@
 
 <h4>3.5.3 Default configuration — v1 starting point</h4>
 <p>These are the values to ship with, and every one of them is config rather than code. They are a considered starting point, not a tuned answer; expect the first weight set to be wrong and plan to move it.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Constant</th><th>Default</th><th>Note</th></tr></thead>
 <tbody>
 <tr><td>Rating weight</td><td>35</td><td rowspan="4">Weights sum to 100 so a score reads as a percentage.</td></tr>
@@ -431,11 +431,11 @@
 <tr><td>Rerank floor</td><td>4 candidates</td><td>Below this, no rerank at all (3.4).</td></tr>
 <tr><td>Tie-break</td><td>By product ID</td><td>Two equal scores must always order the same way, so the feed does not reshuffle between identical calls.</td></tr>
 </tbody>
-</table>
+</table></div>
 
 <h4>3.5.4 Worked example</h4>
 <p>Anchor: <strong>₹289</strong>, 3.9★ on 212 ratings. Price band: <em>under ₹299</em>. Five candidates survive the filter. Sub-category median rating is 4.0.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Rank</th><th>Candidate</th><th>Price</th><th>Rating</th><th>Ratings</th><th>Seller</th><th>Mall</th><th>Score</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>A</td><td>₹249</td><td>4.2★</td><td>938</td><td>4.3</td><td>—</td><td><strong>86.1</strong></td></tr>
@@ -444,7 +444,7 @@
 <tr><td>4</td><td>D</td><td>₹199</td><td>3.6★</td><td>120</td><td>3.6</td><td>—</td><td><strong>39.0</strong></td></tr>
 <tr><td>5</td><td>E</td><td>₹289</td><td>4.6★</td><td>8</td><td>4.0</td><td>—</td><td><strong>31.9</strong></td></tr>
 </tbody>
-</table>
+</table></div>
 <p>Three things this example is meant to demonstrate:</p>
 <ul>
 <li><p><strong>The highest-rated product finishes last.</strong> E is 4.6★ — the best rating in the pool — but on 8 ratings, so the confidence floor replaces it with the median and it earns nothing on volume. This is the behaviour we most want.</p></li>
@@ -563,7 +563,7 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 
 <h3>3.9 Verdict Validators <em>[optional / we can debate this]</em></h3>
 <p>Run before the verdict is spoken. Both are cheap, deterministic, and protect the two guardrails in 3.3 of Section I.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Validator</th><th>Check</th><th>On failure</th></tr></thead>
 <tbody>
 <tr>
@@ -577,7 +577,7 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 <td style="text-align: center;">Suppress the verdict, log <code>verdict_position_fail</code>.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><em>Suppression is preferable to a wrong verdict: Scope 1's reranked feed is still on the screen and still useful without a voice line.</em></p>
 
 <h3>3.10 SDUI Custom CLP (Scope 3)</h3>
@@ -588,7 +588,7 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 <li><p><strong>Source-agnostic:</strong> the image search becomes one <em>source</em> feeding the CLP. The reco feed is a second source (3.12). Neither is the surface.</p></li>
 <li><p><strong>Groups come from a fixed taxonomy we define and instruct.</strong> The model assigns products to our groups; it never invents a group. Fixed groups are what make engagement measurable per intent and the output testable at all.</p></li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Group</th><th>Qualifying signal</th><th>Tier</th></tr></thead>
 <tbody>
 <tr>
@@ -622,7 +622,7 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 <td style="text-align: center;">P1</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>The six groups map one-to-one onto P0/P1/P2 — <strong>the taxonomy needs no data we do not already have</strong>. Mall/Gold stays a badge across groups rather than a seventh group, so trust reads as an attribute of an option rather than a competing axis.</p>
 
 <h3>3.11 Grouping Prompt — v1</h3>
@@ -664,7 +664,7 @@ the single field value that justifies inclusion }.</code></pre>
 
 <h3>3.12 Reco Feed as a Second Source (Scope 3)</h3>
 <p>Image search finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters at Scope 3, through the same CLP.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Entry</th><th>Condition</th><th>Behaviour</th></tr></thead>
 <tbody>
 <tr>
@@ -683,13 +683,13 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Vaani says so, and may offer reco-sourced suggestions rather than ending empty-handed.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Which source to use is a <strong>judgement the model makes from the conversation</strong>, not a hard rule — which is exactly why it belongs in Scope 3, behind two scopes of deterministic behaviour, and why source selection must be logged on every turn so the decision can be audited.</p>
 <h2>4. Technical Requirements — Data &amp; System Dependencies</h2>
 
 <h3>4.1 Signal Tiers</h3>
 <p>The tiering is the hard constraint on Scope 1: the rerank rules can only be as good as P0.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Tier</th><th>Signals</th><th>Read by</th><th>Availability</th></tr></thead>
 <tbody>
 <tr>
@@ -711,11 +711,11 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Already added by the data-enrichment work.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 
 <h3>4.2 System Dependencies</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Dependency</th><th>Needed by</th><th>Note</th></tr></thead>
 <tbody>
 <tr>
@@ -759,7 +759,7 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Same P0–P2 fields required for reco candidates.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>5. Experimentation Strategy</h2>
 
@@ -770,7 +770,7 @@ the single field value that justifies inclusion }.</code></pre>
 <p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. Scope 2 runs as a second experiment layered on Scope 1's treatment, so the verdict's increment is isolated from the rerank's.</p>
 
 <h3>5.3 Variants</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Variant</th><th>Behaviour</th><th>Reads</th></tr></thead>
 <tbody>
 <tr>
@@ -794,7 +794,7 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">The verdict's isolated increment, and the no-deep-link decision.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><em>T1b matters more than it looks. Scope 1 changes two things at once — the query and the order — and only the second one is what this KRD is really betting on.</em></p>
 
 <h2>6. Tech Solutioning</h2>
@@ -802,7 +802,7 @@ the single field value that justifies inclusion }.</code></pre>
 
 <h2>7. Logging Requirements</h2>
 <p>Emit end-to-end for every price turn that enters this flow. Purpose is to attribute conversion, verify the gates, and audit every model output.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
 <tbody>
 <tr>
@@ -856,14 +856,14 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Scope 3. Group engagement, and audits the model's source choice.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h1>Section III: Testing &amp; Launch Checklist</h1>
 
 <h2>1. Functional Testing</h2>
 
 <h3>1.1 Test Cases</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
 <tbody>
 <tr>
@@ -987,7 +987,7 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Scope 3. Rejected at parse; only the six defined keys are accepted.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 
 <h2>2. Launch Checklist</h2>
 <ul>
@@ -1001,7 +1001,7 @@ the single field value that justifies inclusion }.</code></pre>
 </ul>
 
 <h1>Section IV: Mentor Sign Off</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Function</th><th>Name</th><th>Status</th></tr></thead>
 <tbody>
 <tr><td style="text-align: center;">Product</td><td style="text-align: center;">Madhurita Mahapatra</td><td style="text-align: center;">Pending</td></tr>
@@ -1013,7 +1013,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr><td style="text-align: center;">Analytics / DS</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">QA</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 </tbody>
-</table>
+</table></div>
 
 <h1>Summary</h1>
 <p>On a PDP price turn, Vaani runs an anchored image search with an adjacent price filter, the backend reranks the surviving pool on P0 signals before the feed renders, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked products. Required build, by scope:</p>

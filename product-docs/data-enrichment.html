@@ -90,13 +90,13 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html" class="active">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html" class="active">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
     <h1>KRD — Vaani V0 Data Enrichment (P0 + P1)</h1>
 <p>Grounding Vaani in per-product, per-user, per-region data — the storage &amp; pre-computation layer.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
 
@@ -129,7 +129,7 @@
 <td style="text-align: center;">Vaani V0 Prompt Spec — prompt/intent changes ship in a separate KRD</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>Section I: Executive Summary</h2>
 <h3>1. Problem Statement</h3>
 <p>Vaani today answers with generic language because it lacks grounded, per-product, per-user, per-region signal. Every DECIDE-turn (“achha hai?”, “kitne ka hai?”, “kab aayega?”) gets the same shape of response regardless of the product’s return rate, the user’s size history, the pincode’s delivery ETA, or the seller’s trust profile.</p>
@@ -150,7 +150,7 @@
 <h3>3. NSM — Success &amp; Check Metrics</h3>
 <h4><em>3.1 Primary Success Metric</em>*</h4>
 <p>*</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -159,10 +159,10 @@
 <td style="text-align: center;">% Vaani turns on PDP (DECIDE turns) that result in an add-to-cart within the same session, for Treatment (enriched payload) vs Holdout (baseline payload).</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4><em>3.2 Secondary Metrics</em>*</h4>
 <p>*</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -187,10 +187,10 @@
 <td style="text-align: center;">% RETURN_HELP turns that end in a submitted return request within the session.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4><strong><em>3.3 Guardrail Metrics</em></strong>*</h4>
 <p>*</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -199,10 +199,10 @@
 <td style="text-align: center;">End-to-end turn latency with enriched payload vs baseline. Target: no more than +200ms over baseline.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>Section II: Product Requirement Document</h2>
 <h3>1. User Stories &amp; Capabilities</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Value if solved</th></tr></thead>
 <tbody>
 
@@ -263,7 +263,7 @@
 <td style="text-align: center;">Contract-driven safety, not prompt-driven</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>2. Scope</h3>
 <h4><em>2.1 In Scope</em></h4>
 <ul>
@@ -311,7 +311,7 @@
 <h4>3.1 Field Catalogue (P0 + P1)</h4>
 <p>Every field below carries: definition, silent-when rule (LLM will never see a value below threshold — the pipeline returns null), and priority.</p>
 <h5>Cluster A — Seller &amp; Product Trust</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -368,9 +368,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Within ±3pp of platform median → null</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5>Cluster B — Social Proof</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -395,9 +395,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Cohort orders &lt; 200 in 90d → null</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5>Cluster C — Visual Truth</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -414,9 +414,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Empty variants → null</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5>Cluster D — Personalization (user-level)</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -451,9 +451,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5>Cluster E — Commercial Context</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -500,9 +500,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Never null (always populated for known pincodes)</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5>Cluster F — Order State (user-level)</h5>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
 <tbody>
 
@@ -525,7 +525,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Empty is valid — return []</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4>3.2 Silent-When Enforcement Contract</h4>
 <p>Silent-when rules are enforced <strong>at the data layer</strong>, not the LLM.</p>
 <ul>
@@ -546,7 +546,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p>The remainder of this section is what engineering needs to build.</p>
 <h4>4.1 Source Tables (assumed pre-existing)</h4>
 <p>The pre-computed views join off these existing Meesho data assets. All confirmed / obtained via analytics; nothing here is a new upstream data source.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Source</th><th>Grain</th><th>Used by</th></tr></thead>
 <tbody>
 
@@ -641,7 +641,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">many — join dimension</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4>4.2 Pre-Computed Views — Schemas</h4>
 <p><strong>Format:</strong> for each view, we spec grain, columns (name : type — notes), source tables, refresh cadence, and store type. null is used to enforce silent-when at read time.</p>
 <p><strong><br/>
@@ -658,7 +658,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT (daily refresh)</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -723,7 +723,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Read contract:</strong> if silent_when_triggered = true, return the entire object as null in payload.</p>
 <h5><strong>V-A2 product_return_reason_dist</strong> <strong><em>(A2)</em></strong></h5>
 <ul>
@@ -737,7 +737,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -802,7 +802,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if sample_size &lt; 50 OR dominant_reason is null → payload returns null.</p>
 <h5><strong>V-A3 variant_return_stats</strong> <strong><em>(A3)</em></strong></h5>
 <ul>
@@ -816,7 +816,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -851,7 +851,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h5><strong>V-A4 product_order_stats</strong> <strong><em>(A4)</em></strong></h5>
 <ul>
 <li>
@@ -864,7 +864,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -899,7 +899,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if lifetime_orders &lt; 50 → payload returns null.</p>
 <h5><strong>V-A5–A8 seller_snapshot</strong> <strong><em>(A5, A6, A7, A8)</em></strong></h5>
 <ul>
@@ -913,7 +913,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -968,7 +968,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> - If tenure_months between 12 and 36 → return tenure_months: null (rest OK). - If trusted_flag = false → return trusted_flag: null. - If rating_count &lt; 40 → return rating_avg: null, rating_count: null. - If abs(bad_quality_delta_vs_platform_pp) &lt; 3 → return bad_quality_return_rate: null.</p>
 <h5><strong>V-B1B2 product_review_themes</strong> <strong><em>(B1, B2)</em></strong></h5>
 <ul>
@@ -982,7 +982,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1017,7 +1017,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong><br/>
 </strong><strong>Silent-when:</strong> if review_count &lt; 20 → payload returns null for both positive and negative themes. If negative_below_platform_median = true → payload returns negative_themes as null.</p>
 <p><strong><br/>
@@ -1034,7 +1034,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT  </p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1079,7 +1079,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong><br/>
 </strong><strong>Silent-when:</strong> if cohort_orders_l90d &lt; 200 → payload returns null.</p>
 <p><strong>Cohort key construction:</strong> see  4.8.</p>
@@ -1095,7 +1095,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1110,7 +1110,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if exists=false → payload returns null.</p>
 <h5><strong>V-C2 product_variants_view</strong> <strong><em>(C2)</em></strong></h5>
 <ul>
@@ -1124,7 +1124,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1144,7 +1144,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Each variants[i]:</p>
 <pre><code>{  
   variant_id: string,  
@@ -1170,7 +1170,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
@@ -1215,7 +1215,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if sample_size =  0  OR last_order_date &gt; 365d ago → payload returns null.</p>
 <h5><strong>V-D2 user_size_recommendation</strong> <strong><em>(D2)</em></strong></h5>
 <ul>
@@ -1230,7 +1230,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 </li>
 </ul>
 <p>sscat_family groups near-adjacent sscats (kurta / kurti / anarkali share a family). Mapping table: sscat_family_map.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1270,7 +1270,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if supporting_orders_count &lt; 1 OR confidence &lt; 0.6 → payload returns null.</p>
 <p><strong>Note:</strong> Requires join with V-F3 (past orders + return reasons) to compute rationale.</p>
 <h5><strong>V-D3 user_gender_inferred</strong> <strong><em>(D3)</em></strong></h5>
@@ -1285,7 +1285,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1315,7 +1315,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if confidence &lt; 0.7 → payload returns null (both gender and confidence).</p>
 <h5><strong>V-D4 user_sscat_budget</strong> <strong><em>(D4)</em></strong></h5>
 <ul>
@@ -1329,7 +1329,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1369,7 +1369,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if sample_size &lt; 3 → payload returns null.</p>
 <h5><strong>V-D5 user_return_profile</strong> <strong><em>(D5)</em></strong></h5>
 <ul>
@@ -1383,7 +1383,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1418,7 +1418,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> if lifetime_returns = 0 → payload returns returner_tier: null.</p>
 <p><strong>Payload sanitization:</strong> the orchestrator MUST strip overall_return_rate and reason_mix from the payload delivered to the LLM. Only returner_tier is exposed, as a tone-modulator signal. Enforcement is code-level, not prompt-level. See §4.5.</p>
 <h5><strong>V-E1 product_regional_orders</strong> <strong><em>(E1)</em></strong></h5>
@@ -1433,7 +1433,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT (keyed by product_id × user’s pincode-derived geo hierarchy)</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1473,7 +1473,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Fetch strategy at request time:</strong> given user’s pincode, walk up the geo hierarchy — return the tightest geo_level where order_count ≥ 5 for the requested window. If no level meets threshold → payload returns null.</p>
 <h5><strong>V-E2 product_delivery_prediction</strong> <strong><em>(E2)</em></strong></h5>
 <ul>
@@ -1487,7 +1487,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1532,7 +1532,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> serviceable = false → payload returns null.</p>
 <h5><strong>V-E3 product_price_ladder</strong> <strong><em>(E3)</em></strong></h5>
 <ul>
@@ -1546,7 +1546,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1596,7 +1596,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> all conditional fields null → return only base_price.</p>
 <h5><strong>V-E4 product_zonal_discount</strong> <strong><em>(E4)</em></strong></h5>
 <ul>
@@ -1610,7 +1610,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1640,7 +1640,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> delta_vs_base = 0 → payload returns null.</p>
 <h5><strong>V-E5 product_price_trend</strong> <strong><em>(E5)</em></strong></h5>
 <ul>
@@ -1654,7 +1654,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM → HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1714,7 +1714,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Silent-when:</strong> variation_pct &lt; 0.03 → payload returns null.</p>
 <h5><strong>V-E6 sale_calendar</strong> <strong><em>(E6)</em></strong></h5>
 <ul>
@@ -1728,7 +1728,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1763,7 +1763,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Never silent</strong> — always populated.</p>
 <h5><strong>V-E7 payment_eligibility_by_pincode</strong> <strong><em>(E7)</em></strong></h5>
 <ul>
@@ -1777,7 +1777,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1802,7 +1802,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Never silent</strong> — always populated for known pincodes.</p>
 <h5><strong>V-F1 user_orders_in_transit</strong> <strong><em>(F1)</em></strong></h5>
 <ul>
@@ -1816,7 +1816,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
@@ -1840,7 +1840,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Each orders[i]:</p>
 <pre><code>{  
   order_id: string,  
@@ -1865,7 +1865,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> HOT</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
@@ -1889,7 +1889,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Each orders[i]:</p>
 <pre><code>{  
   order_id: string,  
@@ -1913,7 +1913,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Store:</strong> WARM (lazy-loaded on demand — do NOT hydrate every turn; see §4.5 payload contract)</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
 <tbody>
 
@@ -1933,7 +1933,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Each orders[i]:</p>
 <pre><code>{  
   order_id: string,  
@@ -1952,7 +1952,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <p><strong>Note:</strong> V-F3 is the source for V-D2 (size recommendation) and V-D5 (returner tier). It is also directly surfaced when user asks “pichli baar kya liya tha?” — but is not pushed on every turn; it is a lazy fetch. See §4.5.</p>
 <h4>4.3 Cohort Key Definition (used by B4)</h4>
 <p><strong>Cohort key</strong> = hash of the tuple (region_bucket, budget_band, sscat_history_bucket).</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Component</th><th>Buckets</th></tr></thead>
 <tbody>
 
@@ -1961,9 +1961,9 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">state level.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4>4.4 Refresh Cadence Tiers (summary)</h4>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Tier</th><th>Views</th><th>SLA</th></tr></thead>
 <tbody>
 
@@ -1988,7 +1988,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Complete by 6 AM IST</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4>4.5 Orchestrator Hydration Payload</h4>
 <p>The Vaani orchestrator receives one payload per turn. The wire format is fixed; nullability is per 3.1 silent-when rules.</p>
 <p><strong>Trigger:</strong> every turn where Vaani is invoked, keyed by (user_id, product_id?, pincode, current_screen, intent).</p>
@@ -2072,7 +2072,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 </li>
 </ol>
 <h3>5. Experimentation Strategy</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Item</th><th>Detail</th></tr></thead>
 <tbody>
 
@@ -2105,13 +2105,13 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">See I.3.3; any red = pause release.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>6. Tech Solutioning</h3>
 <p><strong>[to be added by Engineering]</strong> </p>
 <h3>7. Logging Requirements</h3>
 <p>Emit the following events for every Vaani turn:</p>
 <p>We can add this in the main table where we store backend related information for Vaani. Primary usage will be check the type of data that was available for agent for response generation, to check factualness and to understand what it prioritised. </p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
 <tbody>
 
@@ -2121,7 +2121,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Arm balance, latency SLO tracking, silent-when compliance</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>8. Open Questions (to close before build)</h3>
 <ol>
 <li>
@@ -2143,7 +2143,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <h2>Section III: Testing &amp; Launch Checklist</h2>
 <h3>1. Functional Testing</h3>
 <h4>1.1 Test Cases</h4>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
 <tbody>
 
@@ -2253,7 +2253,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">If any turn surfaces a field where silent_when_triggered was true, the field_surfaced_but_silent_when_should_have_fired event fires</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>2. Launch Checklist</h3>
 <ul>
 <li>
@@ -2301,7 +2301,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 </ul>
 <h3>3. Post-Launch Governance</h3>
 <h2>Section IV: Mentor Sign Off</h2>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
@@ -2340,7 +2340,7 @@ size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_dela
 <td style="text-align: center;">Pending</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>Summary</h2>
 <p>V0 ships the data foundation that grounds every Vaani response. Required build:</p>
 <ul>

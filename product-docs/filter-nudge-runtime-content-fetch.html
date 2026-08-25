@@ -90,13 +90,13 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html" class="active">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html" class="active">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
     <h1>KRD — Vaani Filter Nudge with Runtime Content Fetch</h1>
 <p><em>Post-search delay-based filter/sort suggestion nudges, with content resolved at trigger time by the backend against the user’s current search context.</em></p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
 
@@ -129,7 +129,7 @@
 <td style="text-align: center;">Vaani Filter &amp; Sort Application in Search — filter execution, state contract, sscat resolution ship in the parent KRD</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section I: Executive Summary</h1>
 <h2>1. Problem Statement</h2>
 <p>Meesho’s current nudge infrastructure is start-of-session bound: at app open, the backend ships the client the full set of triggering rules (rule_ids with parameters) AND the nudge content payloads for every rule the user is eligible for that session. The client then fires nudges locally as triggers hit, with no round-trip to backend at trigger time.</p>
@@ -147,7 +147,7 @@
 </ul>
 <h2>3. NSM — Success &amp; Check Metrics</h2>
 <h3>3.1 Primary Success Metric</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -156,9 +156,9 @@
 <td style="text-align: center;">accept / (accept + dismiss + timeout) for filter/sort nudges surfaced via the runtime-content path.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.2 Secondary Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -179,9 +179,9 @@
 <td style="text-align: center;">Session order rate for sessions with at least one accepted nudge, vs sessions with a dismissed/skipped nudge (descriptive).</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.3 Guardrail Metrics</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -206,10 +206,10 @@
 <td style="text-align: center;">% of nudges where the sscat in the payload does not match the sscat the user was viewing at render (client-side check).</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section II: Product Requirement Document</h1>
 <h2>1. User Stories &amp; Capabilities</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Value if solved</th></tr></thead>
 <tbody>
 
@@ -230,7 +230,7 @@
 <td style="text-align: center;">user_removed backstop enforced at nudge selection</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>2. Scope</h2>
 <h3>2.1 In Scope</h3>
 <ul>
@@ -296,14 +296,14 @@
 <p>Trigger cancellation: if the user leaves the search-result screen (scrolls to PDP, closes the app, initiates a new search) before the delay expires, the trigger is cancelled and no fetch fires.</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
 <td style="text-align: center;"><strong>Trigger vs content — what changes</strong>The delay-based trigger itself is unchanged. It fires the same way it does for every other delay-based rule shipped at app-open. What changes is only the content-resolution step: for this one rule_id, at trigger fire the client makes a network call to nudge_content_resolve before rendering, instead of reading the payload from local cache.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.2 Runtime Content Fetch — End-to-End Flow</h3>
 <p>Sequence, per trigger fire:</p>
 <ul>
@@ -335,14 +335,14 @@
 <p>State-drift check: if between trigger fire and payload receipt the user’s state has changed (they applied a filter manually, switched sscat, dismissed the drawer), the client discards the returned payload rather than rendering stale content. This is a client-side check against the state_snapshot_id in the response (see 4.2).</p>
 </li>
 </ul>
-<table>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
 <td style="text-align: center;"><strong>Design decision — no stale fallback</strong>We chose "silently skip on timeout" over "render the pre-cached fallback" for v1 because a filter suggestion that doesn’t match the user’s current state is worse than no suggestion at all. Cost: some fraction of trigger fires produce no nudge. Benefit: no wrong-context nudges reach the user.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h3>3.4 Fatigue &amp; Back-off</h3>
 <ul>
 <li>
@@ -407,7 +407,7 @@
 <p><em>[to be added by Engineering]</em></p>
 <h2>5. Logging Requirements</h2>
 <p>Emit the following events end-to-end for every filter-nudge trigger fire. Purpose is to audit latency, verify skip logic, and diagnose freshness failures.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
 <tbody>
 
@@ -422,11 +422,11 @@
 <td style="text-align: center;">Latency + skip-logic breakdown.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Section III: Testing</h1>
 <h2>1. Functional Testing</h2>
 <h3>1.1 Test Cases</h3>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
 <tbody>
 
@@ -461,12 +461,12 @@
 <td style="text-align: center;">First trigger cancelled; new trigger armed on saree search-result render.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <ul>
 <li></li>
 </ul>
 <h1>Section IV: Mentor Sign Off</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Function</th><th>Name</th><th>Status</th></tr></thead>
 <tbody>
 
@@ -506,7 +506,7 @@
 <td style="text-align: center;">Pending</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Summary</h1>
 <p>V1 extends the existing delay-based nudge infrastructure with a runtime content-fetch path for filter/sort nudges. Required build:</p>
 <ul>

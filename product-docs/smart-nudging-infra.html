@@ -90,12 +90,12 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html" class="active">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html" class="active">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
     <h1>Vaani Smart Nudging Infra</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Document</th><th>Value</th></tr></thead>
 <tbody>
 
@@ -120,15 +120,15 @@
 <td style="text-align: center;">Enable configurable zero-click nudges with advanced governance and personalized backend-generated content.</td>
 </tr>
 </tbody>
-</table>
-<table>
+</table></div>
+<div style="overflow-x:auto"><table>
 
 <tbody>
 <tr>
 <td style="text-align: center;"><strong>Scope:</strong>  zero-click nudge requirements and backend personalization-context requirements.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Table of Contents</h1>
 <ul>
 <li>
@@ -261,7 +261,7 @@
 </ul>
 <p>Non-goals for MVP: a fully learned drop-off prediction model, free-form LLM copy without templates/guardrails. These can come later once deterministic counters and governance are stable.</p>
 <h1>3. Product principles</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Principle</th><th>Requirement</th></tr></thead>
 <tbody>
 
@@ -290,10 +290,10 @@
 <td style="text-align: center;">Every shown and suppressed nudge must be logged with reason codes and outcome events.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>4. Current nudge logic to continue supporting</h1>
 <p>The new system must remain backward-compatible with the current rule types and per-rule controls.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Existing item</th><th>Current usage</th><th>Required status</th></tr></thead>
 <tbody>
 
@@ -333,10 +333,10 @@
 <td style="text-align: center;">Continue support</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>5. Advanced global nudge controls</h1>
 <p>The advanced controls should be implemented at global_controls level. These controls apply across all nudges and all surfaces unless a rule explicitly has stronger constraints.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Control</th><th>Type</th><th>Definition</th><th>Default MVP value</th></tr></thead>
 <tbody>
 
@@ -383,7 +383,7 @@
 <td style="text-align: center;">true</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <pre><code>{  
   "global_controls": {  
     "cooldown_between_nudges_seconds": 60,  
@@ -428,7 +428,7 @@
 }
 </code></pre>
 <h2>6.2 Product click and product engagement</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Concept</th><th>Recommended event set</th></tr></thead>
 <tbody>
 
@@ -441,10 +441,10 @@
 <td style="text-align: center;">pdp_open, wishlist_click, add_to_cart, buy_now_click, cart_visit, payment_selection_visit</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>7. No-click hypotheses and nudge logic</h1>
 <p>The system should support the following no-click hypotheses through reusable triggers and conditions. These are not separate hard-coded trigger types; they should be expressed through the same schema.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Hypothesis</th><th>Rule pattern</th><th>Content intent</th></tr></thead>
 <tbody>
 
@@ -528,10 +528,10 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">suppress or pause nudges</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>8. Required counters and context parameters</h1>
 <h2>8.1 Session-level exposure counters</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Parameter</th><th>Type</th><th>Reset</th><th>Description</th></tr></thead>
 <tbody>
 
@@ -584,9 +584,9 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Possible drop-off signal</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>8.2 Surface/feed-level counters</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
 <tbody>
 
@@ -651,9 +651,9 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Time spent on current surface</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>8.3 Previous-session summary counters</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
 <tbody>
 
@@ -718,9 +718,9 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">0-1 score representing previous intent strength</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>8.4 Intent-memory parameters</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
 <tbody>
 
@@ -790,9 +790,9 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Whether current dominant SSCAT matches previous intent SSCAT</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>8.5 User maturity, search, and Vaani parameters</h2>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Group</th><th>Parameters</th></tr></thead>
 <tbody>
 
@@ -809,7 +809,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">vaani_used_current_session, current_session_vaani_initiations, lifetime_vaani_initiations, last_vaani_use_gap_seconds, vaani_used_after_last_nudge, last_nudge_ignored, ignored_nudges_count, nudge_to_vaani_conversion_count, last_vaani_success_outcome</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1><strong>9. Rule schema, operators, and config structure</strong> <strong>[optional read - just demonstrative]</strong></h1>
 <p>Rules should be configured as reusable trigger + conditions + sunset + content_strategy + actions. Complex logic should live in conditions and context, not in hard-coded trigger variants.</p>
 <pre><code>{  
@@ -1130,7 +1130,7 @@ AND previous_session_views &gt;=y</td>
 <p>Log nudge shown and update counters.  </p>
 </li>
 </ol>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Priority band</th><th>Nudge type</th></tr></thead>
 <tbody>
 
@@ -1163,7 +1163,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Basic page intro / education nudges</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>If a rule becomes eligible during a global cooldown window, it should be skipped and not queued. Normal trigger evaluation should run again later.</p>
 <h1>12. Backend personalized content generation</h1>
 <p>The backend content generator should receive a structured context payload every time a rule is selected. The goal is to produce a nudge that feels context-aware, personalized, short, helpful, surface-relevant, safe to say aloud, and non-spammy.</p>
@@ -1439,7 +1439,7 @@ AND previous_session_views &gt;=y</td>
 </code></pre>
 <h1>14. Content generation strategy and safety constraints</h1>
 <p>Use a template-first, generation-second strategy. For MVP, content should be controlled by content_intent and fallback templates. Free generation should only happen inside strict guardrails.</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>content_intent</th><th>When used</th><th>Example content direction</th></tr></thead>
 <tbody>
 
@@ -1489,7 +1489,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Order, price या delivery के बारे में पूछना हो तो माइक दबाएँ।</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <pre><code>{  
   "template_id": "resume_previous_sscat_hindi_v1",  
   "template": "पिछली बार आप {{previous_intent_sscat_name}} देख रहे थे। क्या मैं वैसा सामान ढूँढने में मदद करूँ? माइक दबाकर पूछें।",  
@@ -1522,7 +1522,7 @@ AND previous_session_views &gt;=y</td>
   "timestamp_ms": 1710000000000  
 }
 </code></pre>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Suppression reason</th><th>Meaning</th></tr></thead>
 <tbody>
 
@@ -1571,7 +1571,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Required fields for personalized content missing</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>15.3 Nudge shown and outcome events</h2>
 <pre><code>{  
   "event_name": "nudge_shown",  
@@ -1597,7 +1597,7 @@ AND previous_session_views &gt;=y</td>
 }
 </code></pre>
 <h1>16. Success metrics</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Metric type</th><th>Metric</th><th>Definition</th></tr></thead>
 <tbody>
 
@@ -1662,7 +1662,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">Which content intent performs best</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>17. Acceptance criteria</h1>
 <p>Infra acceptance criteria:</p>
 <ol>
@@ -1713,7 +1713,7 @@ AND previous_session_views &gt;=y</td>
 </li>
 </ol>
 <h1>18. Strict Prioritisation  &amp; Phasing</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Phase</th><th>Goal</th><th>Build now</th><th>Outputs &amp; notes</th></tr></thead>
 <tbody>
 
@@ -1823,8 +1823,8 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">- Final maturity step once the threshold system has produced training data.</td>
 </tr>
 </tbody>
-</table>
-<table>
+</table></div>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>MVP area</th><th>Scope</th></tr></thead>
 <tbody>
 
@@ -1849,7 +1849,7 @@ AND previous_session_views &gt;=y</td>
 <td style="text-align: center;">MAIN, CATALOG_SEARCH_RESULTS, CATALOG_LISTING_PAGE first; PDP/cart/payment continue with existing page-intro logic</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>Must-have MVP context fields:</p>
 <p>session_product_views<br/>
 session_distinct_product_views<br/>
@@ -1881,7 +1881,7 @@ session_nudge_count<br/>
 total_nudges<br/>
 ignored_nudges_count</p>
 <h1>19. Implementation notes and open questions</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Area</th><th>Decision / open question</th></tr></thead>
 <tbody>
 
@@ -1914,7 +1914,7 @@ ignored_nudges_count</p>
 <td style="text-align: center;">Counters should be available in real time at nudge-evaluation time, not only in offline pipelines.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h1>Appendix A. Full sample combined config</h1>
 <pre><code>{  
   "enabled": true,  
@@ -2395,7 +2395,7 @@ ignored_nudges_count</p>
 }
 </code></pre>
 <h1>Appendix C. Glossary</h1>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
 <tbody>
 
@@ -2440,7 +2440,7 @@ ignored_nudges_count</p>
 <td style="text-align: center;">A nudge after which the user does not initiate Vaani within the configured window, typically 60 seconds.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
     </article>
   </main>
 </div>

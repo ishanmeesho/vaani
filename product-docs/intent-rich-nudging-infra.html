@@ -90,7 +90,7 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html" class="active">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html" class="active">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
@@ -168,7 +168,7 @@
 </ul>
 <h2>What we will build as an MVP:</h2>
 <p>We will design our experiment for users based on their latest intent based on last few days and what they are doing on the app in the current app version.  For this there will be following axis. </p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Axis</th><th>Values</th><th>What this means</th></tr></thead>
 <tbody>
 
@@ -204,11 +204,11 @@
 At app open, based on actions from the previous session, such as users who added an item to their cart, added an item to their wishlist, or abandoned their journey after reaching one of these stages. Each of these behaviors can trigger a different personalized nudge.</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p>A and B are the primary branch. C is mostly a gating condition ("no search done" = intent not yet expressed). D produces <em>override</em> nudges that can outrank the A×B leaf.</p>
 <h2>Hypothesis and Type of Nudges we will Build on:</h2>
 <h4>EXPLOIT user (sscat S known)</h4>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Trigger condition</th><th>What it could mean (hypotheses)</th><th>Copy (placeholder)</th><th>Priority</th></tr></thead>
 <tbody>
 
@@ -262,9 +262,9 @@ At app open, based on actions from the previous session, such as users who added
 <td style="text-align: center;">base</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h4>EXPLORE user (diffuse; predicted basket Z from cross-cat CG)</h4>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>ID</th><th>Trigger</th><th>Hypotheses</th><th>Copy</th></tr></thead>
 <tbody>
 
@@ -281,7 +281,7 @@ At app open, based on actions from the previous session, such as users who added
 <td style="text-align: center;">same family as X1/E4b "aaj aapne <strong>{sscat_list}</strong> dekhe — kisi khaas occasion ya purpose ke liye?"</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <h2>Suppression Logics</h2>
 <ul>
 <li>
@@ -336,7 +336,7 @@ At app open, based on actions from the previous session, such as users who added
 </ul>
 <h2>Backend Data Points for Placeholders</h2>
 <p>This doubles as eligibility flags <strong>and</strong> copy placeholders:</p>
-<table>
+<div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Use</th></tr></thead>
 <tbody>
 
@@ -373,7 +373,7 @@ At app open, based on actions from the previous session, such as users who added
 <td style="text-align: center;">all copy</td>
 </tr>
 </tbody>
-</table>
+</table></div>
 <p><strong>Copy placeholders:</strong> {sscat}, {sscat_list}, {product}, {predicted_categories}, {past_purchase_categories}, {n_categories_seen}.</p>
     </article>
   </main>
