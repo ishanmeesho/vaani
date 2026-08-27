@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KRD — Vaani V0 Data Enrichment (P0 + P1) — Vaani Product Docs</title>
+<title>KRD — Vaani Data Enrichment — Vaani Product Docs</title>
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="../favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
@@ -90,2289 +90,1299 @@
 <div class="pd-topbar"><a href="../index.html">&larr; Vaani Dashboards</a><span class="pd-topbar-sep">/</span><a href="index.html">Product &amp; Strategy Docs</a></div>
 <div class="pd-shell">
   <nav class="pd-sidebar">
-    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html" class="active">KRD — Vaani V0 Data Enrichment (P0 + P1)</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
+    <div class="pd-group"><p class="pd-group-title">Product Requirements (KRDs)</p><ul><li><a href="zero-click-nudge-mvp.html">KRD — Vaani Zero-Click Nudge MVP</a></li><li><a href="context-aware-nudge-engine.html">KRD — Vaani Context-Aware Personalized Nudge Engine</a></li><li><a href="data-enrichment.html" class="active">KRD — Vaani Data Enrichment</a></li><li><a href="filter-sort-application.html">KRD — Vaani Filter &amp; Sort Application in Search</a></li><li><a href="filter-nudge-runtime-content-fetch.html">KRD — Vaani Filter Nudge with Runtime Content Fetch</a></li><li><a href="price-turn-alternative-discovery.html">KRD — Vaani Alternative Discovery on Price Turns</a></li></ul></div><div class="pd-group"><p class="pd-group-title">Product Notes</p><ul><li><a href="smart-nudging-infra.html">Vaani Smart Nudging Infra</a></li><li><a href="intent-rich-nudging-infra.html">Intent-Rich Nudging Infra</a></li><li><a href="context-enrichment.html">Vaani — Context Enrichment Product Note</a></li><li><a href="agentic-behaviors.html">Vaani — Agentic Behaviors Product Note</a></li><li><a href="ux-priorities.html">Vaani UX — Priorities for This Cycle</a></li><li><a href="filter-application-note.html">Vaani — Filter Application in Search (Product Note)</a></li><li><a href="../product-notes/price-discovery-to-better-value.html">Price Discovery — Better Value</a></li><li><a href="../product-notes/vaani-processor-architecture.html">Vaani Processors — Architecture</a></li><li><a href="../product-notes/vaani-structured-product-thinking.html">Vaani: Structured Product Thinking</a></li></ul></div><div class="pd-group"><p class="pd-group-title">BHAG</p><ul><li><a href="june-bhag.html">June BHAG — Vaani for 1OD+</a></li><li><a href="july-bhag.html">July BHAG</a></li><li><a href="aug-bhag.html">Aug BHAG</a></li></ul></div>
   </nav>
   <main class="pd-content">
     <article class="pd-doc">
-    <h1>KRD — Vaani V0 Data Enrichment (P0 + P1)</h1>
-<p>Grounding Vaani in per-product, per-user, per-region data — the storage &amp; pre-computation layer.</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Field</th><th>Value</th></tr></thead>
+<h1>KRD — Vaani Data Enrichment</h1>
+<p>Grounding Vaani in per-product, per-seller and per-user data — the processor layer that fetches it and the contract that delivers it to the LLM.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
 <tbody>
-
 <tr>
-<td style="text-align: center;">Current Version</td>
-<td style="text-align: center;">v1</td>
+<td style="text-align: left;">Current Version</td>
+<td style="text-align: left;">v2</td>
 </tr>
 <tr>
-<td style="text-align: center;">Current Status</td>
-<td style="text-align: center;">Draft for engineering handoff</td>
+<td style="text-align: left;">Current Status</td>
+<td style="text-align: left;">Draft for engineering handoff</td>
 </tr>
 <tr>
-<td style="text-align: center;">Last Updated</td>
-<td style="text-align: center;">14 July 2026</td>
+<td style="text-align: left;">Last Updated</td>
+<td style="text-align: left;">21 August 2026</td>
 </tr>
 <tr>
-<td style="text-align: center;">POD</td>
-<td style="text-align: center;">Vaani for 1+</td>
+<td style="text-align: left;">POD</td>
+<td style="text-align: left;">Vaani for 1+</td>
 </tr>
 <tr>
-<td style="text-align: center;">Contributors</td>
-<td style="text-align: center;">PM: Ishan | Engineers: Mukul|</td>
+<td style="text-align: left;">Contributors</td>
+<td style="text-align: left;">PM: Ishan · Engineering: Kartik, Mukul</td>
 </tr>
 <tr>
-<td style="text-align: center;">Builds on</td>
-<td style="text-align: center;">Vaani — Context Enrichment Product Note; Vaani — Agentic Behaviors Product Note</td>
+<td style="text-align: left;">Builds on</td>
+<td style="text-align: left;">Vaani — Context Enrichment Product Note; Two-Layer Architecture Spec v2</td>
 </tr>
 <tr>
-<td style="text-align: center;">Companion (separate)</td>
-<td style="text-align: center;">Vaani V0 Prompt Spec — prompt/intent changes ship in a separate KRD</td>
+<td style="text-align: left;">Companion</td>
+<td style="text-align: left;">Vaani V1 Prompt Spec — prompt and intent changes ship separately</td>
 </tr>
 </tbody>
-</table></div>
-<h2>Section I: Executive Summary</h2>
-<h3>1. Problem Statement</h3>
-<p>Vaani today answers with generic language because it lacks grounded, per-product, per-user, per-region signal. Every DECIDE-turn (“achha hai?”, “kitne ka hai?”, “kab aayega?”) gets the same shape of response regardless of the product’s return rate, the user’s size history, the pincode’s delivery ETA, or the seller’s trust profile.</p>
-<p>This KRD ships the <strong>data foundation</strong> that grounds every Vaani response. It defines: (a) the 29 fields (19 P0 + 10 P1) that must be available to the response layer on every turn, (b) the source tables, c) the pre-computed views and their grain, (d) refresh cadences, (e) the hot-store hydration contract that the Vaani orchestrator will pull from, and (f) data-layer enforcement of silent-when rules so that thin/low-confidence signals never reach the LLM.</p>
-<h3>2. Product Thinking</h3>
-<p>The instrumented Vaani we shipped told us conversational shopping is buildable. V1 must show it is worth grounding. Four claims we want the launch to support or reject:</p>
+</table>
+<hr />
+<h1>Section I: Summary</h1>
+<h2>1. Problem Statement</h2>
+<p>Vaani answers with generic language because it lacks grounded, per-product, per-seller, per-user signal. Every DECIDE turn — "achha hai?", "kitne ka hai?", "kab aayega?" — gets the same shape of response regardless of the product's return rate, the seller's trust profile, the delivery ETA to that pincode, or what the user has bought before.</p>
+<p>This KRD ships the layer that fixes that. It defines:</p>
 <ul>
-<li>
-<p><strong>Data-grounded answers convert better than generic ones.</strong> A response that names the return rate, seller trust, and delivery ETA earns more session → cart than a generic “yeh accha hai.”</p>
-</li>
-<li>
-<p><strong>Return-reason + variant-return is a decision-material steer.</strong> Users given a size warning based on variant return rate returning less and adding-to-cart more.</p>
-</li>
-<li>
-<p><strong>User personalization compounds.</strong> Users addressed with their inferred size, budget band, and past-order references show higher repeat-engagement rates than the baseline.</p>
-</li>
+<li><strong>Processors</strong> — the named units that fetch enrichment data, one per downstream API, requested per turn by the intent layer.</li>
+<li><strong>The output contract</strong> — how a processor converts downstream JSON into a token block the response layer can use directly, with no arithmetic or interpretation left to the LLM.</li>
+<li><strong>The build sequence</strong> — what ships in V1, what follows in P0 and P1, and what is held in backlog.</li>
+<li><strong>The data layer</strong> — source tables, pre-computed views, refresh cadence, and data-layer enforcement of suppression rules so that thin or low-confidence signals never reach the LLM.</li>
 </ul>
-<h3>3. NSM — Success &amp; Check Metrics</h3>
-<h4><em>3.1 Primary Success Metric</em>*</h4>
-<p>*</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
-<tbody>
-
+<h2>2. Success Metrics</h2>
+<table>
+<thead>
 <tr>
-<td style="text-align: center;">Enriched-turn → cart-add rate</td>
-<td style="text-align: center;">% Vaani turns on PDP (DECIDE turns) that result in an add-to-cart within the same session, for Treatment (enriched payload) vs Holdout (baseline payload).</td>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Primary</td>
+<td style="text-align: left;">Enriched-turn → cart-add rate</td>
+<td style="text-align: left;">% of Vaani DECIDE turns on PDP resulting in an add-to-cart in the same session, Treatment (enriched) vs Holdout (baseline).</td>
+</tr>
+<tr>
+<td style="text-align: left;">Secondary</td>
+<td style="text-align: left;">Per-key surface rate</td>
+<td style="text-align: left;">% of turns where each emitted key appears in the response, among turns where the key was present in the block. Diagnoses under-use.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Secondary</td>
+<td style="text-align: left;">Processor hit rate</td>
+<td style="text-align: left;">% of requested processors that returned a block within budget. Diagnoses fetch reliability.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Secondary</td>
+<td style="text-align: left;">Return-window action success</td>
+<td style="text-align: left;">% of RETURN_HELP turns ending in a submitted return request within the session.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Guardrail</td>
+<td style="text-align: left;">Response latency (P95)</td>
+<td style="text-align: left;">End-to-end turn latency with processors enabled vs baseline. Target: no more than +200ms.</td>
+</tr>
+<tr>
+<td style="text-align: left;">Guardrail</td>
+<td style="text-align: left;">Suppression compliance</td>
+<td style="text-align: left;">Count of turns where a suppressed value reached the LLM. Target: zero.</td>
 </tr>
 </tbody>
-</table></div>
-<h4><em>3.2 Secondary Metrics</em>*</h4>
-<p>*</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">Per-field surface rate</td>
-<td style="text-align: center;">% turns where each P0/P1 field appears in the response (only among turns where the field was non-null and eligible). Diagnoses under-use.</td>
-</tr>
-<tr>
-<td style="text-align: center;">Fresh-search rate on pivot</td>
-<td style="text-align: center;">% turns with pivot_signal=true where the new query does not carry forward the previous product’s attributes (verifies data isolation, feeds context-lock fix).</td>
-</tr>
-<tr>
-<td style="text-align: center;">Alternate-product CTR (G1)</td>
-<td style="text-align: center;">% turns where Vaani offered an alternate and the user clicked into it.</td>
-</tr>
-<tr>
-<td style="text-align: center;">Size-recommendation acceptance</td>
-<td style="text-align: center;">% turns where Vaani pre-recommended a size (D2) and the user selected the same size.</td>
-</tr>
-<tr>
-<td style="text-align: center;">Return-window action success</td>
-<td style="text-align: center;">% RETURN_HELP turns that end in a submitted return request within the session.</td>
-</tr>
-</tbody>
-</table></div>
-<h4><strong><em>3.3 Guardrail Metrics</em></strong>*</h4>
-<p>*</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Metric</th><th>Definition</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">Response latency (P95)</td>
-<td style="text-align: center;">End-to-end turn latency with enriched payload vs baseline. Target: no more than +200ms over baseline.</td>
-</tr>
-</tbody>
-</table></div>
-<h2>Section II: Product Requirement Document</h2>
-<h3>1. User Stories &amp; Capabilities</h3>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Value if solved</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">US-101</td>
-<td style="text-align: center;">User on PDP</td>
-<td style="text-align: center;">shopper worried about quality</td>
-<td style="text-align: center;">know how many people returned this product and for what reason</td>
-<td style="text-align: center;">make a confident buy/skip decision</td>
-<td style="text-align: center;">Grounds quality Q&amp;A reduces “achha hai?” dead-ends</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-102</td>
-<td style="text-align: center;">User on PDP</td>
-<td style="text-align: center;">first-time buyer of a category</td>
-<td style="text-align: center;">be told my usual size doesn’t fit this seller / this style</td>
-<td style="text-align: center;">pick the right variant on first try</td>
-<td style="text-align: center;">Reduces size-related returns</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-103</td>
-<td style="text-align: center;">User on PDP</td>
-<td style="text-align: center;">budget-sensitive user</td>
-<td style="text-align: center;">see the price ladder — prepaid, non-returnable, coupon</td>
-<td style="text-align: center;">pick the cheapest safe combination</td>
-<td style="text-align: center;">Higher conversion + prepaid share</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-104</td>
-<td style="text-align: center;">User on PDP</td>
-<td style="text-align: center;">user comparing options</td>
-<td style="text-align: center;">be shown a better-fitting alternate when I hesitate</td>
-<td style="text-align: center;">avoid buying something I’ll return</td>
-<td style="text-align: center;">Alternate-offer conversion; lower return-reason share</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-105</td>
-<td style="text-align: center;">User anywhere</td>
-<td style="text-align: center;">user with an in-flight order</td>
-<td style="text-align: center;">ask Vaani about its status without opening My Orders</td>
-<td style="text-align: center;">reduce app friction</td>
-<td style="text-align: center;">Enables ORDER_TRACKING intent</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-106</td>
-<td style="text-align: center;">User on delivered item</td>
-<td style="text-align: center;">user unhappy with a delivered item</td>
-<td style="text-align: center;">initiate a return by talking to Vaani</td>
-<td style="text-align: center;">avoid navigating My Orders → return flow</td>
-<td style="text-align: center;">Enables RETURN_HELP (agentic B8)</td>
-</tr>
-<tr>
-<td style="text-align: center;">US-107</td>
-<td style="text-align: center;">PM</td>
-<td style="text-align: center;">PM</td>
-<td style="text-align: center;">ship every field with a silent-when rule enforced at the data layer</td>
-<td style="text-align: center;">prevent hallucination and over-surfacing regardless of prompt changes</td>
-<td style="text-align: center;">Contract-driven safety, not prompt-driven</td>
-</tr>
-</tbody>
-</table></div>
-<h3>2. Scope</h3>
-<h4><em>2.1 In Scope</em></h4>
+</table>
+<hr />
+<h1>Section II: Requirements</h1>
+<h2>1. Scope</h2>
+<h3>1.1 In Scope</h3>
 <ul>
-<li>
-<p><strong>29 fields (19 P0 + 10 P1)</strong> — see  3.1. Every field has: source, pre-computed view, silent-when rule, refresh cadence, and framing library (framings in the context note, not restated here).  </p>
-</li>
-<li>
-<p><strong>Pre-computed views</strong> — a set of ~15 hot-store tables covering product, seller, user, geo, order, alternate, and cohort aggregates. Detailed schemas in 4.  </p>
-</li>
-<li>
-<p><strong>Orchestrator hydration payload contract</strong> — a single wire format the Vaani orchestrator receives on every turn, with defined nullability and field types. 4.5.  </p>
-</li>
-<li>
-<p><strong>Data-layer silent-when enforcement</strong> — every view returns null when sample size / staleness / thin-cohort thresholds are violated. LLM sees null; LLM does not decide silent-when. 4.6.  </p>
-</li>
-<li>
-<p><strong>Refresh cadence tiers</strong> — real-time (variants, inventory, in-transit orders, ETA, price ladder, sale calendar), near-real-time (return-window orders), daily-batch (all aggregates, cohort summaries, personalization stats, alternates ranking, price trend). 4.7.  </p>
-</li>
-<li>
-<p><strong>Cohort key definition</strong> — canonical (region_bucket, budget_band, sscat_history_overlap) tuple used by B4 (cohort review) and G1 (cohort-anchored alternate). 4.8.  </p>
-</li>
-<li>
-<p><strong>Metric instrumentation</strong> — logging on payload hydration, field-surface rate, silent-when compliance, per-view hit/miss. 7.  </p>
-</li>
-<li>
-<p><strong>A/B experiment plumbing</strong> — Treatment (enriched payload) vs Holdout (baseline). 5.</p>
-</li>
+<li><strong>Processor framework</strong> — contract, selection, parallel execution, failure handling, output normalization.</li>
+<li><strong>Eight processors</strong> across four build phases, each with a declared field set, suppression rules and emitted block.</li>
+<li><strong>Pre-computed views</strong> backing the processors that need aggregation, with schemas, grain and refresh cadence.</li>
+<li><strong>Data-layer suppression</strong> — every view and processor returns nothing for a key whose sample-size or staleness threshold is not met.</li>
+<li><strong>Frontend contract</strong> — <code>supplier_id</code> passed on every PDP-context invocation.</li>
+<li><strong>Instrumentation</strong> — per-processor hit, miss, timeout and suppression logging.</li>
+<li><strong>A/B plumbing</strong> — Treatment (enriched) vs Holdout (baseline).</li>
 </ul>
-<h4><em>2.2 Out of Scope</em></h4>
+<h3>1.2 Out of Scope</h3>
 <ul>
-<li>
-<p><strong>Prompt / intent changes</strong> — shipped in a separate KRD.</p>
-</li>
-<li>
-<p><strong>P2 fields</strong> — H1 (in-session product-view stack), H2 (cross-session memory) Deferred to next cycle.</p>
-</li>
-<li>
-<p><strong>Fully-generative context selection</strong> — the LLM picks which fields to use per prompt; the data layer does not pre-select on its behalf beyond silent-when.</p>
-</li>
-<li>
-<p><strong>New UX surfaces</strong> — the ORDER_TRACKING screen entry-point design ships elsewhere.</p>
-</li>
+<li>Prompt and intent changes — shipped in the Vaani V1 Prompt Spec.</li>
+<li>Backlog fields (§3.4) — specified here for sequencing, not built in this cycle.</li>
+<li>New UX surfaces.</li>
 </ul>
-<h3>3. Product Decision Framework</h3>
-<h4>3.1 Field Catalogue (P0 + P1)</h4>
-<p>Every field below carries: definition, silent-when rule (LLM will never see a value below threshold — the pipeline returns null), and priority.</p>
-<h5>Cluster A — Seller &amp; Product Trust</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">A1</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Product return rate.  
-  
- % of delivered units returned. Reported across L30D, L90D, lifetime; with sscat median, delta, trend flag.</td>
-<td style="text-align: center;">Within ±5pp of sscat median AND no trend movement → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">A2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Return reason mix per product across buckets:   
-  
-size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_delay.</td>
-<td style="text-align: center;">No reason ≥ 25% share OR sample &lt; 50 returns → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">A3</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Variant-level return rate per (product × variant).</td>
-<td style="text-align: center;">Variant delivered_units &lt; 100 → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">A4</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Lifetime orders on product, plus percentile-in-sscat rank.</td>
-<td style="text-align: center;">Lifetime orders &lt; 50 → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">A5</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Seller tenure on Meesho in months.</td>
-<td style="text-align: center;">Tenure 12–36 months → null (only surface for very old / very new sellers)</td>
-</tr>
-<tr>
-<td style="text-align: center;">A6</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Trusted-seller flag (boolean).</td>
-<td style="text-align: center;">Flag = false → null (never call attention to absence)</td>
-</tr>
-<tr>
-<td style="text-align: center;">A7</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Seller rating (avg + count).</td>
-<td style="text-align: center;">Rating count &lt; 40 → null;</td>
-</tr>
-<tr>
-<td style="text-align: center;">A8</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Seller-level bad-quality return rate (% of all returns for this seller).</td>
-<td style="text-align: center;">Within ±3pp of platform median → null</td>
-</tr>
-</tbody>
-</table></div>
-<h5>Cluster B — Social Proof</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">B1</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Positive review theme summary: [{tag: string, weight: float}]. Themes: fit, fabric, colour_accuracy, packaging, value, delivery, stitching.</td>
-<td style="text-align: center;">Reviews &lt; 20 → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">B2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Negative review theme summary (same shape as B1).</td>
-<td style="text-align: center;">Reviews &lt; 20 → null; if all negatives below platform-median share → null.   
-  
-[negative &lt; 3 rating]</td>
-</tr>
-<tr>
-<td style="text-align: center;">B4</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Cohort review summary: pre-aggregated {dominant_theme, sentiment_split} per (product × cohort_key).</td>
-<td style="text-align: center;">Cohort orders &lt; 200 in 90d → null</td>
-</tr>
-</tbody>
-</table></div>
-<h5>Cluster C — Visual Truth</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">C1</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Real-image existence flag</td>
-<td style="text-align: center;">exists=false → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">C2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Variants list: [(variant_id, colour, size, price_delta, in_stock, image_url, return_rate_from_A3)].</td>
-<td style="text-align: center;">Empty variants → null</td>
-</tr>
-</tbody>
-</table></div>
-<h5>Cluster D — Personalization (user-level)</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">D1</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Per (user × sscat) most-frequent-kept size + sample size + confidence.</td>
-<td style="text-align: center;">No orders in this sscat in last 12 months → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">D2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Size recommendation for the current PDP’s sscat_family, adjusted for prior size-related returns. Returns {size, rationale_code}.</td>
-<td style="text-align: center;">No orders in adjacent sscat (category) → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">D3</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">User gender inferred (history-first, name-fallback) + confidence + source.</td>
-<td style="text-align: center;">Confidence &lt; 0.7 → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">D4</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Per (user × category) budget band: {p25, p50, p75} in INR.</td>
-<td style="text-align: center;">No Sample  orders in category → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">D5</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">User’s own return history. Internal-only: returner_tier ∈ {low, med, high}, reason_mix. Never surfaced numerically.</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<h5>Cluster E — Commercial Context</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">E1</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Regional orders on this product across pincode / city / state / region for windows 3d / 7d / 30d.</td>
-<td style="text-align: center;">Order count at chosen granularity &lt; 5 → null; if all granularities thin → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">E2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Delivery ETA to user + area typical lead time. {eta_date, typical_days_min, typical_days_max}.</td>
-<td style="text-align: center;">Serviceability = false → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">E3</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Price ladder: {base, prepaid, non_returnable}.</td>
-<td style="text-align: center;">No conditional variants (all null but base) → return only base</td>
-</tr>
-<tr>
-<td style="text-align: center;">E4</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Zonal discount attribution: {delta_vs_base, seller_in_zone: bool}.</td>
-<td style="text-align: center;">No zonal component → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">E5</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Price trend: {min, max, current} for 30 / 60 / 90 day windows.</td>
-<td style="text-align: center;">Variation &lt; 3% across all windows → null</td>
-</tr>
-<tr>
-<td style="text-align: center;">E6</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">Sale calendar: {is_sale_today, next_sale_date, campaign_tag}.</td>
-<td style="text-align: center;">Never null (static config; always populated) Sale is first sunday every month.</td>
-</tr>
-<tr>
-<td style="text-align: center;">E7</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">Payment eligibility : {cod_available_at_pincode, cod_avaialble_for_user}.</td>
-<td style="text-align: center;">Never null (always populated for known pincodes)</td>
-</tr>
-</tbody>
-</table></div>
-<h5>Cluster F — Order State (user-level)</h5>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Priority</th><th>Definition</th><th>Silent-when</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">F1</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">User’s in-transit orders: [{order_id, product_name, sscat, status, eta_date, deviation_days}].</td>
-<td style="text-align: center;">Empty list is valid — return []</td>
-</tr>
-<tr>
-<td style="text-align: center;">F2</td>
-<td style="text-align: center;">P0</td>
-<td style="text-align: center;">User’s delivered orders in return window: [{order_id, product, delivered_date, days_left, rating_given}].</td>
-<td style="text-align: center;">Empty list is valid — return []</td>
-</tr>
-<tr>
-<td style="text-align: center;">F3</td>
-<td style="text-align: center;">P1</td>
-<td style="text-align: center;">User’s post-window orders (lifetime): [{order_id, product, sscat, delivered_date, rating, returned, reason, outcome}]. Feeds D2/D5.</td>
-<td style="text-align: center;">Empty is valid — return []</td>
-</tr>
-</tbody>
-</table></div>
-<h4>3.2 Silent-When Enforcement Contract</h4>
-<p>Silent-when rules are enforced <strong>at the data layer</strong>, not the LLM.</p>
-<ul>
-<li>
-<p>Every view materializes rows only when the sample / threshold conditions are met.</p>
-</li>
-<li>
-<p>The orchestrator’s payload will contain null (or [] for list fields) for any field whose silent-when trigger fires.</p>
-</li>
-<li>
-<p>The LLM’s rule is simple: <strong>if a field is null, do not surface it, do not reason about it, do not mention it is missing</strong> (unless the user explicitly asked for it).</p>
-</li>
-<li>
-<p>This makes the LLM prompt simpler AND makes safety a data-contract guarantee, not a prompt-adherence hope.</p>
-</li>
-</ul>
-<h3>4. Technical Requirements — Storage &amp; Pre-computation</h3>
-<p>The remainder of this section is what engineering needs to build.</p>
-<h4>4.1 Source Tables (assumed pre-existing)</h4>
-<p>The pre-computed views join off these existing Meesho data assets. All confirmed / obtained via analytics; nothing here is a new upstream data source.</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Source</th><th>Grain</th><th>Used by</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">orders</td>
-<td style="text-align: center;">order_id</td>
-<td style="text-align: center;">A1, A4, A8, D1, D2, D4, D5, E1, F1, F2, F3, G1</td>
-</tr>
-<tr>
-<td style="text-align: center;">order_items</td>
-<td style="text-align: center;">order_item_id</td>
-<td style="text-align: center;">A1, A3, A4, D1, D4, G1</td>
-</tr>
-<tr>
-<td style="text-align: center;">returns</td>
-<td style="text-align: center;">return_id</td>
-<td style="text-align: center;">A1, A2, A3, A8, D2, D5, F3</td>
-</tr>
-<tr>
-<td style="text-align: center;">products</td>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">A1–A8, B1, B2, C1, C2, E3, E5, G1</td>
-</tr>
-<tr>
-<td style="text-align: center;">product_variants</td>
-<td style="text-align: center;">variant_id</td>
-<td style="text-align: center;">A3, C2</td>
-</tr>
-<tr>
-<td style="text-align: center;">sellers</td>
-<td style="text-align: center;">seller_id</td>
-<td style="text-align: center;">A5, A6, A7, A8</td>
-</tr>
-<tr>
-<td style="text-align: center;">reviews</td>
-<td style="text-align: center;">review_id</td>
-<td style="text-align: center;">B1, B2, B4</td>
-</tr>
-<tr>
-<td style="text-align: center;">users</td>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">D1–D5</td>
-</tr>
-<tr>
-<td style="text-align: center;">user_profiles</td>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">D3, D4</td>
-</tr>
-<tr>
-<td style="text-align: center;">pincodes / geo</td>
-<td style="text-align: center;">pincode</td>
-<td style="text-align: center;">E1, E2, E7</td>
-</tr>
-<tr>
-<td style="text-align: center;">pricing_rules</td>
-<td style="text-align: center;">product_id × rule_type</td>
-<td style="text-align: center;">E3, E4</td>
-</tr>
-<tr>
-<td style="text-align: center;">price_history</td>
-<td style="text-align: center;">product_id × date</td>
-<td style="text-align: center;">E5</td>
-</tr>
-<tr>
-<td style="text-align: center;">sale_calendar</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">E6</td>
-</tr>
-<tr>
-<td style="text-align: center;">logistics_sla</td>
-<td style="text-align: center;">pincode × seller_zone</td>
-<td style="text-align: center;">E2</td>
-</tr>
-<tr>
-<td style="text-align: center;">payment_methods_by_pincode</td>
-<td style="text-align: center;">pincode</td>
-<td style="text-align: center;">E7</td>
-</tr>
-<tr>
-<td style="text-align: center;">tracking_events</td>
-<td style="text-align: center;">order_id × timestamp</td>
-<td style="text-align: center;">F1</td>
-</tr>
-<tr>
-<td style="text-align: center;">inventory</td>
-<td style="text-align: center;">variant_id × warehouse</td>
-<td style="text-align: center;">C2</td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_taxonomy</td>
-<td style="text-align: center;">sscat_id</td>
-<td style="text-align: center;">many — join dimension</td>
-</tr>
-</tbody>
-</table></div>
-<h4>4.2 Pre-Computed Views — Schemas</h4>
-<p><strong>Format:</strong> for each view, we spec grain, columns (name : type — notes), source tables, refresh cadence, and store type. null is used to enforce silent-when at read time.</p>
-<p><strong><br/>
-</strong><strong>Notation for refresh:</strong> - <strong>RT</strong> = real-time (event-driven, sub-second lag) - <strong>NRT</strong> = near-real-time (minutes lag; hourly refresh) - <strong>BATCH</strong> = daily overnight batch (&lt; 6 AM IST) - <strong>STATIC</strong> = config-driven (updated when campaign / calendar changes)</p>
-<h5><strong>V-A1 product_return_stats</strong> <strong><em>(A1)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT (daily refresh)</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">join dim</td>
-</tr>
-<tr>
-<td style="text-align: center;">delivered_units_l30d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">returned_units_l30d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">return_rate_l30d</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">null if delivered_units_l30d &lt; 30</td>
-</tr>
-<tr>
-<td style="text-align: center;">return_rate_l90d</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">null if delivered_units_l90d &lt; 90</td>
-</tr>
-<tr>
-<td style="text-align: center;">return_rate_lifetime</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">null if delivered_units_lifetime &lt; 100</td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_median_l90d</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">populated from V-derived sscat medians</td>
-</tr>
-<tr>
-<td style="text-align: center;">delta_vs_sscat_pp</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">return_rate_l90d − sscat_median_l90d, in percentage points</td>
-</tr>
-<tr>
-<td style="text-align: center;">trend_flag</td>
-<td style="text-align: center;">enum(‘up’,‘down’,‘stable’)</td>
-<td style="text-align: center;">up/down if L30D vs L90D delta &gt; 3pp</td>
-</tr>
-<tr>
-<td style="text-align: center;">silent_when_triggered</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">true if abs(delta_vs_sscat_pp) &lt; 5 AND trend_flag = ‘stable’</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Read contract:</strong> if silent_when_triggered = true, return the entire object as null in payload.</p>
-<h5><strong>V-A2 product_return_reason_dist</strong> <strong><em>(A2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">sample_size</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">total returned units L90D</td>
-</tr>
-<tr>
-<td style="text-align: center;">share_size</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">fraction</td>
-</tr>
-<tr>
-<td style="text-align: center;">share_quality</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_wrong_item</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_damaged</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_colour_mismatch</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_changed_mind</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_delivery_delay</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">share_other</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">dominant_reason</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">argmax if any ≥ 0.25; else null</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if sample_size &lt; 50 OR dominant_reason is null → payload returns null.</p>
-<h5><strong>V-A3 variant_return_stats</strong> <strong><em>(A3)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> variant_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">variant_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">delivered_units_l90d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">return_rate_l90d</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">null if delivered_units_l90d &lt; 100</td>
-</tr>
-<tr>
-<td style="text-align: center;">dominant_reason</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">from V-A2 restricted to this variant</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<h5><strong>V-A4 product_order_stats</strong> <strong><em>(A4)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">lifetime_orders</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">orders_l30d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">percentile_in_sscat</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">1–100; top 5% flag derivable</td>
-</tr>
-<tr>
-<td style="text-align: center;">launch_date</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">for “just launched” freshness signal</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if lifetime_orders &lt; 50 → payload returns null.</p>
-<h5><strong>V-A5–A8 seller_snapshot</strong> <strong><em>(A5, A6, A7, A8)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> seller_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">seller_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">onboarding_date</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">tenure_months</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">trusted_flag</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">rating_avg</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">rating_count</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">rating_low_signal</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">rating_avg &lt; 3.8</td>
-</tr>
-<tr>
-<td style="text-align: center;">bad_quality_return_rate</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">% of seller’s returns tagged ‘quality’, ‘color_mismatch’, ‘wrong_item’</td>
-</tr>
-<tr>
-<td style="text-align: center;">bad_quality_delta_vs_platform_pp</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">vs platform median</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> - If tenure_months between 12 and 36 → return tenure_months: null (rest OK). - If trusted_flag = false → return trusted_flag: null. - If rating_count &lt; 40 → return rating_avg: null, rating_count: null. - If abs(bad_quality_delta_vs_platform_pp) &lt; 3 → return bad_quality_return_rate: null.</p>
-<h5><strong>V-B1B2 product_review_themes</strong> <strong><em>(B1, B2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH (daily; theme classifier is offline)</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">review_count</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">reviews with rating in L180D</td>
-</tr>
-<tr>
-<td style="text-align: center;">positive_themes</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">[{tag: string, weight: float}] top 3</td>
-</tr>
-<tr>
-<td style="text-align: center;">negative_themes</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">[{tag: string, weight: float}] top 3</td>
-</tr>
-<tr>
-<td style="text-align: center;">negative_below_platform_median</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">if true, negatives are “typical” and payload should treat as null</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong><br/>
-</strong><strong>Silent-when:</strong> if review_count &lt; 20 → payload returns null for both positive and negative themes. If negative_below_platform_median = true → payload returns negative_themes as null.</p>
-<p><strong><br/>
-</strong><strong>Note on theme classifier:</strong> exists as an offline ML pipeline; owner: Analytics/ML. Tag taxonomy: fit, fabric, colour_accuracy, packaging, value, delivery, stitching. Extendable.</p>
-<h5><strong>V-B4 product_cohort_review_summary</strong> <strong><em>(B4)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id × cohort_key</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT  </p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">cohort_key</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2 — hash of (region_bucket)</td>
-</tr>
-<tr>
-<td style="text-align: center;">cohort_orders_l90d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">for silent-when</td>
-</tr>
-<tr>
-<td style="text-align: center;">dominant_positive_theme</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">dominant_negative_theme</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">sentiment_split</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">share of positive reviews in cohort</td>
-</tr>
-<tr>
-<td style="text-align: center;">divergence_flag</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">true if this cohort’s themes differ materially from overall product themes</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong><br/>
-</strong><strong>Silent-when:</strong> if cohort_orders_l90d &lt; 200 → payload returns null.</p>
-<p><strong>Cohort key construction:</strong> see  4.8.</p>
-<h5><strong>V-C1 product_real_image_flag</strong> <strong><em>(C1)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> NRT (event-driven when new media uploaded)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">exists</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if exists=false → payload returns null.</p>
-<h5><strong>V-C2 product_variants_view</strong> <strong><em>(C2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id (composed row containing list of variants)</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> RT (event-driven on inventory / variant changes)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">variants</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">see below</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p>Each variants[i]:</p>
-<pre><code>{  
-  variant_id: string,  
-  colour: string,  
-  size: string,  
-  price_delta: int,           // INR delta from base  
-  in_stock: bool,  
-  image_url: string,  
-  variant_image_is_real: bool, // if real-image variant exists  
-  return_rate: float | null    // from V-A3  
-}
-</code></pre>
-<p><strong>Silent-when:</strong> if variants list is empty → payload returns null.</p>
-<h5><strong>V-D1 user_sscat_size_pref</strong> <strong><em>(D1)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id × sscat_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-
-<tbody>
-<tr>
-<td style="text-align: center;">**  
-<strong>**Column</strong></td>
-<td style="text-align: center;"><strong>Type</strong></td>
-<td style="text-align: center;"><strong>Notes</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">most_frequent_kept_size</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">e.g. ‘L’</td>
-</tr>
-<tr>
-<td style="text-align: center;">sample_size</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"># of orders in this sscat kept (not returned)</td>
-</tr>
-<tr>
-<td style="text-align: center;">confidence</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">based on sample + consistency</td>
-</tr>
-<tr>
-<td style="text-align: center;">last_order_date</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">for staleness gate</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if sample_size =  0  OR last_order_date &gt; 365d ago → payload returns null.</p>
-<h5><strong>V-D2 user_size_recommendation</strong> <strong><em>(D2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id × sscat_family</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<p>sscat_family groups near-adjacent sscats (kurta / kurti / anarkali share a family). Mapping table: sscat_family_map.</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_family</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">recommended_size</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">rationale_code</td>
-<td style="text-align: center;">enum</td>
-<td style="text-align: center;">‘direct’ / ‘sized_up_after_small_return’ / ‘sized_down_after_big_return’ / ‘runs_small_seller_adj’</td>
-</tr>
-<tr>
-<td style="text-align: center;">confidence</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">supporting_orders_count</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if supporting_orders_count &lt; 1 OR confidence &lt; 0.6 → payload returns null.</p>
-<p><strong>Note:</strong> Requires join with V-F3 (past orders + return reasons) to compute rationale.</p>
-<h5><strong>V-D3 user_gender_inferred</strong> <strong><em>(D3)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">gender</td>
-<td style="text-align: center;">enum(‘f’, ‘m’, ‘x’)</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">confidence</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">source</td>
-<td style="text-align: center;">enum(‘history’, ‘name’, ‘profile’, ‘none’)</td>
-<td style="text-align: center;">history-first</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if confidence &lt; 0.7 → payload returns null (both gender and confidence).</p>
-<h5><strong>V-D4 user_sscat_budget</strong> <strong><em>(D4)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id × sscat_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">sscat_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">p25</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">25th percentile of order amounts in sscat, INR</td>
-</tr>
-<tr>
-<td style="text-align: center;">p50</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">median</td>
-</tr>
-<tr>
-<td style="text-align: center;">p75</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">75th percentile</td>
-</tr>
-<tr>
-<td style="text-align: center;">sample_size</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if sample_size &lt; 3 → payload returns null.</p>
-<h5><strong>V-D5 user_return_profile</strong> <strong><em>(D5)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">overall_return_rate</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><strong>INTERNAL — must never be surfaced</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">reason_mix</td>
-<td style="text-align: center;">JSON</td>
-<td style="text-align: center;">share per reason bucket</td>
-</tr>
-<tr>
-<td style="text-align: center;">returner_tier</td>
-<td style="text-align: center;">enum(‘low’,‘med’,‘high’)</td>
-<td style="text-align: center;">derived: low if overall_return_rate &lt; 0.5, high if &gt; 0.4</td>
-</tr>
-<tr>
-<td style="text-align: center;">lifetime_returns</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> if lifetime_returns = 0 → payload returns returner_tier: null.</p>
-<p><strong>Payload sanitization:</strong> the orchestrator MUST strip overall_return_rate and reason_mix from the payload delivered to the LLM. Only returner_tier is exposed, as a tone-modulator signal. Enforcement is code-level, not prompt-level. See §4.5.</p>
-<h5><strong>V-E1 product_regional_orders</strong> <strong><em>(E1)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id × geo_level × window</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT (keyed by product_id × user’s pincode-derived geo hierarchy)</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">geo_level</td>
-<td style="text-align: center;">enum(‘pincode’,‘city’,‘state’,‘region’)</td>
-<td style="text-align: center;">PK part 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">geo_key</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">actual pincode / city / state / region name</td>
-</tr>
-<tr>
-<td style="text-align: center;">window_days</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">3, 7, or 30</td>
-</tr>
-<tr>
-<td style="text-align: center;">order_count</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">momentum_flag</td>
-<td style="text-align: center;">enum(‘flat’,‘rising’,‘spiking’)</td>
-<td style="text-align: center;">derived from 7d vs 30d ratio</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Fetch strategy at request time:</strong> given user’s pincode, walk up the geo hierarchy — return the tightest geo_level where order_count ≥ 5 for the requested window. If no level meets threshold → payload returns null.</p>
-<h5><strong>V-E2 product_delivery_prediction</strong> <strong><em>(E2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id × pincode</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> NRT (SLA + inventory / warehouse changes trigger refresh)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">pincode</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">serviceable</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">predicted_eta_date</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">null if not serviceable</td>
-</tr>
-<tr>
-<td style="text-align: center;">typical_days_min</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">area typical</td>
-</tr>
-<tr>
-<td style="text-align: center;">typical_days_max</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">area typical</td>
-</tr>
-<tr>
-<td style="text-align: center;">seller_ships_within_24h</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">trust anchor</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> serviceable = false → payload returns null.</p>
-<h5><strong>V-E3 product_price_ladder</strong> <strong><em>(E3)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> RT (event-driven on pricing rule changes)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">base_price</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">INR</td>
-</tr>
-<tr>
-<td style="text-align: center;">prepaid_price</td>
-<td style="text-align: center;">int | null</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">non_returnable_price</td>
-<td style="text-align: center;">int | null</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">coupon_price</td>
-<td style="text-align: center;">int | null</td>
-<td style="text-align: center;">with coupon code applied</td>
-</tr>
-<tr>
-<td style="text-align: center;">bank_offer_price</td>
-<td style="text-align: center;">int | null</td>
-<td style="text-align: center;">best bank offer</td>
-</tr>
-<tr>
-<td style="text-align: center;">best_price</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">min of populated fields</td>
-</tr>
-<tr>
-<td style="text-align: center;">best_price_condition</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">e.g., ‘prepaid + non_returnable’</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> all conditional fields null → return only base_price.</p>
-<h5><strong>V-E4 product_zonal_discount</strong> <strong><em>(E4)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id × user_zone</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 1</td>
-</tr>
-<tr>
-<td style="text-align: center;">user_zone</td>
-<td style="text-align: center;">string</td>
-<td style="text-align: center;">PK part 2 (derived from user pincode)</td>
-</tr>
-<tr>
-<td style="text-align: center;">seller_in_zone</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">delta_vs_base</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">INR, positive = cheaper because zonal</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> delta_vs_base = 0 → payload returns null.</p>
-<h5><strong>V-E5 product_price_trend</strong> <strong><em>(E5)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> product_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM → HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">product_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">min_30d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">INR</td>
-</tr>
-<tr>
-<td style="text-align: center;">max_30d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">min_60d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">max_60d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">min_90d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">max_90d</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">current</td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">current listed price</td>
-</tr>
-<tr>
-<td style="text-align: center;">variation_pct</td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">max variation across 90d</td>
-</tr>
-<tr>
-<td style="text-align: center;">at_low</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">true if current == min_90d</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Silent-when:</strong> variation_pct &lt; 0.03 → payload returns null.</p>
-<h5><strong>V-E6 sale_calendar</strong> <strong><em>(E6)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> date</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> STATIC + event-driven on campaign publish</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">date PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">is_sale_day</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">first Sunday of month = true</td>
-</tr>
-<tr>
-<td style="text-align: center;">campaign_tag</td>
-<td style="text-align: center;">string | null</td>
-<td style="text-align: center;">e.g., ‘ethnic-wear-sunday’</td>
-</tr>
-<tr>
-<td style="text-align: center;">campaign_ends</td>
-<td style="text-align: center;">date | null</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">next_sale_date</td>
-<td style="text-align: center;">date</td>
-<td style="text-align: center;">for “sale in N days” framing</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Never silent</strong> — always populated.</p>
-<h5><strong>V-E7 payment_eligibility_by_pincode</strong> <strong><em>(E7)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> pincode</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH (weekly is fine; changes infrequent)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">pincode</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">cod_available</td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">supported_methods</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">[‘prepaid_card’, ‘upi’, ‘netbanking’, ‘cod’]</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Never silent</strong> — always populated for known pincodes.</p>
-<h5><strong>V-F1 user_orders_in_transit</strong> <strong><em>(F1)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id (row is a JSON list of open orders)</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> RT (event-driven on tracking events)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-
-<tbody>
-<tr>
-<td style="text-align: center;">Column</td>
-<td style="text-align: center;">Type</td>
-<td style="text-align: center;">Notes</td>
-</tr>
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">orders</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">see below</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p>Each orders[i]:</p>
-<pre><code>{  
-  order_id: string,  
-  product_name: string,  
-  product_id: string,  
-  sscat: string,  
-  status: enum('placed','packed','shipped','out_for_delivery','delayed'),  
-  eta_date: date,  
-  deviation_days: int    // positive = behind promise  
-}
-</code></pre>
-<p><strong>Empty list is a valid answer</strong> — return [], not null.</p>
-<h5><strong>V-F2 user_orders_in_return_window</strong> <strong><em>(F2)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> NRT (hourly window sweep)</p>
-</li>
-<li>
-<p><strong>Store:</strong> HOT</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-
-<tbody>
-<tr>
-<td style="text-align: center;">Column</td>
-<td style="text-align: center;">Type</td>
-<td style="text-align: center;">Notes</td>
-</tr>
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">orders</td>
-<td style="text-align: center;">JSON list</td>
-<td style="text-align: center;">see below</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p>Each orders[i]:</p>
-<pre><code>{  
-  order_id: string,  
-  product_name: string,  
-  product_id: string,  
-  sscat: string,  
-  delivered_date: date,  
-  days_left: int,  
-  rating_given: int | null  
-}
-</code></pre>
-<h5><strong>V-F3 user_orders_past</strong> <strong><em>(F3)</em></strong></h5>
-<ul>
-<li>
-<p><strong>Grain:</strong> user_id</p>
-</li>
-<li>
-<p><strong>Refresh:</strong> BATCH</p>
-</li>
-<li>
-<p><strong>Store:</strong> WARM (lazy-loaded on demand — do NOT hydrate every turn; see §4.5 payload contract)</p>
-</li>
-</ul>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">user_id</td>
-<td style="text-align: center;">string PK</td>
-<td style="text-align: center;"></td>
-</tr>
-<tr>
-<td style="text-align: center;">orders</td>
-<td style="text-align: center;">JSON list (capped at 50 most recent)</td>
-<td style="text-align: center;">see below</td>
-</tr>
-<tr>
-<td style="text-align: center;">updated_at</td>
-<td style="text-align: center;">timestamp</td>
-<td style="text-align: center;"></td>
-</tr>
-</tbody>
-</table></div>
-<p>Each orders[i]:</p>
-<pre><code>{  
-  order_id: string,  
-  product_name: string,  
-  product_id: string,  
-  sscat: string,  
-  sscat_family: string,  
-  delivered_date: date,  
-  rating: int | null,  
-  size_bought: string | null,  
-  returned: bool,  
-  return_reason: string | null,  
-  return_outcome: string | null  
-}
-</code></pre>
-<p><strong>Note:</strong> V-F3 is the source for V-D2 (size recommendation) and V-D5 (returner tier). It is also directly surfaced when user asks “pichli baar kya liya tha?” — but is not pushed on every turn; it is a lazy fetch. See §4.5.</p>
-<h4>4.3 Cohort Key Definition (used by B4)</h4>
-<p><strong>Cohort key</strong> = hash of the tuple (region_bucket, budget_band, sscat_history_bucket).</p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Component</th><th>Buckets</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;">region_bucket</td>
-<td style="text-align: center;">state level.</td>
-</tr>
-</tbody>
-</table></div>
-<h4>4.4 Refresh Cadence Tiers (summary)</h4>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Tier</th><th>Views</th><th>SLA</th></tr></thead>
-<tbody>
-
-<tr>
-<td style="text-align: center;"><strong>RT</strong> (event-driven)</td>
-<td style="text-align: center;">V-C2 variants, V-E3 price ladder, V-F1 in-transit orders</td>
-<td style="text-align: center;">&lt; 60s from source event</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>NRT</strong> (hourly)</td>
-<td style="text-align: center;">V-C1 real-image flag, V-E2 delivery prediction, V-F2 return-window orders</td>
-<td style="text-align: center;">&lt; 60 min</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>STATIC</strong></td>
-<td style="text-align: center;">V-E6 sale calendar, V-E7 payment eligibility</td>
-<td style="text-align: center;">On config change</td>
-</tr>
-<tr>
-<td style="text-align: center;"><strong>BATCH</strong> (daily)</td>
-<td style="text-align: center;">Everything else: V-A1, A2, A3, A4, A5–A8 (seller_snapshot), V-B1B2, V-B4, V-D1–D5, V-E1, V-E4, V-E5, V-F3, V-G1</td>
-<td style="text-align: center;">Complete by 6 AM IST</td>
-</tr>
-</tbody>
-</table></div>
-<h4>4.5 Orchestrator Hydration Payload</h4>
-<p>The Vaani orchestrator receives one payload per turn. The wire format is fixed; nullability is per 3.1 silent-when rules.</p>
-<p><strong>Trigger:</strong> every turn where Vaani is invoked, keyed by (user_id, product_id?, pincode, current_screen, intent).</p>
-<p><strong>Hydration:</strong> the orchestrator does an in-parallel fanout to hot store keys and composes the payload.</p>
-<p><strong>Payload shape</strong> (indicative — final schema in engineering solutioning):</p>
-<pre><code>{  
-  "product": {  
-    "product_id": "P123",  
-    "name": "...",  
-    "sscat_id": "...",  
-    "sscat_family": "...",  
-    "return_stats": { **&amp;lt;V-A1** **columns&amp;gt;** } **|** **null**,  
-    "return_reasons": { **&amp;lt;V-A2** **columns&amp;gt;** } **|** **null**,  
-    "order_stats": { **&amp;lt;V-A4** **columns&amp;gt;** } **|** **null**,  
-    "real_image": { **&amp;lt;V-C1** **columns&amp;gt;** } **|** **null**,  
-    "variants": [ **&amp;lt;V-C2** **items&amp;gt;** ] **|** **null**,  
-    "review_themes": { **positive**: [**...**], **negative**: [**...**] } **|** **null**,  
-    "cohort_review": { **&amp;lt;V-B4** **columns&amp;gt;** } **|** **null**,  
-    "price_ladder": { **&amp;lt;V-E3** **columns&amp;gt;** },  
-    "price_trend": { **&amp;lt;V-E5** **columns&amp;gt;** } **|** **null**,  
-    "zonal_discount": { **&amp;lt;V-E4** **columns&amp;gt;** } **|** **null**,  
-    "delivery": { **&amp;lt;V-E2** **columns&amp;gt;** } **|** **null**,  
-    "regional_orders": { **&amp;lt;V-E1** **selected** **geo** **level&amp;gt;** } **|** **null**  
-  },  
-  "seller": { **&amp;lt;V-A5..A8** **columns**, **per-field** **nullable&amp;gt;** },  
-  "user": {  
-    "gender_inferred": { **&amp;lt;V-D3** **columns&amp;gt;** } **|** **null**,  
-    "sscat_size_pref": { **&amp;lt;V-D1** **for** **current** **sscat&amp;gt;** } **|** **null**,  
-    "size_recommendation": { **&amp;lt;V-D2** **for** **current** **sscat_family&amp;gt;** } **|** **null**,  
-    "sscat_budget": { **&amp;lt;V-D4** **for** **current** **sscat&amp;gt;** } **|** **null**,  
-    "returner_tier": "low|med|high" **|** **null**      **//** **NEVER** **surface;** **internal** **only**  
-  },  
-  "orders": {  
-    "in_transit": [ **&amp;lt;V-F1** **items&amp;gt;** ],       **//** **always** **list**, **possibly** **empty**  
-    "in_return_window": [ **&amp;lt;V-F2** **items&amp;gt;** ]  **//** **always** **list**, **possibly** **empty**  
-    **//** **past** **orders** **NOT** **included;** **fetched** **via** **lazy** **tool** **call**  
-  },  
-  "context": {  
-    "pincode": "...",  
-    "cohort_key": "...",  
-    "sale": { **&amp;lt;V-E6** **columns&amp;gt;** },  
-    "payment_eligibility": { **&amp;lt;V-E7** **columns&amp;gt;** },  
-    "current_screen": "SINGLE-PRODUCT"  
-  },  
-  "meta": {  
-    "hydration_latency_ms": 42,  
-    "views_failed": []  
-  }  
-}
-</code></pre>
-<p>**  </p>
-<hr/>
-<p><strong>**Sanitization rules the orchestrator MUST enforce:</strong></p>
+<h2>2. Processor Architecture</h2>
+<h3>2.1 What a Processor Is</h3>
+<p>A processor is a named, LLM-addressable unit of information. The intent layer decides which processors a turn needs; the orchestrator runs them in parallel; each converts one downstream API's response into a compact token block that the response layer reads directly.</p>
+<p>Four invariants hold for every processor:</p>
 <ol>
-<li>
-<p>user.returner_tier is exposed. user.return_history_raw (V-D5 numeric fields) is stripped.</p>
-</li>
-<li>
-<p>Any field where silent_when_triggered = true per its view definition → replaced with null.</p>
-</li>
-<li>
-<p>Views that fail to hydrate within 200ms → return null for that field; log to meta.views_failed.</p>
-</li>
-<li>
-<p>V-F3 past orders are NOT hydrated on every turn. They are fetched via a <strong>lazy tool call</strong> invoked by the response layer when the intent is ORDER_TRACKING or RETURN_HELP, or when the LLM signals the need. This keeps the steady-state payload small.</p>
-</li>
+<li><strong>One processor, one downstream API.</strong> A processor never fans out to two systems. If information needs two calls, it is two processors.</li>
+<li><strong>Suppression happens in the processor.</strong> Threshold rules are enforced in code before emit. The LLM never receives a value it is not allowed to use.</li>
+<li><strong>A processor is never on the critical path.</strong> Timeout or error means the block is omitted and the turn continues. A missing block degrades the answer; it never fails it.</li>
+<li><strong>Processors are named for meaning, not for endpoints.</strong> The LLM addresses what the information <em>is</em>; the service behind it can move.</li>
 </ol>
-<h4>*</h4>
-<p><strong><em>*4.6 Data Quality &amp; Silent-When Enforcement (recap)</em></strong></p>
-<ol>
-<li>
-<p>Silent-when is enforced at the <strong>view</strong> level and re-enforced at the <strong>orchestrator</strong> level. LLM never applies silent-when.</p>
-<ol>
-<li>
-<p>At view level: sample-size and threshold rules result in null-populated rows (or omission), per the per-field spec in 3.1.</p>
-</li>
-<li>
-<p>At orchestrator level: a defensive re-check runs before the payload is emitted. If a view returns non-null but sample_size below threshold (e.g., a stale row from before threshold enforcement was tightened), the orchestrator over-writes with null and logs.</p>
-</li>
-</ol>
-</li>
-</ol>
-<h3>5. Experimentation Strategy</h3>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Item</th><th>Detail</th></tr></thead>
+<h3>2.2 Turn Flow</h3>
+<pre><code>Layer 1 — Intent Classifier
+  emits { intent, requires_screenshot, pivot_signal, processors[] }
+        │
+        ▼
+Orchestrator — processor resolver
+  final = default_map[intent] ∪ (requested ∩ allowlist[intent])
+  drops any processor whose required keys are absent this turn
+        │
+        ▼  parallel fanout, 200ms budget, one downstream call each
+  ┌───────────┬───────────────┬──────────────┬─────────┐
+  product_    product_post_   user_order_    … n more
+  info        order_info      transit
+  storefront  return_recon    order aggregate
+  └───────────┴───────────────┴──────────────┴─────────┘
+        │  failed or timed-out processors drop out here
+        ▼
+Normalizer
+  suppression → omit key · precompute framings · resolve dates
+  cap lists · strip internal fields · JSON → one flat block per processor
+        │
+        ▼
+Layer 2 — Response Agent
+  constitution + per-intent prompt + token blocks + screenshot if flagged
+</code></pre>
+<h3>2.3 Processor Contract</h3>
+<p>Every processor declares exactly these eight things. A processor with a blank in this table is not ready to build.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Declaration</th>
+<th style="text-align: left;">Meaning</th>
+</tr>
+</thead>
 <tbody>
-
 <tr>
-<td style="text-align: center;">Experimented?</td>
-<td style="text-align: center;">Yes.</td>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;"><code>&lt;entity&gt;_&lt;facet&gt;</code>, snake_case. Entity is one of <code>product</code>, <code>seller</code>, <code>user</code>, <code>context</code>. The name is what the intent layer emits and what the token block is named after, so it is a public interface.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Type</td>
-<td style="text-align: center;">User-level sticky A/B with an eligible-Holdout arm.</td>
+<td style="text-align: left;">keys required</td>
+<td style="text-align: left;">e.g. <code>product_id + seller_id</code>. If a key is unavailable on the turn, the processor is not invocable and the orchestrator drops it silently.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Arms</td>
-<td style="text-align: center;">Treatment (enriched payload) · Holdout (baseline payload — current fields only, no P0/P1 additions) · optional Control (current V1 Vaani, no data changes at all).</td>
+<td style="text-align: left;">downstream API</td>
+<td style="text-align: left;">Exactly one, named service and endpoint.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Attribution</td>
-<td style="text-align: center;">Per-turn logging; assignment sticky at user level; ITT measurement.</td>
+<td style="text-align: left;">freshness</td>
+<td style="text-align: left;">RT / NRT / BATCH. Determines whether a stale read is acceptable and how long a result may be cached within a session.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Duration</td>
-<td style="text-align: center;">4 weeks minimum; longer if per-field surface rate is thin.</td>
+<td style="text-align: left;">latency budget</td>
+<td style="text-align: left;">In ms. On breach the block is omitted and logged to <code>meta.processors_failed</code>. Budgets must sum within the +200ms P95 guardrail under parallel execution.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Success threshold</td>
-<td style="text-align: center;">+3% relative lift in enriched-turn → cart-add rate (I.3.1) at p&lt;0.05.</td>
+<td style="text-align: left;">emitted block</td>
+<td style="text-align: left;">Block name and exhaustive key list, with units and formatting. This is the contract the response prompts are written against.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Guardrails</td>
-<td style="text-align: center;">See I.3.3; any red = pause release.</td>
+<td style="text-align: left;">suppression rules</td>
+<td style="text-align: left;">Per-key thresholds, enforced in the processor.</td>
+</tr>
+<tr>
+<td style="text-align: left;">eligible intents</td>
+<td style="text-align: left;">Which intents may request it, and which receive it by default.</td>
 </tr>
 </tbody>
-</table></div>
-<h3>6. Tech Solutioning</h3>
-<p><strong>[to be added by Engineering]</strong> </p>
-<h3>7. Logging Requirements</h3>
-<p>Emit the following events for every Vaani turn:</p>
-<p>We can add this in the main table where we store backend related information for Vaani. Primary usage will be check the type of data that was available for agent for response generation, to check factualness and to understand what it prioritised. </p>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
-<tbody>
-
+</table>
+<h3>2.4 Processor Selection</h3>
+<p>The intent layer's output gains one field:</p>
+<pre><code class="language-json">{
+  &quot;intent&quot;: &quot;PRODUCT_INQUIRY&quot;,
+  &quot;requires_screenshot&quot;: false,
+  &quot;pivot_signal&quot;: false,
+  &quot;processors&quot;: [&quot;product_post_order_info&quot;]
+}
+</code></pre>
+<p>The request is advisory. The orchestrator resolves the set that actually runs:</p>
+<pre><code>final = default_map[intent] ∪ (llm_requested ∩ allowlist[intent])
+</code></pre>
+<p>The default map is a deterministic floor; the allowlist is a ceiling. The floor guarantees that a turn always receives the processors its intent requires regardless of classifier behaviour. The ceiling prevents an unrecognised processor name or an unnecessary fetch.</p>
+<table>
+<thead>
 <tr>
-<td style="text-align: center;">payload</td>
-<td style="text-align: center;">user_id, product_id, screen, hydration_latency_ms, views_hydrated (list), views_failed (list), views_silent_when_triggered (list), payload_size_bytes</td>
-<td style="text-align: center;">Arm balance, latency SLO tracking, silent-when compliance</td>
+<th style="text-align: left;">Intent</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">May additionally be requested</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">PRODUCT_INQUIRY</td>
+<td style="text-align: left;"><code>product_info</code></td>
+<td style="text-align: left;"><code>product_post_order_info</code>, <code>seller_info</code>, <code>user_profile</code>, <code>user_past_10_orders</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">VARIANT_SELECT</td>
+<td style="text-align: left;"><code>product_info</code></td>
+<td style="text-align: left;"><code>product_post_order_info</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">REASSURANCE</td>
+<td style="text-align: left;"><code>product_post_order_info</code></td>
+<td style="text-align: left;"><code>seller_info</code>, <code>seller_return_reason</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">BUY_HELP, CHECKOUT_HELP</td>
+<td style="text-align: left;"><code>product_info</code></td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;">ORDER_TRACKING</td>
+<td style="text-align: left;"><code>user_order_transit</code></td>
+<td style="text-align: left;"><code>user_past_10_orders</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">RETURN_HELP</td>
+<td style="text-align: left;"><code>user_order_in_return_window</code></td>
+<td style="text-align: left;"><code>user_past_10_orders</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">SEARCH, REFINE, INFO</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;">GREETING, OUT_OF_SCOPE, UNCLEAR</td>
+<td style="text-align: left;">none</td>
+<td style="text-align: left;">—</td>
 </tr>
 </tbody>
-</table></div>
-<h3>8. Open Questions (to close before build)</h3>
-<ol>
-<li>
-<p><strong>Theme classifier ownership</strong> — Analytics/ML build vs off-the-shelf? Taxonomy final?</p>
-</li>
-<li>
-<p><strong>returner_tier thresholds</strong> — currently proposing low&lt;0.5, high&gt;0.4. Confirm from empirical distribution.</p>
-</li>
-<li>
-<p><strong>V-F3 lazy-fetch trigger</strong> — should the response layer decide, or should the orchestrator eagerly hydrate when intent is ORDER_TRACKING / RETURN_HELP? Recommendation: orchestrator, based on intent.</p>
-</li>
-<li>
-<p><strong>Backfill horizon</strong> — how many months of history for V-D1, D2, D4, D5, F3? Recommend 12 months minimum, longer if storage permits.</p>
-</li>
-<li>
-<p><strong>Kill-switch semantics</strong> — can we independently disable a single view without breaking the payload contract? Recommend: yes, each view is nullable-independent.</p>
-</li>
-</ol>
-<h2>Section III: Testing &amp; Launch Checklist</h2>
-<h3>1. Functional Testing</h3>
-<h4>1.1 Test Cases</h4>
-<div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Scenario</th><th>Expected Result</th></tr></thead>
+</table>
+<h3>2.5 Output Contract</h3>
+<p>Downstream APIs return nested JSON built for services. The normalizer converts each response into one flat block the response layer can speak from without transformation.</p>
+<p><strong>Grammar.</strong> One block per processor. Block name is the processor name, uppercased. Pipe-delimited <code>key=value</code>, emitted as a single line.</p>
+<pre><code>PRODUCT_POST_ORDER_INFO: |return_rate_m3=12% (category 22%, better)|delivered_m3=1284|top_return_reason=size (58% of returns)|quality_returns=4%
+</code></pre>
+<p><strong>Normalization rules.</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Rule</th>
+<th style="text-align: left;">Detail</th>
+</tr>
+</thead>
 <tbody>
-
 <tr>
-<td style="text-align: center;">TC-201</td>
-<td style="text-align: center;">Product with return_rate 12%, sscat median 22%</td>
-<td style="text-align: center;">V-A1 populates; delta_vs_sscat_pp = -10; silent_when_triggered = false; surfaced</td>
+<td style="text-align: left;">Omit, do not null</td>
+<td style="text-align: left;">A suppressed key is absent from the block entirely. A key that is not present cannot be surfaced, hedged about, or reported as missing.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-202</td>
-<td style="text-align: center;">Product with return_rate 20%, sscat median 22%, no trend</td>
-<td style="text-align: center;">silent_when_triggered = true; payload returns null</td>
+<td style="text-align: left;">Empty is not silence</td>
+<td style="text-align: left;">For list processors, emit <code>orders=none</code> when the list is genuinely empty. Absent means stay quiet; <code>none</code> is an established fact the response layer may state.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-203</td>
-<td style="text-align: center;">Product with &lt; 50 lifetime orders</td>
-<td style="text-align: center;">V-A4 returns null</td>
+<td style="text-align: left;">Precompute every framing</td>
+<td style="text-align: left;"><code>return_rate=12% (category 22%, better)</code> — not two raw numbers. Any comparison or arithmetic left to the LLM is a correctness risk.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-204</td>
-<td style="text-align: center;">Seller with tenure 24 months</td>
-<td style="text-align: center;">V-A5’s tenure_months field returns null; rest of seller_snapshot populated</td>
+<td style="text-align: left;">Pre-resolve dates</td>
+<td style="text-align: left;"><code>eta=Sat 18 Jul (4 din)</code> — never an ISO timestamp. Date arithmetic is performed in the processor.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-205</td>
-<td style="text-align: center;">User with no orders in sscat ‘saree’</td>
-<td style="text-align: center;">V-D1 for (user, saree) returns null</td>
+<td style="text-align: left;">Round and humanize numbers</td>
+<td style="text-align: left;">Percentages to whole numbers, currency to integer INR, counts in plain digits. No floats.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-206</td>
-<td style="text-align: center;">User is a repeat returner (returner_tier = ‘high’)</td>
-<td style="text-align: center;">Payload contains user.returner_tier: 'high'; NO overall_return_rate, NO reason_mix in payload</td>
+<td style="text-align: left;">Cap every list</td>
+<td style="text-align: left;">Variants ≤ 8, past orders ≤ 10, review themes ≤ 3. Caps are configuration, never part of the processor name.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-207</td>
-<td style="text-align: center;">Product with &lt; 20 reviews</td>
-<td style="text-align: center;">V-B1B2 returns null for both positive and negative themes</td>
+<td style="text-align: left;">One level of nesting maximum</td>
+<td style="text-align: left;"><code>{k:v,k:v}</code> and <code>[a,b,c]</code> are permitted. Deeper structures flatten to dotted or compound keys.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-208</td>
-<td style="text-align: center;">Cohort has 150 orders in 90d</td>
-<td style="text-align: center;">V-B4 for that cohort returns null (below 200 threshold)</td>
+<td style="text-align: left;">No raw identifiers</td>
+<td style="text-align: left;">Product, variant, order and seller IDs are omitted unless an action the assistant can take requires one.</td>
 </tr>
 <tr>
-<td style="text-align: center;">TC-209</td>
-<td style="text-align: center;">Serviceable pincode; ETA computed</td>
-<td style="text-align: center;">V-E2 populated with predicted_eta_date</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-210</td>
-<td style="text-align: center;">Non-serviceable pincode</td>
-<td style="text-align: center;">V-E2 returns null; delivery field absent from payload</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-211</td>
-<td style="text-align: center;">Product with variation_pct 2% across 90d</td>
-<td style="text-align: center;">V-E5 returns null</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-212</td>
-<td style="text-align: center;">User has 2 in-transit orders</td>
-<td style="text-align: center;">V-F1 returns list of 2</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-213</td>
-<td style="text-align: center;">User has no orders in return window</td>
-<td style="text-align: center;">V-F2 returns [], not null</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-214</td>
-<td style="text-align: center;">Anchor product has fewer than 3 alternates passing user’s size filter</td>
-<td style="text-align: center;">V-G1 returns null</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-215</td>
-<td style="text-align: center;">Orchestrator hydration exceeds 200ms</td>
-<td style="text-align: center;">Payload emitted with meta.views_failed populated for slow views</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-216</td>
-<td style="text-align: center;">Variant inventory event fired</td>
-<td style="text-align: center;">V-C2 refreshed in HOT within 60s</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-217</td>
-<td style="text-align: center;">New review theme classifier version deployed</td>
-<td style="text-align: center;">V-B1B2 backfill completes overnight; no user-facing drop</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-218</td>
-<td style="text-align: center;">User pincode changes mid-session</td>
-<td style="text-align: center;">Next turn’s payload uses new pincode for V-E1, V-E2, V-E4, V-E7</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-219</td>
-<td style="text-align: center;">ORDER_TRACKING intent invoked</td>
-<td style="text-align: center;">Orchestrator triggers V-F3 lazy fetch; latency logged</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-220</td>
-<td style="text-align: center;">V-D5 numeric fields sanitization</td>
-<td style="text-align: center;">Middleware strips overall_return_rate and reason_mix before LLM call; audit log records strip</td>
-</tr>
-<tr>
-<td style="text-align: center;">TC-221</td>
-<td style="text-align: center;">Silent-when compliance monitor</td>
-<td style="text-align: center;">If any turn surfaces a field where silent_when_triggered was true, the field_surfaced_but_silent_when_should_have_fired event fires</td>
+<td style="text-align: left;">Per-processor size budget</td>
+<td style="text-align: left;">Enforced at emit, in characters. Every block rides in the Layer 2 system prompt.</td>
 </tr>
 </tbody>
-</table></div>
-<h3>2. Launch Checklist</h3>
+</table>
+<p><strong>Failure handling.</strong> A processor that errors or exceeds its budget emits no block. Its name is logged to <code>meta.processors_failed</code>. The response layer's standing rule covers the rest: answer from what is present, and do not refer to what is absent.</p>
+<h2>3. Processor Catalogue</h2>
+<h3>3.1 V1 — Building Now</h3>
+<h4><code>product_post_order_info</code></h4>
+<p>Post-purchase outcomes for the product being viewed, from the seller actually selling it.</p>
 <ul>
-<li>
-<p>☐ All 15 pre-computed views authored, tested, and reviewed by Data Eng.</p>
-</li>
-<li>
-<p>☐ Cohort key computation service live; back-fill complete for last 90 days.</p>
-</li>
-<li>
-<p>☐ Theme classifier deployed; taxonomy locked; sample review scored &amp; QA’d (≥95% agreement with human rater).</p>
-</li>
-<li>
-<p>☐ Alternate ranking service live; back-fill complete.</p>
-</li>
-<li>
-<p>☐ Hot store provisioned; sharding + TTL policy applied.</p>
-</li>
-<li>
-<p>☐ Orchestrator hydration service deployed with parallel fanout + sanitization + fallback markers.</p>
-</li>
-<li>
-<p>☐ meta.views_failed dashboard live and alerting.</p>
-</li>
-<li>
-<p>☐ Silent-when compliance monitor live (§7).</p>
-</li>
-<li>
-<p>☐ Latency SLOs measured over 3 days of shadow traffic before flip.</p>
-</li>
-<li>
-<p>☐ Kill-switch verified per view.</p>
-</li>
-<li>
-<p>☐ A/B experiment configuration approved; sticky assignment tested.</p>
-</li>
-<li>
-<p>☐ Backfill horizon set (12 mo) for personalization views.</p>
-</li>
-<li>
-<p>☐ returner_tier sanitization audit passed (0 leak in 100k turns).</p>
-</li>
-<li>
-<p>☐ Sign-off from Product, Tech, Data Eng, Analytics, QA.</p>
-</li>
+<li><strong>Keys:</strong> <code>product_id + seller_id</code> · <strong>Source:</strong> return_recon · <strong>Freshness:</strong> BATCH (daily by 06:00 IST) · <strong>Budget:</strong> 120ms</li>
+<li><strong>Intents:</strong> default for REASSURANCE; requestable on PRODUCT_INQUIRY, VARIANT_SELECT</li>
 </ul>
-<h3>3. Post-Launch Governance</h3>
-<h2>Section IV: Mentor Sign Off</h2>
-<div style="overflow-x:auto"><table>
-
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td style="text-align: center;">Function</td>
-<td style="text-align: center;">Name</td>
-<td style="text-align: center;">Status</td>
+<td style="text-align: left;">return_rate_m1 / m3 / m6</td>
+<td style="text-align: left;">% of delivered units returned, per window, with sscat median and direction</td>
+<td style="text-align: left;">delivered units in window &lt; 30 / 90 / 150</td>
 </tr>
 <tr>
-<td style="text-align: center;">Product</td>
-<td style="text-align: center;">Madhurita Mahapatra</td>
-<td style="text-align: center;">Pending</td>
+<td style="text-align: left;">delivered_m1 / m3 / m6</td>
+<td style="text-align: left;">Count of units delivered per window</td>
+<td style="text-align: left;">—</td>
 </tr>
 <tr>
-<td style="text-align: center;">Tech</td>
-<td style="text-align: center;">Shubham Maheshwari</td>
-<td style="text-align: center;">Pending</td>
+<td style="text-align: left;">returned_m1 / m3 / m6</td>
+<td style="text-align: left;">Count of units returned per window</td>
+<td style="text-align: left;">—</td>
 </tr>
 <tr>
-<td style="text-align: center;">Data Engineering</td>
-<td style="text-align: center;">TBD</td>
-<td style="text-align: center;">Pending</td>
+<td style="text-align: left;">top_return_reason</td>
+<td style="text-align: left;">Dominant reason with its share. Buckets: size, quality, wrong_item, damaged, colour_mismatch, changed_mind, delivery_delay</td>
+<td style="text-align: left;">returns &lt; 50, or no reason ≥ 25% share</td>
 </tr>
 <tr>
-<td style="text-align: center;">Analytics / ML</td>
-<td style="text-align: center;">TBD</td>
-<td style="text-align: center;">Pending</td>
+<td style="text-align: left;">quality_returns</td>
+<td style="text-align: left;">Share of returns tagged quality</td>
+<td style="text-align: left;">returns &lt; 50</td>
 </tr>
 <tr>
-<td style="text-align: center;">QA</td>
-<td style="text-align: center;">TBD</td>
-<td style="text-align: center;">Pending</td>
-</tr>
-<tr>
-<td style="text-align: center;">Business / Category</td>
-<td style="text-align: center;">TBD</td>
-<td style="text-align: center;">Pending</td>
+<td style="text-align: left;">trend</td>
+<td style="text-align: left;"><code>rising</code> / <code>falling</code> / <code>stable</code>, from m1 against m3</td>
+<td style="text-align: left;">delta &lt; 3pp</td>
 </tr>
 </tbody>
-</table></div>
-<h2>Summary</h2>
-<p>V0 ships the data foundation that grounds every Vaani response. Required build:</p>
+</table>
+<pre><code>PRODUCT_POST_ORDER_INFO: |return_rate_m3=12% (category 22%, better)|delivered_m3=1284|returned_m3=151|top_return_reason=size (58% of returns)|quality_returns=4%|trend=stable
+</code></pre>
+<h4><code>user_order_transit</code></h4>
+<p>Orders currently on their way to the user.</p>
 <ul>
-<li>
-<p><strong>15 pre-computed views</strong> across 7 clusters (Seller &amp; Trust, Social Proof, Visual Truth, Personalization, Commercial, Order State, Alternates) covering 19 P0 and 10 P1 fields.</p>
-</li>
-<li>
-<p><strong>Cohort key computation service</strong> for the 8×4×6 (region × budget × sscat_history) grid, used by B4 and G1.</p>
-</li>
-<li>
-<p><strong>Theme classifier pipeline</strong> for B1/B2 (positive/negative review themes) with tag taxonomy.</p>
-</li>
-<li>
-<p><strong>Alternate ranking service</strong> for G1 with request-time size filter.</p>
-</li>
-<li>
-<p><strong>Hot store hydration</strong> with sub-200ms P95 across parallel-fanout view fetches.</p>
-</li>
-<li>
-<p><strong>Orchestrator payload contract</strong> with defined nullability, sanitization (D5 raw stripping, returner_tier passthrough only), and lazy-fetch for V-F3.</p>
-</li>
-<li>
-<p><strong>Silent-when enforcement at the data layer</strong> — LLM sees null, LLM does not apply silent-when logic.</p>
-</li>
-<li>
-<p><strong>Per-turn observability</strong> — hydration latency, view failure, silent-when compliance, per-field surface, sanitization audit.</p>
-</li>
-<li>
-<p><strong>A/B with sticky user assignment</strong> — Treatment (enriched) vs Holdout (baseline); ITT measurement.</p>
-</li>
+<li><strong>Keys:</strong> <code>user_id</code> · <strong>Source:</strong> product order aggregate — in-transit endpoint · <strong>Freshness:</strong> RT · <strong>Budget:</strong> 100ms</li>
+<li><strong>Intents:</strong> default for ORDER_TRACKING</li>
 </ul>
-<p>Prompt/intent changes ship in a separate KRD. Memory (H1, H2) and B3 photo review count deferred to next cycle.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">count</td>
+<td style="text-align: left;">Number of orders in transit</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;">orders[]</td>
+<td style="text-align: left;">Per order: item name, status, resolved ETA, delay if behind promise. Status ∈ placed, packed, shipped, out_for_delivery, delayed</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<pre><code>USER_ORDER_TRANSIT: |count=2|orders=[{item:Rayon Kurta,status:out_for_delivery,eta:aaj},{item:Cotton Saree,status:shipped,eta:Sat 18 Jul,delay:2 din late}]
+</code></pre>
+<p>Empty is a valid answer and must be stated, not suppressed:</p>
+<pre><code>USER_ORDER_TRANSIT: |count=0|orders=none
+</code></pre>
+<h4><code>user_order_in_return_window</code></h4>
+<p>Delivered orders the user can still return.</p>
+<ul>
+<li><strong>Keys:</strong> <code>user_id</code> · <strong>Source:</strong> product order aggregate — return-window endpoint · <strong>Freshness:</strong> NRT (hourly sweep) · <strong>Budget:</strong> 100ms</li>
+<li><strong>Intents:</strong> default for RETURN_HELP</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">count</td>
+<td style="text-align: left;">Number of orders in window</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;">orders[]</td>
+<td style="text-align: left;">Per order: item name, delivered date, days left, whether already rated</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<pre><code>USER_ORDER_IN_RETURN_WINDOW: |count=1|orders=[{item:Cotton Saree,delivered:12 Jul,days_left:2,rated:no}]
+</code></pre>
+<pre><code>USER_ORDER_IN_RETURN_WINDOW: |count=0|orders=none
+</code></pre>
+<h4><code>user_past_10_orders</code></h4>
+<p>The user's ten most recent delivered orders and how each ended.</p>
+<ul>
+<li><strong>Keys:</strong> <code>user_id</code> · <strong>Source:</strong> product order aggregate — order-history endpoint · <strong>Freshness:</strong> BATCH · <strong>Budget:</strong> 120ms</li>
+<li><strong>Intents:</strong> requestable on PRODUCT_INQUIRY, ORDER_TRACKING, RETURN_HELP</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">count / kept / returned</td>
+<td style="text-align: left;">Totals across the ten</td>
+<td style="text-align: left;">—</td>
+</tr>
+<tr>
+<td style="text-align: left;">orders[]</td>
+<td style="text-align: left;">Per order: item name, sscat, size bought, delivered date, rating, kept or returned with reason. Capped at 10, most recent first</td>
+<td style="text-align: left;">—</td>
+</tr>
+</tbody>
+</table>
+<pre><code>USER_PAST_10_ORDERS: |count=10|kept=7|returned=3|orders=[{item:Anarkali Kurta,sscat:kurta,size:L,delivered:2 Jun,rating:5,kept},{item:Cotton Saree,sscat:saree,delivered:18 May,returned:size chota tha}]
+</code></pre>
+<h3>3.2 P0 — Next</h3>
+<h4><code>product_info</code> — extension</h4>
+<p>The live processor, extended. Its current fields stay as they are; the additions below land in the same block.</p>
+<ul>
+<li><strong>Keys:</strong> <code>product_id + seller_id</code> · <strong>Source:</strong> storefront · <strong>Freshness:</strong> RT · <strong>Budget:</strong> 150ms</li>
+<li><strong>Intents:</strong> default for PRODUCT_INQUIRY, VARIANT_SELECT, BUY_HELP, CHECKOUT_HELP</li>
+</ul>
+<p>Currently emitted: name, price, stock, seller, seller_rating, sizes, size_chart, specs, product_rating, total_ratings, total_reviews, rating_distribution, review_highlights.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Addition</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">seller_rating</td>
+<td style="text-align: left;">Seller average rating with rating count</td>
+<td style="text-align: left;">rating_count &lt; 40</td>
+</tr>
+<tr>
+<td style="text-align: left;">eta</td>
+<td style="text-align: left;">Resolved delivery date to the user's pincode, plus days</td>
+<td style="text-align: left;">pincode not serviceable</td>
+</tr>
+<tr>
+<td style="text-align: left;">price_ladder</td>
+<td style="text-align: left;"><code>{base, prepaid, non_returnable}</code> in INR</td>
+<td style="text-align: left;">no conditional variants — emit base only</td>
+</tr>
+<tr>
+<td style="text-align: left;">best_price</td>
+<td style="text-align: left;">Lowest attainable price with the condition that reaches it</td>
+<td style="text-align: left;">equal to base</td>
+</tr>
+<tr>
+<td style="text-align: left;">variants[]</td>
+<td style="text-align: left;">Per variant: colour, size, in-stock. Capped at 8</td>
+<td style="text-align: left;">no variants</td>
+</tr>
+</tbody>
+</table>
+<p>Two changes to existing keys, so the response layer stops deriving values it should be given:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Existing key</th>
+<th style="text-align: left;">Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">rating_distribution</td>
+<td style="text-align: left;">Replaced by <code>pct_4_5_star</code>, computed over the full distribution</td>
+</tr>
+<tr>
+<td style="text-align: left;">size_chart</td>
+<td style="text-align: left;">Flattened to one level: <code>size_chart_in={S:36/42,M:38/42}</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code>PRODUCT_DATA: |name=Women's Rayon Printed Anarkali Kurta|price=699|stock=true|seller=Shree Fashion Hub|seller_rating=3.9 (1243 ratings)|sizes=[S,M,L,XL]|size_chart_in={S:36/42,M:38/42,L:40/42}|specs={Fabric:Rayon,Sleeve:Three-Quarter,Pattern:Printed}|product_rating=4.1|total_ratings=8842|pct_4_5_star=71%|review_highlights={fabric:+310/-61,color:+288/-52,fit:+190/-120}|price_ladder={base:699,prepaid:679,non_returnable:659}|best_price=659 (prepaid + non-returnable)|eta=Sat 18 Jul (4 din)|variants=[Blue-M:in_stock,Blue-L:in_stock,Red-XL:out_of_stock]
+</code></pre>
+<h4><code>user_profile</code></h4>
+<p>Who the assistant is speaking to. Gender is the declared value on the profile; inferred gender is held in backlog.</p>
+<ul>
+<li><strong>Keys:</strong> <code>user_id</code> · <strong>Source:</strong> user profile service · <strong>Freshness:</strong> BATCH · <strong>Budget:</strong> 80ms</li>
+<li><strong>Intents:</strong> requestable on PRODUCT_INQUIRY</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">name</td>
+<td style="text-align: left;">First name as declared on the profile</td>
+<td style="text-align: left;">not declared</td>
+</tr>
+<tr>
+<td style="text-align: left;">gender</td>
+<td style="text-align: left;">Declared gender, <code>f</code> / <code>m</code></td>
+<td style="text-align: left;">not declared</td>
+</tr>
+</tbody>
+</table>
+<pre><code>USER_PROFILE: |name=Sunita|gender=f
+</code></pre>
+<h3>3.3 P1 — After P0</h3>
+<h4><code>seller_info</code></h4>
+<p>Seller standing. Seller rating is not repeated here — it is delivered by <code>product_info</code> from storefront, and must have a single source.</p>
+<ul>
+<li><strong>Keys:</strong> <code>seller_id</code> · <strong>Source:</strong> seller_store_admin · <strong>Freshness:</strong> BATCH · <strong>Budget:</strong> 100ms</li>
+<li><strong>Intents:</strong> requestable on PRODUCT_INQUIRY, REASSURANCE</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">tenure</td>
+<td style="text-align: left;">Time on Meesho, in years, phrased for speech</td>
+<td style="text-align: left;">tenure between 12 and 36 months</td>
+</tr>
+<tr>
+<td style="text-align: left;">trusted</td>
+<td style="text-align: left;">Trusted-seller flag</td>
+<td style="text-align: left;">flag is false — absence is never called out</td>
+</tr>
+</tbody>
+</table>
+<pre><code>SELLER_INFO: |tenure=4 saal|trusted=yes
+</code></pre>
+<h4><code>seller_return_reason</code></h4>
+<p>Why this seller's products come back, across their catalogue.</p>
+<ul>
+<li><strong>Keys:</strong> <code>seller_id</code> · <strong>Source:</strong> return_recon — seller endpoint · <strong>Freshness:</strong> BATCH · <strong>Budget:</strong> 120ms</li>
+<li><strong>Intents:</strong> requestable on REASSURANCE</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Definition</th>
+<th style="text-align: left;">Suppress when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">quality_returns</td>
+<td style="text-align: left;">Share of the seller's returns tagged quality, with platform median and direction</td>
+<td style="text-align: left;">within ±3pp of platform median</td>
+</tr>
+<tr>
+<td style="text-align: left;">top_reason</td>
+<td style="text-align: left;">Dominant return reason across the seller's catalogue, with share</td>
+<td style="text-align: left;">no reason ≥ 25% share</td>
+</tr>
+</tbody>
+</table>
+<pre><code>SELLER_RETURN_REASON: |quality_returns=4% (platform 11%, better)|top_reason=size (52%)
+</code></pre>
+<h3>3.4 Backlog</h3>
+<p>Specified for sequencing. Not built in this cycle. Each is grouped under the processor that would carry it, so the boundary is settled before the build starts.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Would-be processor</th>
+<th style="text-align: left;">Fields</th>
+<th style="text-align: left;">Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>product_social_proof</code></td>
+<td style="text-align: left;">Positive and negative review themes; real-image existence flag</td>
+<td style="text-align: left;">reviews, product media</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>product_pricing_context</code></td>
+<td style="text-align: left;">Price trend over 30 / 60 / 90 days; sale calendar</td>
+<td style="text-align: left;">price_history, sale_calendar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>user_shopping_profile</code></td>
+<td style="text-align: left;">Per-sscat size preference; size recommendation adjusted for prior size-related returns; per-category budget band</td>
+<td style="text-align: left;">orders, returns</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>context_commerce</code></td>
+<td style="text-align: left;">Payment eligibility by pincode; regional order counts</td>
+<td style="text-align: left;">payment_methods_by_pincode, orders</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>product_post_order_info</code> (extension)</td>
+<td style="text-align: left;">Variant-level return rate</td>
+<td style="text-align: left;">return_recon</td>
+</tr>
+<tr>
+<td style="text-align: left;">Unassigned</td>
+<td style="text-align: left;">Cohort review summary; zonal discount; inferred gender; user returner tier</td>
+<td style="text-align: left;">pending grain definition</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Data Layer</h2>
+<h3>4.1 Source Tables</h3>
+<p>Existing Meesho data assets. Nothing here is a new upstream source.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Grain</th>
+<th style="text-align: left;">Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">orders</td>
+<td style="text-align: left;">order_id</td>
+<td style="text-align: left;">product_post_order_info, user_order_*</td>
+</tr>
+<tr>
+<td style="text-align: left;">order_items</td>
+<td style="text-align: left;">order_item_id</td>
+<td style="text-align: left;">product_post_order_info</td>
+</tr>
+<tr>
+<td style="text-align: left;">returns</td>
+<td style="text-align: left;">return_id</td>
+<td style="text-align: left;">product_post_order_info, seller_return_reason</td>
+</tr>
+<tr>
+<td style="text-align: left;">products</td>
+<td style="text-align: left;">product_id</td>
+<td style="text-align: left;">product_info, product_post_order_info</td>
+</tr>
+<tr>
+<td style="text-align: left;">product_variants</td>
+<td style="text-align: left;">variant_id</td>
+<td style="text-align: left;">product_info</td>
+</tr>
+<tr>
+<td style="text-align: left;">sellers</td>
+<td style="text-align: left;">seller_id</td>
+<td style="text-align: left;">seller_info, seller_return_reason</td>
+</tr>
+<tr>
+<td style="text-align: left;">users / user_profiles</td>
+<td style="text-align: left;">user_id</td>
+<td style="text-align: left;">user_profile</td>
+</tr>
+<tr>
+<td style="text-align: left;">pincodes / geo</td>
+<td style="text-align: left;">pincode</td>
+<td style="text-align: left;">product_info (eta)</td>
+</tr>
+<tr>
+<td style="text-align: left;">pricing_rules</td>
+<td style="text-align: left;">product_id × rule_type</td>
+<td style="text-align: left;">product_info (price ladder)</td>
+</tr>
+<tr>
+<td style="text-align: left;">logistics_sla</td>
+<td style="text-align: left;">pincode × seller_zone</td>
+<td style="text-align: left;">product_info (eta)</td>
+</tr>
+<tr>
+<td style="text-align: left;">tracking_events</td>
+<td style="text-align: left;">order_id × timestamp</td>
+<td style="text-align: left;">user_order_transit</td>
+</tr>
+<tr>
+<td style="text-align: left;">inventory</td>
+<td style="text-align: left;">variant_id × warehouse</td>
+<td style="text-align: left;">product_info (variants)</td>
+</tr>
+<tr>
+<td style="text-align: left;">sscat_taxonomy</td>
+<td style="text-align: left;">sscat_id</td>
+<td style="text-align: left;">join dimension</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 Pre-Computed Views</h3>
+<p>Only the views backing V1, P0 and P1 processors. Refresh notation: <strong>RT</strong> event-driven, sub-second lag · <strong>NRT</strong> minutes to hourly · <strong>BATCH</strong> daily overnight, complete by 06:00 IST.</p>
+<h4>V-1 <code>product_seller_return_stats</code> → <code>product_post_order_info</code></h4>
+<p>Grain: <code>product_id × seller_id</code> · Refresh: BATCH · Store: WARM → HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">product_id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">PK part 1</td>
+</tr>
+<tr>
+<td style="text-align: left;">seller_id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">PK part 2</td>
+</tr>
+<tr>
+<td style="text-align: left;">sscat_id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">join dimension</td>
+</tr>
+<tr>
+<td style="text-align: left;">delivered_units_m1 / m3 / m6</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">returned_units_m1 / m3 / m6</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">return_rate_m1 / m3 / m6</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">null below 30 / 90 / 150 delivered units</td>
+</tr>
+<tr>
+<td style="text-align: left;">sscat_median_m3</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">from derived sscat medians</td>
+</tr>
+<tr>
+<td style="text-align: left;">delta_vs_sscat_pp</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">return_rate_m3 − sscat_median_m3, percentage points</td>
+</tr>
+<tr>
+<td style="text-align: left;">trend_flag</td>
+<td style="text-align: left;">enum</td>
+<td style="text-align: left;">rising / falling / stable; non-stable when m1 vs m3 delta &gt; 3pp</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h4>V-2 <code>product_seller_return_reason_dist</code> → <code>product_post_order_info</code></h4>
+<p>Grain: <code>product_id × seller_id</code> · Refresh: BATCH · Store: WARM → HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">product_id, seller_id</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">composite PK</td>
+</tr>
+<tr>
+<td style="text-align: left;">sample_size</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">returned units over m3</td>
+</tr>
+<tr>
+<td style="text-align: left;">share_size, share_quality, share_wrong_item, share_damaged, share_colour_mismatch, share_changed_mind, share_delivery_delay, share_other</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">fractions summing to 1</td>
+</tr>
+<tr>
+<td style="text-align: left;">dominant_reason</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">argmax where share ≥ 0.25, else null</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>Read contract: <code>sample_size &lt; 50</code> or null <code>dominant_reason</code> → the processor omits <code>top_return_reason</code> and <code>quality_returns</code>.</p>
+<h4>V-3 <code>user_orders_in_transit</code> → <code>user_order_transit</code></h4>
+<p>Grain: <code>user_id</code> · Refresh: RT (tracking events) · Store: HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">user_id</td>
+<td style="text-align: left;">string PK</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">orders</td>
+<td style="text-align: left;">JSON list</td>
+<td style="text-align: left;">per item: order_id, product_name, product_id, sscat, status, eta_date, deviation_days</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>Empty list is valid. Return <code>[]</code>, not null.</p>
+<h4>V-4 <code>user_orders_in_return_window</code> → <code>user_order_in_return_window</code></h4>
+<p>Grain: <code>user_id</code> · Refresh: NRT (hourly window sweep) · Store: HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">user_id</td>
+<td style="text-align: left;">string PK</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">orders</td>
+<td style="text-align: left;">JSON list</td>
+<td style="text-align: left;">per item: order_id, product_name, product_id, sscat, delivered_date, days_left, rating_given</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>Empty list is valid. Return <code>[]</code>, not null.</p>
+<h4>V-5 <code>user_orders_past</code> → <code>user_past_10_orders</code></h4>
+<p>Grain: <code>user_id</code> · Refresh: BATCH · Store: WARM</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">user_id</td>
+<td style="text-align: left;">string PK</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">orders</td>
+<td style="text-align: left;">JSON list, capped at 10 most recent</td>
+<td style="text-align: left;">per item: order_id, product_name, product_id, sscat, sscat_family, size_bought, delivered_date, rating, returned, return_reason</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p>Backfill horizon: 12 months.</p>
+<h4>V-6 <code>seller_snapshot</code> → <code>seller_info</code></h4>
+<p>Grain: <code>seller_id</code> · Refresh: BATCH · Store: WARM → HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">seller_id</td>
+<td style="text-align: left;">string PK</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">onboarding_date</td>
+<td style="text-align: left;">date</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">tenure_months</td>
+<td style="text-align: left;">int</td>
+<td style="text-align: left;">null when between 12 and 36</td>
+</tr>
+<tr>
+<td style="text-align: left;">trusted_flag</td>
+<td style="text-align: left;">bool</td>
+<td style="text-align: left;">null when false</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h4>V-7 <code>seller_return_reason_dist</code> → <code>seller_return_reason</code></h4>
+<p>Grain: <code>seller_id</code> · Refresh: BATCH · Store: WARM → HOT</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Column</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">seller_id</td>
+<td style="text-align: left;">string PK</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">bad_quality_return_rate</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">share of the seller's returns tagged quality, colour_mismatch or wrong_item</td>
+</tr>
+<tr>
+<td style="text-align: left;">delta_vs_platform_pp</td>
+<td style="text-align: left;">float</td>
+<td style="text-align: left;">vs platform median; null when within ±3pp</td>
+</tr>
+<tr>
+<td style="text-align: left;">dominant_reason</td>
+<td style="text-align: left;">string</td>
+<td style="text-align: left;">argmax where share ≥ 0.25, else null</td>
+</tr>
+<tr>
+<td style="text-align: left;">updated_at</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<p><code>product_info</code> reads storefront directly and is not backed by a pre-computed view. <code>user_profile</code> reads the profile service directly.</p>
+<h3>4.3 Refresh Cadence</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tier</th>
+<th style="text-align: left;">Views</th>
+<th style="text-align: left;">SLA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">RT</td>
+<td style="text-align: left;">V-3 in-transit orders; storefront reads (variants, price ladder)</td>
+<td style="text-align: left;">&lt; 60s from source event</td>
+</tr>
+<tr>
+<td style="text-align: left;">NRT</td>
+<td style="text-align: left;">V-4 return-window orders; delivery prediction</td>
+<td style="text-align: left;">&lt; 60 min</td>
+</tr>
+<tr>
+<td style="text-align: left;">BATCH</td>
+<td style="text-align: left;">V-1, V-2, V-5, V-6, V-7</td>
+<td style="text-align: left;">Complete by 06:00 IST</td>
+</tr>
+</tbody>
+</table>
+<h3>4.4 Suppression Enforcement</h3>
+<p>Suppression is enforced at two levels and never by the LLM.</p>
+<ol>
+<li><strong>View level.</strong> Sample-size and staleness rules null the column, per the per-field rules in §3.</li>
+<li><strong>Processor level.</strong> A defensive re-check runs before emit. A non-null value whose sample size sits below threshold is dropped and logged.</li>
+</ol>
+<p>The processor omits the key entirely rather than emitting a null. The response layer's rule is therefore a single line: answer from the keys present.</p>
+<h3>4.5 Frontend Contract</h3>
+<p>To key seller-grain data, Android must pass <code>supplier_id</code> alongside <code>product_id</code> on every Vaani invocation in a product context.</p>
+<ul>
+<li>Sent whenever Vaani is opened or invoked from a PDP.</li>
+<li>Updated when the user switches to another product.</li>
+<li>Where unavailable, the agreed null state is passed. No value is inferred on the client.</li>
+<li><code>product_info</code> resolves its seller from this identifier rather than selecting the first supplier, so every processor on a turn resolves the same seller.</li>
+</ul>
+<p>Frontend does not fetch enrichment data, apply eligibility logic, or render new UI.</p>
+<h2>5. Experimentation</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Item</th>
+<th style="text-align: left;">Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">User-level sticky A/B with an eligible-Holdout arm</td>
+</tr>
+<tr>
+<td style="text-align: left;">Arms</td>
+<td style="text-align: left;">Treatment (processors enabled) · Holdout (current <code>product_info</code> only)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Attribution</td>
+<td style="text-align: left;">Per-turn logging; assignment sticky at user level; ITT measurement</td>
+</tr>
+<tr>
+<td style="text-align: left;">Duration</td>
+<td style="text-align: left;">4 weeks minimum; extended if per-key surface rate is thin</td>
+</tr>
+<tr>
+<td style="text-align: left;">Success threshold</td>
+<td style="text-align: left;">+3% relative lift in enriched-turn → cart-add rate at p&lt;0.05</td>
+</tr>
+<tr>
+<td style="text-align: left;">Guardrails</td>
+<td style="text-align: left;">Per §I.2; any breach pauses release</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Logging</h2>
+<p>One record per Vaani turn, in the existing Vaani backend table. Primary use: establish what data the agent had when generating a response, verify factuality, and understand what it prioritised.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">user_id, product_id, seller_id, screen, intent</td>
+<td style="text-align: left;">Turn identification and arm balance</td>
+</tr>
+<tr>
+<td style="text-align: left;">processors_requested</td>
+<td style="text-align: left;">What the intent layer asked for</td>
+</tr>
+<tr>
+<td style="text-align: left;">processors_run</td>
+<td style="text-align: left;">What the orchestrator resolved and executed</td>
+</tr>
+<tr>
+<td style="text-align: left;">processors_failed</td>
+<td style="text-align: left;">Timeouts and errors, per processor</td>
+</tr>
+<tr>
+<td style="text-align: left;">keys_suppressed</td>
+<td style="text-align: left;">Which keys were withheld and by which rule</td>
+</tr>
+<tr>
+<td style="text-align: left;">processor_latency_ms</td>
+<td style="text-align: left;">Per processor, plus total</td>
+</tr>
+<tr>
+<td style="text-align: left;">block_size_bytes</td>
+<td style="text-align: left;">Per processor, for prompt-budget tracking</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1>Section III: Testing &amp; Launch</h1>
+<h2>1. Test Cases</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">ID</th>
+<th style="text-align: left;">Scenario</th>
+<th style="text-align: left;">Expected result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">TC-01</td>
+<td style="text-align: left;">Product with m3 return rate 12%, sscat median 22%</td>
+<td style="text-align: left;">Key emitted as <code>12% (category 22%, better)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-02</td>
+<td style="text-align: left;">Product with 60 delivered units in m3</td>
+<td style="text-align: left;"><code>return_rate_m3</code> absent from block; m6 emitted if it clears threshold</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-03</td>
+<td style="text-align: left;">Product with 40 returns in m3</td>
+<td style="text-align: left;"><code>top_return_reason</code> and <code>quality_returns</code> absent</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-04</td>
+<td style="text-align: left;">Product where no return reason reaches 25%</td>
+<td style="text-align: left;"><code>top_return_reason</code> absent</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-05</td>
+<td style="text-align: left;">Seller with tenure 24 months</td>
+<td style="text-align: left;"><code>tenure</code> absent; <code>trusted</code> still emitted</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-06</td>
+<td style="text-align: left;">Seller with trusted flag false</td>
+<td style="text-align: left;"><code>trusted</code> absent; block emitted with remaining keys</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-07</td>
+<td style="text-align: left;">Seller with 30 ratings</td>
+<td style="text-align: left;"><code>seller_rating</code> absent from PRODUCT_DATA</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-08</td>
+<td style="text-align: left;">User with two in-transit orders</td>
+<td style="text-align: left;"><code>count=2</code>, both orders listed with resolved ETA</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-09</td>
+<td style="text-align: left;">User with no in-transit orders</td>
+<td style="text-align: left;">Block present carrying <code>count=0</code> and <code>orders=none</code> — not omitted</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-10</td>
+<td style="text-align: left;">User with no orders in return window</td>
+<td style="text-align: left;">Block present carrying <code>count=0</code> and <code>orders=none</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-11</td>
+<td style="text-align: left;">User with 14 past orders</td>
+<td style="text-align: left;">Exactly 10 emitted, most recent first</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-12</td>
+<td style="text-align: left;">Non-serviceable pincode</td>
+<td style="text-align: left;"><code>eta</code> absent; rest of PRODUCT_DATA emitted</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-13</td>
+<td style="text-align: left;">Product with no conditional pricing</td>
+<td style="text-align: left;"><code>price_ladder</code> emits base only; <code>best_price</code> absent</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-14</td>
+<td style="text-align: left;">Turn on PDP without <code>supplier_id</code></td>
+<td style="text-align: left;">Seller-keyed processors dropped; <code>product_info</code> still runs</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-15</td>
+<td style="text-align: left;">GREETING intent</td>
+<td style="text-align: left;">No processors run; no blocks in the Layer 2 prompt</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-16</td>
+<td style="text-align: left;">Intent layer requests a processor outside its allowlist</td>
+<td style="text-align: left;">Request discarded; default set still runs</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-17</td>
+<td style="text-align: left;">Intent layer requests no processors on PRODUCT_INQUIRY</td>
+<td style="text-align: left;"><code>product_info</code> runs from the default map</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-18</td>
+<td style="text-align: left;">return_recon exceeds its 120ms budget</td>
+<td style="text-align: left;">Block omitted; <code>processors_failed</code> records it; response still returned</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-19</td>
+<td style="text-align: left;">All processors fail</td>
+<td style="text-align: left;">Turn completes on prompt alone; no error surfaced to the user</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-20</td>
+<td style="text-align: left;">Suppression compliance monitor</td>
+<td style="text-align: left;">Any turn where a suppressed value reaches the LLM raises an alert</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-21</td>
+<td style="text-align: left;">ETA date crosses a month boundary</td>
+<td style="text-align: left;">Date resolved correctly in the block; no arithmetic left to the LLM</td>
+</tr>
+<tr>
+<td style="text-align: left;">TC-22</td>
+<td style="text-align: left;">User pincode changes mid-session</td>
+<td style="text-align: left;">Next turn's <code>eta</code> reflects the new pincode</td>
+</tr>
+</tbody>
+</table>
+<h2>2. Launch Checklist</h2>
+<ul>
+<li>&#9744; Views V-1 through V-7 authored, tested and reviewed by Data Engineering</li>
+<li>&#9744; Hot store provisioned; sharding and TTL policy applied</li>
+<li>&#9744; Processor framework deployed: resolver, parallel fanout, per-processor budgets, failure handling</li>
+<li>&#9744; Normalizer implemented against §2.5, with per-processor size budgets enforced</li>
+<li>&#9744; <code>supplier_id</code> shipped on Android and verified across product switches</li>
+<li>&#9744; <code>product_info</code> migrated to <code>pct_4_5_star</code> and flattened <code>size_chart</code></li>
+<li>&#9744; Suppression compliance monitor live and alerting</li>
+<li>&#9744; <code>processors_failed</code> dashboard live</li>
+<li>&#9744; Latency SLOs measured over three days of shadow traffic before flip</li>
+<li>&#9744; Kill-switch verified per processor</li>
+<li>&#9744; Backfill complete: 12 months for <code>user_orders_past</code></li>
+<li>&#9744; A/B configuration approved; sticky assignment tested</li>
+<li>&#9744; Sign-off from Product, Tech, Data Engineering, Analytics, QA</li>
+</ul>
+<h2>3. Sign Off</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Product</td>
+<td style="text-align: left;">Madhurita Mahapatra</td>
+<td style="text-align: left;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tech</td>
+<td style="text-align: left;">Shubham Maheshwari</td>
+<td style="text-align: left;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: left;">Data Engineering</td>
+<td style="text-align: left;">TBD</td>
+<td style="text-align: left;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: left;">Analytics / ML</td>
+<td style="text-align: left;">TBD</td>
+<td style="text-align: left;">Pending</td>
+</tr>
+<tr>
+<td style="text-align: left;">QA</td>
+<td style="text-align: left;">TBD</td>
+<td style="text-align: left;">Pending</td>
+</tr>
+</tbody>
+</table>
     </article>
   </main>
 </div>
