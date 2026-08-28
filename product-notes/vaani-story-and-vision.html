@@ -776,34 +776,6 @@ figure{margin:22px 0}
 
   <div class="imp"><p class="lbl">The structural read</p><p>Users have low comprehension of what Vaani can do, and Vaani is pull-based until they already know what to ask. A pull product cannot teach its own capabilities to someone who does not know what to pull. <b>Users do not know what they do not know</b> &mdash; and no amount of nudge-copy optimisation solves that.</p></div>
 
-  <h3>Underneath all four sits one universal lens</h3>
-  <p>These four failures are specific to Vaani, but the friction they create is not. Every capability in any product is blocked by one of two things &mdash; and naming them gives us the frame we use for the rest of this document.</p>
-
-  <div class="duo">
-    <div class="duo-card">
-      <p class="tag">Not knowing &mdash; our job: show the path</p>
-      <h4>They can't want what they can't see</h4>
-      <p>The user doesn't know a capability exists, so they never reach for it.</p>
-      <div class="eg"><b>e.g.</b> The feed can be narrowed with filters &mdash; but the user has never discovered that filters exist.</div>
-      <p class="arrow-note">&rarr; Surface the capability at the exact moment it becomes useful.</p>
-    </div>
-    <div class="duo-card">
-      <p class="tag">Not expressing &mdash; our job: shorten the path</p>
-      <h4>They know, but can't operate it</h4>
-      <p>The user knows the capability exists but can't work it efficiently enough to reach their goal.</p>
-      <div class="eg"><b>e.g.</b> They know filters exist &mdash; but can't combine the right ones to land on what they have in mind.</div>
-      <p class="arrow-note">&rarr; Deliver the outcome without demanding mastery of the mechanics.</p>
-    </div>
-  </div>
-
-  <p>Both are measurable in our own data. <b>Not knowing</b> is everyone in the first bar of the funnel above &mdash; people who never reached for a capability they did not know was there. <b>Not expressing</b> is visible in every search box: before a first search shoppers click through a mean of <b>137 products</b>, then two-thirds of them type a query with no attribute at all.</p>
-
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">Shoppers know what they want. They cannot say it.</p><p class="viz-sub">How often a search continues what the shopper was already browsing, by query length.</p></div>
-    <div id="c-query"></div>
-    <p class="viz-cap">A one-word query continues the shopper's own prior browsing just <b>6.8%</b> of the time; a four-word query, <b>48.1%</b>. And <b>41%</b> of searches land on a category they never browsed that session. The gap between what they have shown us and what they manage to type is the opportunity.</p>
-  </div></figure>
-
 </section>
 
 <section class="sec" id="habit">
@@ -1127,7 +1099,7 @@ figure{margin:22px 0}
           <span class="vbtn">Show me</span>
         </div>
       </div>
-      <p class="mock-cap"><b>Not knowing &rarr; show the path.</b> The user never had to learn that the feed can be narrowed.</p>
+      <p class="mock-cap"><b>Show the path.</b> The user never had to learn that the feed can be narrowed &mdash; Vaani did it and showed the result.</p>
     </div>
     <div class="mock-col">
       <p class="mock-tag">PDP &middot; decision intelligence</p>
@@ -1896,12 +1868,6 @@ hbars('c-constraint', { max:18, labelWidth:205, rows:[
   {label:'Price budget, after a price turn',value:12.2,display:'11.6–12.2%',color:'var(--c-warn)'},
   {label:'Quality tier, after quality',value:7.2,display:'7.2%',color:'var(--c-bad)'},
   {label:'Use case, after how-to-use',value:4.6,display:'4.6%',color:'var(--c-bad)'}]
-});
-hbars('c-query', { max:55, labelWidth:150, rows:[
-  {label:'One-word query',value:6.78,display:'6.8%',color:'var(--c-bad)',tipLabel:'37,216 sessions'},
-  {label:'Two words',value:19.81,display:'19.8%',color:'var(--c-warn)'},
-  {label:'Three words',value:35.79,display:'35.8%',color:'var(--c-find)'},
-  {label:'Four or more',value:48.11,display:'48.1%',color:'var(--c-good)'}]
 });
 hbars('c-voice', { max:12, labelWidth:230, rows:[
   {label:'Voice corrected an empty profile',value:11,display:'11',color:'var(--c-good)'},
