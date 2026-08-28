@@ -278,6 +278,7 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 
 /* ============ WORKED-EXAMPLE PHONE MOCKS ============ */
 .phones.duo2{grid-template-columns:1fr 1fr}
+.phones.solo{grid-template-columns:minmax(0,540px); justify-content:center}
 .phones{display:grid; grid-template-columns:1fr 34px 1fr; gap:12px; align-items:start; margin:22px 0}
 @media (max-width:860px){.phones{grid-template-columns:1fr; gap:16px}}
 .phone-col{min-width:0}
@@ -1077,6 +1078,28 @@ figure{margin:22px 0}
   </div>
   <p class="steps-note">App-first, Vaani-assisted &nbsp;&rarr;&nbsp; Vaani-first, app capabilities underneath.</p>
 
+  <h3>What the two look like inside one live app</h3>
+  <p>Amazon ships both halves on a single product page, and the join between them is visible in one screenshot.</p>
+
+  <div class="phones solo">
+    <div class="phone-col">
+      <p class="phone-tag sec">Amazon &middot; a secondary surface opening a primary one</p>
+      <div class="phone">
+        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9825;</span></div>
+        <div class="phone-body">
+          <div class="ph-price"><span class="ph-off">-33%</span><span class="ph-amt">&#8377;3,148</span><span class="ph-link">Price history</span></div>
+          <p class="ph-mrp">M.R.P.: <s>&#8377;4,699</s> &middot; inclusive of all taxes</p>
+          <div class="ph-rows"><div class="ph-row">EMI from &#8377;111 &middot; No Cost EMI available</div><div class="ph-row">Buy for &#8377;3,148 + &#8377;157 cashback</div></div>
+        </div>
+        <div class="ph-nav"><span>Home</span><span>You</span><span>Cart</span><span>Browse</span><b>Rufus</b></div>
+      </div>
+      <p class="annot"><b>"Price history" is the secondary surface. Rufus is the primary one.</b> The link sits inside Amazon's own price block, in the app's own idiom, next to the number it is about &mdash; two words, no chat window, and no requirement that the shopper knows an assistant exists or what to ask it. That is showing the path. Tapping it opens Rufus with the question already asked, and the answer comes back as a price chart with a verdict on top &mdash; an interface the product page could never have rendered. That is shortening it.</p>
+    </div>
+  </div>
+  <p class="source">Reconstruction of the Amazon flow, drawn to the values shown in the app.</p>
+
+  <div class="proof"><span class="pf-who">Amazon &middot; price history</span><p>Intelligence as one word, next to the number it is about. The assistant is entered from the product page with the question pre-asked, and answers with a chart rather than prose. <b>The prompt was never the user's problem &mdash; the surface asked it for them.</b> <a href="https://www.aboutamazon.com/news/retail/visual-search-shopping-features" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+
   <p>The two are not alternatives and they are not phases. A secondary surface with nothing good to hand off to produces another 12% nudge. A primary surface nobody discovers produces another 87.4%. They only work as one system, joined at the handoff &mdash; which is the piece we have never built, and which &sect;10 is entirely about.</p>
 </section>
 
@@ -1285,22 +1308,9 @@ figure{margin:22px 0}
   </div>
 
   <h3>This is shipping today, in a shopping app</h3>
-  <p>Two live examples, both on the ask that dominates our own DECIDE branch. The first is entered through a question the user already had; the second needs no question at all.</p>
+  <p>The Amazon example in &sect;07 is Turn Zero entered through <b>intent</b>: the shopper had a price question, and the secondary surface asked it on their behalf before handing the context to Rufus. The harder case is the one where the shopper has no question at all &mdash; and Amazon ships that too.</p>
 
-  <div class="phones duo2">
-    <div class="phone-col">
-      <p class="phone-tag sec">Amazon &middot; entered through intent</p>
-      <div class="phone">
-        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9825;</span></div>
-        <div class="phone-body">
-          <div class="ph-price"><span class="ph-off">-33%</span><span class="ph-amt">&#8377;3,148</span><span class="ph-link">Price history</span></div>
-          <p class="ph-mrp">M.R.P.: <s>&#8377;4,699</s> &middot; inclusive of all taxes</p>
-          <div class="ph-rows"><div class="ph-row">EMI from &#8377;111 &middot; No Cost EMI available</div><div class="ph-row">Buy for &#8377;3,148 + &#8377;157 cashback</div></div>
-        </div>
-        <div class="ph-nav"><span>Home</span><span>You</span><span>Cart</span><span>Browse</span><b>Rufus</b></div>
-      </div>
-      <p class="annot"><b>Intelligence as one word, next to the number it is about.</b> Tapping it opens the assistant with the question already asked; the answer is a price chart with a verdict on top. The prompt was never the user's problem &mdash; the surface asked it for them.</p>
-    </div>
+  <div class="phones solo">
     <div class="phone-col">
       <p class="phone-tag pri">Amazon &middot; entered through behaviour</p>
       <div class="phone">
@@ -1320,9 +1330,7 @@ figure{margin:22px 0}
       <p class="annot"><b>Ten products viewed and no purchase is the trigger.</b> A state the app already knows and normally hides. Surfacing it both helps the shopper and creates the moment where help is obviously wanted &mdash; then the assistant shows its work before answering.</p>
     </div>
   </div>
-  <p class="source">Reconstructions of the Amazon flows, drawn to the values shown in the app.</p>
-
-  <div class="proof"><span class="pf-who">Amazon &middot; price history</span><p>The assistant is entered from the product page with the question pre-asked, and answers with a chart rather than prose. <b>Behaviour-triggered assistance, with context carried.</b> <a href="https://www.aboutamazon.com/news/retail/visual-search-shopping-features" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <p class="source">Reconstruction of the Amazon flow, drawn to the values shown in the app.</p>
   <div class="proof"><span class="pf-who">Amazon &middot; Help Me Decide</span><p>The button appears after a shopper has browsed similar products without purchasing, and recommends one using their own activity. <b>The behaviour itself creates the entry point</b> &mdash; which is precisely our revisit pattern from &sect;06. <a href="https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
   <div class="proof"><span class="pf-who">Google Search</span><p>AI Overviews gives a quick answer inside normal search; a follow-up flows into AI Mode <b>with the original context preserved</b>. Google reports users preferred the natural transition. That is Turn Zero at web scale. <a href="https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
 </section>
