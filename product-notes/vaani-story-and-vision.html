@@ -183,7 +183,11 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 @media (max-width:860px){.mocks{grid-template-columns:1fr}}
 .mock-col .mock-tag{font:800 10.5px ui-monospace,monospace; letter-spacing:.11em; text-transform:uppercase;
   color:var(--c-accent); text-align:center; margin:0 0 11px}
-.ph{border:2px solid var(--deep); border-radius:20px; background:var(--surface); padding:12px 11px 14px; position:relative}
+.ph{--paper:#ffffff; --surface:#ffffff; --surface-2:#f3f4f6; --surface-3:#eef2ff; --tint:#eef2ff; --deep:#111827;
+    --ink:#111827; --ink-2:#374151; --ink-3:#6b7280; --hairline:#e5e7eb; --hairline-2:#eef0f3;
+    --c-accent:#4f46e5; --c-accent-ink:#4338ca; --c-bad:#dc2626; --c-find:#2563eb; --c-decide:#7c3aed;
+    --c-good:#16a34a; --c-warn:#d97706; --c-neutral-ink:#9ca3af;
+    border:2px solid #111827; border-radius:20px; background:#ffffff; padding:12px 11px 14px; position:relative}
 .ph::before{content:""; display:block; width:52px; height:6px; border-radius:4px; background:var(--deep); margin:0 auto 12px}
 .ph-search{background:var(--surface-2); border-radius:8px; padding:7px 11px; font-size:11.5px; color:var(--ink-3); margin-bottom:9px}
 .ph-tiles{display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:10px}
@@ -273,13 +277,18 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .jobs td.said{font-style:italic}
 
 /* ============ WORKED-EXAMPLE PHONE MOCKS ============ */
+.phones.duo2{grid-template-columns:1fr 1fr}
 .phones{display:grid; grid-template-columns:1fr 34px 1fr; gap:12px; align-items:start; margin:22px 0}
 @media (max-width:860px){.phones{grid-template-columns:1fr; gap:16px}}
 .phone-col{min-width:0}
 .phone-tag{font:800 10.5px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; margin:0 0 8px}
 .phone-tag.sec{color:var(--c-find)}
 .phone-tag.pri{color:var(--c-decide)}
-.phone{border:1px solid var(--hairline); border-radius:16px; background:var(--surface); overflow:hidden; box-shadow:var(--shadow)}
+.phone{--paper:#ffffff; --surface:#ffffff; --surface-2:#f3f4f6; --surface-3:#eef2ff; --tint:#eef2ff; --deep:#111827;
+    --ink:#111827; --ink-2:#374151; --ink-3:#6b7280; --hairline:#e5e7eb; --hairline-2:#eef0f3;
+    --c-accent:#4f46e5; --c-accent-ink:#4338ca; --c-bad:#dc2626; --c-find:#2563eb; --c-decide:#7c3aed;
+    --c-good:#16a34a; --c-warn:#d97706; --c-neutral-ink:#9ca3af;
+    border:2px solid #111827; border-radius:18px; background:#ffffff; overflow:hidden; box-shadow:none}
 .phone-bar{display:flex; align-items:center; justify-content:space-between; padding:7px 12px;
   background:var(--surface-2); border-bottom:1px solid var(--hairline-2); font:700 10px ui-monospace,monospace; color:var(--ink-3)}
 .phone-body{padding:15px 15px 17px}
@@ -368,6 +377,15 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .sec.future td b{color:#fff} .sec.future tbody tr:hover{background:rgba(255,255,255,.04)}
 .sec.future .callout{background:rgba(255,255,255,.06); color:#fff; border-left-color:var(--c-bright)}
 .sec.future .callout-deep{background:var(--grad); color:#fff}
+.sec.future .ho-pri{background:var(--grad); color:#F3F0FF}
+.sec.future .ho-pri .ho-lab{color:#EDE9FE}
+.sec.future .ho-pri .note{color:#E4DDFB}
+.sec.future .ho-pri .chip{background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.30); color:#fff}
+.sec.future .ho-pri .utter{background:#fff; color:#4338ca}
+.sec.future .ho-sec{background:rgba(255,255,255,.06)}
+.sec.future .ho-sec .ho-lab{color:#9ca3af} .sec.future .ho-sec .note{color:#c7cad2}
+.sec.future .ho-arrow .lab{color:#a5b4fc} .sec.future .ho-arrow .bar{background:#a5b4fc}
+.sec.future .ho-arrow .bar::after{border-left-color:#a5b4fc}
 .sec.future .callout-deep b{color:#fff}
 .sec.future .phase{border-top-color:rgba(255,255,255,.12)}
 .sec.future .phase h4{color:#fff} .sec.future .phase p{color:#c7cad2}
@@ -384,10 +402,19 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .sec.future .ladder .step::before{background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.16); color:#c4b5fd}
 .sec.future .ladder .step h4{color:#fff} .sec.future .ladder .step p{color:#c7cad2}
 /* phone mocks read light-on-dark inside future sections */
-.sec.future .ph{background:#FFFFFF; border-color:rgba(255,255,255,.25)}
-.sec.future .ph *{color-scheme:light}
+.sec.future .ph,.sec.future .phone{border-color:#111827; box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.ph,.ph *,.phone,.phone *{color-scheme:light}
 .sec.future .mock-col .mock-tag{color:#a5b4fc}
 .sec.future .mock-cap{color:#c7cad2} .sec.future .mock-cap b{color:#fff}
+.sec.future .annot{color:#c7cad2; border-left-color:rgba(255,255,255,.22)}
+.sec.future .annot b{color:#fff}
+.sec.future .phone-tag.sec{color:#a5b4fc} .sec.future .phone-tag.pri{color:#c4b5fd}
+/* the blanket .sec.future p rule must not reach inside a phone mock */
+.sec.future .ph .vcard p,.sec.future .phone .vcard p{color:var(--ink-2)}
+.sec.future .ph .ph-mrp,.sec.future .phone .ph-mrp{color:var(--ink-3)}
+.sec.future .ph .ph-answer,.sec.future .phone .ph-answer{color:var(--ink-2)}
+.sec.future .ph p b,.sec.future .ph p strong,
+.sec.future .phone p b,.sec.future .phone p strong{color:var(--ink)}
 /* proof card — inline research */
 .proof{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px;
@@ -1140,7 +1167,7 @@ figure{margin:22px 0}
   <h3>This is shipping today, in a shopping app</h3>
   <p>Two live examples, both on the ask that dominates our own DECIDE branch. The first is entered through a question the user already had; the second needs no question at all.</p>
 
-  <div class="phones">
+  <div class="phones duo2">
     <div class="phone-col">
       <p class="phone-tag sec">Amazon &middot; entered through intent</p>
       <div class="phone">
@@ -1689,19 +1716,19 @@ function funnel(id, cfg){
     var idx=T(tipRow(r.label, r.tip||r.value));
     h+='<div tabindex="0" data-tip-idx="'+idx+'" style="width:'+w+'%;min-width:230px;background:'+r.color+
        ';border-radius:11px;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer">'+
-       '<span style="font-size:13.5px;color:'+(r.dark?'#e5e7eb':'var(--ink-2)')+'">'+r.label+'</span>'+
-       '<b style="font:800 20px ui-monospace,monospace;color:'+(r.dark?'#fff':'var(--ink)')+';white-space:nowrap">'+r.value+
+       '<span style="font-size:13.5px;color:'+(r.fg||'var(--ink-2)')+'">'+r.label+'</span>'+
+       '<b style="font:800 20px ui-monospace,monospace;color:'+r.fgb+';white-space:nowrap">'+r.value+
        (r.pc?' <span style="font-size:12px;font-weight:400;opacity:.75">· '+r.pc+'</span>':'')+'</b></div>';
   });
   el.innerHTML=h+'</div>';
 }
 funnel('c-funnel', { rows:[
-  { label:'Exposed to Vaani', value:'5.07M', color:'var(--surface-2)', tip:'pooled Test arm' },
-  { label:'Never adopted — 87.4%', value:'4.43M', color:'var(--c-accent-soft)', tip:'never spoke to Vaani once' },
-  { label:'Adopted — at least one session', value:'97,646', color:'var(--tint)', tip:'100% of adopters' },
-  { label:'Repeat — two or more', value:'33,918', pc:'34.7%', color:'#c7d2fe', tip:'34.7% of adopters' },
-  { label:'Engaged — three or more', value:'16,869', pc:'17.3%', color:'#a5b4fc', tip:'17.3% of adopters' },
-  { label:'Habit — five or more', value:'6,361', pc:'6.5%', color:'var(--deep)', dark:true, tip:'6.5% of adopters · then 89.6% self-initiate' }]
+  { label:'Exposed to Vaani', value:'5.07M', color:'#f3f4f6', fg:'#4b5563', fgb:'#111827', tip:'pooled Test arm' },
+  { label:'Never adopted — 87.4%', value:'4.43M', color:'#e5e7eb', fg:'#4b5563', fgb:'#111827', tip:'never spoke to Vaani once' },
+  { label:'Adopted — at least one session', value:'97,646', color:'#eef2ff', fg:'#4338ca', fgb:'#312e81', tip:'100% of adopters' },
+  { label:'Repeat — two or more', value:'33,918', pc:'34.7%', color:'#c7d2fe', fg:'#3730a3', fgb:'#1e1b4b', tip:'34.7% of adopters' },
+  { label:'Engaged — three or more', value:'16,869', pc:'17.3%', color:'#a5b4fc', fg:'#312e81', fgb:'#1e1b4b', tip:'17.3% of adopters' },
+  { label:'Habit — five or more', value:'6,361', pc:'6.5%', color:'#312e81', fg:'#c7d2fe', fgb:'#ffffff', tip:'6.5% of adopters · then 89.6% self-initiate' }]
 });
 
 lineChart('c-fatigue', { width:640, height:215, yMin:0, yMax:9,
