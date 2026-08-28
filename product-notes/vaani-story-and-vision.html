@@ -161,9 +161,13 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 /* sources */
 .srcgrid{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:12px}
 @media (max-width:860px){.srcgrid{grid-template-columns:1fr}}
-.srcgrid a{display:block; padding:11px 14px; background:var(--surface); border:1px solid var(--hairline);
-  border-radius:9px; text-decoration:none; font-size:13px; color:var(--ink); font-weight:600}
-.srcgrid a:hover{border-color:var(--c-accent)}
+.srcgrid a{display:block; position:relative; padding:12px 34px 12px 15px; background:var(--surface);
+  border:1px solid var(--hairline); border-left:3px solid var(--c-accent); border-radius:9px;
+  text-decoration:none; font-size:13px; color:var(--c-accent-ink); font-weight:600; transition:background .12s,border-color .12s,transform .12s}
+.srcgrid a::after{content:"\2197"; position:absolute; right:13px; top:11px; font-size:14px; color:var(--c-accent); transition:transform .12s}
+.srcgrid a:hover,.srcgrid a:focus-visible{background:var(--c-accent-soft); border-color:var(--c-accent); transform:translateY(-1px)}
+.srcgrid a:hover::after,.srcgrid a:focus-visible::after{transform:translate(2px,-2px)}
+.srcgrid a:hover span{color:var(--ink-2)}
 .srcgrid a span{display:block; font-size:11.5px; color:var(--ink-3); margin-top:3px; font-weight:400}
 
 /* research cards */
@@ -219,16 +223,16 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .handoff{display:grid; grid-template-columns:1fr 92px 1fr; gap:0; align-items:center; margin:26px 0}
 @media (max-width:860px){.handoff{grid-template-columns:1fr; gap:14px}}
 .ho-sec{background:var(--surface-2); border-radius:16px; padding:24px}
-.ho-pri{background:var(--deep); border-radius:16px; padding:24px; color:#EBD5E2}
+.ho-pri{background:var(--grad); border-radius:16px; padding:24px; color:#EDE9FE}
 .ho-lab{font:800 10.5px ui-monospace,monospace; letter-spacing:.11em; text-transform:uppercase; margin:0 0 14px}
-.ho-sec .ho-lab{color:var(--ink-3)} .ho-pri .ho-lab{color:var(--c-bright)}
+.ho-sec .ho-lab{color:var(--ink-3)} .ho-pri .ho-lab{color:#EDE9FE}
 .ho-sec .note{font-size:13.5px; color:var(--ink-2); margin:14px 0 0; max-width:none}
 .ho-pri .knows{font-size:14px; font-weight:700; color:#fff; margin:0 0 11px}
 .chips{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px}
 .chip{background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.18); border-radius:16px;
-  padding:5px 12px; font-size:12px; color:#F3E1EC; white-space:nowrap}
-.utter{background:var(--c-bright); color:#fff; border-radius:22px; padding:11px 18px; font-size:15px; font-weight:700; display:inline-block}
-.ho-pri .note{font-size:13.5px; color:#D9BCCD; margin:14px 0 0; max-width:none}
+  padding:5px 12px; font-size:12px; color:#fff; white-space:nowrap}
+.utter{background:#fff; color:#4338ca; border-radius:22px; padding:11px 18px; font-size:15px; font-weight:700; display:inline-block}
+.ho-pri .note{font-size:13.5px; color:#E4DDFB; margin:14px 0 0; max-width:none}
 .ho-arrow{display:flex; flex-direction:column; align-items:center; gap:6px}
 .ho-arrow .lab{font:700 11px ui-monospace,monospace; color:var(--c-accent); font-style:italic}
 .ho-arrow .bar{width:100%; height:4px; background:var(--c-accent); position:relative}
@@ -348,74 +352,53 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .tick.now{border-color:var(--ink); border-right-color:transparent; border-bottom-color:transparent; transform:rotate(-45deg)}
 .tick.todo{border-color:var(--hairline)}
 
-/* ===================== FUTURE-STATE MODE ===================== */
-:root{--grad:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%); --charcoal:#111827}
-.sec.future{background:var(--charcoal); color:#e5e7eb; border-radius:22px; padding:52px 44px;
-  margin:26px -26px; border-bottom:none}
-@media (max-width:860px){.sec.future{padding:36px 22px; margin:20px -14px; border-radius:16px}}
-.sec.future + .sec.future{margin-top:14px}
-.sec.future h2,.sec.future .verdict,.sec.future h3{color:#fff}
-.sec.future p,.sec.future .lead{color:#c7cad2}
-.sec.future p b,.sec.future .lead b,.sec.future li b{color:#fff}
-.sec.future .eyebrow{color:#9ca3af}
-.sec.future .part-rule{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
-.sec.future .num{background:var(--grad); color:#fff}
-.sec.future .card{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13); box-shadow:none}
-.sec.future .card h4{color:#fff} .sec.future .card p{color:#c7cad2}
-.sec.future .card .ic{background:var(--grad)}
-.sec.future .duo-card{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13)}
-.sec.future .duo-card h4{color:#fff} .sec.future .duo-card .tag{color:#a5b4fc}
-.sec.future .duo-card .eg{background:rgba(255,255,255,.06); color:#c7cad2}
-.sec.future .duo-card .arrow-note{color:#c4b5fd}
-.sec.future .steps .st{background:rgba(255,255,255,.06)}
-.sec.future .steps .st.hero-node{background:var(--grad)}
-.sec.future .st-t{color:#fff} .sec.future .st-d{color:#c7cad2}
-.sec.future .steps .ic{background:var(--grad)}
-.sec.future .steps .st.hero-node .ic{background:rgba(0,0,0,.28)}
-.sec.future .steps .arw{color:#818cf8} .sec.future .steps-note{color:#c7cad2}
-.sec.future th{background:rgba(255,255,255,.10); color:#fff}
-.sec.future td{color:#c7cad2; border-bottom-color:rgba(255,255,255,.10)}
-.sec.future td b{color:#fff} .sec.future tbody tr:hover{background:rgba(255,255,255,.04)}
-.sec.future .callout{background:rgba(255,255,255,.06); color:#fff; border-left-color:var(--c-bright)}
-.sec.future .callout-deep{background:var(--grad); color:#fff}
-.sec.future .ho-pri{background:var(--grad); color:#F3F0FF}
-.sec.future .ho-pri .ho-lab{color:#EDE9FE}
-.sec.future .ho-pri .note{color:#E4DDFB}
-.sec.future .ho-pri .chip{background:rgba(255,255,255,.16); border-color:rgba(255,255,255,.30); color:#fff}
-.sec.future .ho-pri .utter{background:#fff; color:#4338ca}
-.sec.future .ho-sec{background:rgba(255,255,255,.06)}
-.sec.future .ho-sec .ho-lab{color:#9ca3af} .sec.future .ho-sec .note{color:#c7cad2}
-.sec.future .ho-arrow .lab{color:#a5b4fc} .sec.future .ho-arrow .bar{background:#a5b4fc}
-.sec.future .ho-arrow .bar::after{border-left-color:#a5b4fc}
-.sec.future .callout-deep b{color:#fff}
-.sec.future .phase{border-top-color:rgba(255,255,255,.12)}
-.sec.future .phase h4{color:#fff} .sec.future .phase p{color:#c7cad2}
-.sec.future .phase .pn{background:rgba(255,255,255,.10); color:#c4b5fd}
-.sec.future .phase.last .pn{background:var(--grad); color:#fff}
-.sec.future .belief{background:rgba(255,255,255,.07); color:#fff}
-.sec.future .source{color:#9ca3af} .sec.future a{color:#c4b5fd}
-.sec.future .insight{color:#fff; border-left-color:rgba(255,255,255,.22)}
-.sec.future .rc{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13)}
-.sec.future .rc-top span{color:#fff} .sec.future .rc p{color:#c7cad2}
-.sec.future .rc .lesson{color:#fff; border-left-color:var(--c-bright)}
-.sec.future .rc .lesson b{color:#a5b4fc}
-.sec.future .ladder .step{border-top-color:rgba(255,255,255,.12)}
-.sec.future .ladder .step::before{background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.16); color:#c4b5fd}
-.sec.future .ladder .step h4{color:#fff} .sec.future .ladder .step p{color:#c7cad2}
-/* phone mocks read light-on-dark inside future sections */
-.sec.future .ph,.sec.future .phone{border-color:#111827; box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+/* ===================== ACCENT GRADIENT ===================== */
+:root{--grad:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%)}
 .ph,.ph *,.phone,.phone *{color-scheme:light}
-.sec.future .mock-col .mock-tag{color:#a5b4fc}
-.sec.future .mock-cap{color:#c7cad2} .sec.future .mock-cap b{color:#fff}
-.sec.future .annot{color:#c7cad2; border-left-color:rgba(255,255,255,.22)}
-.sec.future .annot b{color:#fff}
-.sec.future .phone-tag.sec{color:#a5b4fc} .sec.future .phone-tag.pri{color:#c4b5fd}
-/* the blanket .sec.future p rule must not reach inside a phone mock */
-.sec.future .ph .vcard p,.sec.future .phone .vcard p{color:var(--ink-2)}
-.sec.future .ph .ph-mrp,.sec.future .phone .ph-mrp{color:var(--ink-3)}
-.sec.future .ph .ph-answer,.sec.future .phone .ph-answer{color:var(--ink-2)}
-.sec.future .ph p b,.sec.future .ph p strong,
-.sec.future .phone p b,.sec.future .phone p strong{color:var(--ink)}
+
+/* two-way window (§09) */
+.tway{display:grid; grid-template-columns:46px minmax(0,1fr) 46px; gap:14px; align-items:stretch; margin:26px 0}
+.tw-pole{display:grid; place-items:center; border-radius:14px; padding:10px 0;
+  font:800 11px ui-monospace,monospace; letter-spacing:.15em; text-transform:uppercase}
+.tw-pole span{writing-mode:vertical-rl; transform:rotate(180deg); white-space:nowrap}
+.tw-pole.l{background:var(--deep); color:#fff}
+.tw-pole.r{background:var(--grad); color:#fff}
+.tw-chan{border:1px solid var(--hairline); border-radius:16px; background:var(--surface);
+  padding:16px 20px 18px; box-shadow:var(--shadow-sm); min-width:0}
+.tw-chan-lab{font:800 10px ui-monospace,monospace; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--c-accent-ink); text-align:center; margin:0 0 4px}
+.tw-chan-sub{font-size:12px; color:var(--ink-3); text-align:center; margin:0 0 6px; font-style:italic}
+.tw-row{padding:14px 0}
+.tw-row + .tw-row{border-top:1px dashed var(--hairline)}
+.tw-dir{font:800 9.5px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--c-accent-ink); margin:0 0 7px; max-width:none}
+.tw-row.rev .tw-dir{color:var(--c-decide)}
+.tw-ar{height:3px; background:var(--c-accent); position:relative; margin:0 24px 12px 0}
+.tw-ar::after{content:""; position:absolute; right:-1px; top:-6px; border-left:12px solid var(--c-accent);
+  border-top:7.5px solid transparent; border-bottom:7.5px solid transparent}
+.tw-row.rev .tw-ar{background:var(--c-decide); margin:0 0 12px 24px}
+.tw-row.rev .tw-ar::after{content:none}
+.tw-row.rev .tw-ar::before{content:""; position:absolute; left:-1px; top:-6px; border-right:12px solid var(--c-decide);
+  border-top:7.5px solid transparent; border-bottom:7.5px solid transparent}
+.tw-txt b{display:block; font-size:17px; font-weight:700; color:var(--ink); margin-bottom:5px}
+.tw-txt span{display:block; font-size:13.5px; color:var(--ink-2); line-height:1.55; max-width:none}
+.tw-row.rev .tw-dir,.tw-row.rev .tw-txt{text-align:right}
+@media (max-width:760px){
+  .tway{grid-template-columns:1fr; gap:10px}
+  .tw-pole span{writing-mode:horizontal-tb; transform:none}
+  .tw-row.rev .tw-dir,.tw-row.rev .tw-txt{text-align:left}
+  .tw-row.rev .tw-ar{margin:0 24px 12px 0}
+}
+
+/* real product screenshots */
+.shot{margin:22px 0; border:1px solid var(--hairline); border-radius:16px; background:#fff;
+  padding:14px; box-shadow:var(--shadow-sm); overflow:hidden}
+.shot img{display:block; width:100%; height:auto; border-radius:8px}
+.shot-tag{font:800 10.5px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--c-accent-ink); margin:0 0 10px}
+.shot-wrap{max-width:640px; margin:22px auto}
+.shot-wrap.wide{max-width:840px}
+
 /* proof card — inline research */
 .proof{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px;
@@ -816,7 +799,6 @@ figure{margin:22px 0}
     <p class="viz-cap">A one-word query continues the shopper's own prior browsing just <b>6.8%</b> of the time; a four-word query, <b>48.1%</b>. And <b>41%</b> of searches land on a category they never browsed that session. The gap between what they have shown us and what they manage to type is the opportunity.</p>
   </div></figure>
 
-  <div class="callout"><b>Two frictions, two jobs.</b> Show the path, and shorten the path. Everything proposed in the second half of this document is one or the other &mdash; and intelligence is the first tool we have that can solve both at once.</div>
 </section>
 
 <section class="sec" id="habit">
@@ -1081,29 +1063,19 @@ figure{margin:22px 0}
   <h3>What the two look like inside one live app</h3>
   <p>Amazon ships both halves on a single product page, and the join between them is visible in one screenshot.</p>
 
-  <div class="phones solo">
-    <div class="phone-col">
-      <p class="phone-tag sec">Amazon &middot; a secondary surface opening a primary one</p>
-      <div class="phone">
-        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9825;</span></div>
-        <div class="phone-body">
-          <div class="ph-price"><span class="ph-off">-33%</span><span class="ph-amt">&#8377;3,148</span><span class="ph-link">Price history</span></div>
-          <p class="ph-mrp">M.R.P.: <s>&#8377;4,699</s> &middot; inclusive of all taxes</p>
-          <div class="ph-rows"><div class="ph-row">EMI from &#8377;111 &middot; No Cost EMI available</div><div class="ph-row">Buy for &#8377;3,148 + &#8377;157 cashback</div></div>
-        </div>
-        <div class="ph-nav"><span>Home</span><span>You</span><span>Cart</span><span>Browse</span><b>Rufus</b></div>
-      </div>
-      <p class="annot"><b>"Price history" is the secondary surface. Rufus is the primary one.</b> The link sits inside Amazon's own price block, in the app's own idiom, next to the number it is about &mdash; two words, no chat window, and no requirement that the shopper knows an assistant exists or what to ask it. That is showing the path. Tapping it opens Rufus with the question already asked, and the answer comes back as a price chart with a verdict on top &mdash; an interface the product page could never have rendered. That is shortening it.</p>
+  <div class="shot-wrap">
+    <div class="shot">
+      <p class="shot-tag">Amazon &middot; a secondary surface opening a primary one</p>
+      <img src="../assets/amazon-price-history-rufus.png" alt="Amazon product page with a Price history link next to the price; tapping it opens the Rufus assistant with the question already asked and a price chart as the answer." loading="lazy">
     </div>
   </div>
-  <p class="source">Reconstruction of the Amazon flow, drawn to the values shown in the app.</p>
 
-  <div class="proof"><span class="pf-who">Amazon &middot; price history</span><p>Intelligence as one word, next to the number it is about. The assistant is entered from the product page with the question pre-asked, and answers with a chart rather than prose. <b>The prompt was never the user's problem &mdash; the surface asked it for them.</b> <a href="https://www.aboutamazon.com/news/retail/visual-search-shopping-features" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <p class="annot"><b>"Price history" is the secondary surface. Rufus is the primary one.</b> The link sits inside Amazon's own price block, in the app's own idiom, next to the number it is about &mdash; two words, no chat window, and no requirement that the shopper knows an assistant exists or what to ask it. That is showing the path. Tapping it opens Rufus with the question already asked, and the answer comes back as a price chart with a verdict on top &mdash; an interface the product page could never have rendered. That is shortening it.</p>
 
   <p>The two are not alternatives and they are not phases. A secondary surface with nothing good to hand off to produces another 12% nudge. A primary surface nobody discovers produces another 87.4%. They only work as one system, joined at the handoff &mdash; which is the piece we have never built, and which &sect;10 is entirely about.</p>
 </section>
 
-<section class="sec future" id="secondary">
+<section class="sec" id="secondary">
   <p class="part-rule">Part III &middot; The two fixes</p>
   <div class="sec-head"><span class="num">08</span><span class="eyebrow">Fix one &mdash; secondary surfaces</span></div>
   <h2>Show first, ask later.</h2>
@@ -1223,7 +1195,7 @@ figure{margin:22px 0}
   <div class="callout"><b>The guardrail.</b> Omnipresent is not the same as inescapable. If an intervention does not make the current surface easier or more useful, it should not be there. Our users do not complain when we get this wrong &mdash; they just avoid.</div>
 </section>
 
-<section class="sec future" id="primary">
+<section class="sec" id="primary">
   <p class="part-rule">Part III &middot; The two fixes</p>
   <div class="sec-head"><span class="num">09</span><span class="eyebrow">Fix two &mdash; the primary surface</span></div>
   <h2>Not a chat screen &mdash; a generative shopping interface.</h2>
@@ -1253,14 +1225,32 @@ figure{margin:22px 0}
   </table></div>
 
   <h3>A two-way window</h3>
-  <div class="duo">
-    <div class="duo-card"><p class="tag">Meesho &rarr; user</p><h4>Show them the future</h4><p>Expose capabilities far richer than the current app supports: personalised comparisons, anchor-preserving alternatives, review synthesis, size visualisation &mdash; UI generated per mission rather than forced into one fixed layout.</p></div>
-    <div class="duo-card"><p class="tag">User &rarr; Meesho</p><h4>Let them tell us what it should be</h4><p>An unconstrained interface reveals what users actually expect: what to automate, where the app fails, which decisions they struggle with. Every session is a discovery mechanism for the future product.</p></div>
+  <p>The primary surface is not only something we ship to users. Because it is unconstrained, it is also the only place users can show us what they expect a shopping assistant to do. The traffic runs both ways.</p>
+
+  <div class="tway">
+    <div class="tw-pole l"><span>Meesho</span></div>
+    <div class="tw-chan">
+      <p class="tw-chan-lab">The primary surface</p>
+      <p class="tw-chan-sub">one screen, two directions of traffic</p>
+
+      <div class="tw-row">
+        <p class="tw-dir">Meesho &rarr; user</p>
+        <div class="tw-ar"></div>
+        <div class="tw-txt"><b>We show them the future</b><span>Capabilities far richer than the current app supports: personalised comparisons, anchor-preserving alternatives, review synthesis, size visualisation &mdash; UI generated per mission rather than forced into one fixed layout.</span></div>
+      </div>
+
+      <div class="tw-row rev">
+        <p class="tw-dir">User &rarr; Meesho</p>
+        <div class="tw-ar"></div>
+        <div class="tw-txt"><b>They tell us what it should be</b><span>An unconstrained interface reveals what users actually expect: what to automate, where the app fails, which decisions they struggle with. Every session is a discovery mechanism for the future product.</span></div>
+      </div>
+    </div>
+    <div class="tw-pole r"><span>The user</span></div>
   </div>
   <p class="steps-note">We use the primary surface to show users the future of Meesho &mdash; while users use it to tell us what that future should be.</p>
 </section>
 
-<section class="sec future" id="turn0">
+<section class="sec" id="turn0">
   <p class="part-rule">Part III &middot; The two fixes</p>
   <div class="sec-head"><span class="num">10</span><span class="eyebrow">What joins them &mdash; Turn Zero</span></div>
   <h2>The conversation starts before the user speaks.</h2>
@@ -1310,32 +1300,19 @@ figure{margin:22px 0}
   <h3>This is shipping today, in a shopping app</h3>
   <p>The Amazon example in &sect;07 is Turn Zero entered through <b>intent</b>: the shopper had a price question, and the secondary surface asked it on their behalf before handing the context to Rufus. The harder case is the one where the shopper has no question at all &mdash; and Amazon ships that too.</p>
 
-  <div class="phones solo">
-    <div class="phone-col">
-      <p class="phone-tag pri">Amazon &middot; entered through behaviour</p>
-      <div class="phone">
-        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9906;</span></div>
-        <div class="phone-body">
-          <div class="rv-head"><div class="t">Air fryers<span>Recently viewed (10)</span></div><div class="pill">Help me decide &#10022;</div></div>
-          <div class="rv-strip">
-            <div class="rv-item sel"><div class="rv-thumb"></div><div class="rv-price">$179</div></div>
-            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$399</div></div>
-            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$89</div></div>
-            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$199</div></div>
-            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$199</div></div>
-          </div>
-          <div class="ph-prod"><div class="brand">Cuisinart</div><div class="rate"><b>4.5 &#9733;&#9733;&#9733;&#9733;&#9734;</b> (3,942)</div><div class="bought">10K+ bought in past month</div></div>
-        </div>
-      </div>
-      <p class="annot"><b>Ten products viewed and no purchase is the trigger.</b> A state the app already knows and normally hides. Surfacing it both helps the shopper and creates the moment where help is obviously wanted &mdash; then the assistant shows its work before answering.</p>
+  <div class="shot-wrap wide">
+    <div class="shot">
+      <p class="shot-tag">Amazon &middot; the behaviour itself opens the primary surface</p>
+      <img src="../assets/amazon-help-me-decide.png" alt="Amazon product page showing a Help me decide button above a strip of ten recently viewed air fryers; tapping it opens the assistant, which shows its work — analysing 5.2k air fryers, evaluating size and capacity, reading 154k reviews, comparing prices and return rates." loading="lazy">
     </div>
   </div>
-  <p class="source">Reconstruction of the Amazon flow, drawn to the values shown in the app.</p>
+
+  <p class="annot"><b>Ten products viewed and no purchase is the trigger.</b> A state the app already knows and normally hides. Surfacing it both helps the shopper and creates the moment where help is obviously wanted. And notice the second screen: the primary surface answers by <b>showing its work</b> &mdash; 5.2k products analysed, 154k reviews read &mdash; before it recommends anything. Reasoning made visible is what earns the trust to accept the recommendation.</p>
   <div class="proof"><span class="pf-who">Amazon &middot; Help Me Decide</span><p>The button appears after a shopper has browsed similar products without purchasing, and recommends one using their own activity. <b>The behaviour itself creates the entry point</b> &mdash; which is precisely our revisit pattern from &sect;06. <a href="https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
   <div class="proof"><span class="pf-who">Google Search</span><p>AI Overviews gives a quick answer inside normal search; a follow-up flows into AI Mode <b>with the original context preserved</b>. Google reports users preferred the natural transition. That is Turn Zero at web scale. <a href="https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
 </section>
 
-<section class="sec future" id="flywheel">
+<section class="sec" id="flywheel">
   <p class="part-rule">Part IV &middot; Where it ends</p>
   <div class="sec-head"><span class="num">11</span><span class="eyebrow">Why it compounds, and where it lands</span></div>
   <h2>Every use improves the next.</h2>
@@ -1432,19 +1409,8 @@ figure{margin:22px 0}
 
 <section class="sec" id="appendix">
   <div class="sec-head"><span class="num">&mdash;</span><span class="eyebrow">Appendix</span></div>
-  <h2>Open decisions and evidence</h2>
+  <h2>Where the numbers come from</h2>
 
-  <div class="appendix">
-    <h3>Where we want alignment</h3>
-    <div class="grid2">
-      <div class="card"><h4>Sequencing the first integration</h4><p>Feed &rarr; Start and Refine. PDP &rarr; Alternate and Decide. Orders &rarr; Resume. Which real estate goes first?</p></div>
-      <div class="card"><h4>Vaani's identity thread</h4><p>The persistent visual mark that ties every touchpoint back to the primary surface.</p></div>
-      <div class="card"><h4>Nudge placement per surface</h4><p>Each surface's outcome nudge must map to its local intent. Nudge placement and omnipresence are one workstream wearing two names.</p></div>
-      <div class="card"><h4>Guardrail against imposition</h4><p>How do we measure when a touchpoint interrupts rather than serves? It erodes first under growth pressure.</p></div>
-    </div>
-  </div>
-
-  <h3>Where the numbers come from</h3>
   <p>Figures are drawn from Vaani analytics between May and August 2026. The main turn analysis covers 2,201,813 classified turns across 167,082 users, 20 May to 20 Jul 2026; adoption and nudge figures come from experiments run 17&ndash;25 Jul; behavioural cuts span 79.5M sessions.</p>
   <div class="srcgrid">
     <a href="../01-vaani-usage-and-outcomes/turn-tagging.html">Turn tagging<span>Usage mix, mission states, surface behaviour</span></a>
