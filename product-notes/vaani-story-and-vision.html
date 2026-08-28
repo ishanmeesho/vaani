@@ -5,36 +5,39 @@
 <title>Vaani · Product Future State</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
+
+/* ---- tokens: the site's own palette (matches product-docs) ---- */
 :root{
   color-scheme: light;
-  --paper:#FCF9FA; --surface:#FFFFFF; --surface-2:#F9F0F5; --tint:#FCEEF5; --deep:#4A0E37;
-  --ink:#2A1520; --ink-2:#5A4450; --ink-3:#8A7480;
-  --hairline:#E8DAE2; --hairline-2:#F0E6EC;
-  --c-accent:#A81C68; --c-accent-ink:#8A1355; --c-accent-soft:#FBEAF3; --c-bright:#E5308F;
-  --c-find:#1E7FA8; --c-decide:#A81C68; --c-good:#2E9E6B; --c-warn:#CE7C1E; --c-bad:#D14A55;
-  --c-other:#BCAFB6; --c-neutral:#DDD2D8; --c-neutral-ink:#9C8B95;
-  --shadow:0 3px 0 #F0E4EB; --shadow-sm:0 2px 0 #F3E9EF;
-  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --paper:#f6f7f9; --surface:#ffffff; --surface-2:#f8f9fb; --tint:#eef2ff; --deep:#111827;
+  --ink:#111827; --ink-2:#374151; --ink-3:#6b7280;
+  --hairline:#e5e7eb; --hairline-2:#eef0f3;
+  --c-accent:#4f46e5; --c-accent-ink:#4338ca; --c-accent-soft:#eef2ff; --c-bright:#6366f1;
+  --c-find:#2563eb; --c-decide:#7c3aed; --c-good:#16a34a; --c-warn:#d97706; --c-bad:#dc2626;
+  --c-other:#9ca3af; --c-neutral:#e5e7eb; --c-neutral-ink:#9ca3af;
+  --shadow:0 1px 2px rgba(17,24,39,.04), 0 1px 3px rgba(17,24,39,.06);
+  --shadow-sm:0 1px 2px rgba(17,24,39,.04);
+  --serif:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   color-scheme: dark;
-  --paper:#171016; --surface:#20161D; --surface-2:#2A1C25; --tint:#33192A; --deep:#3B0B2C;
-  --ink:#F6EDF2; --ink-2:#D9C8D2; --ink-3:#A38F9B;
-  --hairline:#3A2A34; --hairline-2:#2E212A;
-  --c-accent:#E97DB6; --c-accent-ink:#F2A3CD; --c-accent-soft:#3A1B2D; --c-bright:#F260A9;
-  --c-find:#5FB6DC; --c-decide:#E97DB6; --c-good:#4FC08D; --c-warn:#E2A55E; --c-bad:#EC7C86;
-  --c-other:#6A5A63; --c-neutral:#4A3A43; --c-neutral-ink:#95828D;
-  --shadow:0 3px 0 #100A0E; --shadow-sm:0 2px 0 #100A0E;
+  --paper:#111318; --surface:#1a1d24; --surface-2:#20232b; --tint:#242042; --deep:#1a1d24;
+  --ink:#f1f2f5; --ink-2:#c7cad2; --ink-3:#8b8fa3;
+  --hairline:#2c2f38; --hairline-2:#262932;
+  --c-accent:#8b85f2; --c-accent-ink:#b3aef7; --c-accent-soft:#242042; --c-bright:#a5b4fc;
+  --c-find:#60a5fa; --c-decide:#b28af0; --c-good:#4ade80; --c-warn:#e0a955; --c-bad:#f37272;
+  --c-other:#6b7280; --c-neutral:#374151; --c-neutral-ink:#8b8fa3;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-sm:0 1px 2px rgba(0,0,0,.4);
 }}
 :root[data-theme="dark"]{
   color-scheme: dark;
-  --paper:#171016; --surface:#20161D; --surface-2:#2A1C25; --tint:#33192A; --deep:#3B0B2C;
-  --ink:#F6EDF2; --ink-2:#D9C8D2; --ink-3:#A38F9B;
-  --hairline:#3A2A34; --hairline-2:#2E212A;
-  --c-accent:#E97DB6; --c-accent-ink:#F2A3CD; --c-accent-soft:#3A1B2D; --c-bright:#F260A9;
-  --c-find:#5FB6DC; --c-decide:#E97DB6; --c-good:#4FC08D; --c-warn:#E2A55E; --c-bad:#EC7C86;
-  --c-other:#6A5A63; --c-neutral:#4A3A43; --c-neutral-ink:#95828D;
-  --shadow:0 3px 0 #100A0E; --shadow-sm:0 2px 0 #100A0E;
+  --paper:#111318; --surface:#1a1d24; --surface-2:#20232b; --tint:#242042; --deep:#1a1d24;
+  --ink:#f1f2f5; --ink-2:#c7cad2; --ink-3:#8b8fa3;
+  --hairline:#2c2f38; --hairline-2:#262932;
+  --c-accent:#8b85f2; --c-accent-ink:#b3aef7; --c-accent-soft:#242042; --c-bright:#a5b4fc;
+  --c-find:#60a5fa; --c-decide:#b28af0; --c-good:#4ade80; --c-warn:#e0a955; --c-bad:#f37272;
+  --c-other:#6b7280; --c-neutral:#374151; --c-neutral-ink:#8b8fa3;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-sm:0 1px 2px rgba(0,0,0,.4);
 }
 
 *{box-sizing:border-box} html{scroll-behavior:smooth}
@@ -83,7 +86,7 @@ h2{font-size:clamp(25px,3.3vw,36px); line-height:1.14; margin:0 0 16px; max-widt
   background:var(--tint); margin:22px 0; font-size:16.5px; font-weight:600; color:var(--ink); max-width:none}
 .callout.blue{border-left-color:var(--c-find)} .callout.green{border-left-color:var(--c-good)}
 .callout.warn{border-left-color:var(--c-warn)} .callout.bad{border-left-color:var(--c-bad)}
-.callout-deep{background:var(--deep); color:#F6E8F0; border:none; border-radius:14px; padding:24px 26px; margin:24px 0; font-size:17px; font-weight:600}
+.callout-deep{background:var(--deep); color:#e5e7eb; border:none; border-radius:14px; padding:24px 26px; margin:24px 0; font-size:17px; font-weight:600}
 .callout-deep b{color:#fff}
 .source{font-size:12px; color:var(--ink-3); margin-top:9px}
 .insight{font-size:15.5px; color:var(--ink); margin:18px 0 6px; padding-left:14px; border-left:3px solid var(--hairline); max-width:72ch}
@@ -105,7 +108,7 @@ h2{font-size:clamp(25px,3.3vw,36px); line-height:1.14; margin:0 0 16px; max-widt
 /* tables */
 table{border-collapse:collapse; width:100%; margin:20px 0; font-size:13.5px}
 th,td{padding:11px 12px; border-bottom:1px solid var(--hairline-2); text-align:left; vertical-align:top; color:var(--ink-2)}
-th{background:var(--deep); color:#F6E8F0; font:700 11.5px ui-monospace,monospace; letter-spacing:.05em; text-transform:uppercase; border-bottom:none}
+th{background:var(--deep); color:#f3f4f6; font:700 11.5px ui-monospace,monospace; letter-spacing:.05em; text-transform:uppercase; border-bottom:none}
 th:first-child{border-radius:9px 0 0 0} th:last-child{border-radius:0 9px 0 0}
 td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .tw{overflow-x:auto}
@@ -113,15 +116,15 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 /* ===== DECK-STYLE DIAGRAMS ===== */
 /* step flow (loop, playbook, browse->anchor) */
 .steps{display:flex; flex-wrap:wrap; align-items:stretch; gap:0; margin:24px 0}
-.steps .st{flex:1 1 145px; min-width:145px; background:var(--tint); border-radius:14px; padding:18px 14px; text-align:center}
+.steps .st{flex:1 1 118px; min-width:118px; background:var(--tint); border-radius:14px; padding:18px 14px; text-align:center}
 .steps .st.hero-node{background:var(--deep)}
-.steps .st.hero-node .st-t{color:#fff} .steps .st.hero-node .st-d{color:#E9C9DC}
+.steps .st.hero-node .st-t{color:#fff} .steps .st.hero-node .st-d{color:#c7cad2}
 .steps .ic{width:46px;height:46px;border-radius:50%;background:var(--c-accent);color:#fff;display:grid;place-items:center;margin:0 auto 12px;font-size:19px}
 .steps .st.hero-node .ic{background:var(--c-bright)}
 .st-t{font-size:15.5px; font-weight:700; color:var(--deep); margin-bottom:6px}
 :root[data-theme="dark"] .st-t, :root:not([data-theme="light"]) .st-t{color:var(--ink)}
 .st-d{font-size:12.5px; color:var(--ink-2); line-height:1.4}
-.steps .arw{flex:0 0 26px; display:flex; align-items:center; justify-content:center; color:var(--c-accent); font-size:16px}
+.steps .arw{flex:0 0 20px; display:flex; align-items:center; justify-content:center; color:var(--c-accent); font-size:16px}
 .steps-note{text-align:center; font-size:14px; color:var(--ink-2); margin-top:12px; font-weight:600}
 
 /* two-friction / two-column feature blocks */
@@ -197,7 +200,7 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 /* the Vaani card — the signature element */
 .vcard{border:1.5px solid var(--c-accent); background:var(--tint); border-radius:12px; padding:11px 12px}
 .vcard-h{display:flex; align-items:center; gap:8px; margin-bottom:7px}
-.vmic{width:24px;height:24px;line-height:0;border-radius:50%;background:var(--c-accent);color:#fff;display:grid;place-items:center;font-size:11px;flex:none}
+.vmic{width:24px;height:24px;border-radius:50%;background:var(--c-accent);color:#fff;display:grid;place-items:center;font-size:11px;flex:none}
 .vcard-h b{font-size:12.5px; color:var(--ink); line-height:1.35}
 .vcard p{font-size:12px; color:var(--ink-2); margin:0; max-width:none; line-height:1.45}
 .vbtn{display:inline-block; margin-top:9px; background:var(--c-accent); color:#fff; border-radius:16px;
@@ -228,6 +231,188 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
 .ho-arrow .bar::after{content:""; position:absolute; right:-1px; top:-7px; border-left:13px solid var(--c-accent);
   border-top:9px solid transparent; border-bottom:9px solid transparent}
 @media (max-width:860px){.ho-arrow{flex-direction:row}.ho-arrow .bar{width:70%}}
+
+/* ===== prose + long-form components ===== */
+.verdict{font-size:clamp(19px,2.5vw,24px); font-weight:700; line-height:1.32; letter-spacing:-.012em;
+  max-width:36ch; margin:0 0 18px; color:var(--deep); font-family:var(--serif)}
+:root[data-theme="dark"] .verdict, :root:not([data-theme="light"]) .verdict{color:var(--ink)}
+.imp{margin:22px 0 4px; padding:16px 20px; background:var(--surface-2); border-left:3px solid var(--c-accent); border-radius:0 10px 10px 0}
+.imp .lbl{font:800 10.5px ui-monospace,monospace; letter-spacing:.13em; text-transform:uppercase; color:var(--c-accent-ink); margin-bottom:6px}
+.imp p{margin:0; font-size:15px; color:var(--ink); max-width:none}
+.pull{font-size:clamp(19px,2.4vw,23px); font-weight:700; line-height:1.35; color:var(--deep);
+  max-width:46ch; margin:30px 0; padding-left:18px; border-left:3px solid var(--c-accent); font-family:var(--serif)}
+:root[data-theme="dark"] .pull, :root:not([data-theme="light"]) .pull{color:var(--ink)}
+.vocab{margin:28px 0 0; padding:16px 20px; background:var(--surface-2); border:1px solid var(--hairline);
+  border-radius:10px; font-size:13.5px; color:var(--ink-2)}
+.vocab b{color:var(--ink)} .vocab .term-def{margin-right:16px; display:inline-block}
+.ladder{counter-reset:lad; margin:24px 0 0}
+.ladder .step{position:relative; padding:15px 0 15px 50px; border-top:1px solid var(--hairline-2)}
+.ladder .step:first-child{border-top:none}
+.ladder .step::before{counter-increment:lad; content:counter(lad); position:absolute; left:0; top:15px;
+  width:28px;height:28px;border-radius:50%;background:var(--c-accent-soft);border:1px solid var(--hairline);
+  display:flex;align-items:center;justify-content:center;font:800 12px ui-monospace,monospace;color:var(--c-accent-ink)}
+.ladder .step h4{margin:0 0 4px; font-size:15.5px; font-weight:700; color:var(--ink)}
+.ladder .step p{margin:0; font-size:14.5px; max-width:66ch}
+.fail{background:var(--surface); border:1px solid var(--hairline); border-left:3px solid var(--c-bad);
+  border-radius:0 12px 12px 0; padding:16px 18px}
+.fail h4{margin:0 0 6px; font-size:15px; font-weight:700; color:var(--ink)}
+.fail p{margin:0; font-size:13.5px; max-width:none}
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:22px; margin:22px 0}
+@media (max-width:860px){.two-col{grid-template-columns:1fr}}
+.two-col h4{font:800 11px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin:0 0 8px}
+.two-col p{font-size:14.5px; max-width:none}
+.scope{background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px; padding:18px 20px; margin:13px 0}
+.scope .n{font:800 10.5px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; color:var(--c-accent-ink)}
+.scope h4{margin:6px 0 8px; font-size:16px; font-weight:700; color:var(--ink)}
+.scope ul{margin:0; padding-left:19px; font-size:14px; color:var(--ink-2)} .scope li{margin:0 0 5px}
+.jobs{width:100%; border-collapse:collapse; font-size:13.5px; margin:20px 0}
+.jobs th{text-align:left; font:800 11px ui-monospace,monospace; letter-spacing:.06em; text-transform:uppercase;
+  color:#F6E8F0; background:var(--deep); padding:11px 12px}
+.jobs td{padding:11px 12px; border-bottom:1px solid var(--hairline-2); vertical-align:top; color:var(--ink-2)}
+.jobs td.k{color:var(--ink); font-weight:700; white-space:nowrap}
+.jobs td.said{font-style:italic}
+
+/* ============ WORKED-EXAMPLE PHONE MOCKS ============ */
+.phones{display:grid; grid-template-columns:1fr 34px 1fr; gap:12px; align-items:start; margin:22px 0}
+@media (max-width:860px){.phones{grid-template-columns:1fr; gap:16px}}
+.phone-col{min-width:0}
+.phone-tag{font:800 10.5px ui-monospace,monospace; letter-spacing:.12em; text-transform:uppercase; margin:0 0 8px}
+.phone-tag.sec{color:var(--c-find)}
+.phone-tag.pri{color:var(--c-decide)}
+.phone{border:1px solid var(--hairline); border-radius:16px; background:var(--surface); overflow:hidden; box-shadow:var(--shadow)}
+.phone-bar{display:flex; align-items:center; justify-content:space-between; padding:7px 12px;
+  background:var(--surface-2); border-bottom:1px solid var(--hairline-2); font:700 10px ui-monospace,monospace; color:var(--ink-3)}
+.phone-body{padding:15px 15px 17px}
+.ph-price{display:flex; align-items:baseline; gap:9px; flex-wrap:wrap}
+.ph-off{font:800 17px ui-monospace,monospace; color:var(--c-bad)}
+.ph-amt{font:800 30px/1 ui-monospace,monospace; color:var(--ink); letter-spacing:-.02em}
+.ph-mrp{font-size:12.5px; color:var(--ink-3); margin:5px 0 0}
+.ph-mrp s{opacity:.75}
+.ph-link{display:inline-block; margin-top:2px; font-size:14px; font-weight:700; color:var(--c-find);
+  border-bottom:2px solid var(--c-find); padding-bottom:1px}
+.ph-rows{margin-top:13px; border-top:1px solid var(--hairline-2); padding-top:11px}
+.ph-row{font-size:12px; color:var(--ink-3); padding:5px 0; border-bottom:1px dashed var(--hairline-2)}
+.ph-row:last-child{border-bottom:none}
+.ph-nav{display:flex; justify-content:space-between; padding:9px 14px; border-top:1px solid var(--hairline-2);
+  background:var(--surface-2); font-size:10px; color:var(--ink-3)}
+.ph-nav b{color:var(--c-decide)}
+.ph-userturn{display:inline-block; background:var(--surface-2); border:1px solid var(--hairline);
+  border-radius:14px 14px 3px 14px; padding:6px 12px; font-size:13px; font-weight:700; color:var(--ink); float:right; margin-bottom:11px}
+.ph-answer{clear:both; font-size:12.5px; color:var(--ink-2); line-height:1.5; margin:0 0 12px}
+.ph-answer b{color:var(--ink)}
+.ph-ask{margin-top:12px; border:1px solid var(--hairline); border-radius:20px; padding:8px 13px;
+  font-size:12.5px; color:var(--ink-3); display:flex; justify-content:space-between}
+.phone-arrow{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding-top:80px; color:var(--ink-3)}
+.phone-arrow .a{font-size:22px; line-height:1}
+.phone-arrow .t{font:700 9px ui-monospace,monospace; letter-spacing:.09em; writing-mode:vertical-rl; text-orientation:mixed}
+@media (max-width:860px){.phone-arrow{padding-top:0; flex-direction:row} .phone-arrow .t{writing-mode:horizontal-tb}}
+.annot{margin-top:9px; font-size:12.5px; color:var(--ink-2); border-left:3px solid var(--hairline); padding-left:11px}
+.annot b{color:var(--ink)}
+.pricechart svg{width:100%; height:auto; display:block}
+/* recently-viewed strip + decide pill */
+.rv-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
+.rv-head .t{font-size:13.5px; font-weight:800; color:var(--ink); line-height:1.25}
+.rv-head .t span{display:block; font-size:11px; font-weight:400; color:var(--ink-3)}
+.pill{background:var(--ink); color:var(--paper); border-radius:20px; padding:7px 13px;
+  font-size:12px; font-weight:800; white-space:nowrap; display:inline-flex; align-items:center; gap:6px}
+.pill .sp{color:var(--c-warn)}
+.rv-strip{display:flex; gap:6px; overflow:hidden; padding-bottom:2px}
+.rv-item{flex:0 0 52px}
+.rv-thumb{height:44px; border-radius:6px; background:var(--surface-2); border:1px solid var(--hairline-2)}
+.rv-item.sel .rv-thumb{border:2px solid var(--c-find)}
+.rv-price{font:700 9.5px ui-monospace,monospace; color:var(--ink-2); text-align:center; margin-top:4px}
+.ph-prod{margin-top:12px; border-top:1px solid var(--hairline-2); padding-top:11px}
+.ph-prod .brand{font-size:12.5px; font-weight:800; color:var(--ink)}
+.ph-prod .rate{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+.ph-prod .rate b{color:var(--c-warn)}
+.ph-prod .desc{font-size:11.5px; color:var(--ink-2); margin-top:6px; line-height:1.4}
+.ph-prod .bought{font-size:11.5px; color:var(--ink); font-weight:700; margin-top:6px}
+/* reasoning checklist */
+.think-h{font-size:17px; font-weight:800; color:var(--ink); margin:6px 0 16px; letter-spacing:-.02em}
+.think{display:flex; flex-direction:column; gap:13px}
+.think-row{display:flex; align-items:center; gap:11px; font-size:12.5px; color:var(--ink-2)}
+.think-row b{color:var(--ink)}
+.tick{flex:none; width:19px; height:19px; border-radius:50%; display:grid; place-items:center;
+  font-size:10px; font-weight:800; border:2px solid var(--hairline)}
+.tick.done{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.tick.now{border-color:var(--ink); border-right-color:transparent; border-bottom-color:transparent; transform:rotate(-45deg)}
+.tick.todo{border-color:var(--hairline)}
+
+/* ===================== FUTURE-STATE MODE ===================== */
+:root{--grad:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%); --charcoal:#111827}
+.sec.future{background:var(--charcoal); color:#e5e7eb; border-radius:22px; padding:52px 44px;
+  margin:26px -26px; border-bottom:none}
+@media (max-width:860px){.sec.future{padding:36px 22px; margin:20px -14px; border-radius:16px}}
+.sec.future + .sec.future{margin-top:14px}
+.sec.future h2,.sec.future .verdict,.sec.future h3{color:#fff}
+.sec.future p,.sec.future .lead{color:#c7cad2}
+.sec.future p b,.sec.future .lead b,.sec.future li b{color:#fff}
+.sec.future .eyebrow{color:#9ca3af}
+.sec.future .part-rule{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+.sec.future .num{background:var(--grad); color:#fff}
+.sec.future .card{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13); box-shadow:none}
+.sec.future .card h4{color:#fff} .sec.future .card p{color:#c7cad2}
+.sec.future .card .ic{background:var(--grad)}
+.sec.future .duo-card{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13)}
+.sec.future .duo-card h4{color:#fff} .sec.future .duo-card .tag{color:#a5b4fc}
+.sec.future .duo-card .eg{background:rgba(255,255,255,.06); color:#c7cad2}
+.sec.future .duo-card .arrow-note{color:#c4b5fd}
+.sec.future .steps .st{background:rgba(255,255,255,.06)}
+.sec.future .steps .st.hero-node{background:var(--grad)}
+.sec.future .st-t{color:#fff} .sec.future .st-d{color:#c7cad2}
+.sec.future .steps .ic{background:var(--grad)}
+.sec.future .steps .st.hero-node .ic{background:rgba(0,0,0,.28)}
+.sec.future .steps .arw{color:#818cf8} .sec.future .steps-note{color:#c7cad2}
+.sec.future th{background:rgba(255,255,255,.10); color:#fff}
+.sec.future td{color:#c7cad2; border-bottom-color:rgba(255,255,255,.10)}
+.sec.future td b{color:#fff} .sec.future tbody tr:hover{background:rgba(255,255,255,.04)}
+.sec.future .callout{background:rgba(255,255,255,.06); color:#fff; border-left-color:var(--c-bright)}
+.sec.future .callout-deep{background:var(--grad); color:#fff}
+.sec.future .callout-deep b{color:#fff}
+.sec.future .phase{border-top-color:rgba(255,255,255,.12)}
+.sec.future .phase h4{color:#fff} .sec.future .phase p{color:#c7cad2}
+.sec.future .phase .pn{background:rgba(255,255,255,.10); color:#c4b5fd}
+.sec.future .phase.last .pn{background:var(--grad); color:#fff}
+.sec.future .belief{background:rgba(255,255,255,.07); color:#fff}
+.sec.future .source{color:#9ca3af} .sec.future a{color:#c4b5fd}
+.sec.future .insight{color:#fff; border-left-color:rgba(255,255,255,.22)}
+.sec.future .rc{background:rgba(255,255,255,.055); border-color:rgba(255,255,255,.13)}
+.sec.future .rc-top span{color:#fff} .sec.future .rc p{color:#c7cad2}
+.sec.future .rc .lesson{color:#fff; border-left-color:var(--c-bright)}
+.sec.future .rc .lesson b{color:#a5b4fc}
+.sec.future .ladder .step{border-top-color:rgba(255,255,255,.12)}
+.sec.future .ladder .step::before{background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.16); color:#c4b5fd}
+.sec.future .ladder .step h4{color:#fff} .sec.future .ladder .step p{color:#c7cad2}
+/* phone mocks read light-on-dark inside future sections */
+.sec.future .ph{background:#FFFFFF; border-color:rgba(255,255,255,.25)}
+.sec.future .ph *{color-scheme:light}
+.sec.future .mock-col .mock-tag{color:#a5b4fc}
+.sec.future .mock-cap{color:#c7cad2} .sec.future .mock-cap b{color:#fff}
+/* proof card — inline research */
+.proof{display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px;
+  padding:15px 17px; margin:12px 0}
+.sec:not(.future) .proof{background:var(--surface-2); border-color:var(--hairline)}
+.proof .pf-who{font:800 10.5px ui-monospace,monospace; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--c-bright); white-space:nowrap; padding-top:2px}
+.sec:not(.future) .proof .pf-who{color:var(--c-accent)}
+.proof p{margin:0; font-size:13.5px; max-width:none}
+.proof a{font-size:11.5px; white-space:nowrap}
+/* POC flow */
+.pocflow{display:flex; flex-direction:column; gap:0; margin:24px 0}
+.poc-step{background:rgba(255,255,255,.06); border-radius:12px; padding:14px 18px; display:grid;
+  grid-template-columns:30px 1fr; gap:13px; align-items:center}
+.sec:not(.future) .poc-step{background:var(--surface-2)}
+.poc-step .pi{width:26px;height:26px;border-radius:50%;background:var(--grad);color:#fff;
+  display:grid;place-items:center;font:800 11px ui-monospace,monospace}
+.poc-step b{font-size:14.5px; color:#fff} .sec:not(.future) .poc-step b{color:var(--ink)}
+.poc-step span{display:block; font-size:12.5px; color:#c7cad2; margin-top:2px}
+.sec:not(.future) .poc-step span{color:var(--ink-2)}
+.poc-arw{text-align:center; color:#818cf8; font-size:15px; padding:5px 0}
+.sec:not(.future) .poc-arw{color:var(--c-accent)}
+/* appendix */
+.appendix{background:var(--surface-2); border:1px solid var(--hairline); border-radius:14px; padding:26px 28px; margin:26px 0}
+.appendix h3{margin-top:0}
 /* ============ CHART FRAME ============ */
 figure{margin:22px 0}
 .viz{background:var(--surface); border:1px solid var(--hairline); border-radius:16px; padding:20px 22px 17px; box-shadow:var(--shadow)}
@@ -359,54 +544,79 @@ figure{margin:22px 0}
     <div class="metric"><b class="bad">87.4%</b><span>of exposed users never adopt</span></div>
   </div>
   <div class="callout-deep"><b>The paradox: we built a pull product for users who don't know what to pull.</b> Vaani can only teach its capabilities to someone who already knows what to ask. Our first-time buyer doesn't &mdash; and never will, unless the product makes the first move.</div>
+  <div class="vocab">
+    <span class="term-def"><b>FIND</b> &mdash; the user wants to see something that isn't on screen</span>
+    <span class="term-def"><b>DECIDE</b> &mdash; the user wants help with the product in hand</span>
+    <span class="term-def"><b>anchor</b> &mdash; the first product a buyer clicks of the type they end up buying</span>
+    <span class="term-def"><b>secondary surface</b> &mdash; Vaani's intelligence placed inside an existing app screen</span>
+    <span class="term-def"><b>primary surface</b> &mdash; a screen Vaani owns; Vaani-first, app capabilities underneath</span>
+  </div>
 </header>
 
 <!-- ============ 00 ============ -->
 <section class="sec" id="snapshot">
   <div class="sec-head"><span class="num">00</span><span class="eyebrow">Our thoughts in a snapshot</span></div>
   <h2>Two clear problems, and both are a consequence of how we chose to build the product.</h2>
-  <p class="lead">Vaani works. It just works for very few people, and for a narrow slice of what shopping actually requires. Everything in this document sits under one of two headings.</p>
+  <p class="lead">Six statements carry this entire document.</p>
+
+  <div class="ladder">
+    <div class="step"><h4>Vaani was built voice-first, with thin UX</h4><p>A deliberate first bet: add intelligence to the app without redesigning it.</p></div>
+    <div class="step"><h4>Most users never adopt it</h4><p>87.4% of people who could use Vaani never speak to it once.</p></div>
+    <div class="step"><h4>The current adoption mechanism asks for trust before showing value</h4><p>A nudge names a category of question. It never demonstrates the intelligence.</p></div>
+    <div class="step"><h4>Habit can form, once users receive enough useful outcomes</h4><p>Past five sessions, 89.6% self-initiate. Trust becomes self-sustaining.</p></div>
+    <div class="step"><h4>But habit-forming users are still not shopping with less effort</h4><p>Clicks per order go up, not down. Repeat usage is not the same as a solved problem.</p></div>
+    <div class="step"><h4>Those are two different problems, and they need two different fixes</h4><p>Secondary surfaces earn adoption. A primary surface improves the outcome.</p></div>
+  </div>
 
   <div class="duo">
     <div class="duo-card" style="border-top:4px solid var(--c-warn)">
       <p class="tag">Problem one</p>
       <h4>Adoption</h4>
-      <p><b>87.4%</b> of users who could use Vaani never speak to it once. Of those who do, <b>64.5%</b> never come back for a second session. Our sharpest nudge converts <b>12.9&ndash;14.1%</b>, and decays every time it fires.</p>
-      <p class="arrow-note">&rarr; Fixed by secondary surfaces (&sect;06&ndash;08)</p>
+      <p><b>87.4%</b> of users who could use Vaani never speak to it once. Of those who do, <b>64.5%</b> never come back for a second session. Our sharpest, most conservative nudge converts <b>12.9&ndash;14.1%</b>, and decays every time it fires.</p>
+      <p class="arrow-note">&rarr; Fixed by secondary surfaces (&sect;07&ndash;09)</p>
     </div>
     <div class="duo-card" style="border-top:4px solid var(--c-decide)">
       <p class="tag">Problem two</p>
       <h4>Outcomes, when the user is deciding</h4>
-      <p>When Vaani fetches, it works &mdash; <b>74.4%</b> good outcomes. When Vaani has to reason out loud, it does not: <b>28.4%</b> at best, and <b>12.6%</b> when it asks a question back. Deciding and finding alternatives is where this bites.</p>
-      <p class="arrow-note">&rarr; Fixed by a primary surface (&sect;09&ndash;11)</p>
+      <p>When Vaani performs the task, it works &mdash; <b>74.4%</b> good outcomes. When Vaani has to reason out loud, it does not: <b>28.4%</b> at best, and <b>12.6%</b> when it asks a question back. Deciding, and finding a better alternative, is where this bites hardest.</p>
+      <p class="arrow-note">&rarr; Fixed by a primary surface (&sect;10&ndash;12)</p>
     </div>
   </div>
 
-  <div class="callout"><b>Both problems have the same root.</b> We built Vaani as a voice layer on top of an app that was already finished. It can make the existing app easier to operate. It cannot do things the app was never designed to do &mdash; and it cannot teach anyone what it is capable of.</div>
+  <p>These are not two independent bugs. They are the same design decision seen from two angles. We built Vaani as a voice layer on top of an app that was already finished, so it can only reach for outcomes the app already knows how to render, and it can only be discovered by someone who already suspects it can help. One limit caps who uses it; the other caps what it can do for them once they do.</p>
+  <div class="callout"><b>Both problems have the same root.</b> Vaani can make the existing app easier to operate. It cannot do things the app was never designed to do &mdash; and it cannot teach anyone what it is capable of.</div>
 </section>
 
 <!-- ============ 01 ============ -->
 <section class="sec" id="built">
   <div class="sec-head"><span class="num">01</span><span class="eyebrow">How Vaani was built</span></div>
-  <h2>Useful, but capped by the app it serves.</h2>
+  <p class="verdict">Useful, but capped by the app it serves.</p>
   <p class="lead">The first version was deliberately narrow: voice-first, very limited UX intervention, intelligence used to make existing journeys easier. That was the right way to start &mdash; it let us learn how users behave with conversational help before rebuilding shopping around it.</p>
 
+  <p>Because Vaani lived inside the app as one feature rather than being the thing the app was built around, every outcome it could serve had to land on a screen that already existed. So we pointed it at problems we already understood: usability gaps and funnel drop-offs. Three capabilities came out of that framing.</p>
+
   <div class="grid3">
-    <div class="card"><div class="ic">&#9906;</div><h4>Initiate search</h4><p>Helps the user start looking for a product.</p></div>
-    <div class="card"><div class="ic">&#9776;</div><h4>Refine the feed</h4><p>Narrows down what is being shown.</p></div>
-    <div class="card"><div class="ic">?</div><h4>Understand a product</h4><p>Answers questions about a product already on the app.</p></div>
+    <div class="card"><div class="ic">&#9906;</div><h4>Initiate search</h4><p>Helps the user start looking for a product, in their own words rather than the app's taxonomy.</p></div>
+    <div class="card"><div class="ic">&#9776;</div><h4>Refine the feed</h4><p>Narrows down what is being shown, without the user having to find and combine filters.</p></div>
+    <div class="card"><div class="ic">?</div><h4>Understand a product</h4><p>Answers questions about a product already on the app &mdash; price, quality, size, delivery.</p></div>
   </div>
 
-  <p>Each of those is genuinely valuable, and voice removes real friction &mdash; spelling, taxonomy, the effort of translating a need into search terms. But notice what they have in common: every one of them operates a surface the app already had.</p>
-  <div class="callout-deep"><b>The app remains the experience; Vaani just helps operate it.</b> The missing piece is a surface Vaani owns.</div>
-  <p>One thing we did not plan for: a new modality surfaced demand that could never have appeared in the old construct. People started <b>negotiating on price</b>, at volume, because speaking made it possible. That is the first evidence that new ways to engage produce new opportunities &mdash; and it is the seed of everything in the second half of this document.</p>
-</section>
+  <p>Alongside them we built an adoption machine: a floating mic button, page-intro nudges on the product page, listing page and cart, and later zero-click nudges that fire when a session is about to end with nothing clicked.</p>
+  <p>Each capability is genuinely valuable, and voice removes real friction &mdash; spelling, taxonomy, the effort of turning a need into search terms. One user put it plainly:</p>
+  <p class="pull">"Spelling nahi aati hai toh &hellip; bol karke phir aa jaati hai."</p>
+  <p>But notice what those three capabilities have in common: every one of them operates a surface the app already had. Vaani could operate those surfaces better. It could rarely create a new experience around the user's mission.</p>
 
+  <div class="callout-deep"><b>The app remains the experience; Vaani just helps operate it.</b> The missing piece is a surface Vaani owns.</div>
+
+  <p>One thing we did not plan for. A new modality surfaced demand that could never have appeared in the old construct: people started <b>negotiating on price</b>, at volume, because speaking made it possible in a way that tapping never did. Nobody designed that. It arrived because we changed how users could express themselves, and it is now the single largest thing anyone says to Vaani.</p>
+  <div class="insight"><b>The signal worth holding onto &mdash;</b> new ways to engage produce new demand. That is the argument for the second half of this document in miniature.</div>
+</section>
 <!-- ============ 02 ============ -->
 <section class="sec" id="adoption">
   <p class="part-rule">Problem one &middot; Adoption</p>
   <div class="sec-head"><span class="num">02</span><span class="eyebrow">How many adopt, and how many reach habit</span></div>
-  <h2>Habit is real. Almost nobody gets there.</h2>
+  <p class="verdict">Habit is real. Almost nobody gets there.</p>
+  <p class="lead">The adoption question is not "can anyone form a habit with Vaani?" We know they can. It is "can the first useful experience be good enough to earn a second one?"</p>
 
   <figure><div class="viz">
     <div class="viz-head"><p class="viz-title">From exposed, to adopted, to habit</p><p class="viz-sub">Everyone who could have used Vaani, and where they land.</p></div>
@@ -414,27 +624,32 @@ figure{margin:22px 0}
     <p class="viz-cap">Of everyone exposed, <b>87.4%</b> never speak to Vaani once. Of the 97,646 who do, <b>64.5%</b> never return. Only <b>6.5%</b> of adopters &mdash; 6,361 people &mdash; reach five sessions.</p>
   </div></figure>
 
-  <p>The good news sits at the far end of that funnel. Once a user reaches five sessions, the behaviour becomes self-sustaining: <b>68%</b> continue to another session, <b>89.6%</b> self-initiate rather than waiting to be nudged, and <b>64.6%</b> use Vaani again within their next five app opens.</p>
-  <div class="callout green"><b>Habit formation is not the problem. Reaching it is.</b> Whoever forms a habit sticks with Vaani. The entire loss is between session one and session two.</div>
+  <p>Read down that funnel and the loss is concentrated in one place. It is not a leaky funnel with attrition spread across many steps; it is a wall between the first session and the second. 34.7% of adopters reach a second session, 17.3% a third. Everything after that decays gently rather than sharply.</p>
+  <p>And the far end of the funnel is genuinely good news. Once a user reaches five sessions the behaviour becomes self-sustaining: <b>68%</b> continue to another session, <b>89.6%</b> self-initiate rather than waiting to be nudged, and <b>64.6%</b> use Vaani again within their next five app opens. They stop needing us to prompt them.</p>
+
+  <div class="callout green"><b>Habit formation is not the problem. Reaching it is.</b> Whoever forms a habit sticks with Vaani. The entire loss sits between session one and session two &mdash; which makes this a first-experience problem, not a retention problem.</div>
 </section>
 
 <!-- ============ 03 ============ -->
 <section class="sec" id="why-adoption">
   <p class="part-rule">Problem one &middot; Adoption</p>
   <div class="sec-head"><span class="num">03</span><span class="eyebrow">Why adoption is low</span></div>
-  <h2>The reason is the approach we took, not the targeting.</h2>
+  <p class="verdict">The reason is the approach we took, not the targeting.</p>
 
-  <p class="lead">Today's nudges are <b>menus, not demos</b>. "Do you want to know?" tells the user what to say &mdash; not why Vaani is smart. The user has to imagine the value before ever seeing it. And it is spoken once, then gone.</p>
+  <p class="lead">Today's nudges are <b>menus, not demos</b>. "Do you want to know?" and "do you want this or that?" tell the user a <i>category of question</i> they are allowed to ask. They never show the intelligence itself. The user has to imagine the value before they have seen any of it &mdash; and for a first-time buyer with no mental model of what a shopping assistant even is, that is a very large ask.</p>
+  <p>Then there is the delivery. The nudge is spoken once, and then it is gone. There is nothing on the app that persists, nothing to scroll back to, no record that builds the belief that Vaani is an intelligent entity that understands what you are doing. Miss it and the lesson is gone with it.</p>
 
+  <h3>Three ways voice-only push fails</h3>
   <div class="grid3">
-    <div class="card"><h4>Low volume</h4><p>Phones stay muted or quiet. Voice alone cannot be relied on to carry the nudge.</p></div>
-    <div class="card"><h4>Dense households</h4><p>Shared, noisy spaces make audio easy to lose and socially awkward to use.</p></div>
-    <div class="card"><h4>Weak TTS, one shot</h4><p>Output quality undermines trust, and there is no second chance to hear it.</p></div>
+    <div class="fail"><h4>Low volume</h4><p>Phones stay muted or quiet, and some handsets have a lower baseline to begin with. Voice alone cannot be relied on to carry a nudge.</p></div>
+    <div class="fail"><h4>Dense households</h4><p>Shared, noisy spaces make audio easy to lose &mdash; and using it socially awkward, which is its own kind of friction.</p></div>
+    <div class="fail"><h4>Weak TTS, one shot</h4><p>Output quality undermines trust in the thing being offered, and there is no second chance to hear it.</p></div>
   </div>
-  <div class="callout warn">Two of those three are the user's environment, not our technology &mdash; which points squarely at <b>visual-first delivery</b>.</div>
+  <div class="callout warn">Two of those three are the user's <b>environment</b>, not our technology. We cannot engineer them away &mdash; we can only design around them, and that points squarely at <b>visual-first delivery</b> with voice as reinforcement.</div>
 
   <h3>We tested this as hard as it can be tested</h3>
-  <p>Zero-click nudges fire when a session looks highly likely to end without a single product click &mdash; about as conservative and well-targeted as a trigger gets. Even there, adoption caps out.</p>
+  <p>Zero-click nudges fire when a session looks highly likely to end without a single product click &mdash; a moment of obvious, measurable need, and about as conservative and well-targeted as a trigger gets. If capability discovery through nudging were going to work anywhere, it would work here.</p>
+  <p>The first thing we learned was about our own measurement. The original "adopted" flag meant a mic tap within 60 seconds. When we checked whether a real conversation actually followed, only 35.6% of those flagged adoptions had one. <b>Roughly 61% of what we were calling adoption was a tap that went nowhere</b> &mdash; a UI open, an error, an abandoned mic. Every number below uses the honest definition: a tap <i>and</i> a real Vaani turn.</p>
 
   <div class="grid4">
     <div class="card"><span class="big warn">12.9&ndash;14.1%</span><p>strict adoption among users shown the nudge</p></div>
@@ -443,120 +658,99 @@ figure{margin:22px 0}
     <div class="card"><span class="big">~20%</span><p>of nudge-driven adopters return on their own</p></div>
   </div>
 
+  <div class="pair">
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Every rule we have lands in the same narrow band</p><p class="viz-sub">Strict adoption by nudge rule, both arms.</p></div>
+      <div id="c-leaderboard"></div>
+      <p class="viz-cap">The whole portfolio sits between <b>7.5% and 13.6%</b> &mdash; and the best performer is not a zero-click rule at all, it is the search-results repeat nudge. Sharper targeting is not the missing ingredient.</p>
+    </div></figure>
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">And the same nudge wears out every time it fires</p><p class="viz-sub">Adoption rate by how many times a user has already seen that rule.</p></div>
+      <div id="c-fatigue"></div>
+      <p class="viz-cap">Zero-click nudges fall <b>8.0% to 3.2%</b> by the seventh exposure. Repetition does not recover a missed nudge &mdash; it burns it. This is "you miss it, you miss it" expressed as arithmetic.</p>
+    </div></figure>
+  </div>
+
+  <p>None of which means nudges are worthless. When a zero-click nudge actually produces a conversation, the effect on that session is large and immediate.</p>
+
   <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">And the same nudge wears out every time it fires</p><p class="viz-sub">Adoption rate by how many times a user has already seen that rule.</p></div>
-    <div id="c-fatigue"></div>
-    <p class="viz-cap">Zero-click nudges fall <b>8.0% to 3.2%</b> by the seventh exposure. Repetition does not recover a missed nudge &mdash; it burns it. This is "you miss it, you miss it" as arithmetic.</p>
+    <div class="viz-head"><p class="viz-title">When it lands, it works</p><p class="viz-sub">Share of sessions ending with no product click at all. Lower is better.</p></div>
+    <div id="c-zeroclick"></div>
+    <p class="viz-cap">A real conversation cuts the zero-click rate from <b>32.6%</b> to <b>12.8%</b> &mdash; a 2.6&times; reduction. Nudges also drive the majority of first-ever adoption, 62.9&ndash;65.4%.</p>
   </div></figure>
 
-  <div class="callout"><b>Vaani was effective for adopters, and irrelevant to everyone who ignored it.</b> When a nudge does produce a conversation, the session recovers &mdash; zero-click sessions fall from 32.6% to 12.8%. The mechanism works. Almost nobody enters it.</div>
+  <div class="callout"><b>Vaani was effective for adopters, and irrelevant to everyone who ignored it.</b> The mechanism works. Almost nobody enters it, and the ones we do reach we cannot reach twice.</div>
+
+  <h3>Which leaves four structural reasons, not four fixable bugs</h3>
+  <div class="grid2">
+    <div class="fail"><h4>Menus, not demos</h4><p>We tell users a category of question they could ask. We almost never show the intelligence itself, so there is nothing to be impressed by.</p></div>
+    <div class="fail"><h4>"You miss it, you miss it"</h4><p>A transient voice nudge makes capability discovery depend on the exact moment. If it disappears, so does the lesson &mdash; and the decay curve above is what that costs us.</p></div>
+    <div class="fail"><h4>Voice is weak for push</h4><p>Low volume, shared households and TTS quality make voice a poor medium for <i>proactive discovery</i>. It remains excellent once intent already exists.</p></div>
+    <div class="fail"><h4>Vaani is not omnipresent</h4><p>It is not woven into each surface's own objective, so users experience a separate feature rather than intelligence inside the shopping experience.</p></div>
+  </div>
+
+  <div class="imp"><p class="lbl">The structural read</p><p>Users have low comprehension of what Vaani can do, and Vaani is pull-based until they already know what to ask. A pull product cannot teach its own capabilities to someone who does not know what to pull. <b>Users do not know what they do not know</b> &mdash; and no amount of nudge-copy optimisation solves that.</p></div>
+
+  <h3>Underneath all four sits one universal lens</h3>
+  <p>These four failures are specific to Vaani, but the friction they create is not. Every capability in any product is blocked by one of two things &mdash; and naming them gives us a frame we will use for the rest of this document.</p>
+
+  <div class="duo">
+    <div class="duo-card">
+      <p class="tag">Not knowing &mdash; our job: show the path</p>
+      <h4>They can't want what they can't see</h4>
+      <p>The user doesn't know a capability exists, so they never reach for it.</p>
+      <div class="eg"><b>e.g.</b> The feed can be narrowed with filters &mdash; but the user has never discovered that filters exist.</div>
+      <p class="arrow-note">&rarr; Surface the capability at the exact moment it becomes useful.</p>
+    </div>
+    <div class="duo-card">
+      <p class="tag">Not expressing &mdash; our job: shorten the path</p>
+      <h4>They know, but can't operate it</h4>
+      <p>The user knows the capability exists but can't work it efficiently enough to reach their goal.</p>
+      <div class="eg"><b>e.g.</b> They know filters exist &mdash; but can't combine the right ones to land on what they have in mind.</div>
+      <p class="arrow-note">&rarr; Deliver the outcome without demanding mastery of the mechanics.</p>
+    </div>
+  </div>
+
+  <p>Both are measurable in our own data. <b>Not knowing</b> is the 87.4% who never adopt, and the 556 people who ever thought to ask Vaani to compare two products. <b>Not expressing</b> is visible in every search box: before a first search shoppers click through a mean of <b>137 products</b>, then two-thirds of them type a query with no attribute at all.</p>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">Shoppers know what they want. They cannot say it.</p><p class="viz-sub">How often a search continues what the shopper was already browsing, by query length.</p></div>
+    <div id="c-query"></div>
+    <p class="viz-cap">A one-word query continues the shopper's own prior browsing just <b>6.8%</b> of the time; a four-word query, <b>48.1%</b>. And <b>41%</b> of searches land on a category they never browsed that session. The gap between what they have shown us and what they manage to type is the opportunity.</p>
+  </div></figure>
+
+  <div class="callout"><b>This lens applies to Refine, Alternate and Decide alike</b> &mdash; and intelligence is the first tool we have that can solve both frictions at once.</div>
 </section>
 <!-- ============ 04 ============ -->
-<section class="sec" id="habit-good">
+<section class="sec" id="habit">
   <p class="part-rule">Problem one &middot; Adoption</p>
-  <div class="sec-head"><span class="num">04</span><span class="eyebrow">What habit-formed users show us</span></div>
-  <h2>The people who get through do better &mdash; and it costs us to get them there.</h2>
-  <p class="lead">This matters because it tells us the product is worth adopting. The barrier is discovery, not value.</p>
+  <div class="sec-head"><span class="num">04</span><span class="eyebrow">Yet habit proves trust can form</span></div>
+  <p class="verdict">The product does not need endless prompting. It needs a better first outcome.</p>
+  <p class="lead">Everything in the last section was about why people never start. This section is the counterweight, and it matters just as much: the users who do get through behave exactly as we would want them to.</p>
+
+  <div class="grid4">
+    <div class="card"><span class="big good">68%</span><p>at five sessions, continue to another</p></div>
+    <div class="card"><span class="big good">89.6%</span><p>at five sessions, self-initiate rather than wait to be nudged</p></div>
+    <div class="card"><span class="big good">64.6%</span><p>use Vaani again within their next five app opens</p></div>
+    <div class="card"><span class="big acc">84.0%</span><p>repeat rate on price, after a good first answer</p></div>
+  </div>
+
+  <p>That last number is the one to hold on to, because it identifies the mechanism precisely. We took every user's first turn of a given ask, graded that first outcome, and checked whether they ever came back and asked the same thing again.</p>
 
   <figure><div class="viz">
     <div class="viz-head"><p class="viz-title">A good first answer is what earns the second session</p><p class="viz-sub">Repeat rate for each DECIDE ask, after a bad first outcome against a good one.</p></div>
     <div id="c-firstask"></div>
-    <p class="viz-cap">On price &mdash; our biggest ask &mdash; a good first answer moves repeat from <b>62.8%</b> to <b>84.0%</b>, and turns per user from 8.2 to 10.7. Outcome quality, not exposure, is the hinge.</p>
+    <p class="viz-cap">On price &mdash; our biggest ask by far &mdash; a good first answer moves repeat from <b>62.8%</b> to <b>84.0%</b>, and turns per user from 8.2 to 10.7. Delivery shows the largest relative lift at 1.37&times;.</p>
   </div></figure>
 
   <div class="grid3">
-    <div class="card"><h4>Density beats channel</h4><p>Deep users had <b>16.7 vs 5.9</b> searches and <b>9.1 vs 2.4</b> turns in their first session. Search-led first sessions bounced at <b>41.7% vs 60.2%</b>.</p></div>
-    <div class="card"><h4>Channel barely matters</h4><p>Nudge-first and organic-first users form habit at <b>7.0% vs 6.2%</b>. Acquisition was never the difference. What happened after adoption was.</p></div>
-    <div class="card"><h4>But repeat can be friction</h4><p>Price is highly repetitive &mdash; <b>8.7 turns per user</b> &mdash; yet only <b>29.6%</b> successful. Repetition without resolution is an unanswered question, not a habit.</p></div>
+    <div class="card"><h4>Density beats channel</h4><p>Deep users had <b>16.7 vs 5.9</b> searches and <b>9.1 vs 2.4</b> turns in their first session. Search-led first sessions bounced at <b>41.7% vs 60.2%</b>. A dense, productive first session is the predictor.</p></div>
+    <div class="card"><h4>Channel barely matters</h4><p>Nudge-first and organic-first users form habit at <b>7.0% vs 6.2%</b>. How they arrived was never the difference. What happened once they got there was.</p></div>
+    <div class="card"><h4>Order impact is real</h4><p>Vaani users order more, and a positive gap survives even after tight matching on how often people open the app. The effect is genuine &mdash; the section that follows is about what it costs.</p></div>
   </div>
 
-  <h3>Vaani users order more &mdash; but the effort is going up, not down</h3>
-  <div class="pair">
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">Effort, heaviest Vaani users vs never-users</p><p class="viz-sub">Matched on how often they open the app.</p></div>
-      <div id="c-effort"></div>
-      <p class="viz-cap">Every measure moves the wrong way &mdash; more clicks per visit, more per order, more products considered, and slightly more visits to a first order.</p>
-    </div></figure>
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">Vaani turns spent per incremental order</p><p class="viz-sub">At four levels of matching rigour. Lower is more efficient.</p></div>
-      <div id="c-cost"></div>
-      <p class="viz-cap">The most carefully matched read is <b>126</b> turns per incremental order, <b>185</b> against control. The gain is real in every cut &mdash; it is simply expensive at today's outcome quality.</p>
-    </div></figure>
-  </div>
-
-  <div class="callout bad"><b>We are creating impact, for a very small number of users, at a high cost per outcome.</b> Both halves of that sentence point the same way: the constraint is not how much Vaani talks. It is what Vaani is able to do when it does.</div>
-</section>
-
-<!-- ============ 05 ============ -->
-<section class="sec" id="outcomes">
-  <p class="part-rule">Problem two &middot; Outcomes</p>
-  <div class="sec-head"><span class="num">05</span><span class="eyebrow">How Vaani is actually used, and where it breaks</span></div>
-  <h2>Vaani is already two products: "show me" and "help me decide." It is good at one of them.</h2>
-
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">What people ask Vaani for</p><p class="viz-sub">2,201,813 turns across 519,160 sessions and 167,082 users.</p></div>
-    <div id="c-mix"></div>
-    <p class="viz-cap">A product built only for voice search would ignore almost a third of real usage.</p>
-  </div></figure>
-
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">Inside DECIDE &mdash; and the one ask that is missing entirely</p><p class="viz-sub">657,387 DECIDE turns by what the user wanted to know.</p></div>
-    <div id="c-decide"></div>
-    <p class="viz-cap">Price is <b>64.1%</b> of the branch, and 44.6% of price turns are outright negotiation. Now read the last row: asking Vaani to <b>compare two products</b> happens <b>556 times in 2.2 million</b>. Not a low-usage feature &mdash; a capability that effectively does not exist, at the exact moment a shopper decides.</p>
-  </div></figure>
-
-  <div class="callout"><b>What counts as a good outcome.</b> For FIND, the user clicks a product Vaani showed them. For DECIDE, the user adds to cart after asking Vaani something. On that definition, here is what works.</div>
-
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">Good outcomes happen when Vaani does the task, not when it talks about it</p><p class="viz-sub">Successful-outcome rate by what Vaani did in response.</p></div>
-    <div id="c-outcome"></div>
-    <p class="viz-cap">Performing the task directly is worth <b>74.4%</b>. A specific answer is worth <b>28.4%</b>, a generic one <b>15.5%</b>. And <b>asking a question back &mdash; when the user asked us to do something &mdash; is the worst thing we do, at 12.6%</b>, across 288,350 turns.</p>
-  </div></figure>
-
-  <p>That ordering is the whole diagnosis of problem two. <b>Do the thing &gt; answer specifically &gt; answer generically &gt; ask the user to try again.</b> Our largest ask by volume, price, is one we can only answer with words &mdash; so it lands at 29.6%.</p>
-
-  <h3>And this is what starts happening over sessions</h3>
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">Each surface hardens into its own job</p><p class="viz-sub">Share of that screen's turns which are DECIDE (product page, cart) or FIND (search, listing, home), first Vaani session against tenth.</p></div>
-    <div id="c-surfaces"></div>
-    <p class="viz-cap">Nothing converges. The product page becomes <i>more</i> of a decision desk over time, search stays refine-only, home stays a launcher. Users are telling us what each surface is for.</p>
-  </div></figure>
-
-  <h3>The deciding journey is where the money is &mdash; and where we are weakest</h3>
-  <div class="pair">
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">Comparison behaviour is what buying looks like</p><p class="viz-sub">Session conversion, split by whether the shopper re-opened any product.</p></div>
-      <div id="c-revisit"></div>
-      <p class="viz-cap">Sessions with a revisit convert at <b>15.4%</b> against <b>3.1%</b>. They are a fifth of sessions and produce <b>55% of all orders</b>.</p>
-    </div></figure>
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">And the hunt after the anchor is long and manual</p><p class="viz-sub">Once a buyer clicks the first product of the type they eventually buy.</p></div>
-      <div id="c-anchor"></div>
-      <p class="viz-cap">Buyers make <b>7.1</b> more same-type clicks after anchoring, and <b>75%</b> of onward clicks stay in the category tree.</p>
-    </div></figure>
-  </div>
-
-  <div class="pair">
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">Re-searching does not rescue a stalling decision</p><p class="viz-sub">Same-category conversion after a price negotiation, by what Vaani did next.</p></div>
-      <div id="c-research"></div>
-      <p class="viz-cap">Same-product closure falls from <b>34.0%</b> to <b>20.8&ndash;23.7%</b> once a re-search fires. The alternate gain does not offset the anchor loss.</p>
-    </div></figure>
-    <figure><div class="viz">
-      <div class="viz-head"><p class="viz-title">Because the re-search drops what was just discussed</p><p class="viz-sub">Share of post-decision re-searches preserving the exact constraint.</p></div>
-      <div id="c-constraint"></div>
-      <p class="viz-cap">Only <b>4.6&ndash;14.8%</b> carry it forward. A shopper says "same but cheaper" and gets a fresh search instead of a branch from the product she liked.</p>
-    </div></figure>
-  </div>
-
-  <div class="callout-deep"><b>Alternate is not "more like this."</b> It is: preserve what the user likes, change what they do not. That is a state-management problem before it is a retrieval problem &mdash; and the current app has nowhere to hold that state.</div>
-</section>
-
-<!-- ============ 06 ============ -->
-<section class="sec" id="lens">
-  <div class="sec-head"><span class="num">06</span><span class="eyebrow">Why both problems have one shape</span></div>
-  <h2>Trust is the hinge, and two frictions block every capability.</h2>
-  <p class="lead">Everything above resolves into one loop. Vaani only earns a second use if the outcome was trustworthy &mdash; so the loop's first node and its third node have to carry the same currency: <b>outcomes</b>.</p>
+  <h3>Which is exactly the loop we want, working</h3>
+  <p>Put those findings together and they describe a single mechanism. Vaani only earns a second use if the outcome was trustworthy &mdash; so the loop's first node and its third node have to carry the same currency: <b>outcomes</b>.</p>
 
   <div class="steps">
     <div class="st"><div class="ic">&#9992;</div><div class="st-t">Nudge</div><div class="st-d">Push an outcome that shows what Vaani can do</div></div>
@@ -569,56 +763,150 @@ figure{margin:22px 0}
     <div class="arw">&rarr;</div>
     <div class="st"><div class="ic">&#8635;</div><div class="st-t">Repeat</div><div class="st-d">Trust drives the next adoption &mdash; the loop runs again</div></div>
   </div>
-  <p class="steps-note">Today the loop breaks at node one: the nudge is a menu, so it never produces the outcome that would earn node four.</p>
+  <p class="steps-note">Today the loop breaks at node one. The nudge is a menu, so it never produces the outcome that would earn node four.</p>
 
-  <h3>Underneath, every capability is blocked by one of two frictions</h3>
-  <div class="duo">
-    <div class="duo-card">
-      <p class="tag">Not knowing &mdash; our job: show the path</p>
-      <h4>They can't want what they can't see</h4>
-      <p>The user doesn't know a capability exists, so they never reach for it.</p>
-      <div class="eg"><b>e.g.</b> The feed can be narrowed with filters &mdash; but the user has never discovered that filters exist.</div>
-      <p class="arrow-note">&rarr; Surface the capability at the exact moment it becomes useful.</p>
-    </div>
-    <div class="duo-card">
-      <p class="tag">Not expressing &mdash; our job: shorten the path</p>
-      <h4>They know, but can't operate it</h4>
-      <p>The user knows the capability exists, but can't work it efficiently enough to reach their goal.</p>
-      <div class="eg"><b>e.g.</b> They know filters exist &mdash; but can't combine the right ones to land on what they have in mind.</div>
-      <p class="arrow-note">&rarr; Deliver the outcome without demanding mastery of the mechanics.</p>
-    </div>
-  </div>
-  <p>We can measure both. <b>Not knowing</b> is the 87.4% who never adopt, and the 556 comparison asks. <b>Not expressing</b> is visible in every search box: two-thirds of queries carry no attribute at all, and a one-word query continues the shopper's own prior browsing only <b>6.8%</b> of the time.</p>
+  <div class="imp"><p class="lbl">The read</p><p>Habit is not a motivation problem and it is not an acquisition-channel problem. It is an <b>outcome-quality problem at first contact</b>. Fix what happens in session one and the loop turns on its own.</p></div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section class="sec" id="usage">
+  <p class="part-rule">Problem two &middot; Outcomes</p>
+  <div class="sec-head"><span class="num">05</span><span class="eyebrow">What habitual usage reveals</span></div>
+  <p class="verdict">Vaani is not one universal voice behaviour. The job changes with the mission and the real estate.</p>
+  <p class="lead">Now that we know habit can form, the next question is what those users are actually doing &mdash; because that tells us whether repeat usage means the shopping problem is being solved.</p>
 
   <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">Shoppers know what they want. They cannot say it.</p><p class="viz-sub">How often a search continues what the shopper was already browsing, by query length.</p></div>
-    <div id="c-query"></div>
-    <p class="viz-cap">Before a first search, shoppers click through a mean of <b>137 products</b>. Then <b>41%</b> search a category they never browsed in that session. The gap between what they have shown us and what they manage to type is the opportunity.</p>
+    <div class="viz-head"><p class="viz-title">What people ask Vaani for</p><p class="viz-sub">2,201,813 classified turns across 519,160 sessions and 167,082 users.</p></div>
+    <div id="c-mix"></div>
+    <p class="viz-cap">Roughly six in ten turns are "show me something." Three in ten are about the product already in hand. The remainder is mostly unintelligible audio, and it shrinks with experience &mdash; 13.7% of turns in a first session, 9.7% by the tenth.</p>
   </div></figure>
 
-  <div class="callout-deep">Intelligence is the first tool we have that can solve both frictions at once &mdash; <b>show the path</b> where the user doesn't know, and <b>shorten the path</b> where they can't express. The next two sections are those two jobs, given two surfaces.</div>
+  <p>FIND is not simply "search for a category" either. Most of what users say already carries usable constraints:</p>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">The shape of a FIND ask</p><p class="viz-sub">1,289,995 FIND turns by what the user supplied.</p></div>
+    <div id="c-findshape"></div>
+    <p class="viz-cap"><b>81.3%</b> of FIND includes a category. "Attributes only" usually leans on what is already on screen &mdash; and "no category" is often a stated problem or a dissatisfaction, not blank intent.</p>
+  </div></figure>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">Inside DECIDE &mdash; and the one ask that is missing entirely</p><p class="viz-sub">657,387 DECIDE turns by what the user wanted to know.</p></div>
+    <div id="c-decide"></div>
+    <p class="viz-cap">Price is <b>64.1%</b> of the branch &mdash; about <b>19% of everything anyone says to Vaani</b> &mdash; and 44.6% of price turns are outright negotiation. Now read the last row: asking Vaani to <b>compare two products</b> happens <b>556 times in 2.2 million</b>. Not a low-usage feature. A capability that effectively does not exist, at the exact moment a shopper decides.</p>
+  </div></figure>
+
+  <p>The habit hardens in one direction too. Between a user's first Vaani session and their tenth, DECIDE grows from 27.3% to about 32% of turns, and price grows from 60.0% to 66.5% of DECIDE. Power users skip the curve entirely &mdash; price is already 64.6% of their DECIDE turns in session one.</p>
+
+  <h3>And the job changes with the surface</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Surface</th><th>What users mostly do</th><th>What Vaani should do</th></tr></thead>
+    <tbody>
+      <tr><td><b>Home</b></td><td>Mission opening and re-opening; ~78&ndash;80% FIND</td><td>Launch an intent. Offer resume only when the evidence is strong.</td></tr>
+      <tr><td><b>Search / CLP</b></td><td>Refine; ~86&ndash;88% FIND</td><td>Apply constraints visibly to the active feed and show what changed.</td></tr>
+      <tr><td><b>PDP</b></td><td>Evaluate the product; DECIDE grows to ~53%</td><td>Decision desk &mdash; answer, and preserve the anchor.</td></tr>
+      <tr><td><b>Cart</b></td><td>Decision plus action</td><td>Final amount, quantity, delivery and the exact next step.</td></tr>
+      <tr><td><b>Payment</b></td><td>Structurally high confusion</td><td>Be screen-aware. Guide the transaction, don't run product search.</td></tr>
+    </tbody>
+  </table></div>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">Each surface hardens into its own job</p><p class="viz-sub">Share of that screen's turns which are DECIDE (product page, cart) or FIND (search, listing, home), first Vaani session against tenth.</p></div>
+    <div id="c-surfaces"></div>
+    <p class="viz-cap">Nothing converges. The product page becomes <i>more</i> of a decision desk over time, search stays refine-only, home stays a launcher. Users are telling us what each surface is for.</p>
+  </div></figure>
+
+  <p>Two more details worth carrying forward. Power users start decision-heavy: in their first session <b>54.0%</b> of turns are on the product page, <b>54.4%</b> of those asks are DECIDE, and <b>64.6%</b> of DECIDE is price. And people do not learn to ask Vaani earlier &mdash; a product-page turn typically lands on the <i>second</i> product of that type they have opened, and with experience that gets <i>deeper</i>, from 4.22 same-type clicks before the turn in session one to 5.50 by session eleven. Vaani has become an end-of-crawl tool, used after the manual work is already done.</p>
+
+  <h3>All of which maps onto five mission states</h3>
+  <p>A better unit than "screen" is the shopping mission. At any moment a shopper is in one of five states &mdash; four inside a session, one that starts a new one.</p>
+  <table class="jobs">
+    <thead><tr><th>State</th><th>In the user's words</th><th>What our data says</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Start</td><td class="said">"I haven't seen any products yet"</td><td>57.5% of home search actions. Home is already the launcher.</td></tr>
+      <tr><td class="k">Refine</td><td class="said">"I haven't found anything I like yet"</td><td>44% of search-page searches. The one mission we serve reasonably well.</td></tr>
+      <tr><td class="k">Alternate</td><td class="said">"I found something &mdash; is there better?"</td><td>42% of PDP-triggered searches are the same thing with a different attribute.</td></tr>
+      <tr><td class="k">Decide</td><td class="said">"I want to be informed before I buy"</td><td>29.9% of all turns &mdash; but only 556 explicit comparisons.</td></tr>
+      <tr><td class="k">Resume</td><td class="said">"I abandoned this &mdash; let me pick it back up"</td><td>Under-built today. Its best door only exists if the user expressed preferences to Vaani earlier.</td></tr>
+    </tbody>
+  </table>
+  <p class="source">Resume is a downstream reward for upstream adoption &mdash; which is another reason the two problems in this document are linked.</p>
 </section>
+<!-- ============ 06 ============ -->
+<section class="sec" id="ceiling2">
+  <p class="part-rule">Problem two &middot; Outcomes</p>
+  <div class="sec-head"><span class="num">06</span><span class="eyebrow">The second ceiling: outcome quality</span></div>
+  <p class="verdict">Solving adoption alone would still not be enough.</p>
+  <p class="lead">Suppose every user adopted Vaani tomorrow. The product they arrived at would still be bounded by the app it sits on &mdash; because if an answer is not already a feed, a product module, a search result or an app action, Vaani has nowhere to put it.</p>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">Good outcomes happen when Vaani does the task, not when it talks about it</p><p class="viz-sub">Successful-outcome rate by what Vaani did in response. A good outcome means the user clicked a product Vaani showed (FIND), or added to cart after asking (DECIDE).</p></div>
+    <div id="c-outcome"></div>
+    <p class="viz-cap">Performing the task directly is worth <b>74.4%</b>. A specific spoken answer is worth <b>28.4%</b>, a generic one <b>15.5%</b>. And <b>asking a question back &mdash; when the user has just asked us to do something &mdash; is the worst thing we do, at 12.6%</b> across 288,350 turns.</p>
+  </div></figure>
+
+  <p>That ordering is the whole diagnosis: <b>do the thing &gt; answer specifically &gt; answer generically &gt; ask the user to try again.</b> Our largest ask by volume is price, which today we can only answer with words &mdash; so it lands at 29.6%. And the ask that would actually resolve a price question, comparison, is the one nobody knows to make.</p>
+
+  <h3>The deciding journey is where the value is, and where we are weakest</h3>
+  <div class="pair">
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Comparison behaviour is what buying looks like</p><p class="viz-sub">Session conversion, split by whether the shopper re-opened any product.</p></div>
+      <div id="c-revisit"></div>
+      <p class="viz-cap">Sessions with a revisit convert at <b>15.4%</b> against <b>3.1%</b>. They are a fifth of sessions and produce <b>55% of all orders</b>.</p>
+    </div></figure>
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">And the hunt after the anchor is long and manual</p><p class="viz-sub">Once a buyer clicks the first product of the type they eventually buy.</p></div>
+      <div id="c-anchor"></div>
+      <p class="viz-cap">Buyers make <b>7.1</b> more same-type clicks after anchoring; <b>75%</b> of onward clicks stay in the category tree; anchoring at twice the price finally paid costs <b>+56%</b> more browsing.</p>
+    </div></figure>
+  </div>
+
+  <div class="pair">
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Re-searching does not rescue a stalling decision</p><p class="viz-sub">Same-category conversion after a price negotiation, by what Vaani did next.</p></div>
+      <div id="c-research"></div>
+      <p class="viz-cap">Same-product closure falls from <b>34.0%</b> to <b>20.8&ndash;23.7%</b> once a broad re-search fires. The alternate gain does not offset the anchor loss.</p>
+    </div></figure>
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Because the re-search drops what was just discussed</p><p class="viz-sub">Share of post-decision re-searches preserving the exact constraint.</p></div>
+      <div id="c-constraint"></div>
+      <p class="viz-cap">Only <b>4.6&ndash;14.8%</b> carry it forward. A shopper says "same but cheaper" and gets a fresh search instead of a branch from the product she liked.</p>
+    </div></figure>
+  </div>
+
+  <p>There is no place in the current product to hold "keep this, change that." <b>Alternate is not "more like this"</b> &mdash; it is preserve what the user likes, change what they do not. That is a state-management problem before it is a retrieval problem, and state is exactly what a feed cannot hold.</p>
+
+  <h3>And effort is not falling for the people who use Vaani most</h3>
+  <div class="pair">
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Heaviest Vaani users vs never-users</p><p class="viz-sub">Matched on how often they open the app.</p></div>
+      <div id="c-effort"></div>
+      <p class="viz-cap">Every measure moves the wrong way &mdash; more clicks per visit, more per order, more products considered, and slightly more visits to a first order.</p>
+    </div></figure>
+    <figure><div class="viz">
+      <div class="viz-head"><p class="viz-title">Vaani turns spent per incremental order</p><p class="viz-sub">At four levels of matching rigour. Lower is more efficient.</p></div>
+      <div id="c-cost"></div>
+      <p class="viz-cap">The most carefully matched read is <b>126</b> turns per incremental order, <b>185</b> against control. The order gain is real in every cut &mdash; it is simply expensive at today's outcome quality.</p>
+    </div></figure>
+  </div>
+
+  <div class="callout-deep"><b>Everything we have built makes the app easier to operate. It does not yet make intelligence itself a way to shop.</b> Vaani is good at operating an existing construct. It is weak the moment the answer requires reasoning, state, comparison, or an interface the app does not have.</div>
+</section>
+
 <!-- ============ 07 ============ -->
 <section class="sec" id="two-fixes">
-  <p class="part-rule">The fix</p>
-  <div class="sec-head"><span class="num">07</span><span class="eyebrow">Two surfaces, two jobs</span></div>
-  <h2>Secondary gets users to intelligence. Primary puts it to work.</h2>
-  <p class="lead">One surface fixes adoption, the other fixes outcomes. They are not two products &mdash; they are a division of responsibility. <b>If the existing surface can complete the task well, Vaani should assist it. If the task needs reasoning or an interface the app does not have, Vaani should own that part of the journey.</b></p>
+  <div class="sec-head"><span class="num">07</span><span class="eyebrow">Two problems require two fixes</span></div>
+  <p class="verdict">A better nudge cannot solve both of these.</p>
+  <p class="lead">One ceiling is that intelligence is invisible until the user already knows what to ask. The other is that intelligence has nowhere to express itself once they do. Those are different failures, and they need different answers.</p>
 
-  <div class="duo">
-    <div class="duo-card" style="border-top:4px solid var(--c-find)">
-      <p class="tag">01 &middot; Fixes adoption</p>
-      <h4>Outcome-based nudges, in UI and voice</h4>
-      <p>Nudges show actual outcomes Vaani produced &mdash; not capability categories. UI persistence fixes every voice failure at once: volume, privacy, TTS quality, transience.</p>
-      <p class="arrow-note">The nudge becomes the demo &mdash; a nudge, a proof of intelligence and a trust deposit in one.</p>
-    </div>
-    <div class="duo-card" style="border-top:4px solid var(--c-decide)">
-      <p class="tag">02 &middot; Fixes outcomes</p>
-      <h4>Vaani woven into every real estate</h4>
-      <p>A secondary integration inside each surface, solving that surface's own intent. It educates users about Vaani as a side effect of usefulness, never a tutorial.</p>
-      <p class="arrow-note">Seeds trust so users arrive at the primary surface already convinced.</p>
-    </div>
-  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Problem</th><th>Why it happens</th><th>Product fix</th></tr></thead>
+    <tbody>
+      <tr><td><b>Adoption &mdash; capability discovery</b></td><td>Intelligence is invisible until the user already knows what to ask for</td><td><b>Secondary surfaces</b></td></tr>
+      <tr><td><b>Outcome quality &mdash; intelligence expression</b></td><td>Vaani is constrained by app constructs that already exist</td><td><b>A primary surface</b></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout-deep" style="font-size:20px"><b>Secondary gets users to intelligence. Primary puts it to work.</b></div>
 
   <div class="tw"><table>
     <thead><tr><th></th><th>Secondary surface</th><th>Primary surface</th></tr></thead>
@@ -636,34 +924,37 @@ figure{margin:22px 0}
 </section>
 
 <!-- ============ 08 ============ -->
-<section class="sec" id="secondary">
-  <p class="part-rule">Fixing adoption</p>
+<section class="sec future" id="secondary">
+  <p class="part-rule">The future model &middot; fixing adoption</p>
   <div class="sec-head"><span class="num">08</span><span class="eyebrow">Secondary surfaces</span></div>
-  <h2>Six ways to show intelligence before asking for anything.</h2>
-  <p class="lead">A secondary surface is not another Vaani button. It is Vaani doing a small, useful thing inside the task the user is already doing &mdash; and signing it.</p>
+  <h2>Show first, ask later.</h2>
+  <p class="lead">A secondary surface is not another Vaani button. It is Vaani doing a small, useful thing inside the task the user is already doing &mdash; and signing it. The operating model is five steps, and none of them start with a prompt.</p>
 
-  <div class="grid3">
-    <div class="card tint"><h4>Verdict</h4><p>"20 products here are under &#8377;500." Shows Vaani understands what you are looking at.</p></div>
-    <div class="card tint"><h4>Suggestion</h4><p>"Suggested by Vaani" &mdash; a cheaper substitute, a complement, an in-stock alternative.</p></div>
-    <div class="card tint"><h4>Preference learning</h4><p>"You seem to skip green kurtis &mdash; show fewer?" A hypothesis the user can correct.</p></div>
-    <div class="card tint"><h4>Tip / nugget</h4><p>"Pay prepaid, save &#8377;50." "Buyers say this runs small." Consumable without a conversation.</p></div>
-    <div class="card tint"><h4>Work already done</h4><p>"While you were away, Vaani organised your wishlist." Doing beats asking to do.</p></div>
-    <div class="card tint"><h4>Functional Vaani</h4><p>Track, cancel, return, exchange, review &mdash; Vaani-led flows where intent already exists.</p></div>
+  <div class="steps">
+    <div class="st"><div class="ic">&#9673;</div><div class="st-t">Observe context</div><div class="st-d">Read what the user is doing right now</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">&#10022;</div><div class="st-t">Do something useful</div><div class="st-d">Produce a real micro-outcome</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">&#9679;</div><div class="st-t">Attribute it</div><div class="st-d">Make it unmistakable that Vaani did it</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">&#10003;</div><div class="st-t">Let them react</div><div class="st-d">Yes / no / why / show me</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st hero-node"><div class="ic">&#8599;</div><div class="st-t">Expand</div><div class="st-d">Only when the user wants more</div></div>
   </div>
-  <p class="source">Some of this intelligence already exists inside Meesho. Packaging it as Vaani is what builds one consistent, attributable identity.</p>
 
-  <h3>Where it shows up &mdash; placing fruit at eye level</h3>
+  <h3>Six primitives</h3>
   <div class="tw"><table>
-    <thead><tr><th>Surface</th><th>What Vaani says</th><th>Mission it serves</th></tr></thead>
+    <thead><tr><th>Primitive</th><th>What Vaani does</th><th>Example</th></tr></thead>
     <tbody>
-      <tr><td><b>Feed</b></td><td>"You seem to be looking for red kurtis under &#8377;300 &mdash; show more?"</td><td>Refine</td></tr>
-      <tr><td><b>PDP</b></td><td>"Vaani's take: buyers like the fabric, but sizing runs small. M fits you."</td><td>Decide</td></tr>
-      <tr><td><b>Cart</b></td><td>"Vaani found a similar product &#8377;80 cheaper."</td><td>Alternate</td></tr>
-      <tr><td><b>Wishlist</b></td><td>"Vaani organised your saved items &mdash; this one is the best value of the four."</td><td>Decide / Compare</td></tr>
-      <tr><td><b>Orders</b></td><td>"Tell Vaani what you need done" &mdash; track, cancel, return, exchange, review.</td><td>Functional habit</td></tr>
-      <tr><td><b>Homepage</b></td><td>"Vaani picked these because Rakhi is coming up." Curated, not just ranked.</td><td>Start</td></tr>
+      <tr><td><b>Verdict</b></td><td>Interprets the current set, product or situation</td><td>"20 products here are under &#8377;500." / "Sizing reviews are mixed."</td></tr>
+      <tr><td><b>Suggestion</b></td><td>Surfaces a useful next option</td><td>"Suggested by Vaani" &mdash; a cheaper substitute, an in-stock alternative</td></tr>
+      <tr><td><b>Preference hypothesis</b></td><td>Makes an inference visible and correctable</td><td>"You seem to skip green kurtis &mdash; show fewer?"</td></tr>
+      <tr><td><b>Tip / nugget</b></td><td>One useful insight, consumable without a conversation</td><td>"Pay prepaid, save &#8377;50." / "Buyers say this runs small."</td></tr>
+      <tr><td><b>Work already done</b></td><td>Completes something before being asked</td><td>"While you were away, Vaani organised your wishlist."</td></tr>
+      <tr><td><b>Functional action</b></td><td>Executes a job where intent already exists</td><td>Track, cancel, return, exchange, review</td></tr>
     </tbody>
   </table></div>
+  <p class="source">Some of this intelligence already exists inside Meesho. Packaging it as Vaani is what builds one consistent, attributable identity.</p>
 
   <h3>What this looks like on screen</h3>
   <div class="mocks">
@@ -693,7 +984,7 @@ figure{margin:22px 0}
           <span class="vlink">Why? &rsaquo;</span>
         </div>
       </div>
-      <p class="mock-cap"><b>Answering the 29.6% ask properly.</b> A verdict with evidence, instead of a spoken price.</p>
+      <p class="mock-cap"><b>The 29.6% ask, answered properly.</b> A verdict with evidence, instead of a spoken price.</p>
     </div>
     <div class="mock-col">
       <p class="mock-tag">Wishlist &middot; work already done</p>
@@ -713,72 +1004,106 @@ figure{margin:22px 0}
   </div>
   <p class="steps-note">Native to each surface, consumable in place, one tap from a conversation &mdash; and always signed "Vaani."</p>
 
-  <div class="callout bad"><b>The guardrail.</b> Omnipresent is not the same as inescapable. If an intervention does not make the current surface easier or more useful, it should not be there. Our users do not complain when we get this wrong &mdash; they just avoid.</div>
+  <h3>The signature: one identity, different local costumes</h3>
+  <p>Feed intelligence should look native to a feed. Product-page intelligence should look native to a product page. Orders intelligence should look native to orders. What travels between them is not the UI &mdash; it is the mark. Repeated association is what turns scattered smart features into a single entity the user can name.</p>
+
+  <div class="proof"><span class="pf-who">Microsoft Word</span><p>For eligible documents, Word places a Copilot-written summary at the top. You read it without invoking anything; "open in chat" sits underneath for when you want more. <b>Useful output appears before any prompt.</b> <a href="https://support.microsoft.com/en-us/office/summarize-a-document-with-microsoft-365-copilot-755227aa-b4e0-4ced-80c0-bb0df44295e9" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <div class="proof"><span class="pf-who">Notion</span><p>Notion removed the empty prompt box: highlight text and it offers Explain or Improve writing in one click. Teams saw meaningfully more value from that interaction change alone. <b>"Not knowing what to ask" is solved by showing the path.</b> <a href="https://www.notion.com/releases/2024-07-29" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <div class="proof"><span class="pf-who">Meta AI</span><p>Dissolved into search, DMs, feed and creation &mdash; each in that surface's own idiom, never importing a chat window into someone else's screen. The standalone app came only after the identity had been learned. <b>One intelligence, many local manifestations.</b> <a href="https://about.fb.com/news/2024/06/meta-ai-arrives-in-india-leading-ai-assistant-now-at-your-fingertip/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <div class="proof"><span class="pf-who">X / Grok</span><p>Moved from a nav-bar destination to a button on the post itself. The object carries the context, so the user never rebuilds it. <b>The entry point is the intent, not the brand.</b> <a href="https://x.ai/news/grok-1212" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+
+  <h3>Where it shows up &mdash; the full reference map</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Real estate</th><th>What Vaani says</th><th>Mission</th></tr></thead>
+    <tbody>
+      <tr><td><b>Feed / search results</b></td><td>"Vaani found 14 cotton kurtis under &#8377;500 in these results." / "You have skipped most synthetic fabrics &mdash; avoid them?"</td><td>Refine</td></tr>
+      <tr><td><b>PDP</b></td><td>"Buyers like the fabric, but sizing is inconsistent." / "Vaani recommends M for you." / "Slightly expensive versus similar products."</td><td>Decide</td></tr>
+      <tr><td><b>PDP bounce</b></td><td>"Didn't like this one?" &mdash; price, colour, design, quality. Later: "You seem to be rejecting on price. Keep the style and show cheaper?"</td><td>Preference learning</td></tr>
+      <tr><td><b>Wishlist / recently viewed</b></td><td>"Vaani found a cheaper option similar to this." / "These two are close substitutes &mdash; compare?" / "This is the best value among your saved products."</td><td>Alternate / Compare</td></tr>
+      <tr><td><b>Cart</b></td><td>"Vaani found a similar product &#8377;80 cheaper." / "This item has weaker reviews than another you shortlisted."</td><td>Alternate</td></tr>
+      <tr><td><b>Homepage / Inspire Me</b></td><td>"Vaani picked these because Rakhi is coming up." Curated, not merely ranked.</td><td>Start</td></tr>
+      <tr><td><b>Search entry</b></td><td>"Continue with cotton kurtis under &#8377;500?" Shorten the path rather than restarting intent.</td><td>Start / Refine</td></tr>
+      <tr><td><b>Orders</b></td><td>"Tell Vaani what you need done" &mdash; track, cancel, return, exchange, review.</td><td>Functional habit</td></tr>
+      <tr><td><b>Post-purchase</b></td><td>"Vaani found matching leggings for what you bought." / "This is unavailable now &mdash; here is a close replacement."</td><td>Resume</td></tr>
+      <tr><td><b>Sharing</b></td><td>"Vaani wrote a message you can send with this product." / "Want to share the cheaper option instead?"</td><td>&mdash;</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout"><b>The guardrail.</b> Omnipresent is not the same as inescapable. If an intervention does not make the current surface easier or more useful, it should not be there. Our users do not complain when we get this wrong &mdash; they just avoid.</div>
 </section>
 
 <!-- ============ 09 ============ -->
-<section class="sec" id="playbook">
-  <p class="part-rule">Fixing adoption</p>
-  <div class="sec-head"><span class="num">09</span><span class="eyebrow">How this drives adoption</span></div>
+<section class="sec future" id="playbook">
+  <p class="part-rule">The future model &middot; fixing adoption</p>
+  <div class="sec-head"><span class="num">09</span><span class="eyebrow">How secondary surfaces drive adoption</span></div>
   <h2>Show &rarr; Attribute &rarr; Interact &rarr; Expand &rarr; Delegate</h2>
+  <p class="lead">The examples in the last section are not a list of features. They are an adoption system, and this is the mechanism it runs on.</p>
 
-  <div class="steps">
-    <div class="st"><div class="ic">&#9673;</div><div class="st-t">Show</div><div class="st-d">Do useful intelligence without requiring adoption</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic"><svg viewBox="0 0 24 24" width="60%" height="60%" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.93V21h2v-3.07A7 7 0 0 0 19 11h-2z"/></svg></div><div class="st-t">Attribute</div><div class="st-d">Make it unmistakable: "Vaani did this"</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">&#10003;</div><div class="st-t">Interact</div><div class="st-d">Lightweight reactions: yes / no / why / show me</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">&#8599;</div><div class="st-t">Expand</div><div class="st-d">The reaction becomes a contextual conversation</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st hero-node"><div class="ic">&#9758;</div><div class="st-t">Delegate</div><div class="st-d">"Vaani, just do this for me"</div></div>
+  <div class="ladder">
+    <div class="step"><h4>Show</h4><p>Produce a useful micro-outcome without requiring adoption. The user gets value whether or not they ever engage.</p></div>
+    <div class="step"><h4>Attribute</h4><p>Make it unmistakable that Vaani did it. Repeated association is what builds an entity in the user's head rather than a scattering of smart features.</p></div>
+    <div class="step"><h4>Interact</h4><p>Let them respond cheaply &mdash; yes, no, why, show me, compare. Vaani has already produced the first turn; the user only has to answer it.</p></div>
+    <div class="step"><h4>Expand</h4><p>The reaction becomes a contextual conversation, with everything already loaded.</p></div>
+    <div class="step"><h4>Delegate</h4><p>Eventually the user stops operating the interface for that task at all: "Vaani, just do this for me."</p></div>
+  </div>
+
+  <div class="callout">Compare that with today. The current sequence is <b>tell &rarr; ask the user to adopt &rarr; hope they imagine the value.</b> That is why 87.4% never start: we ask for trust before giving anyone a reason to extend it.</div>
+
+  <h3>Six beliefs the surfaces have to build</h3>
+  <div class="beliefs">
+    <div class="belief">"It understands what I'm doing"</div>
+    <div class="belief">"It notices things useful to me"</div>
+    <div class="belief">"It does work before I even ask"</div>
+    <div class="belief">"It remembers my journey"</div>
+    <div class="belief">"I can correct it when it's wrong"</div>
+    <div class="belief">"For anything bigger, I can just ask it"</div>
   </div>
   <p class="steps-note">Don't sell the intelligence. Demonstrate it. The secondary surface's first job is not conversation &mdash; it is evidence.</p>
-
-  <div class="callout">Compare this with what we do today. The current sequence is <b>tell &rarr; ask the user to adopt &rarr; hope they imagine the value</b>. That is why 87.4% never start: we ask for trust before we have given anyone a reason to extend it.</div>
 </section>
 <!-- ============ 10 ============ -->
-<section class="sec" id="primary">
-  <p class="part-rule">Fixing outcomes</p>
-  <div class="sec-head"><span class="num">10</span><span class="eyebrow">The primary surface</span></div>
-  <h2>Don't fix browsing. Own what comes after.</h2>
-  <p class="lead">Users already know how to browse. The goal is not "make every interaction conversational." Let them browse naturally until intelligence can materially improve the journey &mdash; then take real control.</p>
+<section class="sec future" id="primary">
+  <p class="part-rule">The future model &middot; fixing outcomes</p>
+  <div class="sec-head"><span class="num">10</span><span class="eyebrow">Primary surface</span></div>
+  <h2>Not a chat screen &mdash; a generative shopping interface.</h2>
+  <p class="lead">Users already know how to browse. The goal is not to make every interaction conversational. Let them browse naturally until intelligence can materially improve the journey &mdash; then take real control.</p>
 
   <div class="steps">
-    <div class="st"><div class="ic">&#9776;</div><div class="st-t">Browse naturally</div><div class="st-d">The app exactly as it is today</div></div>
+    <div class="st"><div class="ic">&#9776;</div><div class="st-t">Browse naturally</div><div class="st-d">The app exactly as it is today. If it isn't broken, don't fix it.</div></div>
     <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">&#9873;</div><div class="st-t">Find an anchor</div><div class="st-d">Intent direction becomes clear</div></div>
+    <div class="st"><div class="ic">&#9873;</div><div class="st-t">Find an anchor</div><div class="st-d">A product close to what they want. Intent direction becomes clear.</div></div>
     <div class="arw">&rarr;</div>
     <div class="st hero-node"><div class="ic">&#10022;</div><div class="st-t">Vaani takes over the mission</div><div class="st-d">Evaluate &middot; Compare &middot; Alternate &middot; Decide</div></div>
   </div>
   <p class="steps-note">"Browse &rarr; find anchor" becomes "anchor &rarr; understand intent &rarr; Vaani actively completes the mission."</p>
 
-  <p>The primary surface is <b>not a chat screen</b>. It is a Vaani-owned shopping surface for the missions the app cannot express &mdash; "same look but cheaper", "which of these should I buy?", "continue what I was looking at yesterday". The principle is <b>task first, UI second</b>: understand the mission, then render the interface that solves it.</p>
+  <div class="callout-deep" style="font-size:19px"><b>Voice in, anything out.</b> Input stays conversational because it lets users express complex intent cheaply. Output is whatever the decision needs &mdash; cards, comparisons, filters, product sets, infographics, review synthesis, size visualisation, generated UI. <b>Conversational input does not require conversational output.</b></div>
+  <p>That single separation also disarms the third adoption failure from &sect;03. Low volume, shared households and weak TTS all stop being load-bearing the moment the answer is something you can see.</p>
 
-  <div class="callout-deep"><b>Voice in, anything out.</b> Input stays conversational &mdash; voice primary, text secondary &mdash; because it lets users express complex intent cheaply. Output is whatever the decision needs: comparisons, alternatives, infographics, generated UI. <b>Conversational input does not require conversational output.</b></div>
-
+  <h3>Four jobs the primary surface owns</h3>
   <div class="tw"><table>
-    <thead><tr><th>Mission</th><th>What Vaani owns</th><th>What the interface needs</th></tr></thead>
+    <thead><tr><th>Mission</th><th>What Vaani owns</th><th>What the interface may need</th></tr></thead>
     <tbody>
-      <tr><td><b>Alternate</b></td><td>Preserve what the user likes; change the failing constraint</td><td>Pinned anchor, must-keep / must-change, 5&ndash;10 alternatives with reasons, easy return</td></tr>
-      <tr><td><b>Compare</b></td><td>Organise real candidates on the dimensions that matter here</td><td>Side-by-side evidence, user-specific criteria, explicit trade-offs</td></tr>
-      <tr><td><b>Decide</b></td><td>Synthesize price, quality, reviews, seller, delivery and fit</td><td>Verdict, evidence, follow-up actions</td></tr>
-      <tr><td><b>Resume</b></td><td>Carry a past mission forward instead of restarting</td><td>Previous anchors, expressed preferences, what changed since</td></tr>
+      <tr><td><b>Alternate</b></td><td>Preserve what the user likes and change the failing constraint</td><td>Pinned anchor, must-keep / must-change, a small alternative set, reason labels, easy return</td></tr>
+      <tr><td><b>Compare</b></td><td>Organise real candidates around what matters for this mission</td><td>Side-by-side evidence, mission-specific criteria, explicit trade-offs</td></tr>
+      <tr><td><b>Decide</b></td><td>Synthesize price, reviews, seller, delivery, fit and user context</td><td>Verdict, evidence, uncertainty, next actions</td></tr>
+      <tr><td><b>Resume</b></td><td>Carry the mission forward instead of restarting discovery</td><td>Prior anchors, expressed preferences, what changed, new options</td></tr>
     </tbody>
   </table></div>
 
+  <h3>A two-way window</h3>
   <div class="duo">
-    <div class="duo-card"><p class="tag">Meesho &rarr; user</p><h4>Show them the future</h4><p>Expose capabilities far richer than the current app supports: personalised comparisons, anchor-preserving alternatives, review synthesis, size visualisation &mdash; UI generated per mission.</p></div>
-    <div class="duo-card"><p class="tag">User &rarr; Meesho</p><h4>Let them tell us what it should be</h4><p>An unconstrained interface reveals what users actually expect: what to automate, where the app fails, which decisions they struggle with. A discovery mechanism for the future product.</p></div>
+    <div class="duo-card"><p class="tag">Meesho &rarr; user</p><h4>Show them the future</h4><p>Expose capabilities far richer than the current app supports: personalised comparisons, anchor-preserving alternatives, review synthesis, size visualisation &mdash; UI generated per mission rather than forced into one fixed layout.</p></div>
+    <div class="duo-card"><p class="tag">User &rarr; Meesho</p><h4>Let them tell us what it should be</h4><p>An unconstrained interface reveals what users actually expect: what to automate, where the app fails, which decisions they struggle with. Every session is a discovery mechanism for the future product.</p></div>
   </div>
   <p class="steps-note">We use the primary surface to show users the future of Meesho &mdash; while users use it to tell us what that future should be.</p>
 </section>
 
 <!-- ============ 11 ============ -->
-<section class="sec" id="turn0">
-  <p class="part-rule">How the two connect</p>
-  <div class="sec-head"><span class="num">11</span><span class="eyebrow">The handoff</span></div>
-  <h2>Turn Zero &mdash; the conversation starts before the user speaks.</h2>
+<section class="sec future" id="turn0">
+  <p class="part-rule">The future model &middot; connecting the two</p>
+  <div class="sec-head"><span class="num">11</span><span class="eyebrow">Turn Zero</span></div>
+  <h2>The conversation starts before the user speaks.</h2>
+  <p class="lead">Secondary and primary only work as one intelligence if context survives the jump. A user should never restate something Vaani already had on screen.</p>
 
   <div class="handoff">
     <div class="ho-sec">
@@ -798,7 +1123,9 @@ figure{margin:22px 0}
       <p class="note">The user's first words are already a refinement &mdash; no blank screen, no restart, no re-explaining.</p>
     </div>
   </div>
-  <p class="steps-note">The intervention is Turn 0. The tap is Turn 1. Context carries &mdash; this is what makes Vaani feel truly aware.</p>
+  <p class="steps-note">The intervention is Turn Zero. The tap is Turn One.</p>
+
+  <p>The connection has to work in reverse too. Once Vaani has generated alternatives or completed a comparison, the user moves back into normal browsing &mdash; images, variants, cart, checkout. <b>We do not trap the journey inside an AI surface.</b> Each surface owns the part of the journey it is best at.</p>
 
   <div class="tw"><table>
     <thead><tr><th>Handoff</th><th>Secondary &middot; Turn 0</th><th>Primary continuation</th></tr></thead>
@@ -806,138 +1133,186 @@ figure{margin:22px 0}
       <tr><td><b>Feed &rarr; Refine</b></td><td>"Vaani found 14 cotton kurtis under &#8377;500."</td><td>"Show me" opens a curated result already carrying cotton, price band and feed context</td></tr>
       <tr><td><b>PDP &rarr; Decide</b></td><td>"Reviews are positive on fabric, mixed on sizing."</td><td>"Compare with the one I saw earlier" opens with both products and their evidence</td></tr>
       <tr><td><b>Wishlist &rarr; Alternate</b></td><td>"Vaani found a cheaper alternative."</td><td>"Why is it better?" opens a comparison preserving the original anchor</td></tr>
-      <tr><td><b>Orders &rarr; Functional</b></td><td>"Delivery is delayed by two days."</td><td>"Cancel it" continues straight into the order action</td></tr>
+      <tr><td><b>Orders &rarr; Functional</b></td><td>"Delivery is delayed by two days."</td><td>"Cancel it" continues straight into the correct order action</td></tr>
     </tbody>
   </table></div>
-  <p>The connection works in reverse too. Once Vaani has generated alternatives or completed a comparison, the user moves back into normal browsing &mdash; images, variants, cart, checkout. Each surface owns the part of the journey it is best at.</p>
+
+  <h3>This is shipping today, in a shopping app</h3>
+  <p>Two live examples, both on the ask that dominates our own DECIDE branch. The first is entered through a question the user already had; the second needs no question at all.</p>
+
+  <div class="phones">
+    <div class="phone-col">
+      <p class="phone-tag sec">Amazon &middot; entered through intent</p>
+      <div class="phone">
+        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9825;</span></div>
+        <div class="phone-body">
+          <div class="ph-price"><span class="ph-off">-33%</span><span class="ph-amt">&#8377;3,148</span><span class="ph-link">Price history</span></div>
+          <p class="ph-mrp">M.R.P.: <s>&#8377;4,699</s> &middot; inclusive of all taxes</p>
+          <div class="ph-rows"><div class="ph-row">EMI from &#8377;111 &middot; No Cost EMI available</div><div class="ph-row">Buy for &#8377;3,148 + &#8377;157 cashback</div></div>
+        </div>
+        <div class="ph-nav"><span>Home</span><span>You</span><span>Cart</span><span>Browse</span><b>Rufus</b></div>
+      </div>
+      <p class="annot"><b>Intelligence as one word, next to the number it is about.</b> Tapping it opens the assistant with the question already asked; the answer is a price chart with a verdict on top. The prompt was never the user's problem &mdash; the surface asked it for them.</p>
+    </div>
+    <div class="phone-col">
+      <p class="phone-tag pri">Amazon &middot; entered through behaviour</p>
+      <div class="phone">
+        <div class="phone-bar"><span>PRODUCT PAGE</span><span>&#9906;</span></div>
+        <div class="phone-body">
+          <div class="rv-head"><div class="t">Air fryers<span>Recently viewed (10)</span></div><div class="pill">Help me decide &#10022;</div></div>
+          <div class="rv-strip">
+            <div class="rv-item sel"><div class="rv-thumb"></div><div class="rv-price">$179</div></div>
+            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$399</div></div>
+            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$89</div></div>
+            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$199</div></div>
+            <div class="rv-item"><div class="rv-thumb"></div><div class="rv-price">$199</div></div>
+          </div>
+          <div class="ph-prod"><div class="brand">Cuisinart</div><div class="rate"><b>4.5 &#9733;&#9733;&#9733;&#9733;&#9734;</b> (3,942)</div><div class="bought">10K+ bought in past month</div></div>
+        </div>
+      </div>
+      <p class="annot"><b>Ten products viewed and no purchase is the trigger.</b> A state the app already knows and normally hides. Surfacing it both helps the shopper and creates the moment where help is obviously wanted &mdash; then the assistant shows its work before answering.</p>
+    </div>
+  </div>
+  <p class="source">Reconstructions of the Amazon flows, drawn to the values shown in the app.</p>
+
+  <div class="proof"><span class="pf-who">Amazon &middot; price history</span><p>The assistant is entered from the product page with the question pre-asked, and answers with a chart rather than prose. <b>Behaviour-triggered assistance, with context carried.</b> <a href="https://www.aboutamazon.com/news/retail/visual-search-shopping-features" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <div class="proof"><span class="pf-who">Amazon &middot; Help Me Decide</span><p>The button appears after a shopper has browsed similar products without purchasing, and recommends one using their own activity. <b>The behaviour itself creates the entry point</b> &mdash; which is precisely our revisit pattern from &sect;06. <a href="https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+  <div class="proof"><span class="pf-who">Google Search</span><p>AI Overviews gives a quick answer inside normal search; a follow-up flows into AI Mode <b>with the original context preserved</b>. Google reports users preferred the natural transition. That is Turn Zero at web scale. <a href="https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
 </section>
 
 <!-- ============ 12 ============ -->
-<section class="sec" id="experiment">
-  <p class="part-rule">The first experiment</p>
-  <div class="sec-head"><span class="num">12</span><span class="eyebrow">What we are testing now</span></div>
-  <h2>Alternate product discovery and comparison, on a Vaani surface.</h2>
-  <p class="lead">We are not building the vision at once. The first experiment takes the sharpest instance of problem two &mdash; the price turn &mdash; and gives it a surface that can actually hold the mission.</p>
-
-  <div class="grid2">
-    <div class="card" style="border-top:3px solid var(--c-good)"><h4>Bet 1 &middot; Alternate product discovery</h4><p>Anchor the product, capture the dissatisfaction, preserve must-keep attributes, change the failing constraint, show 5&ndash;10 alternatives with reasons, and keep return to the anchor trivial.</p></div>
-    <div class="card" style="border-top:3px solid var(--c-decide)"><h4>Bet 2 &middot; Comparison</h4><p>Compare products the shopper actually considered, on price, reviews, seller, delivery and fit. Explain the trade-off rather than manufacturing a winner. <b>The largest unserved job we have.</b></p></div>
-    <div class="card" style="border-top:3px solid var(--c-find)"><h4>Bet 3 &middot; Secondary pull</h4><p>Two or three high-confidence interventions on PDP, feed and wishlist. Show intelligence before asking for adoption, and measure interruption as carefully as pull.</p></div>
-    <div class="card" style="border-top:3px solid var(--c-warn)"><h4>Bet 4 &middot; Turn-0 handoff</h4><p>Carry surface, product, verdict and behaviour into primary. The user should never repeat what Vaani already knew.</p></div>
-  </div>
-
-  <div class="tw"><table>
-    <thead><tr><th>What we need to know</th><th>How we will know it</th></tr></thead>
-    <tbody>
-      <tr><td>Can we preserve the mission while showing alternatives?</td><td>Same-category closure, held against the 39.0% no-search baseline</td></tr>
-      <tr><td>Do shoppers understand why an alternative fits their constraint?</td><td>Curated-list click, and constraint carry-forward against today's 4.6&ndash;14.8%</td></tr>
-      <tr><td>Does comparison reduce decision effort?</td><td>Compare completion, return-to-anchor, clicks to decision against the 7.1 baseline</td></tr>
-      <tr><td>Does visible intelligence create pull?</td><td>Interaction rate, downstream primary adoption, later organic use &mdash; against dismissal</td></tr>
-      <tr><td>Does Turn 0 preserve continuity?</td><td>Handoff completion with no context restatement</td></tr>
-    </tbody>
-  </table></div>
-
-  <div class="callout"><b>Sequence:</b> make alternate discovery and comparison excellent on primary &rarr; test a few secondary interventions with strong local utility &rarr; connect them through Turn 0 &rarr; scale omnipresence only once value is proven.</div>
-  <p class="source">The measure is not Vaani turns. It is whether Vaani improved the mission, earned trust, and created later voluntary use. &middot; <a href="../product-docs/price-turn-alternative-discovery.html">Alternate discovery definition &nearr;</a></p>
-</section>
-<!-- ============ 13 ============ -->
-<section class="sec" id="combine">
-  <p class="part-rule">The vision</p>
-  <div class="sec-head"><span class="num">13</span><span class="eyebrow">How the two surfaces combine over time</span></div>
+<section class="sec future" id="flywheel">
+  <p class="part-rule">The future model &middot; why it compounds</p>
+  <div class="sec-head"><span class="num">12</span><span class="eyebrow">The flywheel</span></div>
   <h2>Every use improves the next.</h2>
-  <p class="lead">Secondary and primary are not a handoff we build once. Together they make a flywheel &mdash; each turn of it makes the app more personal and the next intervention smarter, until adoption becomes self-funding.</p>
 
   <div class="steps">
-    <div class="st"><div class="ic">1</div><div class="st-t">Detect</div><div class="st-d">A secondary surface spots an opportunity in the user's context</div></div>
+    <div class="st"><div class="ic">1</div><div class="st-t">Detect</div><div class="st-d">A secondary surface spots an opportunity in context</div></div>
     <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">2</div><div class="st-t">Adopt</div><div class="st-d">Useful, visible intelligence drives the user to engage</div></div>
+    <div class="st"><div class="ic">2</div><div class="st-t">Pull</div><div class="st-d">Useful intelligence drives the user to engage</div></div>
     <div class="arw">&rarr;</div>
     <div class="st"><div class="ic">3</div><div class="st-t">Solve</div><div class="st-d">The primary surface completes the mission</div></div>
     <div class="arw">&rarr;</div>
     <div class="st"><div class="ic">4</div><div class="st-t">Reveal</div><div class="st-d">Explicit intent and behaviour expose real constraints</div></div>
     <div class="arw">&rarr;</div>
-    <div class="st hero-node"><div class="ic">5</div><div class="st-t">Sharpen</div><div class="st-d">Better understanding, personalisation and interventions</div></div>
+    <div class="st hero-node"><div class="ic">5</div><div class="st-t">Sharpen</div><div class="st-d">Personalisation and future interventions improve</div></div>
   </div>
   <p class="steps-note">&#8629; and sharper interventions detect better opportunities &mdash; the wheel turns again &#8629;</p>
 
-  <p>Step four is not hypothetical. Across the 40 heaviest Vaani users and the 29,317 turns between them, voice corrected, contradicted or wholly supplied what the platform believed for <b>26 of the 40</b> &mdash; and <b>8 are invisible</b> in our order systems entirely. The same conversations surfaced <b>245 unmet asks</b>, <b>163 explicit rejections</b> and <b>144 stated price ceilings</b>, none of which exist in click data.</p>
+  <p>Step four is not theoretical. We can already see what a conversation knows that click data cannot reconstruct. Across the 40 heaviest Vaani users and the 29,317 turns between them, voice <b>corrected, contradicted or wholly supplied</b> what the platform believed for <b>26 of the 40</b> &mdash; and <b>8 of them are invisible</b> in our order systems entirely.</p>
 
   <figure><div class="viz">
     <div class="viz-head"><p class="viz-title">What the conversation knew that our systems did not</p><p class="viz-sub">The 40 heaviest Vaani users, against what the platform believed about them.</p></div>
     <div id="c-voice"></div>
-    <p class="viz-cap">This is the compounding asset. Every primary-surface mission produces intent data no amount of click analysis can reconstruct.</p>
+    <p class="viz-cap">The same 40 conversations surfaced <b>245 unmet asks</b>, <b>163 explicit rejections</b>, <b>144 stated price ceilings</b> and <b>83 hard exclusions</b>. None of that exists in click data. This is the compounding asset.</p>
   </div></figure>
+</section>
 
-  <h3>The migration path &mdash; five phases from feature to interface</h3>
+<!-- ============ 13 ============ -->
+<section class="sec future" id="endstate">
+  <p class="part-rule">The future model &middot; where it ends</p>
+  <div class="sec-head"><span class="num">13</span><span class="eyebrow">Intermediate state and end state</span></div>
+  <h2>Five phases from feature to interface.</h2>
+  <p class="lead">Not a transition we force in one release. We teach the interaction model through demonstrated utility, and Vaani's prominence grows only where users show pull.</p>
+
   <div class="phases">
     <div class="phase"><span class="pn">1</span><div><h4>Evidence</h4><p>Vaani leaves visible proof of intelligence across feed, PDP, cart, wishlist and orders. No conversation required anywhere.</p></div></div>
     <div class="phase"><span class="pn">2</span><div><h4>Interactive</h4><p>Every intervention can be acted on &mdash; "yes, show more", "why?", "no, correct that". Vaani starts the conversation instead of waiting for it.</p></div></div>
-    <div class="phase"><span class="pn">3</span><div><h4>Turn Zero</h4><p>Tapping an intervention opens the primary surface pre-loaded with surface, product and behaviour. The tap is Turn 1.</p></div></div>
-    <div class="phase"><span class="pn">4</span><div><h4>Expand</h4><p>Users who show pull get more: richer outputs, more prominence, less friction into primary Vaani. Prominence follows demonstrated demand.</p></div></div>
-    <div class="phase last"><span class="pn">5</span><div><h4>Vaani is the interface</h4><p>Users tell Vaani the outcome; Meesho becomes the environment through which Vaani accomplishes it.</p></div></div>
+    <div class="phase"><span class="pn">3</span><div><h4>Turn Zero</h4><p>Tapping an intervention opens the primary surface pre-loaded with surface, product and behaviour, without losing context.</p></div></div>
+    <div class="phase"><span class="pn">4</span><div><h4>Expand based on pull</h4><p>Users who repeatedly engage receive richer outputs, more prominence and lower friction into primary Vaani. Prominence follows demonstrated demand.</p></div></div>
+    <div class="phase last"><span class="pn">5</span><div><h4>Adaptive Meesho</h4><p>The user states the outcome. Vaani orchestrates the experience &mdash; search, ranking, evidence, comparison and action &mdash; while Meesho provides the visual control surface.</p></div></div>
   </div>
-  <p class="steps-note">Not a transition we force in one release &mdash; we teach the interaction model through demonstrated utility.</p>
 
-  <div class="callout blue"><b>This is not a chatbot replacing the app.</b> Visual browsing stays valuable. The shift is that users no longer have to operate the interface manually to get an outcome. Over time the question "is this Vaani or Meesho?" should stop mattering.</div>
+  <div class="callout"><b>The end state is not "Vaani replaces the app."</b> Visual browsing remains valuable. The shift is that the user no longer needs to manually operate every interface to get an outcome &mdash; intelligence and UI reorganise themselves around the mission. Over time the question "is this Vaani or Meesho?" stops mattering.</div>
 
-  <h3>Six beliefs the surfaces have to build</h3>
-  <div class="beliefs">
-    <div class="belief">"It understands what I'm doing"</div>
-    <div class="belief">"It notices things useful to me"</div>
-    <div class="belief">"It does work before I even ask"</div>
-    <div class="belief">"It remembers my journey"</div>
-    <div class="belief">"I can correct it when it's wrong"</div>
-    <div class="belief">"For anything bigger, I can just ask it"</div>
-  </div>
-  <div class="callout-deep"><b>Vaani becomes the intelligence layer through which Meesho adapts itself around what each user is trying to accomplish.</b> Secondary surfaces create belief. The primary surface converts belief into usage.</div>
+  <div class="callout-deep" style="font-size:21px"><b>Vaani becomes the intelligence layer through which Meesho adapts itself around what each user is trying to accomplish.</b></div>
 </section>
-
 <!-- ============ 14 ============ -->
-<section class="sec" id="research">
-  <div class="sec-head"><span class="num">14</span><span class="eyebrow">Proof from the industry</span></div>
-  <h2>Everyone who cracked AI adoption cracked it the same way.</h2>
+<section class="sec" id="poc-primary">
+  <p class="part-rule">What we do next</p>
+  <div class="sec-head"><span class="num">14</span><span class="eyebrow">First primary-surface conviction test</span></div>
+  <p class="verdict">Alternate discovery and comparison, on a price turn.</p>
+  <p class="lead">The logic chains straight out of Part II. Price is the largest DECIDE ask. Price questions are usually unresolved <i>decision</i> asks, not discount requests. A broad re-search loses the anchor and the constraint. And revisit behaviour tells us comparison is what high intent looks like. So the first test is the one that puts all four together.</p>
 
-  <div class="research-grid">
-    <article class="rc"><div class="rc-top"><span>Google Search</span><a href="https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p>AI Overviews appeared inside normal search. Users began asking longer questions and wanting more &mdash; then AI Mode carried the context forward.</p>
-      <p class="lesson"><b>Lesson</b>Secondary to primary handoff, with context. Exactly &sect;11.</p></article>
-    <article class="rc"><div class="rc-top"><span>Gmail</span><a href="https://workspace.google.com/blog/product-announcements/may-workspace-feature-drop-new-ai-features" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p><b>12%</b> of mobile replies came from Smart Reply by 2017. Three suggested words grew, over years, into an inbox assistant.</p>
-      <p class="lesson"><b>Lesson</b>No step required a new behaviour. Each one made the next smaller.</p></article>
-    <article class="rc"><div class="rc-top"><span>Amazon</span><a href="https://www.aboutamazon.com/news/retail/amazon-things-to-buy-help-me-decide-gen-ai" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p>Shopping Guides, review highlights and "Help Me Decide" show intelligence before any chat. Help Me Decide is triggered by browsing without buying &mdash; behaviour, not a question.</p>
-      <p class="lesson"><b>Lesson</b>Rufus is the follow-up, not the front door. Our revisit pattern is the same trigger.</p></article>
-    <article class="rc"><div class="rc-top"><span>X / Grok</span><a href="https://x.ai/news/grok-1212" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p>Moved from a nav-bar destination to a button on the post itself. The object becomes the prompt.</p>
-      <p class="lesson"><b>Lesson</b>The surface carries the context; the user never rebuilds it.</p></article>
-    <article class="rc"><div class="rc-top"><span>Meta AI</span><a href="https://about.fb.com/news/2024/06/meta-ai-arrives-in-india-leading-ai-assistant-now-at-your-fingertip/" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p>Dissolved into search, DMs, feed and creation &mdash; each in that surface's own idiom. The standalone app came only after the identity was learned.</p>
-      <p class="lesson"><b>Lesson</b>One identity, many local costumes. The destination comes last.</p></article>
-    <article class="rc"><div class="rc-top"><span>Notion &amp; Word</span><a href="https://support.microsoft.com/en-us/office/summarize-a-document-with-microsoft-365-copilot-755227aa-b4e0-4ced-80c0-bb0df44295e9" target="_blank" rel="noreferrer">source &nearr;</a></div>
-      <p>Both removed the empty prompt box: contextual one-click suggestions, and automatic document summaries with chat one click away.</p>
-      <p class="lesson"><b>Lesson</b>Value with zero prompting. "Not knowing what to ask" solved by showing the path.</p></article>
+  <div class="pocflow">
+    <div class="poc-step"><span class="pi">1</span><div><b>Anchor product</b><span>The item the shopper is on, pinned and kept visible throughout</span></div></div>
+    <div class="poc-arw">&darr;</div>
+    <div class="poc-step"><span class="pi">2</span><div><b>What must remain</b><span>Design, fabric, colour, size &mdash; whatever they liked, held constant</span></div></div>
+    <div class="poc-arw">&darr;</div>
+    <div class="poc-step"><span class="pi">3</span><div><b>What must change</b><span>The failing constraint, captured from the price turn itself</span></div></div>
+    <div class="poc-arw">&darr;</div>
+    <div class="poc-step"><span class="pi">4</span><div><b>5&ndash;10 curated alternatives</b><span>A small, reranked set &mdash; not another broad feed</span></div></div>
+    <div class="poc-arw">&darr;</div>
+    <div class="poc-step"><span class="pi">5</span><div><b>Explain why each qualifies</b><span>"Same design, lower price." "Same look, better size availability."</span></div></div>
+    <div class="poc-arw">&darr;</div>
+    <div class="poc-step"><span class="pi">6</span><div><b>Compare, return to anchor, or proceed</b><span>Side-by-side on the dimensions that matter, and a one-tap way back</span></div></div>
   </div>
 
-  <div class="callout bad"><b>One caution, from the same examples.</b> Users pushed back when Meta AI felt imposed. The line between omnipresent and inescapable is whether the integration serves the surface's intent &mdash; or hijacks it.</div>
+  <p>That flow is the primary-surface thesis in its smallest testable form: an anchor, a preserved constraint, a generated set, and a reason for each item. If it works, "task first, UI second" stops being a principle and becomes a shipped behaviour.</p>
+  <p class="source">Full scope and measurement: <a href="../product-docs/price-turn-alternative-discovery.html">KRD &mdash; Alternative Discovery on Price Turns &nearr;</a></p>
 </section>
 
 <!-- ============ 15 ============ -->
-<section class="sec" id="ask">
-  <div class="sec-head"><span class="num">15</span><span class="eyebrow">Where we want alignment</span></div>
-  <h2>Open decisions</h2>
-  <div class="grid2">
-    <div class="card"><h4>Sequencing the first integration</h4><p>Feed &rarr; Start and Refine. PDP &rarr; Alternate and Decide. Orders &rarr; Resume. Which real estate goes first?</p></div>
-    <div class="card"><h4>Vaani's identity thread</h4><p>The persistent visual mark &mdash; our equivalent of Meta's gradient ring &mdash; that ties every touchpoint back to the primary surface.</p></div>
-    <div class="card"><h4>Nudge placement per surface</h4><p>Each surface's outcome nudge must map to its local intent. Nudge placement and omnipresence are one workstream wearing two names.</p></div>
-    <div class="card"><h4>Guardrail against imposition</h4><p>How do we measure when a touchpoint interrupts rather than serves? It erodes first under growth pressure &mdash; and our users don't complain, they avoid.</p></div>
+<section class="sec" id="poc-secondary">
+  <p class="part-rule">What we do next</p>
+  <div class="sec-head"><span class="num">15</span><span class="eyebrow">First secondary-surface conviction tests</span></div>
+  <p class="verdict">Three interventions where the local utility is obvious. Not omnipresence.</p>
+  <p class="lead">In parallel, we test the smallest number of secondary surfaces that can tell us whether visible intelligence creates pull. Each one has to be useful on its own terms, whether or not it ever leads to Vaani.</p>
+
+  <div class="grid3">
+    <div class="card"><h4>PDP &middot; decision evidence</h4><p>"Buyers like the fabric, but sizing is inconsistent."</p><p class="source">Targets the 29.6% ask we currently answer with words.</p></div>
+    <div class="card"><h4>Wishlist / revisit &middot; alternate trigger</h4><p>"Vaani found a cheaper alternative to this."</p><p class="source">Targets the revisit pattern that produces 55% of orders.</p></div>
+    <div class="card"><h4>Feed &middot; refinement verdict</h4><p>"Vaani found 14 cotton kurtis under &#8377;500 in these results."</p><p class="source">Targets the silent stretch before a first search.</p></div>
   </div>
-  <div class="callout-deep"><b>The ask:</b> alignment on this direction &mdash; then we pick the first real estate and ship Phase 1 evidence.</div>
+
+  <div class="tw"><table>
+    <thead><tr><th>What we measure</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Interaction rate</td><td>Does visible intelligence get engaged with at all?</td></tr>
+      <tr><td>Ignore and dismiss rate</td><td>The honest counterweight to interaction &mdash; and our imposition guardrail</td></tr>
+      <tr><td>Perceived usefulness</td><td>Whether the intervention solved the local job, independent of Vaani</td></tr>
+      <tr><td>Downstream primary adoption</td><td>Does belief convert into usage?</td></tr>
+      <tr><td>Later voluntary use</td><td>The only real proof that trust was built</td></tr>
+      <tr><td>Interruption or annoyance</td><td>Because our users do not complain &mdash; they avoid</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
 <!-- ============ 16 ============ -->
-<section class="sec" id="sources">
-  <div class="sec-head"><span class="num">16</span><span class="eyebrow">Evidence</span></div>
-  <h2>Where the numbers come from</h2>
+<section class="sec" id="connect">
+  <p class="part-rule">What we do next</p>
+  <div class="sec-head"><span class="num">16</span><span class="eyebrow">Then connect them through Turn Zero</span></div>
+  <p class="verdict">Build somewhere worth going, before building the roads to it.</p>
+  <p class="lead">Once the primary experience is genuinely good, and at least one secondary intervention demonstrably creates pull, we join them &mdash; and only then.</p>
+
+  <div class="grid2">
+    <div class="card"><h4>Carry complete context</h4><p>Surface, product, prior behaviour, the verdict shown and the action taken all travel into primary.</p></div>
+    <div class="card"><h4>Never open an empty Vaani screen</h4><p>The intervention is Turn Zero; the tap is Turn One. The user's first words should be a refinement.</p></div>
+    <div class="card"><h4>Never ask the user to restate</h4><p>Not the product, not the constraint, not the mission. If Vaani had it on screen, it keeps it.</p></div>
+    <div class="card"><h4>Preserve the anchor, and the way back</h4><p>Easy return to the original product and to normal browsing. We do not trap the journey.</p></div>
+  </div>
+
+  <div class="callout"><b>Sequence:</b> build a strong primary outcome &rarr; test a few high-utility secondary interventions &rarr; connect them through Turn Zero &rarr; scale only what proves useful. That is stronger than building broad secondary presence before there is somewhere valuable for the pull to go.</div>
+
+  <div class="callout-deep"><b>This is not the roadmap. It is the first proof that intelligence can become a native way to shop</b> &mdash; and the first honest read on whether demonstrated intelligence creates the pull that a menu of questions never did.</div>
+</section>
+
+<!-- ============ APPENDIX ============ -->
+<section class="sec" id="appendix">
+  <div class="sec-head"><span class="num">&mdash;</span><span class="eyebrow">Appendix</span></div>
+  <h2>Open decisions and evidence</h2>
+
+  <div class="appendix">
+    <h3>Where we want alignment</h3>
+    <div class="grid2">
+      <div class="card"><h4>Sequencing the first integration</h4><p>Feed &rarr; Start and Refine. PDP &rarr; Alternate and Decide. Orders &rarr; Resume. Which real estate goes first?</p></div>
+      <div class="card"><h4>Vaani's identity thread</h4><p>The persistent visual mark that ties every touchpoint back to the primary surface.</p></div>
+      <div class="card"><h4>Nudge placement per surface</h4><p>Each surface's outcome nudge must map to its local intent. Nudge placement and omnipresence are one workstream wearing two names.</p></div>
+      <div class="card"><h4>Guardrail against imposition</h4><p>How do we measure when a touchpoint interrupts rather than serves? It erodes first under growth pressure.</p></div>
+    </div>
+  </div>
+
+  <h3>Where the numbers come from</h3>
   <p>Figures are drawn from Vaani analytics between May and August 2026. The main turn analysis covers 2,201,813 classified turns across 167,082 users, 20 May to 20 Jul 2026; adoption and nudge figures come from experiments run 17&ndash;25 Jul; behavioural cuts span 79.5M sessions.</p>
   <div class="srcgrid">
     <a href="../01-vaani-usage-and-outcomes/turn-tagging.html">Turn tagging<span>Usage mix, mission states, surface behaviour</span></a>
@@ -946,12 +1321,12 @@ figure{margin:22px 0}
     <a href="../01-vaani-usage-and-outcomes/habit-formation-uplift-cost.html">Habit, uplift &amp; cost<span>Adoption funnel, effort, turn efficiency</span></a>
     <a href="../02-where-and-when-vaani-is-used/zero-click-nudge-analysis.html">Nudge experiments<span>Adoption, decay, same-session effect</span></a>
     <a href="../02-where-and-when-vaani-is-used/homepage-usage.html">Pre-search behaviour<span>Browsing before search, query specificity</span></a>
+    <a href="../02-where-and-when-vaani-is-used/pdp-clicks-before-turn.html">PDP browse depth<span>When in the crawl a turn happens</span></a>
     <a href="../02-where-and-when-vaani-is-used/pdp-research-conversion-impact.html">Re-search impact<span>What happens after a decision turn</span></a>
     <a href="../03-alternate-discovery-and-revisits/pdp-revisit-deep-dive.html">Comparison behaviour<span>Revisit and conversion</span></a>
     <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">The anchored alternative<span>The post-anchor hunt</span></a>
     <a href="../04-understanding-vaani-users/top40-insight-explorer.html">Top-40 insight explorer<span>What voice knew that clicks did not</span></a>
-    <a href="../product-docs/price-turn-alternative-discovery.html">Alternate discovery definition<span>Scope and measurement for Bet 1</span></a>
-    <a href="../product-notes/vaani-structured-product-thinking.html">Structured product thinking<span>Companion note on the mission-state model</span></a>
+    <a href="../product-docs/price-turn-alternative-discovery.html">Alternate discovery definition<span>Scope and measurement for the primary POC</span></a>
   </div>
 </section>
 
@@ -1314,7 +1689,7 @@ function funnel(id, cfg){
     var idx=T(tipRow(r.label, r.tip||r.value));
     h+='<div tabindex="0" data-tip-idx="'+idx+'" style="width:'+w+'%;min-width:230px;background:'+r.color+
        ';border-radius:11px;padding:13px 17px;display:flex;align-items:center;justify-content:space-between;gap:14px;cursor:pointer">'+
-       '<span style="font-size:13.5px;color:'+(r.dark?'#F3E1EC':'var(--ink-2)')+'">'+r.label+'</span>'+
+       '<span style="font-size:13.5px;color:'+(r.dark?'#e5e7eb':'var(--ink-2)')+'">'+r.label+'</span>'+
        '<b style="font:800 20px ui-monospace,monospace;color:'+(r.dark?'#fff':'var(--ink)')+';white-space:nowrap">'+r.value+
        (r.pc?' <span style="font-size:12px;font-weight:400;opacity:.75">· '+r.pc+'</span>':'')+'</b></div>';
   });
@@ -1324,8 +1699,8 @@ funnel('c-funnel', { rows:[
   { label:'Exposed to Vaani', value:'5.07M', color:'var(--surface-2)', tip:'pooled Test arm' },
   { label:'Never adopted — 87.4%', value:'4.43M', color:'var(--c-accent-soft)', tip:'never spoke to Vaani once' },
   { label:'Adopted — at least one session', value:'97,646', color:'var(--tint)', tip:'100% of adopters' },
-  { label:'Repeat — two or more', value:'33,918', pc:'34.7%', color:'#F3D6E6', tip:'34.7% of adopters' },
-  { label:'Engaged — three or more', value:'16,869', pc:'17.3%', color:'#E9B4D2', tip:'17.3% of adopters' },
+  { label:'Repeat — two or more', value:'33,918', pc:'34.7%', color:'#c7d2fe', tip:'34.7% of adopters' },
+  { label:'Engaged — three or more', value:'16,869', pc:'17.3%', color:'#a5b4fc', tip:'17.3% of adopters' },
   { label:'Habit — five or more', value:'6,361', pc:'6.5%', color:'var(--deep)', dark:true, tip:'6.5% of adopters · then 89.6% self-initiate' }]
 });
 
@@ -1429,7 +1804,38 @@ hbars('c-voice', { max:12, labelWidth:230, rows:[
   {label:'Unknown to both',value:1,display:'1',color:'var(--c-neutral-ink)'}]
 });
 
+hbars('c-findshape', { max:45, labelWidth:180, rows:[
+  {label:'Category only',value:42.5,display:'42.5%',color:'var(--c-find)',tipLabel:'548,201 turns — start or continue a category mission'},
+  {label:'Category + attributes',value:38.8,display:'38.8%',color:'var(--c-good)',tipLabel:'500,406 turns — usable constraints already supplied'},
+  {label:'Attributes only',value:9.7,display:'9.7%',color:'var(--c-warn)',tipLabel:'125,533 turns — refines what is on screen'},
+  {label:'No category',value:9.0,display:'9.0%',color:'var(--c-bad)',tipLabel:'115,855 turns — often a stated problem, not blank intent'}]
+});
+hbars('c-leaderboard', { max:16, labelWidth:225, rows:[
+  {label:'Search results, repeat if unused',value:13.6,display:'13.6%',color:'var(--c-good)',tipLabel:'55,682 users shown'},
+  {label:'Zero-click session (aggressive)',value:11.9,display:'11.9%',color:'var(--c-find)',tipLabel:'275,374 users shown'},
+  {label:'Listing page intro',value:11.8,display:'11.8%',color:'var(--c-neutral-ink)'},
+  {label:'Zero-click "for you" (aggressive)',value:10.9,display:'10.9%',color:'var(--c-find)'},
+  {label:'Product page intro',value:10.8,display:'10.8%',color:'var(--c-neutral-ink)',tipLabel:'448,426 users shown'},
+  {label:'Zero-click search (conservative)',value:10.7,display:'10.7%',color:'var(--c-find)'},
+  {label:'Zero-click session (conservative)',value:10.6,display:'10.6%',color:'var(--c-find)'},
+  {label:'Cart page intro',value:9.4,display:'9.4%',color:'var(--c-neutral-ink)'},
+  {label:'Zero-click listing (aggressive)',value:7.8,display:'7.8%',color:'var(--c-bad)'},
+  {label:'Zero-click listing (conservative)',value:7.5,display:'7.5%',color:'var(--c-bad)'}],
+  legend:[{color:'var(--c-find)',label:'zero-click rules'},{color:'var(--c-neutral-ink)',label:'page-intro rules'}]
+});
+hbars('c-zeroclick', { max:36, labelWidth:235, rows:[
+  {label:'No nudge shown (test arm)',value:32.6,display:'32.6%',color:'var(--c-bad)'},
+  {label:'Control arm — no nudges exist',value:30.3,display:'30.3%',color:'var(--c-neutral-ink)'},
+  {label:'Nudge shown, no real conversation',value:25.2,display:'25.2%',color:'var(--c-warn)'},
+  {label:'Nudge shown, real conversation',value:12.8,display:'12.8%',color:'var(--c-good)'}]
+});
+
 })();
+</script>
+
+</body>
+</html>
+
 </script>
 
 </body>
