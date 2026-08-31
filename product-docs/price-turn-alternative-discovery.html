@@ -96,7 +96,7 @@
     <article class="pd-doc">
     <h1>Alternate Product Discovery</h1>
 <h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
-<p><em>When a buyer questions or negotiates the price of the product they are on, Vaani runs an anchored image search with a price filter, the backend reranks the candidate pool on P0 signals, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked results.</em></p>
+<p><em>When a buyer questions or negotiates the price of the product they are on, Vaani retrieves a set of similar, in-stock alternatives in the same price band, scores and groups them against P0/P1/P2 signals inside a backend-composed CLP, and speaks a verdict comparing the anchor against the best of them.</em></p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
@@ -129,8 +129,8 @@
 <td style="text-align: center;">KRD — Vaani Data Enrichment — supplies the P1/P2 fields the verdict reads</td>
 </tr>
 <tr>
-<td style="text-align: center;">Ships in</td>
-<td style="text-align: center;">Three scopes. Scope 1 is backend-only. Scope 2 adds the LLM verdict. Scope 3 adds the SDUI CLP and needs Android + design.</td>
+<td style="text-align: center;">Ships as</td>
+<td style="text-align: center;">A single build — SDUI custom CLP, candidate scoring and grouping, and the spoken verdict, together. Needs Android + design.</td>
 </tr>
 </tbody>
 </table></div>
@@ -140,19 +140,19 @@
 <h2>1. Problem Statement</h2>
 <p>Price is the dominant ask on PDP Vaani turns — roughly 70% of DECIDE turns at every hunt depth — and <strong>44.6%</strong> of those price turns are outright negotiation. Today that ask gets a price answer or, worse, a re-search of the same sub-category. Measured across 879,571 Vaani PDP turns, a same-sscat re-search after a DECIDE turn converts <em>worse than doing nothing at all</em>, and fewer than 15% of Vaani re-searches preserve the constraint the buyer just stated.</p>
 <p>The behaviour underneath the ask is well established. Buyers anchor on one product and then grind through <strong>7.1</strong> more clicks of the same product type before ordering. They are not chasing the price floor — the alternative they click before buying is priced above the eventual purchase about as often as below — but any gap between where they land and what they buy multiplies the work: landing at 2× the price finally paid costs <strong>+56%</strong> more browsing.</p>
-<p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, run an anchored image search with a price filter, rerank the candidate pool so genuinely good products land at the top, and — from Scope 2 — say out loud which one is the better buy and why.</p>
+<p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, retrieve a set of similar, in-stock alternatives in the same price band, score and group them so genuinely good products land at the top, and say out loud which one is the better buy and why.</p>
 
 <h2>2. Product Thinking</h2>
 <p>Four claims this KRD wants to support or reject:</p>
 <ul>
 <li>
-<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a reranked alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount.</p>
+<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a scored, grouped alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount.</p>
 </li>
 <li>
-<p><strong>Deterministic reranking on P0 alone is enough to beat default order.</strong> Six fields — price, rating, rating count, seller rating, availability, Mall/Gold — should be sufficient to move a better product into the first screen. This is testable without any LLM in the path.</p>
+<p><strong>Deterministic scoring on P0 alone is enough to beat default order.</strong> Six fields — price, rating, rating count, seller rating, availability, Mall/Gold — should be sufficient to move a better product into the first screen. This is testable in isolation from the LLM (the LLM is still used for grouping and the verdict — see below).</p>
 </li>
 <li>
-<p><strong>A spoken verdict converts better than a silent reorder.</strong> Scope 1 changes what the buyer sees; Scope 2 changes what they understand. The delta between them is the value of the verdict, and is measurable as an isolated increment.</p>
+<p><strong>A spoken verdict converts better than a silent grouped feed.</strong> The CLP's scoring and grouping changes what the buyer sees; the verdict changes what they understand. The delta between them is the value of the verdict, and is measurable as an isolated increment.</p>
 </li>
 <li>
 <p><strong>Buyers can act on a voice reference without a deep-link.</strong> With no scroll-to and no deep-link, the buyer must locate the product Vaani described. If product-open rate from the top three is weak, the navigation capability we deliberately cut has to come back.</p>
@@ -182,20 +182,20 @@
 <td style="text-align: center;">Same-sscat product clicks between the price turn and the order. Baseline is 7.1 post-anchor clicks; a working alternative engine cuts it.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Rerank coverage</td>
-<td style="text-align: center;">% of price turns where the pool cleared the 4-candidate floor and a rerank actually ran. Bounds how much of the population the feature can affect at all.</td>
+<td style="text-align: center;">Candidate coverage</td>
+<td style="text-align: center;">% of price turns where the pool cleared the 4-candidate floor and scoring/grouping actually ran. Bounds how much of the population the feature can affect at all.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Top-3 product open rate</td>
-<td style="text-align: center;">Share of reranked feeds where the buyer opens one of the first three products. The direct read on whether reranking put the answer where the thumb is.</td>
+<td style="text-align: center;">Share of CLP renders where the buyer opens one of the first three products shown. The direct read on whether scoring/grouping put the answer where the thumb is.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Verdict spoken rate</td>
-<td style="text-align: center;">Scope 2. % of reranked feeds where the model judged something worth saying and spoke. Both extremes are bad — near 100% means the meaningfulness bar is not working, near 0% means it is too strict.</td>
+<td style="text-align: center;">% of CLP renders where the model judged something worth saying and spoke. Both extremes are bad — near 100% means the meaningfulness bar is not working, near 0% means it is too strict.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Post-verdict open rate</td>
-<td style="text-align: center;">Scope 2. Share of spoken verdicts followed by the buyer opening a product Vaani named. Tests the no-deep-link decision directly.</td>
+<td style="text-align: center;">Share of spoken verdicts followed by the buyer opening a product Vaani named. Tests the no-deep-link decision directly.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Text-search fallback rate</td>
@@ -203,7 +203,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Group engagement</td>
-<td style="text-align: center;">Scope 3. Opens per CLP group, so we learn which of the six intents buyers actually shop by.</td>
+<td style="text-align: center;">Opens per CLP group, so we learn which of the six intents buyers actually shop by.</td>
 </tr>
 </tbody>
 </table></div>
@@ -214,23 +214,23 @@
 <tbody>
 <tr>
 <td style="text-align: center;">Unsupported-claim rate</td>
-<td style="text-align: center;">Scope 2. % of spoken verdicts containing a factual claim not derivable from a field supplied in the prompt payload. <strong>Target 0.</strong> Sampled and human-audited.</td>
+<td style="text-align: center;">% of spoken verdicts containing a factual claim not derivable from a field supplied in the prompt payload. <strong>Target 0.</strong> Sampled and human-audited.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Positional-mismatch rate</td>
-<td style="text-align: center;">Scope 2. % of verdicts where a stated position ("the second one") does not match the product's actual rank in the rendered feed. <strong>Target 0.</strong></td>
+<td style="text-align: center;">% of verdicts where a stated position ("the second one") does not match the product's actual rank in the rendered CLP. <strong>Target 0.</strong></td>
 </tr>
 <tr>
 <td style="text-align: center;">Unavailable recommendation rate</td>
-<td style="text-align: center;">% of ranked or spoken products that were out of stock or non-servicable at render. <strong>Target 0</strong> — availability is a gate before scoring, not a post-hoc apology.</td>
+<td style="text-align: center;">% of scored or spoken products that were out of stock or non-servicable at render. <strong>Target 0</strong> — availability is a gate before scoring, not a post-hoc apology.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Thin-pool rate</td>
-<td style="text-align: center;">% of price turns where fewer than 4 candidates survived the price filter, so no rerank ran. Diagnoses whether the price filter is too tight.</td>
+<td style="text-align: center;">% of price turns where fewer than 4 candidates survived the price filter, so no scoring/grouping ran. Diagnoses whether the price filter is too tight.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Added latency</td>
-<td style="text-align: center;">P95 added to feed render (Scope 1) and to first spoken word (Scope 2), versus a normal image search.</td>
+<td style="text-align: center;">P95 added to CLP render and to first spoken word, versus the buyer's current default path.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Anchor abandonment without purchase</td>
@@ -242,7 +242,7 @@
 
 <h2>1. User Stories &amp; Capabilities</h2>
 <div style="overflow-x:auto"><table>
-<thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th><th>Scope</th></tr></thead>
+<thead><tr><th>ID</th><th>Persona</th><th>As a…</th><th>I want to…</th><th>So that I can…</th></tr></thead>
 <tbody>
 <tr>
 <td style="text-align: center;">US-501</td>
@@ -250,7 +250,6 @@
 <td style="text-align: center;">shopper on a PDP who thinks the price is too high</td>
 <td style="text-align: center;">see visually similar products in the same price range with the good ones first</td>
 <td style="text-align: center;">judge whether this price is fair without opening ten PDPs</td>
-<td style="text-align: center;">1</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-502</td>
@@ -258,7 +257,6 @@
 <td style="text-align: center;">shopper asking Vaani to make it cheaper</td>
 <td style="text-align: center;">be shown a genuinely better-value option instead of a refusal</td>
 <td style="text-align: center;">get to a purchase I feel good about</td>
-<td style="text-align: center;">1</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-503</td>
@@ -266,7 +264,6 @@
 <td style="text-align: center;">shopper looking at a feed of similar products</td>
 <td style="text-align: center;">hear which one is the better buy, and why, against the product I was already on</td>
 <td style="text-align: center;">decide without comparing seven listings myself</td>
-<td style="text-align: center;">2</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-504</td>
@@ -274,7 +271,6 @@
 <td style="text-align: center;">shopper who already picked a size on the PDP</td>
 <td style="text-align: center;">have that size accounted for when Vaani tells me what to buy</td>
 <td style="text-align: center;">not be recommended something I cannot wear</td>
-<td style="text-align: center;">2</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-505</td>
@@ -282,7 +278,6 @@
 <td style="text-align: center;">shopper who cares most about delivery speed, or returns, or price</td>
 <td style="text-align: center;">see the options grouped by that priority</td>
 <td style="text-align: center;">shop the axis I actually care about</td>
-<td style="text-align: center;">3</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-506</td>
@@ -290,7 +285,6 @@
 <td style="text-align: center;">shopper in a category where a bad unit is costly</td>
 <td style="text-align: center;">know when a Mall option exists</td>
 <td style="text-align: center;">trade a little price for confidence</td>
-<td style="text-align: center;">1 (badge) / 2 (spoken)</td>
 </tr>
 <tr>
 <td style="text-align: center;">US-507</td>
@@ -298,49 +292,40 @@
 <td style="text-align: center;">shopper on an item with a thin similar-product pool</td>
 <td style="text-align: center;">be told there is nothing better, rather than shown filler</td>
 <td style="text-align: center;">trust Vaani the next time it does have an answer</td>
-<td style="text-align: center;">2</td>
 </tr>
 </tbody>
 </table></div>
 
 <h2>2. Scope</h2>
 
-<h3>2.1 In Scope — Scope 1 (backend only)</h3>
+<h3>2.1 In Scope</h3>
 <ul>
-<li><p>Price-intent detection on PDP Vaani turns, firing the anchored image search. See 3.1.</p></li>
+<li><p>Price-intent detection on PDP Vaani turns, firing candidate retrieval for the anchor. See 3.1.</p></li>
 <li><p>Anchor resolution, including the reco-feed case where the anchor remains the PDP. See 3.2.</p></li>
-<li><p>Image-search invocation with the anchor's full catalog image, the adjacent price filter, and an availability constraint. See 3.3.</p></li>
-<li><p>Candidate pool of the top 50 <em>after</em> the price filter, with the 4-candidate rerank floor. See 3.4.</p></li>
-<li><p>Deterministic P0 rerank applied before the feed renders, with config-driven weights. See 3.5.</p></li>
-<li><p>Mall priority lift in the rerank plus a client badge on Mall/Gold cards. See 3.6.</p></li>
-<li><p>Instrumentation across trigger, pool, rerank and feed render. See 7.</p></li>
-</ul>
-
-<h3>2.1b In Scope — Scope 2 (adds the spoken verdict)</h3>
-<ul>
-<li><p>Verdict payload assembly: the anchor (with its selected variant) plus the top 6–7 reranked products, each carrying P0 + P1 + P2 fields and its rank. See 3.7.</p></li>
+<li><p>Candidate retrieval for the anchor, constrained to in-stock products in the adjacent price band. See 3.3.</p></li>
+<li><p>Candidate pool of the top 50 <em>after</em> the price filter, with the 4-candidate floor below which nothing is scored or grouped. See 3.4.</p></li>
+<li><p>Deterministic P0 scoring applied to the pool, with config-driven weights. See 3.5.</p></li>
+<li><p>Mall priority lift in the scoring, plus a client badge on Mall/Gold cards. See 3.6.</p></li>
+<li><p>Verdict payload assembly: the anchor (with its selected variant) plus the top 6–7 scored products, each carrying P0 + P1 + P2 fields and its rank. See 3.7.</p></li>
 <li><p>LLM verdict generation under the v1 prompt, including the silence path and the product-reference rules. See 3.7 and 3.8.</p></li>
 <li><p>Voice delivery of the verdict. No deep-link, no scroll-to, no Vaani-driven navigation.</p></li>
 <li><p>Post-generation validators for unsupported claims and positional mismatch. See 3.9.</p></li>
-</ul>
-
-<h3>2.1c In Scope — Scope 3 (SDUI custom CLP)</h3>
-<ul>
 <li><p>SDUI-driven custom CLP that opens on every price turn, with backend-composed content slots. See 3.10.</p></li>
 <li><p>LLM grouping of the 50-candidate pool against the fixed six-group taxonomy. See 3.10 and 3.11.</p></li>
 <li><p>Anchor product pinned in the CLP for comparison.</p></li>
 <li><p>Reco feed as a second source into the same CLP, including the LLM's decision to use it. See 3.12.</p></li>
+<li><p>Instrumentation across trigger, pool, scoring/grouping, verdict and CLP render. See 7.</p></li>
 </ul>
 
 <h3>2.2 Out of Scope</h3>
 <ul>
-<li><p><strong>Carry-over filters.</strong> Replaying the colour, fabric, size or other attributes the buyer established earlier in the session is deferred past Scope 3. Scopes 1–3 carry only the price filter. The single exception is the variant already selected on the anchor PDP itself, which enters at Scope 2 (US-504) because it sits on the anchor rather than in session memory.</p></li>
-<li><p><strong>Vaani-driven navigation.</strong> Scroll-to-position, deep-linking to a PDP, and opening a curated pid list are all cut, not deferred. Reranking is the substitute: put the answer at the top instead of walking the buyer to it. Revisit only if post-verdict open rate is weak (see 3.2 of Section I).</p></li>
+<li><p><strong>Carry-over filters.</strong> Replaying the colour, fabric, size or other attributes the buyer established earlier in the session is deferred. This build carries only the price filter. The single exception is the variant already selected on the anchor PDP itself, which is read directly off the anchor (US-504) rather than from session memory.</p></li>
+<li><p><strong>Vaani-driven navigation.</strong> Scroll-to-position, deep-linking to a PDP, and opening a curated pid list are all cut, not deferred. Scoring and grouping are the substitute: put the answer at the top instead of walking the buyer to it. Revisit only if post-verdict open rate is weak (see 3.2 of Section I).</p></li>
 <li><p><strong>Price negotiation of any kind.</strong> Vaani never changes a price, promises a discount, or implies one is available.</p></li>
-<li><p><strong>LLM involvement in ranking.</strong> In Scopes 1 and 2 the order is deterministic. The model explains it; it never produces it. Scope 3's grouping is an organisation of the pool, not a re-ranking of the feed.</p></li>
+<li><p><strong>LLM involvement in scoring.</strong> The candidate order is deterministic. The model explains it; it never produces it. The LLM's grouping is an organisation of the pool into the fixed taxonomy, not a re-ranking of the feed.</p></li>
 <li><p><strong>Combo per-unit value maths.</strong> Comparing a 2-piece pack's effective per-unit price against single listings is out of v1; combo structure is not in P0–P2.</p></li>
 <li><p><strong>Cross-session memory</strong> of any kind. Everything here is within the current session.</p></li>
-<li><p><strong>Non-PDP entry points.</strong> Home, CLP and search-result screens do not fire this flow in v1. Reco entry arrives only at Scope 3.</p></li>
+<li><p><strong>Non-PDP entry points.</strong> Home, CLP and search-result screens do not fire this flow in v1. Reco entry arrives only via the CLP's second source (3.12).</p></li>
 </ul>
 
 <h2>3. Product Decision Framework</h2>
@@ -373,27 +358,26 @@
 </tr>
 </tbody>
 </table></div>
-<p>The anchor record carries: pid, catalog id, sscat, <strong>full catalog image reference</strong>, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. The image reference must be the catalog asset — <strong>a screen capture is not acceptable input</strong>; PDP chrome, overlays and crops measurably degrade match quality.</p>
+<p>The anchor record carries: pid, catalog id, sscat, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. <strong>Candidate sourcing for the anchor is out of scope for this document</strong> — the requirement is a pool of in-stock, comparable candidates in the adjacent price band, however they are retrieved.</p>
 
-<h3>3.3 Query Construction</h3>
+<h3>3.3 Candidate Constraints</h3>
 <ul>
-<li><p><strong>Image:</strong> the anchor's full catalog image, passed by reference.</p></li>
 <li><p><strong>Price filter:</strong> the bucket that just contains the anchor's price. A ₹289 anchor takes <em>under ₹299</em>. <strong>Never jump to the cheapest available bucket</strong> — the divergence is larger than the buyer asked for and the resulting pool degrades into low-quality catalogs.</p></li>
 <li><p><strong>Availability:</strong> in-stock and servicable to the buyer's pincode, enforced at retrieval.</p></li>
-<li><p><strong>Nothing else.</strong> No attribute filters in Scopes 1–3 (see 2.2).</p></li>
-<li><p><strong>Visibility:</strong> the applied price filter renders as a normal, user-editable filter chip. If the buyer edits it, the feed re-runs as an ordinary search and the rerank re-applies to the new pool.</p></li>
+<li><p><strong>Nothing else.</strong> No attribute filters in this build (see 2.2).</p></li>
+<li><p><strong>Visibility:</strong> the applied price filter renders as a normal, user-editable filter chip. If the buyer edits it, candidates are re-retrieved for the new band and scoring/grouping re-applies.</p></li>
+<li><p><strong>Sourcing mechanism is out of scope for this document.</strong> Candidates may come from an image-similarity match, a comp-swap API, or another catalog-matching pipeline — whichever is already in place. This KRD specifies only the constraints above and the scoring, grouping and verdict logic that runs on top of whatever pool is returned.</p></li>
 </ul>
 <p><em>Boundary case to close in build: an anchor priced exactly at a bucket edge, and an anchor above the top bucket &mdash; to close in build.</em></p>
 
 <h3>3.4 Candidate Pool &amp; Rerank Eligibility</h3>
 <ul>
 <li><p><strong>Pool size: 50</strong>, taken from the results <em>after</em> the price filter is applied — not 50 raw visual matches subsequently filtered.</p></li>
-<li><p><strong>Rerank floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not rerank</strong>. The feed ships in its default order and the flow ends there for Scope 1.</p></li>
-<li><p>Under the floor in Scope 2, the verdict path is skipped as well — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
+<li><p><strong>Floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not score or group</strong>. The CLP still opens (3.10), but the pool renders in default order and no verdict is attempted — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
 <li><p>Availability is a <strong>gate</strong>, applied before scoring. An unavailable candidate is removed from the pool, not down-weighted, and does not count toward the 4.</p></li>
 </ul>
 
-<h3>3.5 Rerank Logic — P0 Scoring (Scope 1)</h3>
+<h3>3.5 Rerank Logic — P0 Scoring</h3>
 <p>The rerank is deterministic, backend-side, and runs before the feed is generated. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
 
 <h4>3.5.1 In plain terms</h4>
@@ -475,19 +459,19 @@ where
 <h3>3.6 Mall / Gold Handling</h3>
 <ul>
 <li><p><strong>Rerank:</strong> Mall/Gold membership is a bounded priority lift (<code>w_mall</code>), so trusted stock rises in the stack without a much better non-Mall product being buried beneath a mediocre Mall one.</p></li>
-<li><p><strong>Feed:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything (works in silent Scope 1).</p></li>
-<li><p><strong>Verdict (Scope 2):</strong> when a Mall/Gold option is in the spoken set, Vaani may mention that the option is also available from Mall / the original brand.</p></li>
+<li><p><strong>Feed:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything.</p></li>
+<li><p><strong>Verdict:</strong> when a Mall/Gold option is in the spoken set, Vaani may mention that the option is also available from Mall / the original brand.</p></li>
 <li><p><strong>Out of scope:</strong> injecting Mall products from <em>outside</em> the price band. The price filter stays hard in v1 — Mall handling is a lift and a highlight within the band, not a band exception.</p></li>
 </ul>
-<h3>3.7 Verdict Generation (Scope 2)</h3>
-<p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the feed.</p>
+<h3>3.7 Verdict Generation</h3>
+<p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the CLP.</p>
 <ul>
-<li><p><strong>Input window: the top 6–7 reranked products.</strong> There is no fixed <code>k</code> for output — the model receives the window and decides which of them are worth mentioning. The bar for "worth mentioning" is set by prompt, not by code.</p></li>
+<li><p><strong>Input window: the top 6–7 scored products.</strong> There is no fixed <code>k</code> for output — the model receives the window and decides which of them are worth mentioning. The bar for "worth mentioning" is set by prompt, not by code.</p></li>
 <li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build. <strong>[info enrichment v0 processors which we have built]</strong></p></li>
 <li><p><strong>The anchor is in the payload</strong>, with the same fields plus the buyer's selected variant. Without it the model cannot say "₹40 cheaper" or "four times the ratings", and the verdict degrades into a description.</p></li>
-<li><p><strong>The verdict may disagree with the rank order.</strong> The rerank sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
+<li><p><strong>The verdict may disagree with the score order.</strong> The scoring sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
 <li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — in a visual-similarity feed the candidates share their visible attributes, so "the red cotton one" identifies nothing. Never by pid.</p></li>
-<li><p><strong>Position means rank in the rendered feed</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the feed is a guardrail failure.</p></li>
+<li><p><strong>Position means rank in the rendered CLP</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the CLP is a guardrail failure.</p></li>
 <li><p><strong>Silence is a valid output.</strong> If nothing in the window is a meaningfully better buy than the anchor, Vaani says so plainly — "yeh theek hai, isse behtar kuch khaas nahi mila" — rather than inventing a reason to move the buyer. That case is US-507, and it is trust-building rather than a failure.</p></li>
 </ul>
 
@@ -578,14 +562,14 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 </tr>
 </tbody>
 </table></div>
-<p><em>Suppression is preferable to a wrong verdict: Scope 1's reranked feed is still on the screen and still useful without a voice line.</em></p>
+<p><em>Suppression is preferable to a wrong verdict: the CLP's scored, grouped candidates are still on the screen and still useful without a voice line.</em></p>
 
-<h3>3.10 SDUI Custom CLP (Scope 3)</h3>
+<h3>3.10 SDUI Custom CLP</h3>
 <ul>
 <li><p><strong>Opens on every price turn</strong> — it is the landing surface for the flow, not an optional detour.</p></li>
-<li><p><strong>SDUI-driven:</strong> the backend composes what goes into it. This is the point of Scope 3 — the durable asset is a surface the backend can place content into, and comparison views and everything after them will live here.</p></li>
+<li><p><strong>SDUI-driven:</strong> the backend composes what goes into it. This is the point of this build — the durable asset is a surface the backend can place content into, and comparison views and everything after them will live here.</p></li>
 <li><p><strong>Anchor pinned</strong> in the CLP, so the comparison the buyer is actually making is on screen rather than in memory.</p></li>
-<li><p><strong>Source-agnostic:</strong> the image search becomes one <em>source</em> feeding the CLP. The reco feed is a second source (3.12). Neither is the surface.</p></li>
+<li><p><strong>Source-agnostic:</strong> candidate retrieval is one <em>source</em> feeding the CLP. The reco feed is a second source (3.12). Neither is the surface.</p></li>
 <li><p><strong>Groups come from a fixed taxonomy we define and instruct.</strong> The model assigns products to our groups; it never invents a group. Fixed groups are what make engagement measurable per intent and the output testable at all.</p></li>
 </ul>
 <div style="overflow-x:auto"><table>
@@ -662,8 +646,8 @@ OUTPUT
 For each non-empty group: the group key, and its products as { pid, rank_in_group, and
 the single field value that justifies inclusion }.</code></pre>
 
-<h3>3.12 Reco Feed as a Second Source (Scope 3)</h3>
-<p>Image search finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters at Scope 3, through the same CLP.</p>
+<h3>3.12 Reco Feed as a Second Source</h3>
+<p>The primary retrieval path finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters through the same CLP.</p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Entry</th><th>Condition</th><th>Behaviour</th></tr></thead>
 <tbody>
@@ -675,20 +659,20 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">Attribute absent on the anchor</td>
 <td style="text-align: center;">Mid-conversation the buyer asks for an attribute the anchor does not have (a different material, a different colour)</td>
-<td style="text-align: center;">Image search cannot serve this — visual similarity returns the attribute the buyer is trying to leave. Source from reco instead.</td>
+<td style="text-align: center;">The primary retrieval path cannot serve this — matching on the anchor returns the attribute the buyer is trying to leave. Source from reco instead.</td>
 </tr>
 <tr>
 <td style="text-align: center;">No meaningful alternative</td>
-<td style="text-align: center;">The image-search pool is thin, or nothing clears the verdict bar</td>
+<td style="text-align: center;">The retrieved pool is thin, or nothing clears the verdict bar</td>
 <td style="text-align: center;">Vaani says so, and may offer reco-sourced suggestions rather than ending empty-handed.</td>
 </tr>
 </tbody>
 </table></div>
-<p>Which source to use is a <strong>judgement the model makes from the conversation</strong>, not a hard rule — which is exactly why it belongs in Scope 3, behind two scopes of deterministic behaviour, and why source selection must be logged on every turn so the decision can be audited.</p>
+<p>Which source to use is a <strong>judgement the model makes from the conversation</strong>, not a hard rule — and source selection must be logged on every turn so the decision can be audited.</p>
 <h2>4. Technical Requirements — Data &amp; System Dependencies</h2>
 
 <h3>4.1 Signal Tiers</h3>
-<p>The tiering is the hard constraint on Scope 1: the rerank rules can only be as good as P0.</p>
+<p>The tiering is the hard constraint on scoring: the rules can only be as good as P0.</p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Tier</th><th>Signals</th><th>Read by</th><th>Availability</th></tr></thead>
 <tbody>
@@ -696,7 +680,7 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">P0</td>
 <td style="text-align: center;">price, rating, rating count, seller rating, availability, Mall/Gold flag</td>
 <td style="text-align: center;">Backend rerank <strong>and</strong> LLM verdict</td>
-<td style="text-align: center;">Must be readable for 50 candidates at scoring time, pre-feed. Availability is a gate, not a scoring term.</td>
+<td style="text-align: center;">Must be readable for 50 candidates at scoring time, pre-render. Availability is a gate, not a scoring term.</td>
 </tr>
 <tr>
 <td style="text-align: center;">P1</td>
@@ -716,46 +700,38 @@ the single field value that justifies inclusion }.</code></pre>
 
 <h3>4.2 System Dependencies</h3>
 <div style="overflow-x:auto"><table>
-<thead><tr><th>Dependency</th><th>Needed by</th><th>Note</th></tr></thead>
+<thead><tr><th>Dependency</th><th>Note</th></tr></thead>
 <tbody>
 <tr>
-<td style="text-align: center;">Image search by catalog-image reference</td>
-<td style="text-align: center;">Scope 1</td>
-<td style="text-align: center;">Must accept the anchor's catalog asset. A PDP screenshot is not an acceptable input.</td>
+<td style="text-align: center;">Candidate retrieval for the anchor</td>
+<td style="text-align: center;">Must return in-stock, comparable candidates within the adjacent price band. Sourcing mechanism (image match, comp-swap API, or another catalog pipeline) is an implementation choice outside this document.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Price-bucket resolution</td>
-<td style="text-align: center;">Scope 1</td>
 <td style="text-align: center;">Given an anchor price, return the containing bucket. Edge behaviour to be closed in build.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Pre-feed rerank hook</td>
-<td style="text-align: center;">Scope 1</td>
-<td style="text-align: center;">A point in feed generation where the surviving pool can be reordered before render.</td>
+<td style="text-align: center;">Pre-render scoring hook</td>
+<td style="text-align: center;">A point in the flow where the surviving pool can be scored and grouped before the CLP renders.</td>
 </tr>
 <tr>
 <td style="text-align: center;">P0 read for 50 candidates</td>
-<td style="text-align: center;">Scope 1</td>
 <td style="text-align: center;">Must fit the added-latency guardrail.</td>
 </tr>
 <tr>
 <td style="text-align: center;">P1/P2 read for ~7 candidates + anchor</td>
-<td style="text-align: center;">Scope 2</td>
 <td style="text-align: center;">Existing enrichment fields.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Mall/Gold badge on feed cards</td>
-<td style="text-align: center;">Scope 1</td>
-<td style="text-align: center;">Client change; the only client work in Scope 1.</td>
+<td style="text-align: center;">Client change.</td>
 </tr>
 <tr>
 <td style="text-align: center;">SDUI CLP surface</td>
-<td style="text-align: center;">Scope 3</td>
-<td style="text-align: center;">Android + design. Backend-composed slots, anchor pin, grouped shelves.</td>
+<td style="text-align: center;">Needs Android + design. Backend-composed slots, anchor pin, grouped shelves.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Reco stock as a CLP source</td>
-<td style="text-align: center;">Scope 3</td>
 <td style="text-align: center;">Same P0–P2 fields required for reco candidates.</td>
 </tr>
 </tbody>
@@ -764,10 +740,10 @@ the single field value that justifies inclusion }.</code></pre>
 <h2>5. Experimentation Strategy</h2>
 
 <h3>5.1 Will this feature be experimented?</h3>
-<p>Yes. Each scope is a separate read, because each changes a different thing: Scope 1 changes what the buyer sees, Scope 2 changes what they understand, Scope 3 changes where they stand.</p>
+<p>Yes. The build changes three things at once — where the buyer stands (the CLP surface), what they see (scored, grouped candidates), and what they understand (the spoken verdict) — so the read is designed to isolate the verdict's own increment from the surface and grouping's.</p>
 
 <h3>5.2 Experiment Type</h3>
-<p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. Scope 2 runs as a second experiment layered on Scope 1's treatment, so the verdict's increment is isolated from the rerank's.</p>
+<p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. The verdict runs as a layered treatment on top of the CLP, so its increment is isolated from the CLP/grouping's own effect.</p>
 
 <h3>5.3 Variants</h3>
 <div style="overflow-x:auto"><table>
@@ -779,23 +755,23 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Baseline for same-sscat conversion and clicks-to-decision.</td>
 </tr>
 <tr>
-<td style="text-align: center;">T1 — Scope 1</td>
-<td style="text-align: center;">Anchored image search + price filter + silent P0 rerank.</td>
-<td style="text-align: center;">Does a reordered feed alone move conversion and cut clicks?</td>
+<td style="text-align: center;">T1 — CLP, silent</td>
+<td style="text-align: center;">Candidate retrieval + price filter + CLP with deterministic P0 scoring/grouping, no spoken verdict.</td>
+<td style="text-align: center;">Does the CLP alone move conversion and cut clicks?</td>
 </tr>
 <tr>
-<td style="text-align: center;">T1b — search without rerank</td>
-<td style="text-align: center;">Same search and filter, default order.</td>
-<td style="text-align: center;">Separates the value of <em>searching</em> from the value of <em>reranking</em>. Without this arm a win is unattributable.</td>
+<td style="text-align: center;">T1b — retrieval without scoring</td>
+<td style="text-align: center;">Same retrieval and filter, default order, no CLP grouping.</td>
+<td style="text-align: center;">Separates the value of <em>retrieval</em> from the value of <em>scoring/grouping</em>. Without this arm a win is unattributable.</td>
 </tr>
 <tr>
-<td style="text-align: center;">T2 — Scope 2</td>
-<td style="text-align: center;">Scope 1 + spoken verdict.</td>
+<td style="text-align: center;">T2 — CLP + verdict</td>
+<td style="text-align: center;">T1 + spoken verdict.</td>
 <td style="text-align: center;">The verdict's isolated increment, and the no-deep-link decision.</td>
 </tr>
 </tbody>
 </table></div>
-<p><em>T1b matters more than it looks. Scope 1 changes two things at once — the query and the order — and only the second one is what this KRD is really betting on.</em></p>
+<p><em>T1b matters more than it looks. The CLP changes two things at once — the candidate set and the order — and only the second one is what this KRD is really betting on.</em></p>
 
 <h2>6. Tech Solutioning</h2>
 <p><em>[to be added by Engineering]</em></p>
@@ -812,18 +788,18 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">alt_discovery_query</td>
-<td style="text-align: center;">turn_id, image_ref, price_band, band_source (bucket / edge_case), availability_applied</td>
+<td style="text-align: center;">turn_id, source_ref, price_band, band_source (bucket / edge_case), availability_applied</td>
 <td style="text-align: center;">Verifies the adjacent-band rule and catches boundary handling.</td>
 </tr>
 <tr>
 <td style="text-align: center;">alt_discovery_pool</td>
 <td style="text-align: center;">turn_id, raw_match_count, post_filter_count, pool_size, dropped_unavailable, below_floor (bool)</td>
-<td style="text-align: center;">Thin-pool guardrail and rerank coverage.</td>
+<td style="text-align: center;">Thin-pool guardrail and candidate coverage.</td>
 </tr>
 <tr>
 <td style="text-align: center;">alt_discovery_rerank</td>
 <td style="text-align: center;">turn_id, weights_version, config_id, ordered_pids, score_components_top10, rank_delta_vs_default</td>
-<td style="text-align: center;">Lets us replay any ranking and measure how much the rerank actually moved.</td>
+<td style="text-align: center;">Lets us replay any scoring and measure how much it actually moved.</td>
 </tr>
 <tr>
 <td style="text-align: center;">alt_discovery_feed_render</td>
@@ -852,8 +828,8 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">alt_clp_render</td>
-<td style="text-align: center;">turn_id, source (image_search / reco), groups_with_counts, anchor_pinned, grouping_prompt_version</td>
-<td style="text-align: center;">Scope 3. Group engagement, and audits the model's source choice.</td>
+<td style="text-align: center;">turn_id, source (candidate_retrieval / reco), groups_with_counts, anchor_pinned, grouping_prompt_version</td>
+<td style="text-align: center;">Group engagement, and audits the model's source choice.</td>
 </tr>
 </tbody>
 </table></div>
@@ -869,7 +845,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-501</td>
 <td style="text-align: center;">Basic price turn — buyer on a ₹289 PDP asks "isse sasta kuch hai?"</td>
-<td style="text-align: center;">Image search fires with the anchor's catalog image, price filter <em>under ₹299</em>, availability applied. Feed renders reranked.</td>
+<td style="text-align: center;">Candidate retrieval fires for the anchor, price filter <em>under ₹299</em>, availability applied. CLP renders with scored, grouped candidates.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-502</td>
@@ -884,12 +860,12 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-504</td>
 <td style="text-align: center;">Thin pool — only 3 candidates survive the price filter</td>
-<td style="text-align: center;">No rerank. Feed ships in default order. <code>below_floor = true</code>. Scope 2: no verdict attempted.</td>
+<td style="text-align: center;">No scoring or grouping. CLP opens with the pool in default order. <code>below_floor = true</code>. No verdict attempted.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-505</td>
 <td style="text-align: center;">Exactly 4 candidates survive</td>
-<td style="text-align: center;">Rerank runs. Boundary is inclusive.</td>
+<td style="text-align: center;">Scoring/grouping runs. Boundary is inclusive.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-506</td>
@@ -913,13 +889,13 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">TC-510</td>
-<td style="text-align: center;">Scope 1 silence — rerank runs and reorders the feed</td>
-<td style="text-align: center;">No copy, no voice, no new surface. The feed is simply in a different order.</td>
+<td style="text-align: center;">T1 arm (no verdict) — CLP renders scored, grouped candidates</td>
+<td style="text-align: center;">The CLP shows the grouped, scored feed with no spoken line.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-511</td>
-<td style="text-align: center;">Filter edit — buyer changes the price chip on the rendered feed</td>
-<td style="text-align: center;">Feed re-runs as an ordinary search; rerank re-applies to the new pool.</td>
+<td style="text-align: center;">Filter edit — buyer changes the price chip on the rendered CLP</td>
+<td style="text-align: center;">Candidates are re-retrieved for the new band; scoring/grouping re-applies and the CLP re-renders.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-512</td>
@@ -944,7 +920,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-516</td>
 <td style="text-align: center;">Grounding validator — model emits a rating not present in the payload</td>
-<td style="text-align: center;">Verdict suppressed, <code>verdict_grounding_fail</code> logged with the span. Reranked feed still shown.</td>
+<td style="text-align: center;">Verdict suppressed, <code>verdict_grounding_fail</code> logged with the span. CLP still shown, scored and grouped.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-517</td>
@@ -974,30 +950,30 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-522</td>
 <td style="text-align: center;">CLP groups — pool has no candidate with a faster delivery promise</td>
-<td style="text-align: center;">Scope 3. <code>arrives_faster</code> is empty and dropped, not padded with non-qualifying products.</td>
+<td style="text-align: center;"><code>arrives_faster</code> is empty and dropped, not padded with non-qualifying products.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-523</td>
 <td style="text-align: center;">Absent attribute — buyer asks for a material the anchor does not have</td>
-<td style="text-align: center;">Scope 3. Source switches to reco; <code>source = reco</code> logged.</td>
+<td style="text-align: center;">Source switches to reco; <code>source = reco</code> logged.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-524</td>
 <td style="text-align: center;">Group invention — model attempts a group outside the taxonomy</td>
-<td style="text-align: center;">Scope 3. Rejected at parse; only the six defined keys are accepted.</td>
+<td style="text-align: center;">Rejected at parse; only the six defined keys are accepted.</td>
 </tr>
 </tbody>
 </table></div>
 
 <h2>2. Launch Checklist</h2>
 <ul>
-<li><p>Rerank weights and <code>C</code> replayed offline against historical price turns; the ordering change is inspected by hand on a sample before any live traffic.</p></li>
-<li><p>Rerank weights, prompt versions and the pool/floor constants are all live-tunable config. No hard-coded values.</p></li>
-<li><p>Added-latency guardrail measured on a canary before ramp — feed render for Scope 1, first spoken word for Scope 2.</p></li>
+<li><p>Scoring weights and <code>C</code> replayed offline against historical price turns; the ordering change is inspected by hand on a sample before any live traffic.</p></li>
+<li><p>Scoring weights, prompt versions and the pool/floor constants are all live-tunable config. No hard-coded values.</p></li>
+<li><p>Added-latency guardrail measured on a canary before ramp — CLP render and first spoken word.</p></li>
 <li><p>A human-audited sample of spoken verdicts reviewed for unsupported claims before ramp past the canary.</p></li>
 <li><p>Availability gate verified end-to-end: no out-of-stock product can be ranked or spoken.</p></li>
 <li><p>Every event in section 7 firing and joinable on <code>turn_id</code>.</p></li>
-<li><p>Kill switch per scope, so the verdict can be disabled without disabling the rerank.</p></li>
+<li><p>Kill switch for the verdict, so it can be disabled independently of the CLP and scoring.</p></li>
 </ul>
 
 <h1>Section IV: Mentor Sign Off</h1>
@@ -1009,26 +985,29 @@ the single field value that justifies inclusion }.</code></pre>
 <tr><td style="text-align: center;">Tech — Backend</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Search / Visual Search</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Ranking / Relevance</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
-<tr><td style="text-align: center;">Design</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending (Scope 3)</td></tr>
+<tr><td style="text-align: center;">Design</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Analytics / DS</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">QA</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 </tbody>
 </table></div>
 
 <h1>Summary</h1>
-<p>On a PDP price turn, Vaani runs an anchored image search with an adjacent price filter, the backend reranks the surviving pool on P0 signals before the feed renders, and — from Scope 2 — Vaani speaks a verdict comparing the anchor against the reranked products. Required build, by scope:</p>
+<p>On a PDP price turn, Vaani retrieves a set of similar, in-stock alternatives in the anchor's adjacent price band, scores and groups them on P0/P1/P2 signals inside a backend-composed SDUI CLP, and speaks a verdict comparing the anchor against the best of them. Required build:</p>
 <ul>
 <li>
-<p><strong>Scope 1 — backend only.</strong> Price-intent trigger, anchor resolution (the PDP, even from the reco rail), image search by catalog image with the containing price bucket and an availability gate, a 50-candidate pool taken after the filter, a 4-candidate floor below which nothing is reranked, and a deterministic P0 score with config-driven weights and a rating-count confidence floor. Silent. One client change: the Mall/Gold badge.</p>
+<p><strong>Trigger &amp; retrieval.</strong> Price-intent detection on PDP turns, anchor resolution (the PDP, even from the reco rail), candidate retrieval within the adjacent price band with an availability gate, a 50-candidate pool taken after the filter, and a 4-candidate floor below which nothing is scored or grouped. The candidate-sourcing mechanism (image match, comp-swap API, or otherwise) is an implementation choice this document does not prescribe.</p>
 </li>
 <li>
-<p><strong>Scope 2 — the spoken verdict.</strong> Assemble the anchor plus the top 6–7 reranked products with P0+P1+P2, generate a voice verdict under the v1 prompt in 3.8, and gate it behind a numeric-grounding and a positional-consistency validator. The model may disagree with the rank order, because it sees signals the rerank cannot. Silence is a valid, trust-building output. No deep-link, no scroll-to — the buyer opens the product themselves.</p>
+<p><strong>Deterministic scoring.</strong> A P0 score with config-driven weights and a rating-count confidence floor, applied to the pool before it is grouped. One client change: the Mall/Gold badge.</p>
 </li>
 <li>
-<p><strong>Scope 3 — the SDUI CLP.</strong> A backend-composed surface that opens every time, groups the 50-candidate pool against a fixed six-group taxonomy, and pins the anchor. Image search becomes one source into it; the reco feed is a second, chosen by the model from the conversation. Needs Android and design. The durable asset is the surface, not this flow.</p>
+<p><strong>The SDUI CLP.</strong> A backend-composed surface that opens on every price turn, groups the 50-candidate pool against a fixed six-group taxonomy, and pins the anchor. Candidate retrieval is one source into it; the reco feed is a second, chosen by the model from the conversation. Needs Android and design.</p>
+</li>
+<li>
+<p><strong>The spoken verdict.</strong> Assemble the anchor plus the top 6–7 scored products with P0+P1+P2, generate a voice verdict under the v1 prompt in 3.8, and gate it behind a numeric-grounding and a positional-consistency validator. The model may disagree with the score order, because it sees signals the scoring cannot. Silence is a valid, trust-building output. No deep-link, no scroll-to — the buyer opens the product themselves.</p>
 </li>
 </ul>
-<p>Carry-over filters are out of all three scopes, except the variant already selected on the anchor PDP, which enters at Scope 2. Vaani-driven navigation is cut rather than deferred — reranking is the substitute. Ranking stays deterministic throughout Scopes 1 and 2; the model explains, it never ranks.</p>
+<p>Carry-over filters are out of scope, except the variant already selected on the anchor PDP, which is read directly off the anchor. Vaani-driven navigation is cut rather than deferred — scoring and grouping are the substitute. Scoring stays deterministic throughout; the model explains it, it never produces it.</p>
     </article>
   </main>
 </div>
