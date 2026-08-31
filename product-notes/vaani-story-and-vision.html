@@ -395,6 +395,15 @@ td b{color:var(--ink)} tbody tr:hover{background:var(--surface-2)}
   border:1px solid var(--hairline); border-radius:16px; overflow:hidden; background:#000; box-shadow:var(--shadow-sm)}
 .vid iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
 
+/* case-study slides supplied as deck frames */
+.shot.flush{padding:8px; background:var(--surface)}
+.shot.flush img{border-radius:6px}
+/* POC placeholder note */
+.poc-note{border:1px dashed var(--hairline); border-left:3px solid var(--c-accent); border-radius:12px;
+  padding:16px 20px; margin:20px 0; background:var(--surface)}
+.poc-note p{margin:0 0 9px; font-size:14px; max-width:none}
+.poc-note p:last-child{margin-bottom:0}
+
 /* real product screenshots */
 .shot{margin:22px 0; border:1px solid var(--hairline); border-radius:16px; background:#fff;
   padding:14px; box-shadow:var(--shadow-sm); overflow:hidden}
@@ -940,6 +949,37 @@ figure{margin:22px 0}
   <p class="verdict">One surface makes intelligence visible. A different surface makes it capable. Neither one does both.</p>
   <p class="lead">Adoption fails because intelligence is invisible until the user already knows what to ask. Response quality fails because intelligence has nowhere to express itself once they do. Those are different failures, so they get different answers &mdash; one that <b>shows the path</b>, one that <b>shortens it</b>.</p>
 
+  <h3>Four products already ship this split</h3>
+  <p>This is not a theoretical model. In each of these, a small piece of intelligence sits inside a normal screen &mdash; and that piece is the only reason anyone finds the bigger surface behind it. Secondary on the left of each frame, primary on the right.</p>
+
+  <div class="shot-wrap wide">
+    <div class="shot flush">
+      <p class="shot-tag">Amazon &middot; Help Me Decide, and price history</p>
+      <img src="../assets/case-amazon.png" alt="Amazon: a Help me decide button on the recently-viewed strip and a Price history link beside the price, both secondary; Rufus answering with a price chart, primary." loading="lazy">
+    </div>
+  </div>
+  <p class="annot"><b>The trigger is a state, not a question.</b> Ten products viewed and nothing bought is something the app already knows and normally hides; Amazon turns it into a button on the recently-viewed strip. "Price history" is two words next to the number they are about. Neither asks the shopper to know an assistant exists. Both open Rufus with the question already asked, and Rufus answers with a chart and a verdict &mdash; an interface the product page could never have rendered.</p>
+
+  <div class="shot-wrap wide">
+    <div class="shot flush">
+      <p class="shot-tag">Instagram &middot; Meta AI</p>
+      <img src="../assets/case-instagram.png" alt="Instagram: AI images and Meta AI entries inside the DM composer, and an inline search chip on a reel, both secondary; a full AI results surface for a query, primary." loading="lazy">
+    </div>
+  </div>
+  <p class="annot"><b>Many small doors, one destination &mdash; in that order.</b> Meta put its assistant inside the DM composer, inside creation, and as a search chip on the reel itself, each in that surface's own idiom. The full AI surface came after those doors had taught people what it does, not before. This is principle 4 in production.</p>
+
+  <div class="shot-wrap wide">
+    <div class="shot flush">
+      <p class="shot-tag">Google &middot; AI Overviews and AI Mode</p>
+      <img src="../assets/case-ai-overview.png" alt="Google: an AI Overview inside the normal results page, secondary; AI Mode continuing the same query in a dedicated surface, primary." loading="lazy">
+    </div>
+  </div>
+  <p class="annot"><b>The secondary surface is the page the user was already on.</b> AI Overviews answers inside normal results &mdash; no destination, no prompt, and it appears whether or not you were looking for an assistant. The follow-up flows into AI Mode with the original query preserved. Google reports users preferred the natural transition.</p>
+
+  <div class="proof"><span class="pf-who">X &middot; Grok</span><p>Grok moved from a nav-bar destination to a button on the post itself. The object carries the context, so the user never rebuilds it. <b>The entry point is the intent, not the brand.</b> <a href="https://x.ai/news/grok-1212" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
+
+  <div class="imp"><p class="lbl">So what</p><p>In every one of these the assistant is <b>not discovered by being advertised</b>. It is discovered because a small piece of it did something useful on a screen the user was already looking at. That is the mechanism we are missing.</p></div>
+
   <div class="spine">
     <div class="spine-row">
       <div class="spine-box problem"><div class="lab">Ceiling one</div><b>Adoption</b><span>Intelligence is invisible until the user already knows what to ask for</span></div>
@@ -955,6 +995,7 @@ figure{margin:22px 0}
   <div class="callout-deep" style="font-size:20px"><b>Secondary surfaces get users to intelligence. A primary surface puts it to work.</b></div>
 
   <h3>What separates the two</h3>
+  <p>Same split, named properly. Everything on the left lives in Meesho's own constructs and is judged on whether people engage with it. Everything on the right is Vaani's, and is judged on whether the shopping mission actually closed.</p>
 
   <div class="surfdiag">
     <div class="sd-panel sec-p">
@@ -997,32 +1038,6 @@ figure{margin:22px 0}
 
   <p>The two are not alternatives and they are not phases. A secondary surface with nothing good to hand off to produces another 12% nudge. A primary surface nobody discovers produces another 87.4%. They only work as one system.</p>
 
-  <h3>Four products already ship this split</h3>
-  <p>This is not a theoretical model. The pattern &mdash; a small piece of intelligence inside a normal screen, opening a surface built for the reasoning &mdash; is in production at scale, and in each case the secondary half is what makes the primary half discoverable.</p>
-
-  <div class="shot-wrap wide">
-    <div class="shot">
-      <p class="shot-tag">Amazon &middot; the behaviour itself opens the primary surface</p>
-      <img src="../assets/amazon-help-me-decide.png" alt="Amazon product page showing a Help me decide button above a strip of ten recently viewed air fryers; tapping it opens the assistant, which shows its work." loading="lazy">
-    </div>
-  </div>
-  <p class="annot"><b>Help Me Decide &mdash; the trigger is a state, not a question.</b> Ten products viewed and nothing bought is something the app already knows and normally hides. Amazon surfaces it as a button on the recently-viewed strip: a secondary surface, in the app's own idiom. Tapping it opens the assistant, which answers by <b>showing its work</b> &mdash; 5.2k products analysed, 154k reviews read &mdash; before recommending. Reasoning made visible is what earns the trust to accept the recommendation. This is our own revisit pattern from &sect;2, with a product built on top of it.</p>
-
-  <div class="shot-wrap">
-    <div class="shot">
-      <p class="shot-tag">Amazon &middot; two words next to the number they are about</p>
-      <img src="../assets/amazon-price-history-rufus.png" alt="Amazon product page with a Price history link next to the price; tapping it opens Rufus with the question already asked and a price chart as the answer." loading="lazy">
-    </div>
-  </div>
-  <p class="annot"><b>Price history is the secondary surface. Rufus is the primary one.</b> The link sits inside Amazon's own price block &mdash; two words, no chat window, and no requirement that the shopper knows an assistant exists or what to ask it. That is showing the path. Tapping it opens Rufus with the question already asked, and the answer comes back as a price chart with a verdict on top &mdash; an interface the product page could never have rendered. That is shortening it.</p>
-
-  <div class="proof"><span class="pf-who">Google &middot; AI Overviews</span><p>AI Overviews answers inside the normal results page &mdash; no destination, no prompt, and it appears whether or not you wanted an assistant. A follow-up flows into AI Mode <b>with the original context preserved</b>. Google reports users preferred the natural transition. <b>The secondary surface is the search page itself; the primary surface is one tap away and already knows the question.</b> <a href="https://blog.google/products-and-platforms/products/search/ai-mode-ai-overviews-updates/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
-
-  <div class="proof"><span class="pf-who">Instagram &middot; Meta AI</span><p>Meta dissolved its assistant into search, DMs, feed and creation &mdash; each in that surface's own idiom, never importing a chat window into someone else's screen. The standalone app came <b>after</b> the identity had been learned, not before. <b>Many local manifestations first, one destination later</b> &mdash; which is precisely the sequencing principle 4 argues for. <a href="https://about.fb.com/news/2024/06/meta-ai-arrives-in-india-leading-ai-assistant-now-at-your-fingertip/" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
-
-  <div class="proof"><span class="pf-who">X &middot; Grok</span><p>Grok moved from a nav-bar destination to a button on the post itself. The object carries the context, so the user never rebuilds it. <b>The entry point is the intent, not the brand.</b> <a href="https://x.ai/news/grok-1212" target="_blank" rel="noreferrer">source &nearr;</a></p></div>
-
-  <div class="imp"><p class="lbl">So what</p><p>In every one of these, the assistant is <b>not discovered by being advertised</b>. It is discovered because a small piece of it did something useful on a screen the user was already looking at. That is the mechanism we are missing, and the next section is what it looks like on Meesho.</p></div>
 </section>
 
 <section class="sec" id="secondary">
@@ -1150,6 +1165,7 @@ figure{margin:22px 0}
   <p class="part-rule">Part 2 &middot; The answer</p>
   <div class="sec-head"><span class="num">4</span><span class="eyebrow">The primary surface</span></div>
   <h2>Not a chat screen &mdash; a generative shopping interface.</h2>
+  <p class="lead">The primary surface is for one specific class of request: the ones where a shopper has to <b>state explicit intent</b> because the app has no way to serve it today. Alternate product discovery. Comparison. "Same but cheaper." "Which of these two." Those are not searches and they are not filters &mdash; they are reasoning tasks with state, and there is currently nowhere in Meesho for them to happen.</p>
   <p class="lead">Users already know how to browse. The goal is not to make every interaction conversational. Let them browse naturally until intelligence can materially improve the journey &mdash; then take real control.</p>
 
   <div class="steps">
@@ -1175,7 +1191,36 @@ figure{margin:22px 0}
     </tbody>
   </table></div>
 
-  <h3>A two-way window</h3>
+</section>
+
+<section class="sec" id="flywheel">
+  <p class="part-rule">Part 2 &middot; The answer</p>
+  <div class="sec-head"><span class="num">5</span><span class="eyebrow">How the two-way window collapses into one AI-native app</span></div>
+  <h2>Every use improves the next &mdash; until the seam between Vaani and the app stops being visible.</h2>
+  <p class="lead">Secondary and primary are not two features and they are not two phases. Run together they are a wheel: each turn of it makes the next intervention sharper, and over enough turns the two surfaces stop being distinguishable from the app itself.</p>
+
+  <div class="steps">
+    <div class="st"><div class="ic">1</div><div class="st-t">Detect</div><div class="st-d">A secondary surface spots an opportunity in context</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">2</div><div class="st-t">Pull</div><div class="st-d">Useful intelligence drives the user to engage</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">3</div><div class="st-t">Solve</div><div class="st-d">The primary surface completes the mission</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st"><div class="ic">4</div><div class="st-t">Reveal</div><div class="st-d">Explicit intent and behaviour expose real constraints</div></div>
+    <div class="arw">&rarr;</div>
+    <div class="st hero-node"><div class="ic">5</div><div class="st-t">Sharpen</div><div class="st-d">Personalisation and future interventions improve</div></div>
+  </div>
+  <p class="steps-note">&#8629; and sharper interventions detect better opportunities &mdash; the wheel turns again &#8629;</p>
+
+  <p>Step four is not theoretical. We can already see what a conversation knows that click data cannot reconstruct. Across the 40 heaviest Vaani users and the 29,317 turns between them, voice <b>corrected, contradicted or wholly supplied</b> what the platform believed for <b>26 of the 40</b> &mdash; and <b>8 of them are invisible</b> in our order systems entirely.</p>
+
+  <figure><div class="viz">
+    <div class="viz-head"><p class="viz-title">What the conversation knew that our systems did not</p><p class="viz-sub">The 40 heaviest Vaani users, against what the platform believed about them.</p></div>
+    <div id="c-voice"></div>
+    <p class="viz-cap">The same 40 conversations surfaced <b>245 unmet asks</b>, <b>163 explicit rejections</b>, <b>144 stated price ceilings</b> and <b>83 hard exclusions</b>. None of that exists in click data. This is the compounding asset.</p>
+  </div></figure>
+
+  <h3>The window runs in both directions, and that is what accelerates it</h3>
   <p>The primary surface is not only something we ship to users. Because it is unconstrained, it is also the only place users can show us what they expect a shopping assistant to do. The traffic runs both ways.</p>
 
   <div class="tway">
@@ -1199,83 +1244,10 @@ figure{margin:22px 0}
     <div class="tw-pole r"><span>The user</span></div>
   </div>
   <p class="steps-note">We use the primary surface to show users the future of Meesho &mdash; while users use it to tell us what that future should be.</p>
-</section>
 
-<section class="sec" id="turn0">
-  <p class="part-rule">Part 2 &middot; The answer</p>
-  <div class="sec-head"><span class="num">5</span><span class="eyebrow">Turn Zero &mdash; how the two connect</span></div>
-  <h2>The conversation starts before the user speaks.</h2>
-  <p class="lead">Secondary and primary only work as one intelligence if context survives the jump. A user should never restate something Vaani already had on screen.</p>
-
-  <div class="handoff">
-    <div class="ho-sec">
-      <p class="ho-lab">Secondary surface &middot; feed</p>
-      <div class="vcard">
-        <div class="vcard-h"><span class="vmic"><svg viewBox="0 0 24 24" width="60%" height="60%" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.93V21h2v-3.07A7 7 0 0 0 19 11h-2z"/></svg></span><b>"You seem to prefer red kurtis under &#8377;500."</b></div>
-        <span class="vbtn">Show me</span>
-      </div>
-      <p class="note">An intervention generated by Vaani &mdash; not a prompt generated by the user. This is Turn 0.</p>
-    </div>
-    <div class="ho-arrow"><span class="lab">one tap</span><span class="bar"></span></div>
-    <div class="ho-pri">
-      <p class="ho-lab">Primary surface &middot; opens mid-conversation</p>
-      <p class="knows">Already knows:</p>
-      <div class="chips"><span class="chip">Surface: feed</span><span class="chip">Anchor: red kurti</span><span class="chip">Price: under &#8377;500</span><span class="chip">Signal: skips synthetics</span><span class="chip">Trigger: verdict tap</span></div>
-      <span class="utter">"Only cotton ones."</span>
-      <p class="note">The user's first words are already a refinement &mdash; no blank screen, no restart, no re-explaining.</p>
-    </div>
-  </div>
-  <p class="steps-note">The intervention is Turn Zero. The tap is Turn One.</p>
-
-  <p>The connection has to work in reverse too. Once Vaani has generated alternatives or completed a comparison, the user moves back into normal browsing &mdash; images, variants, cart, checkout. <b>We do not trap the journey inside an AI surface.</b> Each surface owns the part of the journey it is best at.</p>
-
-  <div class="tw"><table>
-    <thead><tr><th>Handoff</th><th>Secondary &middot; Turn 0</th><th>Primary continuation</th></tr></thead>
-    <tbody>
-      <tr><td><b>Feed &rarr; Refine</b></td><td>"Vaani found 14 cotton kurtis under &#8377;500."</td><td>"Show me" opens a curated result already carrying cotton, price band and feed context</td></tr>
-      <tr><td><b>PDP &rarr; Decide</b></td><td>"Reviews are positive on fabric, mixed on sizing."</td><td>"Compare with the one I saw earlier" opens with both products and their evidence</td></tr>
-      <tr><td><b>Wishlist &rarr; Alternate</b></td><td>"Vaani found a cheaper alternative."</td><td>"Why is it better?" opens a comparison preserving the original anchor</td></tr>
-      <tr><td><b>Orders &rarr; Functional</b></td><td>"Delivery is delayed by two days."</td><td>"Cancel it" continues straight into the correct order action</td></tr>
-    </tbody>
-  </table></div>
-
-
-  <h3>Four rules the handoff has to obey</h3>
-  <div class="grid2">
-    <div class="card"><h4>Carry complete context</h4><p>Surface, product, prior behaviour, the verdict shown and the action taken all travel into primary.</p></div>
-    <div class="card"><h4>Never open an empty Vaani screen</h4><p>The intervention is Turn Zero; the tap is Turn One. The user's first words should be a refinement.</p></div>
-    <div class="card"><h4>Never ask the user to restate</h4><p>Not the product, not the constraint, not the mission. If Vaani had it on screen, it keeps it.</p></div>
-    <div class="card"><h4>Preserve the anchor, and the way back</h4><p>Easy return to the original product and to normal browsing. We do not trap the journey.</p></div>
-  </div>
-
-</section>
-
-<section class="sec" id="flywheel">
-  <p class="part-rule">Part 2 &middot; The answer</p>
-  <div class="sec-head"><span class="num">6</span><span class="eyebrow">Why it compounds, and where it lands</span></div>
-  <h2>Every use improves the next.</h2>
-  <p class="lead">The two surfaces joined by Turn Zero are not two features. They are a wheel &mdash; and the reason to build both is that neither turns on its own.</p>
-
-  <div class="steps">
-    <div class="st"><div class="ic">1</div><div class="st-t">Detect</div><div class="st-d">A secondary surface spots an opportunity in context</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">2</div><div class="st-t">Pull</div><div class="st-d">Useful intelligence drives the user to engage</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">3</div><div class="st-t">Solve</div><div class="st-d">The primary surface completes the mission</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st"><div class="ic">4</div><div class="st-t">Reveal</div><div class="st-d">Explicit intent and behaviour expose real constraints</div></div>
-    <div class="arw">&rarr;</div>
-    <div class="st hero-node"><div class="ic">5</div><div class="st-t">Sharpen</div><div class="st-d">Personalisation and future interventions improve</div></div>
-  </div>
-  <p class="steps-note">&#8629; and sharper interventions detect better opportunities &mdash; the wheel turns again &#8629;</p>
-
-  <p>Step four is not theoretical. We can already see what a conversation knows that click data cannot reconstruct. Across the 40 heaviest Vaani users and the 29,317 turns between them, voice <b>corrected, contradicted or wholly supplied</b> what the platform believed for <b>26 of the 40</b> &mdash; and <b>8 of them are invisible</b> in our order systems entirely.</p>
-
-  <figure><div class="viz">
-    <div class="viz-head"><p class="viz-title">What the conversation knew that our systems did not</p><p class="viz-sub">The 40 heaviest Vaani users, against what the platform believed about them.</p></div>
-    <div id="c-voice"></div>
-    <p class="viz-cap">The same 40 conversations surfaced <b>245 unmet asks</b>, <b>163 explicit rejections</b>, <b>144 stated price ceilings</b> and <b>83 hard exclusions</b>. None of that exists in click data. This is the compounding asset.</p>
-  </div></figure>
+  <h3>And it keeps handing us problems we could not have written down</h3>
+  <p>The compounding is not only in personalisation. Every mission a user tries to complete on an unconstrained surface is a statement about what they expect Meesho to be able to do &mdash; and most of those expectations are not in any roadmap today. Comparison was invisible to us until we looked for it and found 556 asks. Price negotiation was never designed; it arrived because we changed how people could express themselves.</p>
+  <div class="insight"><b>Expect this to surface the next set of 10x problem statements</b> &mdash; not from a planning cycle, but from watching what users reach for once the interface stops constraining them. The surface is a demand-discovery instrument as much as a product.</div>
 
   <h3>Five phases from feature to interface</h3>
   <p>Not a transition we force in one release. We teach the interaction model through demonstrated utility, and Vaani's prominence grows only where users show pull.</p>
@@ -1283,7 +1255,7 @@ figure{margin:22px 0}
   <div class="phases">
     <div class="phase"><span class="pn">1</span><div><h4>Evidence</h4><p>Vaani leaves visible proof of intelligence across feed, PDP, cart, wishlist and orders. No conversation required anywhere.</p></div></div>
     <div class="phase"><span class="pn">2</span><div><h4>Interactive</h4><p>Every intervention can be acted on &mdash; "yes, show more", "why?", "no, correct that". Vaani starts the conversation instead of waiting for it.</p></div></div>
-    <div class="phase"><span class="pn">3</span><div><h4>Turn Zero</h4><p>The tap opens the primary surface mid-conversation, exactly as Part 2 &sect;5 describes.</p></div></div>
+    <div class="phase"><span class="pn">3</span><div><h4>The handoff carries context</h4><p>Tapping an intervention opens the primary surface already holding the screen, the product and the behaviour behind it. The user never restates anything.</p></div></div>
     <div class="phase"><span class="pn">4</span><div><h4>Expand based on pull</h4><p>Users who repeatedly engage receive richer outputs, more prominence and lower friction into primary Vaani. Prominence follows demonstrated demand.</p></div></div>
     <div class="phase last"><span class="pn">5</span><div><h4>Adaptive Meesho</h4><p>The user states the outcome. Vaani orchestrates the experience &mdash; search, ranking, evidence, comparison and action &mdash; while Meesho provides the visual control surface.</p></div></div>
   </div>
@@ -1294,15 +1266,26 @@ figure{margin:22px 0}
 </section>
 
 <section class="sec" id="next">
-  <p class="part-rule">Part 2 &middot; The answer</p>
-  <div class="sec-head"><span class="num">7</span><span class="eyebrow">What we do next</span></div>
-  <p class="verdict">Build somewhere worth going, before building the roads to it.</p>
-  <p class="lead">One primary-surface test that proves intelligence can produce a better outcome. Three secondary interventions that test whether visible intelligence creates pull. Then, and only then, join them.</p>
+  <p class="part-rule">Part 3 &middot; Immediate next steps</p>
+  <div class="sec-head"><span class="num">&#9654;</span><span class="eyebrow">One use case, both surfaces</span></div>
+  <p class="verdict">Test the whole model on one mission &mdash; alternate product discovery &mdash; rather than a piece of it everywhere.</p>
+  <p class="lead">Everything in Part 2 stands or falls on one question: does a small piece of visible intelligence pull a shopper into a surface that then closes the mission better than the app can? Alternate product discovery is the cleanest place to ask it. It is the mission with the most evidence behind it, the clearest failure today, and it needs both surfaces to work &mdash; a secondary card to create the pull, a primary surface to do the reasoning.</p>
+  <div class="callout">Why this mission and not another: revisit behaviour produces <b>55% of orders</b> (Part 1 &sect;2), the manual hunt after an anchor runs <b>7.1 clicks</b> deep, and today Vaani actively makes it worse &mdash; a broad re-search drops same-product closure from <b>34.0%</b> to <b>20.8&ndash;23.7%</b> and carries the stated constraint only <b>4.6&ndash;14.8%</b> of the time.</div>
 
-  <div class="callout"><b>Sequence:</b> build a strong primary outcome &rarr; test a few high-utility secondary interventions &rarr; connect them through Turn Zero &rarr; scale only what proves useful. That is stronger than building broad secondary presence before there is somewhere valuable for the pull to go.</div>
+  <div class="callout"><b>Sequence:</b> build a strong primary outcome &rarr; test a few high-utility secondary interventions &rarr; connect them so context carries across &rarr; scale only what proves useful. That is stronger than building broad secondary presence before there is somewhere valuable for the pull to go.</div>
 
-  <h3>First: the primary-surface test &mdash; alternate discovery and comparison, on a price turn</h3>
-  <p>The logic chains straight out of Part II. Price is the largest DECIDE ask. Price questions are usually unresolved <i>decision</i> asks, not discount requests. A broad re-search loses the anchor and the constraint. And revisit behaviour tells us comparison is what high intent looks like. So the first test is the one that puts all four together.</p>
+
+  <h3>What it looks like end to end</h3>
+  <p>Three stages, all inside the shopper's normal journey. She never opens a Vaani destination and never restates what she wants.</p>
+  <div class="poc-note">
+    <p><b>1 &middot; The door.</b> An Ask bar on home and an intelligence affordance on the product page &mdash; visible, in the app's own idiom, on a screen she is already using.</p>
+    <p><b>2 &middot; The ask.</b> She says <i>"इससे सस्ते वाले दिखाओ"</i> against the product in front of her. The anchor is already known, so the constraint is all she has to supply.</p>
+    <p><b>3 &middot; The answer.</b> A secondary card appears on the product page &mdash; <i>"4 cheaper alternatives were found"</i> with the set previewed and a way in. Tapping it opens the primary surface holding the anchor, the constraint and the candidates, with a follow-up box for the next refinement.</p>
+    <p class="source">Design frames to be embedded here.</p>
+  </div>
+
+  <h3>The primary surface: an anchor, a preserved constraint, a generated set</h3>
+  <p>The logic chains straight out of Part 1. Price is the largest DECIDE ask. Price questions are usually unresolved <i>decision</i> asks, not discount requests. A broad re-search loses the anchor and the constraint. And revisit behaviour tells us comparison is what high intent looks like. So the first test is the one that puts all four together.</p>
 
   <div class="pocflow">
     <div class="poc-step"><span class="pi">1</span><div><b>Anchor product</b><span>The item the shopper is on, pinned and kept visible throughout</span></div></div>
@@ -1321,7 +1304,7 @@ figure{margin:22px 0}
   <p>That flow is the primary-surface thesis in its smallest testable form: an anchor, a preserved constraint, a generated set, and a reason for each item. If it works, "task first, UI second" stops being a principle and becomes a shipped behaviour.</p>
   <p class="source">Full scope and measurement: <a href="../product-docs/price-turn-alternative-discovery.html">KRD &mdash; Alternative Discovery on Price Turns &nearr;</a></p>
 
-  <h3>In parallel: three secondary-surface conviction tests</h3>
+  <h3>The secondary surfaces that have to create the pull</h3>
   <p>The smallest number of interventions that can tell us whether visible intelligence creates pull. Each one has to be useful on its own terms, whether or not it ever leads to Vaani. Three, not omnipresence.</p>
 
   <div class="grid3">
