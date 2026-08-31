@@ -122,7 +122,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Builds on</td>
-<td style="text-align: center;">Product note — <a href="../product-notes/price-discovery-to-better-value.html">Price Discovery → Better Value</a>; combined view — <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">How Vaani Can Help in Exploit Journeys</a></td>
+<td style="text-align: center;">Product note — <a href="../product-notes/price-discovery-to-better-value.html">Price Discovery → Better Value</a>; combined view — <a href="../combined-views/how-vaani-can-help-in-exploit-journeys.html">How Vaani Can Help in Exploit Journeys</a>; behavioural read — "The Question After the Haggle" (price-negotiation exit and category-drift data)</td>
 </tr>
 <tr>
 <td style="text-align: center;">Depends on</td>
@@ -140,13 +140,18 @@
 <h2>1. Problem Statement</h2>
 <p>Price is the dominant ask on PDP Vaani turns — roughly 70% of DECIDE turns at every hunt depth — and <strong>44.6%</strong> of those price turns are outright negotiation. Today that ask gets a price answer or, worse, a re-search of the same sub-category. Measured across 879,571 Vaani PDP turns, a same-sscat re-search after a DECIDE turn converts <em>worse than doing nothing at all</em>, and fewer than 15% of Vaani re-searches preserve the constraint the buyer just stated.</p>
 <p>The behaviour underneath the ask is well established. Buyers anchor on one product and then grind through <strong>7.1</strong> more clicks of the same product type before ordering. They are not chasing the price floor — the alternative they click before buying is priced above the eventual purchase about as often as below — but any gap between where they land and what they buy multiplies the work: landing at 2× the price finally paid costs <strong>+56%</strong> more browsing.</p>
+<p>Negotiation-session data sharpens the same mechanism. Across 117,488 sessions with a price-negotiation move, 69.7% keep talking after the last haggle — and the single most common next move, well ahead of any other product question, is a plain new search (35.9% of continuing sessions; only 13% turn into a genuine product question). That search leaves the anchor's sub-category immediately: 62% of the time on the very first post-haggle search turn, rising to 76% across the full tail. The cost is concrete — sessions that keep searching inside the same sub-category return to the original product 39.3% of the time, against 29.7% for sessions that switch category, a ~10pp same-product conversion gap paid to an unrelated listing. <em>(Source: "The Question After the Haggle," turn-tagging 20 May–20 Jul 2026.)</em></p>
 <p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, retrieve a set of similar, in-stock alternatives in the same price band, score and group them so genuinely good products land at the top, and say out loud which one is the better buy and why.</p>
 
 <h2>2. Product Thinking</h2>
 <p>Four claims this KRD wants to support or reject:</p>
 <ul>
 <li>
-<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a scored, grouped alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount.</p>
+<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a scored, grouped alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount. <em>(Independent evidence: after a negotiation stalls, a plain product search — not a product question — is the buyer's overwhelmingly dominant next move, 35.9% vs. 13%. See below.)</em></p>
+<p><img src="../assets/doc/price-turn-wf-topics.png" alt="Waterfall chart: from the negotiation move (100%, 117,488 sessions), 48.2% raise nothing else and 51.8% branch into at least one other topic — product detail 26.8%, quality 22.1%, delivery 11.7%, size and fit 9.6%, pack/quantity 6.6%, how to use 4.8%, comparison 0.6%, each running 2.5-3.7x its own baseline rate; a new product search after the haggle runs at 73.5% but only 0.93x its baseline." loading="lazy"></p>
+<p>Of the 117,488 negotiation sessions, 48.2% never raise another product question — the haggle is the whole conversation. The other 51.8% branch, overwhelmingly into product detail and quality, each running 2.5–3.7× its own baseline rate. This is the direct evidence for Claim 1: negotiation opens a real alternative-discovery window, not just a discount ask.</p>
+<p><img src="../assets/doc/price-turn-wf-depth-combos.png" alt="Two charts: a depth waterfall showing 48.2% of negotiator sessions raise 0 other topics, 30.8% exactly 1, 14.0% exactly 2, 5.1% exactly 3, 1.9% four or more; and a table of the top topic combinations, led by haggle+product detail at 11.47% and haggle+quality at 9.07%, with a note that 70-83% of these co-occurring topics share the price turn's own sub-category." loading="lazy"></p>
+<p>Of the branching 51.8%, three in five stop at exactly one other topic — a single loose end per session, not a general Q&amp;A. The top pairs are haggle + product detail (11.5%) and haggle + quality (9.1%). Critically, 70–83% of these co-occurring topics sit on the <em>same sub-category</em> as the price turn (quality 82.7%, delivery 83.2%, product detail 81.9%) — confirming the verdict's P0/P1/P2 fields (rating, delivery promise, review images) are exactly what buyers are already asking about, on the same product, in the same breath.</p>
 </li>
 <li>
 <p><strong>Deterministic scoring on P0 alone is enough to beat default order.</strong> Six fields — price, rating, rating count, seller rating, availability, Mall/Gold — should be sufficient to move a better product into the first screen. This is testable in isolation from the LLM (the LLM is still used for grouping and the verdict — see below).</p>
@@ -171,6 +176,7 @@
 </tr>
 </tbody>
 </table></div>
+<p>Current baseline, before this build: post-haggle searches that stay in the anchor's sub-category return to the original product 39.3% of the time; searches that switch category, 29.7% (n = 31,825 negotiator sessions with a tagged post-haggle search). This gap is the size of the opportunity the build targets.</p>
 <p><em>Explicitly not the primary metric: within-Vaani order rate. That is selection, not lift — buyers who reach Vaani late in the hunt already convert better. Judge this feature on effort and same-type conversion.</em></p>
 
 <h3>3.2 Secondary Metrics</h3>
