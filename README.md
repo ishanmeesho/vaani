@@ -23,6 +23,12 @@ https://ishanmeesho.github.io/vaani/
   listed in the shared `product-docs/` sidebar under "Product Notes" (as an
   external link) and on the landing page's "Product & Strategy Docs" tab, but
   kept in their own folder so the planning-doc import can't overwrite them.
+- `prompts/` — the prompt atlas: the two-layer stack as it actually ships, with
+  every system and core prompt quoted verbatim from the config it was generated
+  from. One file per config version (`two-layer-atlas-v6.html` covers
+  `application-dyn-prd.v6.yml`), so an older version stays readable after a new
+  one lands — add the next one beside it rather than overwriting. Listed on the
+  landing page's "Product & Strategy Docs" tab.
 - `product-docs/` — KRDs, product notes and BHAG docs, each with its own browse
   sidebar. Most are imported from the team's shared planning doc; KRDs written
   here (e.g. `price-turn-alternative-discovery.html`) use the same shell and are
