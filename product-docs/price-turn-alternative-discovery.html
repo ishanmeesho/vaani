@@ -392,7 +392,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>The anchor record carries: pid, catalog id, sscat, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. <strong>Candidate sourcing for the anchor is out of scope for this document</strong> — the requirement is a pool of in-stock, comparable candidates in the adjacent price band, however they are retrieved.</p>
+<p>The anchor record carries: pid, catalog id, sscat, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. The pid is what the comp-swap call is keyed on (3.3), so anchor resolution and candidate sourcing are the same decision made once: get the anchor wrong and every product on the sheet is wrong.</p>
 
 <h3>3.3 Candidate Constraints</h3>
 <ul>
@@ -408,13 +408,13 @@
 
 <h3>3.4 Candidate Pool &amp; Rerank Eligibility</h3>
 <ul>
-<li><p><strong>Pool size: 50</strong>, taken from the results <em>after</em> the price filter is applied — not 50 raw visual matches subsequently filtered.</p></li>
+<li><p><strong>Pool size: 50</strong>, taken from the comp-swap set <em>after</em> the price filter is applied — not 50 raw competitors subsequently filtered. If comp-swap returns fewer than 50 to begin with, the pool is what it returns.</p></li>
 <li><p><strong>Floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not score or group</strong>. The primary surface still opens (3.10), but the pool renders in comp-swap's order and no verdict is attempted — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
 <li><p>Availability is a <strong>gate</strong>, applied before scoring. An unavailable candidate is removed from the pool, not down-weighted, and does not count toward the 4.</p></li>
 </ul>
 
 <h3>3.5 Rerank Logic — P0 Scoring</h3>
-<p>The rerank is deterministic, backend-side, and runs before the feed is generated. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
+<p>The rerank is deterministic, backend-side, and runs before the primary surface is composed. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
 
 <h4>3.5.1 In plain terms</h4>
 <p>Every candidate gets a score out of 100. Four things earn points, and one adds a bonus. The pool is then sorted by that score.</p>
@@ -495,7 +495,7 @@ where
 <h3>3.6 Mall / Gold Handling</h3>
 <ul>
 <li><p><strong>Rerank:</strong> Mall/Gold membership is a bounded priority lift (<code>w_mall</code>), so trusted stock rises in the stack without a much better non-Mall product being buried beneath a mediocre Mall one.</p></li>
-<li><p><strong>Feed:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything.</p></li>
+<li><p><strong>Surface:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything.</p></li>
 <li><p><strong>Verdict:</strong> when a Mall/Gold option is in the spoken set, Vaani may mention that the option is also available from Mall / the original brand.</p></li>
 <li><p><strong>Out of scope:</strong> injecting Mall products from <em>outside</em> the price band. The price filter stays hard in v1 — Mall handling is a lift and a highlight within the band, not a band exception.</p></li>
 </ul>
@@ -506,7 +506,7 @@ where
 <li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build. <strong>[info enrichment v0 processors which we have built]</strong></p></li>
 <li><p><strong>The anchor is in the payload</strong>, with the same fields plus the buyer's selected variant. Without it the model cannot say "₹40 cheaper" or "four times the ratings", and the verdict degrades into a description.</p></li>
 <li><p><strong>The verdict may disagree with the score order.</strong> The scoring sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
-<li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — in a visual-similarity feed the candidates share their visible attributes, so "the red cotton one" identifies nothing. Never by pid.</p></li>
+<li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — a competitor set shares its visible attributes by construction, so "the red cotton one" identifies nothing. Never by pid.</p></li>
 <li><p><strong>Position means rank on the rendered primary surface</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the sheet is a guardrail failure. The same rule binds comparison turns taken against the sheet (3.15).</p></li>
 <li><p><strong>Silence is a valid output.</strong> If nothing in the window is a meaningfully better buy than the anchor, Vaani says so plainly — "yeh theek hai, isse behtar kuch khaas nahi mila" — rather than inventing a reason to move the buyer. That case is US-507, and it is trust-building rather than a failure.</p></li>
 </ul>
@@ -589,12 +589,12 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 <tr>
 <td style="text-align: center;">Numeric grounding</td>
 <td style="text-align: center;">Every number in the output (price, rating, rating count, days) matches a value supplied in the payload for the anchor or a candidate.</td>
-<td style="text-align: center;">Suppress the verdict, log <code>verdict_grounding_fail</code> with the offending span. Do not retry silently in v1.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>grounding_pass = false</code> with the offending span on <code>alt_verdict</code> (8.3). Do not retry silently in v1.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Positional consistency</td>
 <td style="text-align: center;">Any positional phrase resolves to a rank present in the payload, and the product described at that position matches the payload's product at that rank.</td>
-<td style="text-align: center;">Suppress the verdict, log <code>verdict_position_fail</code>.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>position_pass = false</code> on <code>alt_verdict</code> (8.3).</td>
 </tr>
 </tbody>
 </table></div>
@@ -997,8 +997,8 @@ the single field value that justifies inclusion }.</code></pre>
 <tbody>
 <tr>
 <td style="text-align: center;"><code>alt_discovery_trigger</code></td>
-<td style="text-align: center;">session_id, turn_id, request_id, anchor_pid, anchor_sscat, anchor_price, price_intent_subtype, screen, interaction_type, ts_ms</td>
-<td style="text-align: center;">Trigger precision, and confirms anchor resolution when the buyer asks from the reco rail.</td>
+<td style="text-align: center;">session_id, turn_id, request_id, anchor_pid, anchor_sscat, anchor_price, price_intent_subtype, screen, entry_surface (pdp / reco_scroll), interaction_type, ts_ms</td>
+<td style="text-align: center;">Trigger precision, and confirms anchor resolution when the buyer asks from the reco rail. <code>screen</code> and <code>entry_surface</code> are not the same field — both read PDP in the reco-scroll case, and only the second one says the buyer had scrolled away from it.</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>alt_discovery_candidates</code></td>
