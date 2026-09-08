@@ -96,13 +96,13 @@
     <article class="pd-doc">
     <h1>Alternate Product Discovery</h1>
 <h1>KRD — Vaani Alternative Discovery on Price Turns</h1>
-<p><em>When a buyer questions or negotiates the price of the product they are on, Vaani retrieves a set of similar, in-stock alternatives in the same price band, scores and groups them against P0/P1/P2 signals inside a backend-composed CLP, and speaks a verdict comparing the anchor against the best of them.</em></p>
+<p><em>When a buyer questions or negotiates the price of the product they are on, the backend pulls that product's competitor set from the comp-swap API, scores and groups it against P0/P1/P2 signals, and opens a bottom sheet — the primary surface — carrying it. Vaani speaks a verdict comparing the anchor against the best of them, and stays in the conversation while the buyer compares. Vaani itself moves out of the floating action button into a persistent voice strip at the top of every page.</em></p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Field</th><th>Value</th></tr></thead>
 <tbody>
 <tr>
 <td style="text-align: center;">Current Version</td>
-<td style="text-align: center;">v1</td>
+<td style="text-align: center;">v2 — comp-swap sourcing, primary surface, voice strip</td>
 </tr>
 <tr>
 <td style="text-align: center;">Current Status</td>
@@ -110,7 +110,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Last Updated</td>
-<td style="text-align: center;">20 August 2026</td>
+<td style="text-align: center;">8 September 2026</td>
 </tr>
 <tr>
 <td style="text-align: center;">POD</td>
@@ -130,7 +130,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Ships as</td>
-<td style="text-align: center;">A single build — SDUI custom CLP, candidate scoring and grouping, and the spoken verdict, together. Needs Android + design.</td>
+<td style="text-align: center;">A single build — the persistent voice strip, the comp-swap-sourced primary surface (bottom sheet), candidate scoring and grouping, the bulk product-context processor, and the spoken verdict, together. Needs Android + design.</td>
 </tr>
 </tbody>
 </table></div>
@@ -141,13 +141,13 @@
 <p>Price is the dominant ask on PDP Vaani turns — roughly 70% of DECIDE turns at every hunt depth — and <strong>44.6%</strong> of those price turns are outright negotiation. Today that ask gets a price answer or, worse, a re-search of the same sub-category. Measured across 879,571 Vaani PDP turns, a same-sscat re-search after a DECIDE turn converts <em>worse than doing nothing at all</em>, and fewer than 15% of Vaani re-searches preserve the constraint the buyer just stated.</p>
 <p>The behaviour underneath the ask is well established. Buyers anchor on one product and then grind through <strong>7.1</strong> more clicks of the same product type before ordering. They are not chasing the price floor — the alternative they click before buying is priced above the eventual purchase about as often as below — but any gap between where they land and what they buy multiplies the work: landing at 2× the price finally paid costs <strong>+56%</strong> more browsing.</p>
 <p>Negotiation-session data sharpens the same mechanism. Across 117,488 sessions with a price-negotiation move, 69.7% keep talking after the last haggle — and the single most common next move, well ahead of any other product question, is a plain new search (35.9% of continuing sessions; only 13% turn into a genuine product question). That search leaves the anchor's sub-category immediately: 62% of the time on the very first post-haggle search turn, rising to 76% across the full tail. The cost is concrete — sessions that keep searching inside the same sub-category return to the original product 39.3% of the time, against 29.7% for sessions that switch category, a ~10pp same-product conversion gap paid to an unrelated listing. <em>(Source: "The Question After the Haggle," turn-tagging 20 May–20 Jul 2026.)</em></p>
-<p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, retrieve a set of similar, in-stock alternatives in the same price band, score and group them so genuinely good products land at the top, and say out loud which one is the better buy and why.</p>
+<p>So the buyer asking "is this the best price?" is asking whether to buy <em>this</em> one. This KRD ships the answer: on a price turn, pull the product's competitor set from the comp-swap API, score and group it so genuinely good products land at the top, put it on screen as a bottom sheet the backend opens, and say out loud which one is the better buy and why — then keep answering while the buyer compares what is in front of them.</p>
 
 <h2>2. Product Thinking</h2>
 <p>Four claims this KRD wants to support or reject:</p>
 <ul>
 <li>
-<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a scored, grouped alternative feed on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount. <em>(Independent evidence: after a negotiation stalls, a plain product search — not a product question — is the buyer's overwhelmingly dominant next move, 35.9% vs. 13%. See below.)</em></p>
+<p><strong>A price ask is an alternative-discovery intent, not a discount request.</strong> If true, a scored, grouped competitor set on a price turn should raise same-sscat conversion versus the current price answer. If false, buyers will abandon the feed and re-ask for a discount. <em>(Independent evidence: after a negotiation stalls, a plain product search — not a product question — is the buyer's overwhelmingly dominant next move, 35.9% vs. 13%. See below.)</em></p>
 <p><img src="../assets/doc/price-turn-wf-topics.png" alt="Waterfall chart: from the negotiation move (100%, 117,488 sessions), 48.2% raise nothing else and 51.8% branch into at least one other topic — product detail 26.8%, quality 22.1%, delivery 11.7%, size and fit 9.6%, pack/quantity 6.6%, how to use 4.8%, comparison 0.6%, each running 2.5-3.7x its own baseline rate; a new product search after the haggle runs at 73.5% but only 0.93x its baseline." loading="lazy"></p>
 <p>Of the 117,488 negotiation sessions, 48.2% never raise another product question — the haggle is the whole conversation. The other 51.8% branch, overwhelmingly into product detail and quality, each running 2.5–3.7× its own baseline rate. This is the direct evidence for Claim 1: negotiation opens a real alternative-discovery window, not just a discount ask.</p>
 <p><img src="../assets/doc/price-turn-wf-depth-combos.png" alt="Two charts: a depth waterfall showing 48.2% of negotiator sessions raise 0 other topics, 30.8% exactly 1, 14.0% exactly 2, 5.1% exactly 3, 1.9% four or more; and a table of the top topic combinations, led by haggle+product detail at 11.47% and haggle+quality at 9.07%, with a note that 70-83% of these co-occurring topics share the price turn's own sub-category." loading="lazy"></p>
@@ -157,7 +157,7 @@
 <p><strong>Deterministic scoring on P0 alone is enough to beat default order.</strong> Six fields — price, rating, rating count, seller rating, availability, Mall/Gold — should be sufficient to move a better product into the first screen. This is testable in isolation from the LLM (the LLM is still used for grouping and the verdict — see below).</p>
 </li>
 <li>
-<p><strong>A spoken verdict converts better than a silent grouped feed.</strong> The CLP's scoring and grouping changes what the buyer sees; the verdict changes what they understand. The delta between them is the value of the verdict, and is measurable as an isolated increment.</p>
+<p><strong>A spoken verdict converts better than a silent grouped sheet.</strong> The primary surface's scoring and grouping changes what the buyer sees; the verdict changes what they understand. The delta between them is the value of the verdict, and is measurable as an isolated increment.</p>
 </li>
 <li>
 <p><strong>Buyers can act on a voice reference without a deep-link.</strong> With no scroll-to and no deep-link, the buyer must locate the product Vaani described. If product-open rate from the top three is weak, the navigation capability we deliberately cut has to come back.</p>
@@ -193,11 +193,11 @@
 </tr>
 <tr>
 <td style="text-align: center;">Top-3 product open rate</td>
-<td style="text-align: center;">Share of CLP renders where the buyer opens one of the first three products shown. The direct read on whether scoring/grouping put the answer where the thumb is.</td>
+<td style="text-align: center;">Share of primary-surface opens where the buyer opens one of the first three products shown. The direct read on whether scoring/grouping put the answer where the thumb is.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Verdict spoken rate</td>
-<td style="text-align: center;">% of CLP renders where the model judged something worth saying and spoke. Both extremes are bad — near 100% means the meaningfulness bar is not working, near 0% means it is too strict.</td>
+<td style="text-align: center;">% of primary-surface opens where the model judged something worth saying and spoke. Both extremes are bad — near 100% means the meaningfulness bar is not working, near 0% means it is too strict.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Post-verdict open rate</td>
@@ -209,7 +209,15 @@
 </tr>
 <tr>
 <td style="text-align: center;">Group engagement</td>
-<td style="text-align: center;">Opens per CLP group, so we learn which of the six intents buyers actually shop by.</td>
+<td style="text-align: center;">Opens per group on the primary surface, so we learn which of the six intents buyers actually shop by.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Comparison-turn rate</td>
+<td style="text-align: center;">Share of primary-surface opens followed by at least one further Vaani turn taken while the sheet is up. The read on whether the bulk product-context processor is earning its build — a sheet nobody talks to did not need it.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Voice initiation rate per session</td>
+<td style="text-align: center;">Vaani turns started per session, split by <code>interaction_type</code>. The strip replaces the floating action button app-wide, so this is the read on whether a persistent strip is invited more often than a button — measured across all screens, not just price turns.</td>
 </tr>
 </tbody>
 </table></div>
@@ -224,7 +232,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Positional-mismatch rate</td>
-<td style="text-align: center;">% of verdicts where a stated position ("the second one") does not match the product's actual rank in the rendered CLP. <strong>Target 0.</strong></td>
+<td style="text-align: center;">% of verdicts where a stated position ("the second one") does not match the product's actual rank on the rendered primary surface. <strong>Target 0.</strong></td>
 </tr>
 <tr>
 <td style="text-align: center;">Unavailable recommendation rate</td>
@@ -236,7 +244,7 @@
 </tr>
 <tr>
 <td style="text-align: center;">Added latency</td>
-<td style="text-align: center;">P95 added to CLP render and to first spoken word, versus the buyer's current default path.</td>
+<td style="text-align: center;">P95 added to primary-surface open and to first spoken word, versus the buyer's current default path. Includes the comp-swap round trip.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Anchor abandonment without purchase</td>
@@ -254,7 +262,7 @@
 <td style="text-align: center;">US-501</td>
 <td style="text-align: center;">Buyer questioning price</td>
 <td style="text-align: center;">shopper on a PDP who thinks the price is too high</td>
-<td style="text-align: center;">see visually similar products in the same price range with the good ones first</td>
+<td style="text-align: center;">see comparable products in the same price range with the good ones first</td>
 <td style="text-align: center;">judge whether this price is fair without opening ten PDPs</td>
 </tr>
 <tr>
@@ -295,9 +303,23 @@
 <tr>
 <td style="text-align: center;">US-507</td>
 <td style="text-align: center;">Buyer whose product has no close match</td>
-<td style="text-align: center;">shopper on an item with a thin similar-product pool</td>
+<td style="text-align: center;">shopper on an item with a thin competitor pool</td>
 <td style="text-align: center;">be told there is nothing better, rather than shown filler</td>
 <td style="text-align: center;">trust Vaani the next time it does have an answer</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-508</td>
+<td style="text-align: center;">Buyer comparing what is on screen</td>
+<td style="text-align: center;">shopper looking at the alternatives Vaani just put up</td>
+<td style="text-align: center;">ask about any of them, or about them against the product I came from, and be answered</td>
+<td style="text-align: center;">finish the comparison by talking instead of opening every card</td>
+</tr>
+<tr>
+<td style="text-align: center;">US-509</td>
+<td style="text-align: center;">Any buyer, any screen</td>
+<td style="text-align: center;">shopper anywhere in the app</td>
+<td style="text-align: center;">see that Vaani is there, and what it is doing, without hunting for a button</td>
+<td style="text-align: center;">start talking when the question occurs to me rather than when I remember the feature exists</td>
 </tr>
 </tbody>
 </table></div>
@@ -308,7 +330,7 @@
 <ul>
 <li><p>Price-intent detection on PDP Vaani turns, firing candidate retrieval for the anchor. See 3.1.</p></li>
 <li><p>Anchor resolution, including the reco-feed case where the anchor remains the PDP. See 3.2.</p></li>
-<li><p>Candidate retrieval for the anchor, constrained to in-stock products in the adjacent price band. See 3.3.</p></li>
+<li><p><strong>Comp-swap as the candidate source</strong> — the backend calls the existing comp-swap API for the anchor and reads back the competitor products with their full detail. See 3.3.</p></li>
 <li><p>Candidate pool of the top 50 <em>after</em> the price filter, with the 4-candidate floor below which nothing is scored or grouped. See 3.4.</p></li>
 <li><p>Deterministic P0 scoring applied to the pool, with config-driven weights. See 3.5.</p></li>
 <li><p>Mall priority lift in the scoring, plus a client badge on Mall/Gold cards. See 3.6.</p></li>
@@ -316,22 +338,28 @@
 <li><p>LLM verdict generation under the v1 prompt, including the silence path and the product-reference rules. See 3.7 and 3.8.</p></li>
 <li><p>Voice delivery of the verdict. No deep-link, no scroll-to, no Vaani-driven navigation.</p></li>
 <li><p>Post-generation validators for unsupported claims and positional mismatch. See 3.9.</p></li>
-<li><p>SDUI-driven custom CLP that opens on every price turn, with backend-composed content slots. See 3.10.</p></li>
+<li><p><strong>The primary surface</strong> — an SDUI bottom sheet the backend composes and opens on a price turn, carrying the scored, grouped competitor set with the anchor pinned. See 3.10.</p></li>
 <li><p>LLM grouping of the 50-candidate pool against the fixed six-group taxonomy. See 3.10 and 3.11.</p></li>
-<li><p>Anchor product pinned in the CLP for comparison.</p></li>
-<li><p>Reco feed as a second source into the same CLP, including the LLM's decision to use it. See 3.12.</p></li>
-<li><p>Instrumentation across trigger, pool, scoring/grouping, verdict and CLP render. See 7.</p></li>
+<li><p>Reco feed as a second source into the same surface, including the LLM's decision to use it. See 3.12.</p></li>
+<li><p><strong>The persistent voice strip</strong> — Vaani's entry point moves from the floating action button to a strip at the top of every page, with the five states in 3.13. This is an app-wide interaction change, not a price-turn one.</p></li>
+<li><p><strong>The <code>primary_surface_open</code> action</strong> — a third backend-triggered client action alongside search and filter. See 3.14.</p></li>
+<li><p><strong>The bulk product-context processor</strong> — serves the full detail of every product on the sheet plus the anchor into the turn, so Vaani can answer comparison questions about them. See 3.15.</p></li>
+<li><p>Instrumentation across the strip, trigger, pool, scoring/grouping, verdict, surface open and comparison turns. See 8.</p></li>
 </ul>
 
 <h3>2.2 Out of Scope</h3>
 <ul>
 <li><p><strong>Carry-over filters.</strong> Replaying the colour, fabric, size or other attributes the buyer established earlier in the session is deferred. This build carries only the price filter. The single exception is the variant already selected on the anchor PDP itself, which is read directly off the anchor (US-504) rather than from session memory.</p></li>
+<li><p><strong>Image search as the candidate source.</strong> The anchored image-search path is dropped, not deferred. Comp-swap already returns a competitor set per product with the detail we need, so an image match followed by a filtering and enrichment pass is work we no longer have to do. If comp-swap coverage turns out to be the binding constraint (see the guardrail in 3.3), image search comes back as a second source behind it — not as the default.</p></li>
+
+<li><p><strong>The floating action button.</strong> The strip replaces it rather than sitting alongside it. There is no per-screen fallback to the button; <code>interaction_type</code> exists to read the migration, not to keep both alive indefinitely.</p></li>
+
 <li><p><strong>Vaani-driven navigation.</strong> Scroll-to-position, deep-linking to a PDP, and opening a curated pid list are all cut, not deferred. Scoring and grouping are the substitute: put the answer at the top instead of walking the buyer to it. Revisit only if post-verdict open rate is weak (see 3.2 of Section I).</p></li>
 <li><p><strong>Price negotiation of any kind.</strong> Vaani never changes a price, promises a discount, or implies one is available.</p></li>
 <li><p><strong>LLM involvement in scoring.</strong> The candidate order is deterministic. The model explains it; it never produces it. The LLM's grouping is an organisation of the pool into the fixed taxonomy, not a re-ranking of the feed.</p></li>
 <li><p><strong>Combo per-unit value maths.</strong> Comparing a 2-piece pack's effective per-unit price against single listings is out of v1; combo structure is not in P0–P2.</p></li>
 <li><p><strong>Cross-session memory</strong> of any kind. Everything here is within the current session.</p></li>
-<li><p><strong>Non-PDP entry points.</strong> Home, CLP and search-result screens do not fire this flow in v1. Reco entry arrives only via the CLP's second source (3.12).</p></li>
+<li><p><strong>Non-PDP entry points <em>for this flow</em>.</strong> Home, CLP and search-result screens do not fire alternative discovery in v1. Reco entry arrives only via the primary surface's second source (3.12). This is a limit on the <em>flow</em>, not on the strip — the strip is present on every page from day one, it simply does not open a primary surface anywhere but the PDP yet.</p></li>
 </ul>
 
 <h2>3. Product Decision Framework</h2>
@@ -364,7 +392,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>The anchor record carries: pid, catalog id, sscat, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. <strong>Candidate sourcing for the anchor is out of scope for this document</strong> — the requirement is a pool of in-stock, comparable candidates in the adjacent price band, however they are retrieved.</p>
+<p>The anchor record carries: pid, catalog id, sscat, price, rating, rating count, seller id and rating, Mall/Gold flag, and the variant currently selected on the PDP. The pid is what the comp-swap call is keyed on (3.3), so anchor resolution and candidate sourcing are the same decision made once: get the anchor wrong and every product on the sheet is wrong.</p>
 
 <h3>3.3 Candidate Constraints</h3>
 <ul>
@@ -372,19 +400,21 @@
 <li><p><strong>Availability:</strong> in-stock and servicable to the buyer's pincode, enforced at retrieval.</p></li>
 <li><p><strong>Nothing else.</strong> No attribute filters in this build (see 2.2).</p></li>
 <li><p><strong>Visibility:</strong> the applied price filter renders as a normal, user-editable filter chip. If the buyer edits it, candidates are re-retrieved for the new band and scoring/grouping re-applies.</p></li>
-<li><p><strong>Sourcing mechanism is out of scope for this document.</strong> Candidates may come from an image-similarity match, a comp-swap API, or another catalog-matching pipeline — whichever is already in place. This KRD specifies only the constraints above and the scoring, grouping and verdict logic that runs on top of whatever pool is returned.</p></li>
+<li><p><strong>Source: the comp-swap API.</strong> The backend calls comp-swap with the anchor's pid and reads back that product's competitor set. Comp-swap returns the products <em>with their detail</em>, which is the reason this replaced the image-search path — one call gives us both the pool and most of the fields scoring and the verdict need, instead of a visual match followed by a separate enrichment pass.</p></li>
+<li><p><strong>Fields comp-swap must return per competitor:</strong> pid, catalog id, sscat, price, rating, rating count, seller id and seller rating, Mall/Gold flag, availability, and the image the card renders. Anything in P1/P2 that comp-swap does not carry is read from the enrichment fields as before (4.1). If comp-swap returns a competitor the enrichment read cannot resolve, the candidate still scores on P0 — a missing P1/P2 field means the verdict does not mention that dimension, not that the candidate is dropped.</p></li>
+<li><p><strong>Coverage is a first-class risk.</strong> Comp-swap has a per-product hit rate, and a product with no competitor set is a product this flow cannot serve at all. Log the empty and error responses separately from a thin post-filter pool (8) — they are different failures with different owners, and conflating them will hide whichever is actually biting.</p></li>
 </ul>
-<p><em>Boundary case to close in build: an anchor priced exactly at a bucket edge, and an anchor above the top bucket &mdash; to close in build.</em></p>
+<p><em>Boundary cases to close in build: an anchor priced exactly at a bucket edge; an anchor above the top bucket; and a comp-swap response that returns competitors outside the anchor's sscat.</em></p>
 
 <h3>3.4 Candidate Pool &amp; Rerank Eligibility</h3>
 <ul>
-<li><p><strong>Pool size: 50</strong>, taken from the results <em>after</em> the price filter is applied — not 50 raw visual matches subsequently filtered.</p></li>
-<li><p><strong>Floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not score or group</strong>. The CLP still opens (3.10), but the pool renders in default order and no verdict is attempted — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
+<li><p><strong>Pool size: 50</strong>, taken from the comp-swap set <em>after</em> the price filter is applied — not 50 raw competitors subsequently filtered. If comp-swap returns fewer than 50 to begin with, the pool is what it returns.</p></li>
+<li><p><strong>Floor: 4.</strong> If fewer than 4 candidates survive the filter, <strong>do not score or group</strong>. The primary surface still opens (3.10), but the pool renders in comp-swap's order and no verdict is attempted — there is nothing to compare. Log it as a thin pool; it feeds the guardrail metric that tells us whether the price filter is too tight.</p></li>
 <li><p>Availability is a <strong>gate</strong>, applied before scoring. An unavailable candidate is removed from the pool, not down-weighted, and does not count toward the 4.</p></li>
 </ul>
 
 <h3>3.5 Rerank Logic — P0 Scoring</h3>
-<p>The rerank is deterministic, backend-side, and runs before the feed is generated. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
+<p>The rerank is deterministic, backend-side, and runs before the primary surface is composed. It scores candidates on their <strong>own</strong> P0 merits. A candidate does <em>not</em> have to beat the anchor to rank — this stage produces an ordered list of what is available in the band, and the anchor comparison happens later, in the verdict.</p>
 
 <h4>3.5.1 In plain terms</h4>
 <p>Every candidate gets a score out of 100. Four things earn points, and one adds a bonus. The pool is then sorted by that score.</p>
@@ -465,19 +495,19 @@ where
 <h3>3.6 Mall / Gold Handling</h3>
 <ul>
 <li><p><strong>Rerank:</strong> Mall/Gold membership is a bounded priority lift (<code>w_mall</code>), so trusted stock rises in the stack without a much better non-Mall product being buried beneath a mediocre Mall one.</p></li>
-<li><p><strong>Feed:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything.</p></li>
+<li><p><strong>Surface:</strong> the client badges Mall/Gold cards, so the trust signal is visible without Vaani saying anything.</p></li>
 <li><p><strong>Verdict:</strong> when a Mall/Gold option is in the spoken set, Vaani may mention that the option is also available from Mall / the original brand.</p></li>
 <li><p><strong>Out of scope:</strong> injecting Mall products from <em>outside</em> the price band. The price filter stays hard in v1 — Mall handling is a lift and a highlight within the band, not a band exception.</p></li>
 </ul>
 <h3>3.7 Verdict Generation</h3>
-<p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the CLP.</p>
+<p>The verdict is the answer to "should I buy this one?". It is spoken, it is grounded in supplied fields, and it never re-orders the sheet.</p>
 <ul>
 <li><p><strong>Input window: the top 6–7 scored products.</strong> There is no fixed <code>k</code> for output — the model receives the window and decides which of them are worth mentioning. The bar for "worth mentioning" is set by prompt, not by code.</p></li>
 <li><p><strong>Payload per product:</strong> rank, pid, and all of P0 + P1 + P2 — price, rating, rating count, seller rating, Mall/Gold, review images present, return rate, seller tenure, delivery promise. P1 and P2 come from the existing enrichment fields; this is a read, not a new build. <strong>[info enrichment v0 processors which we have built]</strong></p></li>
 <li><p><strong>The anchor is in the payload</strong>, with the same fields plus the buyer's selected variant. Without it the model cannot say "₹40 cheaper" or "four times the ratings", and the verdict degrades into a description.</p></li>
 <li><p><strong>The verdict may disagree with the score order.</strong> The scoring sees P0 only; the verdict sees P1 and P2 as well, so rank 2 may genuinely be the better buy once review images and return rate are visible. The model is permitted — and expected — to say so, naming the position it is talking about. This is deliberate: the alternative is throwing away the enrichment fields at the moment they matter most.</p></li>
-<li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — in a visual-similarity feed the candidates share their visible attributes, so "the red cotton one" identifies nothing. Never by pid.</p></li>
-<li><p><strong>Position means rank in the rendered CLP</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the CLP is a guardrail failure.</p></li>
+<li><p><strong>Product reference:</strong> by <strong>position</strong> ("the first one", "the second one") or by <strong>price</strong> ("the ₹249 one"). Not by attribute — a competitor set shares its visible attributes by construction, so "the red cotton one" identifies nothing. Never by pid.</p></li>
+<li><p><strong>Position means rank on the rendered primary surface</strong>, not order of mention. If the model talks about products out of order, it must state the position explicitly. A positional claim that does not match the sheet is a guardrail failure. The same rule binds comparison turns taken against the sheet (3.15).</p></li>
 <li><p><strong>Silence is a valid output.</strong> If nothing in the window is a meaningfully better buy than the anchor, Vaani says so plainly — "yeh theek hai, isse behtar kuch khaas nahi mila" — rather than inventing a reason to move the buyer. That case is US-507, and it is trust-building rather than a failure.</p></li>
 </ul>
 
@@ -559,23 +589,26 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 <tr>
 <td style="text-align: center;">Numeric grounding</td>
 <td style="text-align: center;">Every number in the output (price, rating, rating count, days) matches a value supplied in the payload for the anchor or a candidate.</td>
-<td style="text-align: center;">Suppress the verdict, log <code>verdict_grounding_fail</code> with the offending span. Do not retry silently in v1.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>grounding_pass = false</code> with the offending span on <code>alt_verdict</code> (8.3). Do not retry silently in v1.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Positional consistency</td>
 <td style="text-align: center;">Any positional phrase resolves to a rank present in the payload, and the product described at that position matches the payload's product at that rank.</td>
-<td style="text-align: center;">Suppress the verdict, log <code>verdict_position_fail</code>.</td>
+<td style="text-align: center;">Suppress the verdict, log <code>position_pass = false</code> on <code>alt_verdict</code> (8.3).</td>
 </tr>
 </tbody>
 </table></div>
-<p><em>Suppression is preferable to a wrong verdict: the CLP's scored, grouped candidates are still on the screen and still useful without a voice line.</em></p>
+<p><em>Suppression is preferable to a wrong verdict: the sheet's scored, grouped candidates are still on the screen and still useful without a voice line.</em></p>
 
-<h3>3.10 SDUI Custom CLP</h3>
+<h3>3.10 The Primary Surface</h3>
+<p>The surface this build ships is a <strong>bottom sheet</strong>, not a full-screen CLP. It is called the <em>primary surface</em> throughout this document and in the instrumentation, because the surface — not the price-turn flow that happens to be its first tenant — is the durable asset.</p>
 <ul>
-<li><p><strong>Opens on every price turn</strong> — it is the landing surface for the flow, not an optional detour.</p></li>
+<li><p><strong>Opens on a price turn</strong>, over whatever screen the buyer is on — it is the answer to the turn, not an optional detour. The buyer keeps the PDP behind it, which is the point of a sheet rather than a page: the anchor does not leave the screen to make room for its alternatives.</p></li>
+<li><p><strong>Opened by the backend</strong>, through the <code>primary_surface_open</code> action (3.14). The client does not decide to show it.</p></li>
 <li><p><strong>SDUI-driven:</strong> the backend composes what goes into it. This is the point of this build — the durable asset is a surface the backend can place content into, and comparison views and everything after them will live here.</p></li>
-<li><p><strong>Anchor pinned</strong> in the CLP, so the comparison the buyer is actually making is on screen rather than in memory.</p></li>
-<li><p><strong>Source-agnostic:</strong> candidate retrieval is one <em>source</em> feeding the CLP. The reco feed is a second source (3.12). Neither is the surface.</p></li>
+<li><p><strong>Anchor pinned</strong> on the sheet, so the comparison the buyer is actually making is on screen rather than in memory.</p></li>
+<li><p><strong>Vaani stays live while it is up.</strong> The strip does not go away when the sheet opens, and a turn taken against the sheet is answered with the sheet's products in context (3.15). This is the difference between a result and a conversation, and it is why the bulk product-context processor is in this build rather than the next one.</p></li>
+<li><p><strong>Source-agnostic:</strong> comp-swap is one <em>source</em> feeding the surface. The reco feed is a second source (3.12). Neither is the surface.</p></li>
 <li><p><strong>Groups come from a fixed taxonomy we define and instruct.</strong> The model assigns products to our groups; it never invents a group. Fixed groups are what make engagement measurable per intent and the output testable at all.</p></li>
 </ul>
 <div style="overflow-x:auto"><table>
@@ -614,6 +647,7 @@ Either the spoken line, or the exact token NO_VERDICT if nothing is worth saying
 </tbody>
 </table></div>
 <p>The six groups map one-to-one onto P0/P1/P2 — <strong>the taxonomy needs no data we do not already have</strong>. Mall/Gold stays a badge across groups rather than a seventh group, so trust reads as an attribute of an option rather than a competing axis.</p>
+<p><em>How many groups a bottom sheet can carry before it stops being scannable is a design question, not a product one. The taxonomy is fixed at six; how many of them are visible above the fold, and what happens to the rest, is for the design requirement in section 4.</em></p>
 
 <h3>3.11 Grouping Prompt — v1</h3>
 <pre><code>ROLE
@@ -653,32 +687,122 @@ For each non-empty group: the group key, and its products as { pid, rank_in_grou
 the single field value that justifies inclusion }.</code></pre>
 
 <h3>3.12 Reco Feed as a Second Source</h3>
-<p>The primary retrieval path finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters through the same CLP.</p>
+<p>Comp-swap finds the <em>same</em> product cheaper. The reco feed is how Vaani answers a different question — and it enters through the same primary surface.</p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Entry</th><th>Condition</th><th>Behaviour</th></tr></thead>
 <tbody>
 <tr>
 <td style="text-align: center;">Buyer moves into the reco feed</td>
 <td style="text-align: center;">Buyer scrolls down from the PDP into recommendations</td>
-<td style="text-align: center;">Vaani may ask what they are looking for, and compose the CLP from reco stock against that answer.</td>
+<td style="text-align: center;">Vaani may ask what they are looking for, and compose the primary surface from reco stock against that answer.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Attribute absent on the anchor</td>
 <td style="text-align: center;">Mid-conversation the buyer asks for an attribute the anchor does not have (a different material, a different colour)</td>
-<td style="text-align: center;">The primary retrieval path cannot serve this — matching on the anchor returns the attribute the buyer is trying to leave. Source from reco instead.</td>
+<td style="text-align: center;">Comp-swap cannot serve this — a competitor set for the anchor is by construction the attribute the buyer is trying to leave. Source from reco instead.</td>
 </tr>
 <tr>
 <td style="text-align: center;">No meaningful alternative</td>
-<td style="text-align: center;">The retrieved pool is thin, or nothing clears the verdict bar</td>
+<td style="text-align: center;">Comp-swap returns nothing, the surviving pool is thin, or nothing clears the verdict bar</td>
 <td style="text-align: center;">Vaani says so, and may offer reco-sourced suggestions rather than ending empty-handed.</td>
 </tr>
 </tbody>
 </table></div>
 <p>Which source to use is a <strong>judgement the model makes from the conversation</strong>, not a hard rule — and source selection must be logged on every turn so the decision can be audited.</p>
-<h2>4. Technical Requirements — Data &amp; System Dependencies</h2>
 
-<h3>4.1 Signal Tiers</h3>
-<p>The tiering is the hard constraint on scoring: the rules can only be as good as P0.</p>
+<h3>3.13 The Voice Strip</h3>
+<p>Vaani's entry point moves from the floating action button to a <strong>persistent strip pinned to the top of the page</strong>, present on every screen. The button is removed, not demoted. Two things change: Vaani is always visible rather than discovered, and Vaani has somewhere to show what it is doing, which the button never did.</p>
+<p>The strip has a mic on it. Tapping the mic starts listening. Everything else the strip does, it does by changing state.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>State</th><th>What it means</th><th>Entered from</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>idle</code></td>
+<td style="text-align: center;">Vaani is present and available. The resting state on every page.</td>
+<td style="text-align: center;">Page load; end of any other state.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>listening</code></td>
+<td style="text-align: center;">The mic is open and the buyer is speaking. The strip carries a waveform that responds to what is being said, so the buyer can see they are being heard.</td>
+<td style="text-align: center;">Buyer taps the mic.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>post_listen_confirmation</code></td>
+<td style="text-align: center;">Speech has ended and what Vaani heard is shown back before it is acted on. This is the state that makes a misheard turn cheap to correct instead of something the buyer has to sit through and then undo.</td>
+<td style="text-align: center;">ASR end (soft or hard stop).</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>processing</code></td>
+<td style="text-align: center;">The turn is with the backend. Nothing is being asked of the buyer.</td>
+<td style="text-align: center;">Transcription sent.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>speaking</code></td>
+<td style="text-align: center;">Vaani is talking. The mic itself animates as the source of the voice, so the sound has a visible origin on the page rather than coming from nowhere.</td>
+<td style="text-align: center;">First audio frame of the response.</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><p><strong>The strip is app-wide; this flow is not.</strong> The strip ships on every page. Alternative discovery still fires only on the PDP (2.2). Do not couple the two — a strip that only appears where a price turn can happen is a floating action button with extra steps.</p></li>
+<li><p><strong>Interruptible in <code>speaking</code>.</strong> The existing interrupt behaviour carries over unchanged; the strip is where it becomes visible. <code>previous_state</code> on the interrupt event must be able to carry the five state names above.</p></li>
+<li><p><strong>The strip does not disappear behind the primary surface.</strong> A turn taken while the sheet is up is a normal turn (3.15).</p></li>
+<li><p><strong>What the strip looks like in each state is a design requirement</strong>, not a product one. Section 4 owns it. What this section fixes is the set of states, what each one means, and that the mic is the affordance.</p></li>
+</ul>
+
+<h3>3.14 Backend-Triggered Actions</h3>
+<p>The backend can already tell the client to do two things: run a <strong>search</strong>, and apply a <strong>filter</strong>. This build adds a third.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Action</th><th>Status</th><th>What the client does</th></tr></thead>
+<tbody>
+<tr><td style="text-align: center;"><code>search</code></td><td style="text-align: center;">Exists</td><td style="text-align: center;">Runs a catalog search with the backend's query.</td></tr>
+<tr><td style="text-align: center;"><code>filter</code></td><td style="text-align: center;">Exists</td><td style="text-align: center;">Applies filters and sort to the surface in view.</td></tr>
+<tr><td style="text-align: center;"><code>primary_surface_open</code></td><td style="text-align: center;"><strong>New in this build</strong></td><td style="text-align: center;">Opens the primary surface over the current screen and renders the SDUI payload the backend composed.</td></tr>
+</tbody>
+</table></div>
+<ul>
+<li><p><strong>The action carries its content.</strong> The client does not fetch the sheet after being told to open it; the payload — grouped products, the pinned anchor, badges — arrives with the action. One round trip, and no window in which the sheet is open and empty.</p></li>
+<li><p><strong>Generic, not price-specific.</strong> <code>primary_surface_open</code> is an action for opening the primary surface with backend-composed content. It takes a screen and a payload. Nothing in it knows about price turns, and nothing in it should — the next thing that needs a backend-composed sheet must not need a fourth action.</p></li>
+<li><p><strong>Emission is logged on both sides.</strong> The backend logs that it emitted the action and the client logs that the surface opened; the gap between them is a real failure mode and we should be able to see it. See 8.</p></li>
+</ul>
+
+<h3>3.15 Bulk Product Context Processor</h3>
+<p>Once the sheet is up, the buyer is looking at seven or eight products and the one they came from. The obvious next thing they say is a comparison — "is the second one better than this?", "which of these comes fastest?" — and today Vaani cannot answer it, because a turn carries the context of <em>one</em> product.</p>
+<p>This build adds a processor that serves product context in bulk.</p>
+<ul>
+<li><p><strong>Fires when a turn is taken while the primary surface is open.</strong> Not on every turn — this is a wide read and it should only happen where the width is the point.</p></li>
+<li><p><strong>Serves:</strong> the full detail of <em>every</em> product currently on the sheet, plus the anchor, plus the anchor's selected variant. Same fields as the verdict payload (3.7): P0 + P1 + P2, and each product's position on the sheet.</p></li>
+<li><p><strong>Position is part of the context, not decoration.</strong> The buyer says "the second one". The model can only resolve that if it is told what is second, and the answer must use the same positional vocabulary the verdict does (3.7).</p></li>
+<li><p><strong>Reuses the enrichment v0 processors.</strong> This is a bulk read of fields we already produce for one product at a time, not a new source of truth. What is new is fetching them for a set in one pass and holding them for the length of the exchange.</p></li>
+<li><p><strong>The grounding rules do not relax.</strong> Every claim in a comparison answer comes from a supplied field, exactly as in 3.8. A wider payload is more surface for an ungrounded claim, not less.</p></li>
+<li><p><strong>The sheet's contents are frozen for the exchange</strong>, the way the anchor is (3.2). If the sheet re-renders — the buyer edits the price chip (3.3) — the context is rebuilt and positions are re-read. A model answering about position 2 of a sheet that has since changed is the same class of bug as a positional mismatch, and it is caught by the same guardrail.</p></li>
+</ul>
+
+<h2>4. Design Requirements</h2>
+<p><em>[to be added by Design — owner TBD]</em></p>
+<p>This section is deliberately empty. It is the design brief for the two surfaces this build introduces, and it is design's to write rather than product's to guess. What product has fixed, and what is therefore <em>not</em> open here, is listed below so the two documents do not contradict each other.</p>
+<h3>4.1 What product has already fixed</h3>
+<ul>
+<li><p>The strip sits at the top of the page, is present on every screen, and replaces the floating action button (3.13).</p></li>
+<li><p>The strip has five states — <code>idle</code>, <code>listening</code>, <code>post_listen_confirmation</code>, <code>processing</code>, <code>speaking</code> — and the mic is the thing the buyer taps (3.13).</p></li>
+<li><p><code>listening</code> shows a waveform; <code>speaking</code> animates the mic itself (3.13).</p></li>
+<li><p>The alternatives surface is a bottom sheet, opened by the backend, with the anchor pinned and the six-group taxonomy fixed (3.10).</p></li>
+<li><p>Products are referenced by position, so whatever the sheet does, position has to be unambiguous to someone who is listening rather than looking (3.7).</p></li>
+</ul>
+<h3>4.2 What this section needs to specify</h3>
+<ul>
+<li><p>The strip's visual treatment in each of the five states, and the transitions between them — including how <code>post_listen_confirmation</code> shows the transcript back and how the buyer corrects or cancels from there.</p></li>
+<li><p>How the strip coexists with each page's own top chrome, and what happens to it on scroll.</p></li>
+<li><p>The bottom sheet: height and snap points, how many groups are visible before scroll, the card, the pinned anchor's treatment against the candidates, and the Mall/Gold badge.</p></li>
+<li><p>How the strip reads while the sheet is up, given Vaani stays live there (3.15).</p></li>
+<li><p>The thin-pool and no-competitor-set cases (3.4, 3.3) — what the sheet is when there is nothing worth grouping, or whether it opens at all.</p></li>
+<li><p>Dismissal: how the buyer closes the sheet and what they land back on.</p></li>
+</ul>
+
+<h2>5. Technical Requirements — Data &amp; System Dependencies</h2>
+
+<h3>5.1 Signal Tiers</h3>
+<p>The tiering is the hard constraint on scoring: the rules can only be as good as P0. Comp-swap supplies most of P0 directly in its response (3.3); P1 and P2 are read from the enrichment fields, for the verdict window and for whatever is on the primary surface when a comparison turn lands (3.15).</p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Tier</th><th>Signals</th><th>Read by</th><th>Availability</th></tr></thead>
 <tbody>
@@ -697,20 +821,20 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">P2</td>
 <td style="text-align: center;">return rate, seller tenure, delivery promise</td>
-<td style="text-align: center;">LLM verdict only</td>
-<td style="text-align: center;">Already added by the data-enrichment work.</td>
+<td style="text-align: center;">LLM verdict <strong>and</strong> comparison turns</td>
+<td style="text-align: center;">Already added by the data-enrichment work. Read in bulk by the processor in 3.15.</td>
 </tr>
 </tbody>
 </table></div>
 
 
-<h3>4.2 System Dependencies</h3>
+<h3>5.2 System Dependencies</h3>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Dependency</th><th>Note</th></tr></thead>
 <tbody>
 <tr>
-<td style="text-align: center;">Candidate retrieval for the anchor</td>
-<td style="text-align: center;">Must return in-stock, comparable candidates within the adjacent price band. Sourcing mechanism (image match, comp-swap API, or another catalog pipeline) is an implementation choice outside this document.</td>
+<td style="text-align: center;">Comp-swap API</td>
+<td style="text-align: center;"><strong>The candidate source.</strong> Given the anchor's pid, returns its competitor products with detail. Needs a documented per-product hit rate, a latency profile inside the added-latency guardrail, and defined empty/error responses. Its coverage bounds how much of the price-turn population this flow can serve at all.</td>
 </tr>
 <tr>
 <td style="text-align: center;">Price-bucket resolution</td>
@@ -718,40 +842,53 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">Pre-render scoring hook</td>
-<td style="text-align: center;">A point in the flow where the surviving pool can be scored and grouped before the CLP renders.</td>
+<td style="text-align: center;">A point in the flow where the surviving pool can be scored and grouped before the action is emitted.</td>
 </tr>
 <tr>
 <td style="text-align: center;">P0 read for 50 candidates</td>
-<td style="text-align: center;">Must fit the added-latency guardrail.</td>
+<td style="text-align: center;">Largely served by the comp-swap response. Must fit the added-latency guardrail.</td>
 </tr>
 <tr>
-<td style="text-align: center;">P1/P2 read for ~7 candidates + anchor</td>
-<td style="text-align: center;">Existing enrichment fields.</td>
+<td style="text-align: center;">P1/P2 bulk read</td>
+<td style="text-align: center;">Existing enrichment fields, read for the verdict window and again for the full sheet on a comparison turn (3.15).</td>
 </tr>
 <tr>
-<td style="text-align: center;">Mall/Gold badge on feed cards</td>
-<td style="text-align: center;">Client change.</td>
+<td style="text-align: center;">Bulk product-context processor</td>
+<td style="text-align: center;"><strong>New.</strong> Holds the sheet's products plus the anchor, with positions, for the length of the exchange. See 3.15.</td>
 </tr>
 <tr>
-<td style="text-align: center;">SDUI CLP surface</td>
-<td style="text-align: center;">Needs Android + design. Backend-composed slots, anchor pin, grouped shelves.</td>
+<td style="text-align: center;"><code>primary_surface_open</code> action</td>
+<td style="text-align: center;"><strong>New.</strong> Third backend-triggered client action. Android. See 3.14.</td>
 </tr>
 <tr>
-<td style="text-align: center;">Reco stock as a CLP source</td>
+<td style="text-align: center;">Primary surface (bottom sheet)</td>
+<td style="text-align: center;"><strong>New.</strong> Needs Android + design. Backend-composed slots, anchor pin, grouped shelves, Mall/Gold badge.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Voice strip</td>
+<td style="text-align: center;"><strong>New.</strong> Needs Android + design, on every page. Five states, mic affordance, waveform. Removes the floating action button. See 3.13.</td>
+</tr>
+<tr>
+<td style="text-align: center;">Reco stock as a second source</td>
 <td style="text-align: center;">Same P0–P2 fields required for reco candidates.</td>
 </tr>
 </tbody>
 </table></div>
 
-<h2>5. Experimentation Strategy</h2>
+<h2>6. Experimentation Strategy</h2>
 
-<h3>5.1 Will this feature be experimented?</h3>
-<p>Yes. The build changes three things at once — where the buyer stands (the CLP surface), what they see (scored, grouped candidates), and what they understand (the spoken verdict) — so the read is designed to isolate the verdict's own increment from the surface and grouping's.</p>
+<h3>6.1 Will this feature be experimented?</h3>
+<p>Yes — but as <strong>two separate reads</strong>, because the build contains two changes with different blast radii.</p>
+<ul>
+<li><p><strong>The voice strip is app-wide.</strong> It changes how every Vaani turn starts, on every screen, for every feature — not just price turns. Rolling it inside the price-turn experiment would contaminate the control arm and make the alternative-discovery read unattributable. It gets its own app-level A/B against the floating action button, on Vaani engagement rather than on conversion. See 6.4.</p></li>
+<li><p><strong>Alternative discovery is a price-turn flow.</strong> It changes where the buyer stands (the primary surface), what they see (scored, grouped competitors), and what they understand (the spoken verdict), so the read isolates the verdict's own increment from the surface and grouping's. See 6.3.</p></li>
+</ul>
+<p><em>Sequencing matters: land the strip first and let it settle, then run the price-turn experiment on top of a stable entry point. Running both at once means neither result is clean.</em></p>
 
-<h3>5.2 Experiment Type</h3>
-<p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. The verdict runs as a layered treatment on top of the CLP, so its increment is isolated from the CLP/grouping's own effect.</p>
+<h3>6.2 Experiment Type</h3>
+<p>A/B on price turns, at user grain, with the existing price-turn behaviour as control. The verdict runs as a layered treatment on top of the primary surface, so its increment is isolated from the surface/grouping's own effect. The strip experiment (6.4) is a separate A/B at user grain across the whole app.</p>
 
-<h3>5.3 Variants</h3>
+<h3>6.3 Variants</h3>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Variant</th><th>Behaviour</th><th>Reads</th></tr></thead>
 <tbody>
@@ -761,81 +898,166 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Baseline for same-sscat conversion and clicks-to-decision.</td>
 </tr>
 <tr>
-<td style="text-align: center;">T1 — CLP, silent</td>
-<td style="text-align: center;">Candidate retrieval + price filter + CLP with deterministic P0 scoring/grouping, no spoken verdict.</td>
-<td style="text-align: center;">Does the CLP alone move conversion and cut clicks?</td>
+<td style="text-align: center;">T1 — surface, silent</td>
+<td style="text-align: center;">Comp-swap + price filter + the primary surface with deterministic P0 scoring/grouping, no spoken verdict.</td>
+<td style="text-align: center;">Does the sheet alone move conversion and cut clicks?</td>
 </tr>
 <tr>
-<td style="text-align: center;">T1b — retrieval without scoring</td>
-<td style="text-align: center;">Same retrieval and filter, default order, no CLP grouping.</td>
-<td style="text-align: center;">Separates the value of <em>retrieval</em> from the value of <em>scoring/grouping</em>. Without this arm a win is unattributable.</td>
+<td style="text-align: center;">T1b — comp-swap without scoring</td>
+<td style="text-align: center;">Same comp-swap call and price filter, sheet in comp-swap's default order, no grouping.</td>
+<td style="text-align: center;">Separates the value of <em>the competitor set</em> from the value of <em>scoring/grouping</em>. Without this arm a win is unattributable — and since comp-swap is somebody else's ranking, this is also the arm that tells us whether our scoring beats theirs.</td>
 </tr>
 <tr>
-<td style="text-align: center;">T2 — CLP + verdict</td>
-<td style="text-align: center;">T1 + spoken verdict.</td>
+<td style="text-align: center;">T2 — surface + verdict</td>
+<td style="text-align: center;">T1 + spoken verdict, and comparison turns answered from the bulk context (3.15).</td>
 <td style="text-align: center;">The verdict's isolated increment, and the no-deep-link decision.</td>
 </tr>
 </tbody>
 </table></div>
-<p><em>T1b matters more than it looks. The CLP changes two things at once — the candidate set and the order — and only the second one is what this KRD is really betting on.</em></p>
+<p><em>T1b matters more than it looks. The surface changes two things at once — the candidate set and the order — and only the second one is what this KRD is really betting on.</em></p>
 
-<h2>6. Tech Solutioning</h2>
+<h3>6.4 Strip vs. Floating Action Button</h3>
+<p>A separate, app-level A/B at user grain. Control keeps the floating action button; treatment gets the strip on every page. Both arms are tagged by <code>interaction_type</code> (8.1), which is the whole reason that property exists.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Reads</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td style="text-align: center;">Voice initiation rate per session</td><td style="text-align: center;">The primary read. A persistent, visible entry point should be invited more often than a button that has to be found.</td></tr>
+<tr><td style="text-align: center;">Turns per Vaani session</td><td style="text-align: center;">Whether an always-present strip makes a second and third turn cheaper, or whether initiation goes up and depth does not.</td></tr>
+<tr><td style="text-align: center;">Abandonment at <code>post_listen_confirmation</code></td><td style="text-align: center;">New state, new failure mode. If buyers routinely bail here, we are showing them a bad transcription, and the ASR read matters more than the strip read.</td></tr>
+<tr><td style="text-align: center;">Interrupt rate, by <code>previous_state</code></td><td style="text-align: center;">The strip makes Vaani's speaking visible. Whether that makes buyers more willing to cut in is worth knowing before we design anything else around it.</td></tr>
+<tr><td style="text-align: center;">Session-level engagement on screens with no Vaani feature</td><td style="text-align: center;">The guardrail. A strip on every page is a permanent piece of chrome on screens where Vaani has nothing to offer; it must not cost anything there.</td></tr>
+</tbody>
+</table></div>
+
+<h2>7. Tech Solutioning</h2>
 <p><em>[to be added by Engineering]</em></p>
 
-<h2>7. Logging Requirements</h2>
+<h2>8. Logging Requirements</h2>
+<p>Three things change. Existing Vaani voice events gain one property so we can tell the strip from the button (8.1). One new client event records the primary surface opening (8.2). The backend flow's own events are rewritten for comp-swap and the sheet, and four of them are dropped (8.3, 8.4).</p>
+<p><em>Everything joins on <code>request_id</code> within a turn and on <code>turn_id</code> across the backend flow. That join is what lets 8.1 stay short — a property does not need repeating on every event in a funnel it can be joined onto.</em></p>
+
+<h3>8.1 Existing Events — New Property</h3>
+<p>The strip replaces the floating action button, so every existing voice event becomes ambiguous between two different interactions unless we say which one it was. One new property does that.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Property</th><th>Values</th><th>Note</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>interaction_type</code></td>
+<td style="text-align: center;"><code>floating_action_button</code> | <code>strip</code></td>
+<td style="text-align: center;">Which entry point the turn was started from. <code>floating_action_button</code> is the pre-strip behaviour and stays a valid value for as long as the control arm exists (6.4).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Added to these events, and only these:</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Event</th><th>Why it needs the property</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>user_initiates_voice_guide</code></td>
+<td style="text-align: center;">The tap itself. This is the event 6.4's primary read is computed from, and the one every other event in the turn inherits <code>interaction_type</code> from by join.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>voice_guide_native_asr_start</code></td>
+<td style="text-align: center;">Entry into <code>listening</code>. Sliced directly when we ask whether the strip's waveform changes how long or how readily buyers speak.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>voice_guide_native_asr_end</code></td>
+<td style="text-align: center;">Carries <code>soft_stop</code> / <code>hard_stop</code> / <code>result_type</code>. Whether the strip changes how utterances end is a strip question, and this is where it is answered without a join.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Voice_guide_speaks</code></td>
+<td style="text-align: center;">Entry into <code>speaking</code>, where the strip animates the mic. Paired with the interrupt event below, this is the read on whether visible speech changes buyer behaviour.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>User_interupts_voice_guide</code></td>
+<td style="text-align: center;">The behaviour we most expect the strip to move. Also needs its existing <code>previous_state</code> property extended — see below.</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong><code>previous_state</code> on <code>User_interupts_voice_guide</code></strong> must additionally accept the strip's five state names — <code>idle</code>, <code>listening</code>, <code>post_listen_confirmation</code>, <code>processing</code>, <code>speaking</code> (3.13). Without this the interrupt event cannot say what was interrupted, and <code>post_listen_confirmation</code> — a state that did not exist before — is invisible.</p>
+<p><em>Deliberately not tagged:</em> <code>voice_guide_transcription_sent</code>, <code>Voice_guide_stops_speaking</code>, <code>Voice_guide_interrupted</code> and <code>Voice_guide_tts_language_not_available</code>. The first three carry <code>request_id</code> and join to <code>user_initiates_voice_guide</code>, so the property would be duplicated rather than earned. The fourth fires once per user per session and has nothing to do with which entry point was used.</p>
+
+<h3>8.2 New Client Event</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Event</th><th>Properties</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>primary_surface_open</code></td>
+<td style="text-align: center;"><strong>screen</strong>, timestamp, variant, product_id (the anchor, if available), request_id, interaction_type, source (comp_swap / reco), product_count, groups_shown</td>
+<td style="text-align: center;">Fires whenever the primary surface loads. <code>screen</code> is the property that matters most: the surface is generic (3.14) and will be opened from places that are not the PDP, so the screen it opened on is what separates one use of it from the next. Paired with the backend's emission event (8.3), it is also the drop read — action sent but surface never opened.</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>No <code>primary_surface_dismiss</code>. What the buyer did on the sheet is already read from product opens (<code>alt_discovery_outcome</code>) and from turns taken while it was up (<code>bulk_product_context_served</code>); a dismiss event would tell us the sheet closed, which is not a question anyone has.</em></p>
+
+<h3>8.3 Backend Flow Events</h3>
 <p>Emit end-to-end for every price turn that enters this flow. Purpose is to attribute conversion, verify the gates, and audit every model output.</p>
 <div style="overflow-x:auto"><table>
 <thead><tr><th>Event</th><th>Fields</th><th>Purpose</th></tr></thead>
 <tbody>
 <tr>
-<td style="text-align: center;">alt_discovery_trigger</td>
-<td style="text-align: center;">session_id, turn_id, anchor_pid, anchor_sscat, anchor_price, price_intent_subtype, entry_surface (pdp / reco_scroll), ts_ms</td>
-<td style="text-align: center;">Trigger precision, and confirms anchor resolution in the reco-scroll case.</td>
+<td style="text-align: center;"><code>alt_discovery_trigger</code></td>
+<td style="text-align: center;">session_id, turn_id, request_id, anchor_pid, anchor_sscat, anchor_price, price_intent_subtype, screen, entry_surface (pdp / reco_scroll), interaction_type, ts_ms</td>
+<td style="text-align: center;">Trigger precision, and confirms anchor resolution when the buyer asks from the reco rail. <code>screen</code> and <code>entry_surface</code> are not the same field — both read PDP in the reco-scroll case, and only the second one says the buyer had scrolled away from it.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_discovery_query</td>
-<td style="text-align: center;">turn_id, source_ref, price_band, band_source (bucket / edge_case), availability_applied</td>
-<td style="text-align: center;">Verifies the adjacent-band rule and catches boundary handling.</td>
+<td style="text-align: center;"><code>alt_discovery_candidates</code></td>
+<td style="text-align: center;">turn_id, source (comp_swap / reco), comp_swap_status (ok / empty / error / timeout), returned_count, price_band, band_source (bucket / edge_case), availability_applied, latency_ms</td>
+<td style="text-align: center;"><strong>Replaces <code>alt_discovery_query</code>.</strong> Was built around an image reference that no longer exists. <code>comp_swap_status</code> is the field that matters — a product with no competitor set is a coverage problem, and it must not be readable as a thin pool.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_discovery_pool</td>
-<td style="text-align: center;">turn_id, raw_match_count, post_filter_count, pool_size, dropped_unavailable, below_floor (bool)</td>
-<td style="text-align: center;">Thin-pool guardrail and candidate coverage.</td>
+<td style="text-align: center;"><code>alt_discovery_pool</code></td>
+<td style="text-align: center;">turn_id, post_filter_count, pool_size, dropped_unavailable, below_floor (bool)</td>
+<td style="text-align: center;">Thin-pool guardrail and candidate coverage, downstream of a comp-swap response that did return something.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_discovery_rerank</td>
-<td style="text-align: center;">turn_id, weights_version, config_id, ordered_pids, score_components_top10, rank_delta_vs_default</td>
-<td style="text-align: center;">Lets us replay any scoring and measure how much it actually moved.</td>
+<td style="text-align: center;"><code>alt_discovery_rerank</code></td>
+<td style="text-align: center;">turn_id, weights_version, config_id, ordered_pids, comp_swap_order_pids, score_components_top10, rank_delta_vs_source_order</td>
+<td style="text-align: center;">Lets us replay any scoring. <code>rank_delta_vs_source_order</code> now measures our order against <em>comp-swap's</em>, which is the T1b question (6.3) — comp-swap arrives pre-ranked, so &quot;default order&quot; means somebody else's ranking, not none.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_discovery_feed_render</td>
-<td style="text-align: center;">turn_id, rendered_pids, mall_badged_pids, latency_ms</td>
-<td style="text-align: center;">What the buyer actually saw, and added latency.</td>
+<td style="text-align: center;"><code>vaani_action_emitted</code></td>
+<td style="text-align: center;">turn_id, request_id, action_type (search / filter / primary_surface_open), screen, payload_pids, groups_with_counts, anchor_pinned, grouping_prompt_version, latency_ms</td>
+<td style="text-align: center;"><strong>New.</strong> One event for all three backend-triggered actions (3.14), not a bespoke one for the new surface. Against <code>primary_surface_open</code> (8.2) it gives the emitted-vs-rendered drop; on its own it audits what the backend actually composed.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_verdict_request</td>
-<td style="text-align: center;">turn_id, prompt_version, window_size, candidate_pids_with_rank, anchor_payload, selected_variant</td>
-<td style="text-align: center;">Exact model input, for grounding audits.</td>
+<td style="text-align: center;"><code>bulk_product_context_served</code></td>
+<td style="text-align: center;">turn_id, request_id, screen, anchor_pid, context_pids_with_position, context_count, missing_field_pids, latency_ms</td>
+<td style="text-align: center;"><strong>New.</strong> Fires when a turn is taken with the sheet up (3.15). Answers whether comparison turns are happening at all, and whether the model had the products it was being asked about.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_verdict_response</td>
-<td style="text-align: center;">turn_id, spoken (bool), no_verdict_reason, referenced_pids, referenced_positions, disagreed_with_rank (bool), latency_ms, text</td>
-<td style="text-align: center;">Verdict-spoken rate, and how often judgement overrode rank.</td>
+<td style="text-align: center;"><code>alt_verdict</code></td>
+<td style="text-align: center;">turn_id, prompt_version, window_size, candidate_pids_with_rank, anchor_payload, selected_variant, spoken (bool), no_verdict_reason, referenced_pids, referenced_positions, disagreed_with_rank (bool), grounding_pass, position_pass, failed_span, suppressed (bool), latency_ms, text</td>
+<td style="text-align: center;"><strong>Collapses <code>alt_verdict_request</code>, <code>alt_verdict_response</code> and <code>alt_verdict_validation</code> into one row.</strong> They were three events describing one model call, always joined back together before anyone could read them. One row per verdict carries input, output and both validators.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_verdict_validation</td>
-<td style="text-align: center;">turn_id, grounding_pass, position_pass, failed_span, suppressed (bool)</td>
-<td style="text-align: center;">The two guardrails in 3.3. Both target zero.</td>
+<td style="text-align: center;"><code>alt_discovery_outcome</code></td>
+<td style="text-align: center;">turn_id, opened_pid, opened_rank, opened_group, was_referenced (bool), cart_add_pid, order_pid, same_sscat (bool), post_turn_click_count, text_search_after (bool)</td>
+<td style="text-align: center;">Primary and secondary metrics, including whether the buyer opened what Vaani named. <code>opened_group</code> is what makes group engagement readable per intent.</td>
+</tr>
+</tbody>
+</table></div>
+
+<h3>8.4 Removed</h3>
+<p>Four events from the previous version of this section no longer earn their place. Recorded here so nobody implements them from an older copy.</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Removed</th><th>Why</th></tr></thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>alt_discovery_query</code></td>
+<td style="text-align: center;">Its defining field was <code>image_ref</code>. There is no image search. Replaced by <code>alt_discovery_candidates</code>.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_discovery_outcome</td>
-<td style="text-align: center;">turn_id, opened_pid, opened_rank, was_referenced (bool), cart_add_pid, order_pid, same_sscat (bool), post_turn_click_count, text_search_after (bool)</td>
-<td style="text-align: center;">Primary and secondary metrics, including whether the buyer opened what Vaani named.</td>
+<td style="text-align: center;"><code>alt_discovery_feed_render</code></td>
+<td style="text-align: center;">There is no separate feed to render — the sheet is the render, and <code>primary_surface_open</code> records it from the client, which is where the latency the buyer actually feels is measurable.</td>
 </tr>
 <tr>
-<td style="text-align: center;">alt_clp_render</td>
-<td style="text-align: center;">turn_id, source (candidate_retrieval / reco), groups_with_counts, anchor_pinned, grouping_prompt_version</td>
-<td style="text-align: center;">Group engagement, and audits the model's source choice.</td>
+<td style="text-align: center;"><code>alt_clp_render</code></td>
+<td style="text-align: center;">Same event as the above under a different name once the CLP became the primary surface. Its useful fields — groups with counts, anchor pinned, grouping prompt version — moved onto <code>vaani_action_emitted</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>alt_verdict_request</code> / <code>alt_verdict_response</code> / <code>alt_verdict_validation</code></td>
+<td style="text-align: center;">Three events for one model call. Folded into <code>alt_verdict</code>.</td>
 </tr>
 </tbody>
 </table></div>
@@ -851,7 +1073,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-501</td>
 <td style="text-align: center;">Basic price turn — buyer on a ₹289 PDP asks "isse sasta kuch hai?"</td>
-<td style="text-align: center;">Candidate retrieval fires for the anchor, price filter <em>under ₹299</em>, availability applied. CLP renders with scored, grouped candidates.</td>
+<td style="text-align: center;">Comp-swap is called for the anchor, price filter <em>under ₹299</em>, availability applied. The primary surface opens with scored, grouped candidates.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-502</td>
@@ -866,7 +1088,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-504</td>
 <td style="text-align: center;">Thin pool — only 3 candidates survive the price filter</td>
-<td style="text-align: center;">No scoring or grouping. CLP opens with the pool in default order. <code>below_floor = true</code>. No verdict attempted.</td>
+<td style="text-align: center;">No scoring or grouping. The primary surface opens with the pool in comp-swap's order. <code>below_floor = true</code>. No verdict attempted.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-505</td>
@@ -895,13 +1117,13 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">TC-510</td>
-<td style="text-align: center;">T1 arm (no verdict) — CLP renders scored, grouped candidates</td>
-<td style="text-align: center;">The CLP shows the grouped, scored feed with no spoken line.</td>
+<td style="text-align: center;">T1 arm (no verdict) — the surface renders scored, grouped candidates</td>
+<td style="text-align: center;">The sheet shows the grouped, scored candidates with no spoken line.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-511</td>
-<td style="text-align: center;">Filter edit — buyer changes the price chip on the rendered CLP</td>
-<td style="text-align: center;">Candidates are re-retrieved for the new band; scoring/grouping re-applies and the CLP re-renders.</td>
+<td style="text-align: center;">Filter edit — buyer changes the price chip on the rendered sheet</td>
+<td style="text-align: center;">Candidates are re-filtered for the new band; scoring/grouping re-applies, the sheet re-renders, and the bulk context is rebuilt with the new positions (3.15).</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-512</td>
@@ -926,12 +1148,12 @@ the single field value that justifies inclusion }.</code></pre>
 <tr>
 <td style="text-align: center;">TC-516</td>
 <td style="text-align: center;">Grounding validator — model emits a rating not present in the payload</td>
-<td style="text-align: center;">Verdict suppressed, <code>verdict_grounding_fail</code> logged with the span. CLP still shown, scored and grouped.</td>
+<td style="text-align: center;">Verdict suppressed, <code>grounding_pass = false</code> and the failed span logged on <code>alt_verdict</code>. The sheet is still shown, scored and grouped.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-517</td>
 <td style="text-align: center;">Position validator — model says "the second one" but describes the product at rank 4</td>
-<td style="text-align: center;">Verdict suppressed, <code>verdict_position_fail</code> logged.</td>
+<td style="text-align: center;">Verdict suppressed, <code>position_pass = false</code> logged on <code>alt_verdict</code>.</td>
 </tr>
 <tr>
 <td style="text-align: center;">TC-518</td>
@@ -955,7 +1177,7 @@ the single field value that justifies inclusion }.</code></pre>
 </tr>
 <tr>
 <td style="text-align: center;">TC-522</td>
-<td style="text-align: center;">CLP groups — pool has no candidate with a faster delivery promise</td>
+<td style="text-align: center;">Surface groups — pool has no candidate with a faster delivery promise</td>
 <td style="text-align: center;"><code>arrives_faster</code> is empty and dropped, not padded with non-qualifying products.</td>
 </tr>
 <tr>
@@ -968,6 +1190,51 @@ the single field value that justifies inclusion }.</code></pre>
 <td style="text-align: center;">Group invention — model attempts a group outside the taxonomy</td>
 <td style="text-align: center;">Rejected at parse; only the six defined keys are accepted.</td>
 </tr>
+<tr>
+<td style="text-align: center;">TC-525</td>
+<td style="text-align: center;">Comp-swap returns nothing — the anchor has no competitor set</td>
+<td style="text-align: center;">No surface is opened and no verdict attempted. <code>comp_swap_status = empty</code> logged, distinct from <code>below_floor</code>. Vaani answers the price turn without pretending it has alternatives.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-526</td>
+<td style="text-align: center;">Comp-swap errors or times out</td>
+<td style="text-align: center;"><code>comp_swap_status = error</code> / <code>timeout</code>. The turn degrades to the current price answer within the added-latency guardrail; it never hangs waiting on the sheet.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-527</td>
+<td style="text-align: center;">Surface opens from the backend — price turn on the PDP</td>
+<td style="text-align: center;">Backend emits <code>primary_surface_open</code> with the composed payload; the client opens the sheet over the PDP. <code>vaani_action_emitted</code> and <code>primary_surface_open</code> both fire and join on <code>request_id</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-528</td>
+<td style="text-align: center;">Comparison turn on the sheet — buyer asks &quot;is the second one better than this?&quot;</td>
+<td style="text-align: center;"><code>bulk_product_context_served</code> fires carrying every product on the sheet with its position plus the anchor. The answer resolves &quot;the second one&quot; to the product at position 2, and every claim in it is grounded in a supplied field.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-529</td>
+<td style="text-align: center;">Comparison turn after the sheet changed — buyer edits the price chip, then asks about &quot;the second one&quot;</td>
+<td style="text-align: center;">Context is rebuilt before the turn is answered; positions refer to the current sheet, not the one it replaced. An answer against stale positions is a positional-consistency failure.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-530</td>
+<td style="text-align: center;">Strip states — buyer taps the mic, speaks, and Vaani answers</td>
+<td style="text-align: center;">Strip moves <code>idle</code> &rarr; <code>listening</code> (waveform) &rarr; <code>post_listen_confirmation</code> &rarr; <code>processing</code> &rarr; <code>speaking</code> (mic animates) &rarr; <code>idle</code>. No state is skipped and none is entered twice.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-531</td>
+<td style="text-align: center;">Interrupt from the strip</td>
+<td style="text-align: center;">Buyer cuts in while Vaani is speaking. <code>User_interupts_voice_guide</code> fires with <code>interaction_type = strip</code> and <code>previous_state = speaking</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-532</td>
+<td style="text-align: center;">Strip on a screen with no Vaani feature</td>
+<td style="text-align: center;">The strip renders in <code>idle</code> and is tappable. Nothing about the price-turn flow is present, and no floating action button appears anywhere in the treatment arm.</td>
+</tr>
+<tr>
+<td style="text-align: center;">TC-533</td>
+<td style="text-align: center;">Instrumentation — a full turn started from the strip</td>
+<td style="text-align: center;"><code>interaction_type = strip</code> on all five events in 8.1, and every event in the turn joins on <code>request_id</code> back to <code>user_initiates_voice_guide</code>.</td>
+</tr>
 </tbody>
 </table></div>
 
@@ -975,11 +1242,16 @@ the single field value that justifies inclusion }.</code></pre>
 <ul>
 <li><p>Scoring weights and <code>C</code> replayed offline against historical price turns; the ordering change is inspected by hand on a sample before any live traffic.</p></li>
 <li><p>Scoring weights, prompt versions and the pool/floor constants are all live-tunable config. No hard-coded values.</p></li>
-<li><p>Added-latency guardrail measured on a canary before ramp — CLP render and first spoken word.</p></li>
+<li><p>Added-latency guardrail measured on a canary before ramp — comp-swap round trip, primary-surface open, and first spoken word.</p></li>
 <li><p>A human-audited sample of spoken verdicts reviewed for unsupported claims before ramp past the canary.</p></li>
 <li><p>Availability gate verified end-to-end: no out-of-stock product can be ranked or spoken.</p></li>
-<li><p>Every event in section 7 firing and joinable on <code>turn_id</code>.</p></li>
-<li><p>Kill switch for the verdict, so it can be disabled independently of the CLP and scoring.</p></li>
+<li><p>Every event in section 8 firing and joinable on <code>turn_id</code> and <code>request_id</code>.</p></li>
+<li><p>Kill switch for the verdict, so it can be disabled independently of the surface and scoring. Separate kill switch for the strip, so an app-wide entry-point change can be reverted without touching the price-turn flow.</p></li>
+<li><p>Comp-swap hit rate measured on historical price turns before build sign-off. If a large share of anchors have no competitor set, that bounds the feature and needs to be known now rather than at ramp.</p></li>
+<li><p>Comp-swap empty, error and timeout paths verified to degrade to the current price answer inside the latency guardrail — never to an empty sheet.</p></li>
+<li><p>The strip verified in all five states on every screen class, including screens where Vaani has no feature.</p></li>
+<li><p><code>previous_state</code> confirmed to accept the five strip state names before the strip ships, or interrupts land unattributable.</p></li>
+<li><p>Design requirements (section 4) filled in and signed off before Android starts on either surface.</p></li>
 </ul>
 
 <h1>Section IV: Mentor Sign Off</h1>
@@ -989,7 +1261,7 @@ the single field value that justifies inclusion }.</code></pre>
 <tr><td style="text-align: center;">Product</td><td style="text-align: center;">Madhurita Mahapatra</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Tech — Client</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Tech — Backend</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
-<tr><td style="text-align: center;">Search / Visual Search</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
+<tr><td style="text-align: center;">Catalog / Comp-Swap</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Ranking / Relevance</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Design</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
 <tr><td style="text-align: center;">Analytics / DS</td><td style="text-align: center;">TBD</td><td style="text-align: center;">Pending</td></tr>
@@ -998,22 +1270,29 @@ the single field value that justifies inclusion }.</code></pre>
 </table></div>
 
 <h1>Summary</h1>
-<p>On a PDP price turn, Vaani retrieves a set of similar, in-stock alternatives in the anchor's adjacent price band, scores and groups them on P0/P1/P2 signals inside a backend-composed SDUI CLP, and speaks a verdict comparing the anchor against the best of them. Required build:</p>
+<p>On a PDP price turn, the backend pulls the anchor's competitor set from the comp-swap API, filters it to the adjacent price band, scores and groups it on P0/P1/P2 signals, and opens a bottom sheet carrying it. Vaani speaks a verdict against the anchor, and stays in the conversation while the buyer compares. Separately and app-wide, Vaani's entry point moves from a floating action button to a persistent strip. Required build:</p>
 <ul>
 <li>
-<p><strong>Trigger &amp; retrieval.</strong> Price-intent detection on PDP turns, anchor resolution (the PDP, even from the reco rail), candidate retrieval within the adjacent price band with an availability gate, a 50-candidate pool taken after the filter, and a 4-candidate floor below which nothing is scored or grouped. The candidate-sourcing mechanism (image match, comp-swap API, or otherwise) is an implementation choice this document does not prescribe.</p>
+<p><strong>Trigger &amp; sourcing.</strong> Price-intent detection on PDP turns, anchor resolution (the PDP, even from the reco rail), a comp-swap call for the anchor's competitor set, the adjacent price band with an availability gate, a 50-candidate pool taken after the filter, and a 4-candidate floor below which nothing is scored or grouped. <strong>Comp-swap replaces the anchored image search</strong> — it returns the competitor set with its detail, so one call gives us both the pool and most of the fields we need. A product with no competitor set is a coverage failure and is logged separately from a thin pool.</p>
 </li>
 <li>
-<p><strong>Deterministic scoring.</strong> A P0 score with config-driven weights and a rating-count confidence floor, applied to the pool before it is grouped. One client change: the Mall/Gold badge.</p>
+<p><strong>Deterministic scoring.</strong> A P0 score with config-driven weights and a rating-count confidence floor, applied to the pool before it is grouped. Because comp-swap arrives pre-ranked, the T1b arm now asks whether our order beats theirs — not whether order beats no order.</p>
 </li>
 <li>
-<p><strong>The SDUI CLP.</strong> A backend-composed surface that opens on every price turn, groups the 50-candidate pool against a fixed six-group taxonomy, and pins the anchor. Candidate retrieval is one source into it; the reco feed is a second, chosen by the model from the conversation. Needs Android and design.</p>
+<p><strong>The primary surface.</strong> A backend-composed SDUI <strong>bottom sheet</strong>, opened by the new <code>primary_surface_open</code> action — the third backend-triggered client action after search and filter. It groups the pool against the fixed six-group taxonomy and pins the anchor over the PDP the buyer came from. Comp-swap is one source into it; the reco feed is a second, chosen by the model from the conversation. The surface is the durable asset; this flow is its first tenant.</p>
 </li>
 <li>
-<p><strong>The spoken verdict.</strong> Assemble the anchor plus the top 6–7 scored products with P0+P1+P2, generate a voice verdict under the v1 prompt in 3.8, and gate it behind a numeric-grounding and a positional-consistency validator. The model may disagree with the score order, because it sees signals the scoring cannot. Silence is a valid, trust-building output. No deep-link, no scroll-to — the buyer opens the product themselves.</p>
+<p><strong>The spoken verdict, and the conversation after it.</strong> Assemble the anchor plus the top 6–7 scored products with P0+P1+P2, generate a voice verdict under the v1 prompt in 3.8, and gate it behind a numeric-grounding and a positional-consistency validator. A new <strong>bulk product-context processor</strong> then serves every product on the sheet, with its position, plus the anchor, so a follow-up comparison turn can be answered instead of restarted. The model may disagree with the score order, because it sees signals the scoring cannot. Silence is a valid, trust-building output. No deep-link, no scroll-to — the buyer opens the product themselves.</p>
+</li>
+<li>
+<p><strong>The voice strip.</strong> Vaani moves to a strip at the top of every page, with five states — idle, listening, post-listen confirmation, processing, speaking — a mic that starts listening, a waveform while it listens, and a mic that animates while it speaks. The floating action button is removed. This is an app-wide interaction change with its own experiment (6.4) and its own kill switch; it ships in this build but does not belong to this flow.</p>
+</li>
+<li>
+<p><strong>Instrumentation.</strong> <code>interaction_type</code> (<code>floating_action_button</code> | <code>strip</code>) on the five existing voice events that need it, <code>previous_state</code> extended to the strip's five states, a new <code>primary_surface_open</code> client event keyed on <code>screen</code>, and a backend table rebuilt for comp-swap and the sheet — with the image-search query event, both render events and the three-way verdict split removed rather than carried forward.</p>
 </li>
 </ul>
-<p>Carry-over filters are out of scope, except the variant already selected on the anchor PDP, which is read directly off the anchor. Vaani-driven navigation is cut rather than deferred — scoring and grouping are the substitute. Scoring stays deterministic throughout; the model explains it, it never produces it.</p>
+<p>Carry-over filters are out of scope, except the variant already selected on the anchor PDP, which is read directly off the anchor. Image search and the floating action button are cut rather than deferred. Vaani-driven navigation stays cut — scoring and grouping are the substitute. Scoring stays deterministic throughout; the model explains it, it never produces it.</p>
+<p><strong>Section 4 — Design Requirements — is deliberately empty and is design's to fill.</strong> Android should not start on either surface before it is written.</p>
     </article>
   </main>
 </div>
