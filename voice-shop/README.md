@@ -53,12 +53,47 @@ current one plays, so Vaani starts talking before the model has finished
 writing. If cloud TTS fails, the browser voice takes over so the user never
 gets silence.
 
+## Conversation dynamics: making it feel like a person
+
+The small sounds and timings of a real conversation are handled by local
+reflexes in `dynamics.js`, which react instantly with no model in the loop.
+The model is then told what happened, so it carries on naturally.
+
+| What happens | What Vaani does |
+|---|---|
+| You stop talking | She murmurs a fitting acknowledgement immediately ("जी…" for a request, "हम्म…" for a question, "अच्छा, समझ गई…" for a story, "अरे वाह!" for good news, "ओह…" for a complaint, "कोई बात नहीं…" when you're unsure). The model is told she already said it, so its reply continues from it instead of repeating it. She doesn't do this every turn; it rotates and sometimes skips so it doesn't become a tic. |
+| The model is slow, or is running a search | She fills the gap once or twice, in context: "देख रही हूँ…", "आपका ऑर्डर देख रही हूँ…", "एक सेकंड, निकाल रही हूँ…" |
+| You trail off ("मुझे एक साड़ी चाहिए जो…", "और…", "मतलब…", "उम्म") | She waits about 2.6 s instead of 1 s before deciding you're done, so she doesn't cut in mid-thought. A lone "उम्म…" keeps the mic open quietly. |
+| "रुको, सोचने दो" / "एक मिनट" | "जी, आराम से सोचिए… मैं यहीं हूँ।" She switches to patient listening (up to 45 s; the orb breathes slowly) with no model call. If you stay quiet, she offers one gentle, model-written nudge. Your next answer arrives with "the user took N seconds to think, help gently" attached. |
+| You go quiet after a question | One soft check-in ("कोई जल्दी नहीं… मैं सुन रही हूँ।"), then patient listening, then a warm sign-off. |
+| You say "हाँ / हम्म / अच्छा" while she talks *(duplex, optional)* | She keeps going, and the model learns you were nodding along. |
+| You say "रुको / बस" while she talks *(duplex)* | She stops mid-sentence: "जी, बताइए?" |
+| You start talking over her *(duplex, or tap the orb)* | She stops at once and listens. The model is told it was interrupted and which part of its answer you actually heard, so it answers what you just said instead of restarting. |
+| Long pause before you answer | The model is told you took N seconds to think. |
+| Hesitant words (उम्म, पता नहीं, शायद, कौन सा लूँ) | The model is told to narrow the choice and not push. |
+
+The persona prompt has a matching section: spoken-Hindi discourse markers,
+no call-centre phrases, react to feelings before facts, mirror the user's
+words, match their energy, read back key details, and give space when the
+user hesitates.
+
+Reflex sounds are spoken slightly softer and slower than replies. With
+Sarvam or OpenAI TTS they're synthesised once in the background and cached,
+so "हम्म…" plays instantly.
+
+**Duplex** (Settings → "बोलते समय भी सुनें") keeps the browser recogniser
+running while Vaani speaks. Anything that matches what she's saying is
+discarded as echo. It works best with headphones; on a phone speaker, her
+own voice can leak into the mic, which is why it's off by default. Tapping
+the orb to interrupt always works.
+
 ## How it's built
 
 ```
 catalog.js  36 demo products in 10 categories (Hindi + English names, sizes, colours, prices), coupons
 store.js    all state and shopping actions (search, cart, address, payment, orders); persisted to localStorage
-voice.js    ASR + TTS engines, sentence splitter, speech queue with barge-in
+dynamics.js conversational reflexes: acknowledgements, fillers, hesitation/hold/nod/stop detection, endpointing, signals for the model
+voice.js    ASR (own end-of-turn detection, patient mode, duplex monitor) + TTS engines, sentence splitter, speech queue with barge-in and "what was heard" tracking
 brain.js    LLM providers (Anthropic + OpenAI-compatible), tools, live screen context, agent loop, offline brain
 ui.js       screen rendering
 app.js      the conversation loop, taps, settings

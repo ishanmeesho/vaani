@@ -9,38 +9,91 @@
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 
   // ---------------- ASR ----------------
-  function browserListen(cfg, onInterim) {
+  // Join text heard before a handover with what came after, dropping words both caught.
+  function joinHeard(a, b) {
+    const A = String(a || "").trim().split(/\s+/).filter(Boolean), B = String(b || "").trim().split(/\s+/).filter(Boolean);
+    for (let k = Math.min(A.length, B.length); k > 0; k--) {
+      if (A.slice(-k).join(" ") === B.slice(0, k).join(" ")) return A.concat(B.slice(k)).join(" ");
+    }
+    return A.concat(B).join(" ");
+  }
+
+  // Continuous recognition with our own end-of-turn detection: a normal pause
+  // ends the turn after ~1s, but if the user trails off on "और…", "मतलब…" or
+  // "उम्म" we wait longer, the way a person waits for you to finish a thought.
+  // Patient mode (after "सोचने दो") keeps the mic open for a long time.
+  function browserListen(cfg, opts) {
+    const { onInterim, onSpeechStart, patient, prefix } = opts || {};
     return new Promise((resolve, reject) => {
       if (!SR) return reject(new Error("इस ब्राउज़र में आवाज़ पहचान नहीं है। Chrome इस्तेमाल करें या सेटिंग में Sarvam/OpenAI ASR चुनें।"));
-      const rec = new SR();
-      rec.lang = "hi-IN";
-      rec.interimResults = true;
-      rec.continuous = false;
-      rec.maxAlternatives = 1;
-      let finalText = "", interim = "", done = false;
-      const finish = (txt) => { if (!done) { done = true; resolve(txt.trim()); } };
-      rec.onresult = (e) => {
-        interim = "";
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const t = e.results[i][0].transcript;
-          if (e.results[i].isFinal) finalText += t + " "; else interim += t;
-        }
-        onInterim && onInterim((finalText + interim).trim());
+      const t0 = performance.now();
+      const noSpeechLimit = patient ? 45000 : 8000;
+      let carry = prefix ? prefix.trim() : "";   // text from earlier recognizer sessions
+      let current = "", started = !!prefix, done = false, timer = null, rec = null;
+      const full = () => joinHeard(carry, current);
+      const finish = (txt) => {
+        if (done) return; done = true; clearTimeout(timer);
+        try { rec && rec.abort(); } catch (e) {}
+        resolve(txt);
       };
-      rec.onerror = (e) => {
-        if (e.error === "no-speech" || e.error === "aborted") return finish(finalText + interim);
-        done = true;
-        reject(new Error(e.error === "not-allowed" ? "माइक की अनुमति नहीं मिली। ब्राउज़र में माइक की अनुमति दें।" : "ASR त्रुटि: " + e.error));
+      const arm = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => finish(full()), (window.Dynamics ? Dynamics.endpointDelay(full()) : 1000));
       };
-      rec.onend = () => finish(finalText + interim);
-      Voice._stopRec = () => { try { rec.stop(); } catch (e) {} };
-      Voice._abortRec = () => { try { rec.abort(); } catch (e) {} finish(""); };
-      rec.start();
+      const begin = () => {
+        rec = new SR();
+        rec.lang = "hi-IN"; rec.interimResults = true; rec.continuous = true; rec.maxAlternatives = 1;
+        rec.onresult = (e) => {
+          let txt = "";
+          for (let i = 0; i < e.results.length; i++) txt += e.results[i][0].transcript + " ";
+          current = txt;
+          if (!started && full()) { started = true; onSpeechStart && onSpeechStart(performance.now() - t0); }
+          onInterim && onInterim(full());
+          arm();
+        };
+        rec.onerror = (e) => {
+          if (e.error === "no-speech" || e.error === "aborted") return;
+          if (done) return;
+          done = true; clearTimeout(timer);
+          reject(new Error(e.error === "not-allowed" ? "माइक की अनुमति नहीं मिली। ब्राउज़र में माइक की अनुमति दें।" : "ASR त्रुटि: " + e.error));
+        };
+        rec.onend = () => {
+          if (done) return;
+          carry = full(); current = "";
+          // Chrome ends sessions on its own after a while. Keep going until our own rules say stop.
+          if (started) { if (!timer) arm(); setTimeout(() => { if (!done) begin(); }, 60); }
+          else if (performance.now() - t0 < noSpeechLimit) setTimeout(() => { if (!done) begin(); }, 60);
+          else finish("");
+        };
+        try { rec.start(); } catch (e) { finish(full()); }
+      };
+      Voice._stopRec = () => finish(full());
+      Voice._abortRec = () => finish("");
+      setTimeout(() => { if (!started) finish(""); }, noSpeechLimit);
+      begin();
     });
   }
 
+  // Listens while Vaani is speaking (duplex). Reports every result so the app
+  // can tell a nod ("हम्म") from "रुको" from the user taking over.
+  function monitor(onText) {
+    if (!SR) return { stop() {} };
+    let stopped = false, rec, sess = 0;
+    const begin = () => {
+      const my = ++sess;
+      rec = new SR();
+      rec.lang = "hi-IN"; rec.interimResults = true; rec.continuous = true;
+      rec.onresult = (e) => { for (let i = e.resultIndex; i < e.results.length; i++) onText(my + ":" + i, e.results[i][0].transcript, e.results[i].isFinal); };
+      rec.onerror = () => {};
+      rec.onend = () => { if (!stopped) setTimeout(() => !stopped && begin(), 80); };
+      try { rec.start(); } catch (e) {}
+    };
+    begin();
+    return { stop() { stopped = true; try { rec.abort(); } catch (e) {} } };
+  }
+
   // Record until the speaker goes quiet, then hand back a Blob.
-  async function recordUtterance(onLevel) {
+  async function recordUtterance(onLevel, noSpeechMs) {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
     const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg"].find((m) => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || "";
     const rec = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
@@ -77,8 +130,9 @@
         onLevel && onLevel(rms);
         const now = performance.now();
         if (rms > 0.035) { spoke = true; lastLoud = now; }
+        if (spoke && !onLevel.firstSpeech) { onLevel.firstSpeech = true; onLevel.onSpeechStart && onLevel.onSpeechStart(now - start); }
         if (spoke && now - lastLoud > 1300) return stop(false);
-        if (!spoke && now - start > 7000) return stop(true);
+        if (!spoke && now - start > (noSpeechMs || 7000)) return stop(true);
         if (now - start > 20000) return stop(false);
         requestAnimationFrame(tick);
       };
@@ -108,14 +162,29 @@
     return ((await r.json()).text || "").trim();
   }
 
-  async function listen(cfg, { onInterim, onLevel } = {}) {
-    if (cfg.asr === "browser" || !cfg.asr) return browserListen(cfg, onInterim);
-    const blob = await recordUtterance(onLevel);
+  async function cloudOnce(cfg, opts, noSpeechMs) {
+    const lv = (r) => opts.onLevel && opts.onLevel(r);
+    lv.onSpeechStart = opts.onSpeechStart;
+    const blob = await recordUtterance(lv, noSpeechMs);
     if (!blob) return "";
-    onInterim && onInterim("…");
+    opts.onInterim && opts.onInterim(((opts.prefix || "") + " …").trim());
     if (cfg.asr === "sarvam") return sarvamTranscribe(blob, cfg);
     if (cfg.asr === "openai") return openaiTranscribe(blob, cfg);
     throw new Error("अज्ञात ASR: " + cfg.asr);
+  }
+
+  async function listen(cfg, opts = {}) {
+    if (cfg.asr === "browser" || !cfg.asr) return browserListen(cfg, opts);
+    // Cloud engines stop on silence; if the user trailed off mid-thought, keep listening and join the pieces.
+    let text = joinHeard(opts.prefix, await cloudOnce(cfg, opts, opts.patient ? 45000 : 7000));
+    for (let i = 0; i < 2 && text && window.Dynamics && Dynamics.trailsOff(text); i++) {
+      opts.onInterim && opts.onInterim(text + " …");
+      const more = await cloudOnce(cfg, Object.assign({}, opts, { onSpeechStart: null, prefix: text }), 4000);
+      if (!more) break;
+      text = joinHeard(text, more);
+    }
+    opts.onInterim && opts.onInterim(text);
+    return text;
   }
 
   // ---------------- TTS ----------------
@@ -174,22 +243,48 @@
   // A sentence queue. Cloud audio for sentence N+1 is fetched while sentence N
   // plays, so streamed LLM text turns into near-continuous speech.
   class Speaker {
-    constructor() { this.queue = []; this.playing = false; this.gen = 0; this.audio = new Audio(); this.onState = () => {}; this.onError = () => {}; }
+    constructor() {
+      this.queue = []; this.playing = false; this.gen = 0; this.audio = new Audio();
+      this.onState = () => {}; this.onError = () => {}; this.onStart = () => {};
+      this.cache = new Map();   // cloud audio for short reflex lines, so "हम्म…" plays instantly
+      this.heardLog = [];       // reply sentences the user actually heard (started playing)
+      this.current = null;
+    }
     get busy() { return this.playing || this.queue.length > 0; }
-    say(text, cfg) {
+    get speakingReply() { return !!(this.current && this.current.kind === "reply"); }
+    _synth(text, cfg, cacheable) {
+      const key = cfg.tts + "|" + (cfg.ttsVoice || "") + "|" + (cfg.ttsModel || "") + "|" + (cfg.rate || 1) + "|" + text;
+      if (cacheable && this.cache.has(key)) return this.cache.get(key);
+      const p = (cfg.tts === "sarvam" ? sarvamSynth : openaiSynth)(text, cfg).catch((e) => { this.onError(e); this.cache.delete(key); return null; });
+      if (cacheable) this.cache.set(key, p);
+      return p;
+    }
+    // Fetch cloud audio for the reflex lines in the background, two at a time.
+    prewarm(lines, cfg) {
+      if (cfg.tts !== "sarvam" && cfg.tts !== "openai") return;
+      const todo = lines.map(speakable).filter(Boolean);
+      const run = () => { const t = todo.shift(); if (t) this._synth(t, cfg, true).then(run); };
+      run(); run();
+    }
+    // kind: "reply" (the model's words), "ack" (instant reflex), "filler" (while waiting)
+    say(text, cfg, kind) {
+      const shown = String(text);
       text = speakable(text);
       if (!text || cfg.tts === "off") return;
-      const item = { text, cfg, gen: this.gen };
-      if (cfg.tts === "sarvam" || cfg.tts === "openai") {
-        item.audio = (cfg.tts === "sarvam" ? sarvamSynth : openaiSynth)(text, cfg).catch((e) => { this.onError(e); return null; });
-      }
+      const item = { text, shown, cfg, gen: this.gen, kind: kind || "reply" };
+      if (cfg.tts === "sarvam" || cfg.tts === "openai") item.audio = this._synth(text, cfg, item.kind !== "reply");
       this.queue.push(item);
       if (!this.playing) this._next();
     }
+    // Forget what was heard so far; call at the start of each reply.
+    markTurn() { this.heardLog = []; }
+    heard() { return this.heardLog.join(" "); }
     async _next() {
       const item = this.queue.shift();
-      if (!item) { this.playing = false; this.onState(false); return; }
-      this.playing = true; this.onState(true);
+      if (!item) { this.playing = false; this.current = null; this.onState(false); return; }
+      this.playing = true; this.current = item; this.onState(true);
+      if (item.kind === "reply") this.heardLog.push(item.shown);
+      this.onStart(item);
       try {
         if (item.audio) {
           const blob = await item.audio;
@@ -218,8 +313,10 @@
         u.lang = "hi-IN";
         const v = hiVoice || pickVoice();
         if (v) u.voice = v;
-        u.rate = Number(cfg.rate) || 1;
+        // Reflex sounds come out a touch softer and slower, like a murmur.
+        u.rate = (Number(cfg.rate) || 1) * (this.current && this.current.kind !== "reply" ? 0.92 : 1);
         u.pitch = 1.05;
+        u.volume = this.current && this.current.kind !== "reply" ? 0.85 : 1;
         // Chrome sometimes never fires onend; don't let the conversation stall on it.
         const guard = setTimeout(res, 2500 + text.length * 110 / (Number(cfg.rate) || 1));
         u.onend = u.onerror = () => { clearTimeout(guard); res(); };
@@ -241,6 +338,7 @@
       if (window.speechSynthesis) speechSynthesis.cancel();
       if (this._resolveCurrent) this._resolveCurrent();
       this.playing = false;
+      this.current = null;
       this.onState(false);
     }
   }
@@ -263,7 +361,7 @@
 
   const Voice = {
     supported: { browserASR: !!SR, browserTTS: !!window.speechSynthesis, recorder: !!(navigator.mediaDevices && window.MediaRecorder) },
-    listen,
+    listen, monitor,
     stopListening() { Voice._stopRec && Voice._stopRec(); },
     abortListening() { Voice._abortRec && Voice._abortRec(); },
     Speaker, SentenceSplitter, speakable,

@@ -130,6 +130,19 @@
 - End most turns with a light, specific question or suggestion that moves things forward ("लाल वाली दिखाऊँ या मैरून?"), but not every single time.
 - Speech recognition makes mistakes. Read the transcript generously, guess the most likely meaning from context and the screen, and only ask to repeat when you truly can't tell. Numbers and names may be mis-heard: confirm phone numbers, pincodes and UPI IDs by reading them back.
 
+# Sounding like a real person on a call
+- This is a live voice conversation, not chat. Talk the way people actually talk in Hindi: short spoken phrases, natural discourse markers used sparingly and varied (अच्छा, हाँ तो, देखिए, वैसे, अरे, ओह, चलिए, सच कहूँ तो), commas and "…" where you'd naturally pause.
+- Never sound like a call-centre script. Avoid "जी हाँ, बिल्कुल!", "मैं आपकी सहायता के लिए यहाँ हूँ", "क्या मैं आपकी और कोई सहायता कर सकती हूँ?", "आपका स्वागत है". Don't open two replies in a row the same way, and don't start every reply with जी or अच्छा.
+- The app often murmurs a quick acknowledgement ("हम्म…", "जी…", "अरे वाह!") the instant the user stops talking, so there's no dead air. When the [बातचीत के संकेत] block says you already said one, continue straight on from it, as one flowing utterance — never repeat it or add another acknowledgement.
+- React to the person before the task: feelings first, then facts ("अरे वाह, बधाई हो! तो शादी में आप खुद पहनेंगी या किसी को तोहफ़ा देना है?"). Mirror their words and register — if they say "बजट", say "बजट"; if they speak Hinglish, you can too.
+- Match their energy and length: a quick question gets a quick answer; a story gets warmth and a follow-up. One question per turn.
+- When something matters (size, colour, address, money), say it back in your own words to confirm: "तो, लाल वाली, M साइज़ में — सही?"
+- When they hesitate, are unsure, or ask for time to think: give space. Don't pile on options; narrow to two, or give one honest recommendation with a reason, and make it fine to wait.
+- If they just nod along (हाँ / अच्छा / हम्म / ठीक है) after something you said, keep it short and move to the natural next step.
+- If you were interrupted, drop what you were saying. Answer what they just said; add the missing piece in one line only if it really matters.
+- If they've gone quiet for a while, one short, low-pressure line — never a sales push.
+- A little personality is welcome: light humour, gentle opinions ("मुझे तो मैरून वाली ज़्यादा जँच रही है"), small talk about the festival or weather. You're the friendly didi at the shop, not a form.
+
 # How you act
 - Drive the screen with tools — don't just describe. If they want to see something, call search_products so it appears. If they pick one, open_product. Refer to items on screen by their position ("दूसरी वाली साड़ी").
 - Each user message begins with a [ऐप की स्थिति] block: the live state of the screen, cart, address, payment, orders and what they recently tapped. Trust it over your memory of earlier turns; the user may have tapped around between turns.
@@ -223,7 +236,7 @@ ${extra ? "\n# Extra instructions from the app owner\n" + extra : ""}`;
   // ---------------- Anthropic (Claude) ----------------
   const anthropic = {
     init(cfg) { return { system: systemPrompt(cfg.persona), messages: [] }; },
-    addUser(conv, text, preface) { conv.messages.push({ role: "user", content: [preface && { type: "text", text: preface }, { type: "text", text: snapshot() }, { type: "text", text: "यूज़र: " + text }].filter(Boolean) }); },
+    addUser(conv, parts) { conv.messages.push({ role: "user", content: parts.filter(Boolean).map((text) => ({ type: "text", text })) }); },
     async step(conv, cfg, onText, signal) {
       const model = cfg.model || "claude-opus-5-5";
       const base = (cfg.baseUrl || "https://api.anthropic.com").replace(/\/$/, "");
@@ -293,7 +306,7 @@ ${extra ? "\n# Extra instructions from the app owner\n" + extra : ""}`;
   // ---------------- OpenAI-compatible (OpenAI, Gemini, Groq, OpenRouter, Sarvam, local…) ----------------
   const openai = {
     init(cfg) { return { messages: [{ role: "system", content: systemPrompt(cfg.persona) }] }; },
-    addUser(conv, text, preface) { conv.messages.push({ role: "user", content: (preface ? preface + "\n\n" : "") + snapshot() + "\n\nयूज़र: " + text }); },
+    addUser(conv, parts) { conv.messages.push({ role: "user", content: parts.filter(Boolean).join("\n\n") }); },
     async step(conv, cfg, onText, signal) {
       const base = (cfg.baseUrl || "https://api.openai.com/v1").replace(/\/$/, "");
       const body = { model: cfg.model, stream: true, messages: conv.messages,
@@ -418,17 +431,20 @@ ${extra ? "\n# Extra instructions from the app owner\n" + extra : ""}`;
     return P;
   }
 
-  async function turn(text, cfg, hooks) {
-    hooks = hooks || {};
+  // meta.signals: how the turn was spoken (see Dynamics.signals).
+  // meta.event: not something the user said, e.g. a long silence.
+  async function turn(text, cfg, hooks, meta) {
+    hooks = hooks || {}; meta = meta || {};
     const live = cfg.provider !== "offline" && cfg.apiKey && (cfg.provider === "anthropic" || cfg.model);
     // A new turn while one is in flight (barge-in): cancel it and close off its
     // half-finished exchange now, so history stays a valid user/assistant sequence.
     const me = ++current;
     if (abortCtl) { abortCtl.abort(); abortCtl = null; if (conv) providerFor(cfg).patchInterrupted(conv); }
     const P = live ? ensureConv(cfg) : null; // before logging, so a recap never repeats this message
-    log.push({ role: "user", text });
+    if (!meta.event) log.push({ role: "user", text });
+    if (meta.ackText) log.push({ role: "ack", text: meta.ackText });
     if (!live) {
-      const reply = localTurn(text);
+      const reply = meta.event ? meta.offlineReply || "मैं यहीं हूँ… जब मन हो बोलिए।" : localTurn(text);
       taps = [];
       hooks.onText && hooks.onText(reply);
       hooks.onSentence && hooks.onSentence(reply);
@@ -437,14 +453,16 @@ ${extra ? "\n# Extra instructions from the app owner\n" + extra : ""}`;
     }
     abortCtl = new AbortController();
     const signal = abortCtl.signal;
-    P.addUser(conv, text, conv.recap);
+    const sig = meta.signals && meta.signals.length ? "[बातचीत के संकेत]\n" + meta.signals.map((x) => "- " + x).join("\n") : null;
+    P.addUser(conv, [conv.recap, snapshot(), sig, meta.event ? "[घटना] " + text : "यूज़र: " + text]);
     conv.recap = null;
     taps = [];
-    let spoken = "";
+    let spoken = "", stepText = "";
     const splitter = new Voice.SentenceSplitter((s) => hooks.onSentence && hooks.onSentence(s));
     try {
       for (let i = 0; i < 8; i++) {
-        const res = await P.step(conv, cfg, (d) => { spoken += d; splitter.push(d); hooks.onText && hooks.onText(spoken.trim()); }, signal);
+        stepText = "";
+        const res = await P.step(conv, cfg, (d) => { spoken += d; stepText += d; splitter.push(d); hooks.onText && hooks.onText(spoken.trim()); }, signal);
         if (me !== current) return null;
         splitter.flush();
         if (res.stop === "refusal") {
@@ -454,7 +472,7 @@ ${extra ? "\n# Extra instructions from the app owner\n" + extra : ""}`;
         }
         if (res.stop !== "tool_use") break;
         const results = res.calls.map((c) => {
-          hooks.onTool && hooks.onTool(c.name, TOOL_LABEL[c.name] || c.name, c.input);
+          hooks.onTool && hooks.onTool(c.name, TOOL_LABEL[c.name] || c.name, c.input, { spokeThisStep: !!stepText.trim() });
           let output;
           try { output = c.bad ? { ok: false, error: "tool input was not valid JSON — try again" } : runTool(c.name, c.input); }
           catch (e) { output = { ok: false, error: String(e.message || e) }; }

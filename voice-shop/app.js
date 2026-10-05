@@ -20,6 +20,7 @@
     provider: "offline", keys: {}, models: {}, bases: {}, effort: "low", persona: "",
     asr: "browser", tts: "browser", sarvamKey: "", openaiAudioKey: "", openaiAudioBase: "https://api.openai.com/v1",
     asrModel: "", ttsModel: "", ttsVoice: "", rate: 1, handsFree: true,
+    reflexes: true, duplex: false,
   };
   let cfg = Object.assign({}, DEFAULTS);
   try { cfg = Object.assign(cfg, JSON.parse(localStorage.getItem(CFG_KEY) || "{}")); } catch (e) {}
@@ -122,33 +123,98 @@
   // ---------------- voice loop ----------------
   const speaker = new Voice.Speaker();
   const orb = $("#orb"), statusEl = $("#vstatus"), userCap = $("#capUser"), botCap = $("#capBot"), toolCap = $("#capTool");
-  let phase = "idle";       // idle | listening | thinking
-  let session = false;      // a hands-free conversation is running
+  let phase = "idle";        // idle | listening | waiting (patient listening) | thinking
+  let session = false;       // a hands-free conversation is running
   let greeted = false;
-  let turnSeq = 0;
-  let emptyListens = 0;
+  let turnSeq = 0;           // bumps whenever the floor changes hands; stale callbacks check it
+  let silences = 0;          // empty listens in a row
+  let holdStart = 0;         // when the user asked for time to think
+  let lastBotEndAt = 0;      // when Vaani last finished speaking
+  let speakerIdleSince = 0;
+  // Things that happened that the model should hear about on the next turn.
+  let pending = { interrupted: null, nods: [] };
+
+  const isLive = (c) => c.provider !== "offline" && !!c.apiKey && (c.provider === "anthropic" || !!c.model);
 
   function setPhase(p) { phase = p; paint(); }
   function paint() {
     const speaking = speaker.busy;
-    const s = phase === "listening" ? "listening" : speaking ? "speaking" : phase === "thinking" ? "thinking" : "idle";
+    const s = phase === "listening" ? "listening" : phase === "waiting" ? "waiting" : speaking ? "speaking" : phase === "thinking" ? "thinking" : "idle";
     orb.dataset.state = s;
     document.body.dataset.voice = s;
-    statusEl.textContent = { idle: session ? "माइक दबाकर बोलिए" : "बात करने के लिए दबाइए", listening: "सुन रही हूँ…", thinking: "सोच रही हूँ…", speaking: "बोल रही हूँ… (टोकने के लिए दबाइए)" }[s];
+    statusEl.textContent = {
+      idle: session ? "माइक दबाकर बोलिए" : "बात करने के लिए दबाइए",
+      listening: "सुन रही हूँ…",
+      waiting: "आराम से सोचिए… मैं सुन रही हूँ",
+      thinking: "सोच रही हूँ…",
+      speaking: cfg.duplex ? "बोल रही हूँ… बीच में बोल सकते हैं" : "बोल रही हूँ… (टोकने के लिए दबाइए)",
+    }[s];
     $("#endSession").hidden = !session;
   }
-  speaker.onState = paint;
+  speaker.onState = (busy) => { if (!busy) { speakerIdleSince = performance.now(); stopMonitor(); } paint(); };
+  speaker.onStart = (item) => { if (item.kind === "reply") startMonitor(); };
   speaker.onError = (e) => { console.warn(e); toast("आवाज़ की दिक़्क़त: " + String(e.message || e).slice(0, 80) + " — ब्राउज़र आवाज़ इस्तेमाल हो रही है"); };
 
-  async function startListening() {
-    speaker.stop();
-    Brain.abort();
+  // Say a short local line (acknowledgement, check-in…) and then optionally listen.
+  function reflex(line, then) {
+    const my = turnSeq;
+    speaker.say(line, brainCfg(), "ack");
+    botCap.textContent = line;
+    Brain.log.push({ role: "ack", text: line });
+    if (then) speaker.drain().then(() => { if (my === turnSeq) { lastBotEndAt = performance.now(); then(); } });
+  }
+
+  // The user takes the floor: stop talking, cancel the request, remember what they heard.
+  function interrupt() {
+    if (speaker.speakingReply || phase === "thinking") pending.interrupted = { heard: speaker.heard() };
+    turnSeq++;
+    speaker.stop(); Brain.abort(); stopMonitor();
+  }
+
+  // ---- duplex: hearing the user while Vaani speaks ----
+  let mon = null, monSeen = new Set();
+  function startMonitor() {
+    if (mon || !cfg.duplex || !Voice.supported.browserASR || (cfg.asr && cfg.asr !== "browser") || !session) return;
+    monSeen = new Set();
+    mon = Voice.monitor(onOverlap);
+  }
+  function stopMonitor() { if (mon) { mon.stop(); mon = null; } }
+  function onOverlap(key, text, isFinal) {
+    if (monSeen.has(key)) return;
+    const spoken = (speaker.current ? speaker.current.text + " " : "") + speaker.heard();
+    const kind = Dynamics.duringSpeech(text, spoken);
+    if (kind === "nod" && isFinal) {
+      monSeen.add(key);
+      pending.nods.push(text.trim());
+      userCap.textContent = "(" + text.trim() + ")";
+    } else if (kind === "stop") {
+      monSeen.add(key);
+      interrupt();
+      userCap.textContent = text.trim();
+      turnSeq++;
+      reflex(Dynamics.stoppedLine(), () => listenTurn({ patient: true }));
+    } else if (kind === "speech") {
+      monSeen.add(key);
+      interrupt();
+      listenTurn({ prefix: text.trim() });
+    }
+  }
+
+  // ---- listening ----
+  async function listenTurn(opts) {
+    opts = opts || {};
+    stopMonitor(); speaker.stop(); Brain.abort();
     const my = ++turnSeq;
-    setPhase("listening");
-    userCap.textContent = "…";
+    setPhase(opts.patient ? "waiting" : "listening");
+    userCap.textContent = opts.prefix || "…";
+    let thinkMs = 0;
     let text = "";
     try {
-      text = await Voice.listen(brainCfg(), { onInterim: (t) => { if (my === turnSeq) userCap.textContent = t; } });
+      text = await Voice.listen(brainCfg(), {
+        patient: opts.patient, prefix: opts.prefix,
+        onInterim: (t) => { if (my === turnSeq) userCap.textContent = t; },
+        onSpeechStart: (ms) => { thinkMs = lastBotEndAt ? performance.now() - lastBotEndAt : ms; },
+      });
     } catch (e) {
       if (my !== turnSeq) return;
       setPhase("idle"); session = false; paint();
@@ -157,74 +223,145 @@
       return;
     }
     if (my !== turnSeq) return;
-    if (!text) {
-      emptyListens++;
-      userCap.textContent = "";
-      setPhase("idle");
-      if (session && emptyListens < 2) { botCap.textContent = "मैं यहीं हूँ, जब चाहें बोलिए।"; }
-      if (emptyListens >= 2) { session = false; paint(); }
-      return;
-    }
-    emptyListens = 0;
-    handleUtterance(text, my);
+    if (!text) return onSilence();
+    silences = 0;
+    onUserSaid(text, { thinkMs, continued: Dynamics.trailsOff(text) || /\s(और|तो|मतलब)\s/.test(text) });
   }
 
-  async function handleUtterance(text, my) {
-    if (my == null) { speaker.stop(); Brain.abort(); my = ++turnSeq; }
-    if (/^(बस|बाय|bye|अलविदा|ठीक है बस|बंद करो)\b/i.test(text.trim())) session = false;
-    userCap.textContent = text;
-    botCap.textContent = "";
-    toolCap.textContent = "";
-    setPhase("thinking");
+  // Nothing was said. A person checks in once, then lets you be.
+  function onSilence() {
+    userCap.textContent = "";
+    if (!session) return setPhase("idle");
+    silences++;
+    if (silences === 1 && holdStart) {
+      // They asked for time and are still thinking: one gentle, useful nudge.
+      return runTurn("यूज़र ने सोचने का समय माँगा था और काफ़ी देर से चुप है। बिना दबाव के एक छोटी, मददगार बात कहो — एक सरल सुझाव, या बस इतना कि तुम इंतज़ार कर रही हो।", "event",
+        { heldMs: performance.now() - holdStart }, { event: true, offlineReply: Dynamics.checkinLine(), patientAfter: true });
+    }
+    if (silences === 1) { turnSeq++; return reflex(Dynamics.checkinLine(), () => listenTurn({ patient: true })); }
+    holdStart = 0; silences = 0;
+    turnSeq++;
+    reflex(Dynamics.goodbyeLine());
+    session = false; setPhase("idle");
+  }
+
+  function onUserSaid(text, ctx) {
+    const cls = Dynamics.classify(text);
+    if (cls === "filler") {
+      // Just "उम्म…" — they're thinking out loud. Keep quiet and keep listening.
+      holdStart = holdStart || performance.now();
+      return listenTurn({ patient: true });
+    }
+    if (cls === "hold") {
+      userCap.textContent = text;
+      Brain.log.push({ role: "user", text });
+      holdStart = performance.now();
+      turnSeq++;
+      return reflex(Dynamics.holdLine(), () => listenTurn({ patient: true }));
+    }
+    const heldMs = holdStart ? performance.now() - holdStart : 0;
+    holdStart = 0;
+    if (cls === "bye") session = false;
+    runTurn(text, cls, { thinkMs: ctx.thinkMs, heldMs, continued: ctx.continued });
+  }
+
+  // Typed text and tip buttons come in here.
+  function handleUtterance(text) {
+    if (speaker.busy || phase === "thinking") interrupt();
+    Voice.abortListening();
+    greeted = true;
+    silences = 0;
+    onUserSaid(text, { thinkMs: 0 });
+  }
+
+  // ---- one exchange with the brain ----
+  async function runTurn(text, cls, ctx, meta) {
+    meta = meta || {};
+    stopMonitor();
+    const my = ++turnSeq;
     const c = brainCfg();
+    const live = isLive(c);
+    if (!meta.event) userCap.textContent = text;
+    botCap.textContent = ""; toolCap.textContent = "";
+
+    // The instant murmur, so there's never dead air while the model thinks.
+    const ack = live && cfg.reflexes && !meta.event ? Dynamics.ackFor(cls, text) : null;
+    if (ack) { speaker.say(ack, c, "ack"); botCap.textContent = ack; }
+    const signals = Dynamics.signals(text, cls, Object.assign({ ack, interrupted: pending.interrupted, nods: pending.nods }, ctx));
+    pending = { interrupted: null, nods: [] };
+    speaker.markTurn();
+    if (!speaker.busy) speakerIdleSince = performance.now();
+    setPhase("thinking");
+
+    // If the reply is slow and nothing is audible, murmur once more ("देख रही हूँ…").
+    let replyStarted = false, fillers = 0, lastTool = "_";
+    const filler = () => {
+      if (my !== turnSeq || replyStarted || fillers >= 2 || !live || !cfg.reflexes || speaker.busy) return;
+      fillers++;
+      speaker.say(Dynamics.progressFor(lastTool), c, "filler");
+    };
+    const waitTimer = setInterval(() => { if (!speaker.busy && performance.now() - speakerIdleSince > 1600 && fillers === 0) filler(); }, 250);
+
+    let reply = null;
     try {
-      await Brain.turn(text, c, {
-        onText: (t) => { if (my === turnSeq) botCap.textContent = t; },
-        onSentence: (s) => { if (my === turnSeq) speaker.say(s, c); },
-        onTool: (name, label) => { if (my !== turnSeq) return; toolCap.textContent = "⚡ " + label; view.classList.remove("pulse"); void view.offsetWidth; view.classList.add("pulse"); },
-      });
+      reply = await Brain.turn(text, c, {
+        onText: (t) => { if (my === turnSeq) botCap.textContent = (ack ? ack + " " : "") + t; },
+        onSentence: (s) => { if (my !== turnSeq) return; replyStarted = true; speaker.say(s, c, "reply"); },
+        onTool: (name, label, input, info) => {
+          if (my !== turnSeq) return;
+          lastTool = name;
+          toolCap.textContent = "⚡ " + label;
+          view.classList.remove("pulse"); void view.offsetWidth; view.classList.add("pulse");
+          if (!info.spokeThisStep) { replyStarted = false; filler(); }
+        },
+      }, { signals, event: meta.event, offlineReply: meta.offlineReply, ackText: ack });
     } catch (e) {
-      if (my !== turnSeq) return;
+      if (my !== turnSeq) { clearInterval(waitTimer); return; }
       const msg = e.status === 401 || e.status === 403 ? "API key सही नहीं लग रही। सेटिंग में जाँचिए।" : e.status === 429 ? "अभी बहुत सारे अनुरोध हो गए, थोड़ी देर में फिर कोशिश कीजिए।" : "माफ़ कीजिए, अभी मॉडल से जुड़ नहीं पा रही।";
-      speaker.say(msg, c);
+      speaker.say(msg, c, "reply");
       botCap.textContent = msg;
       toolCap.textContent = "⚠ " + e.message;
       console.error(e);
     }
+    clearInterval(waitTimer);
     if (my !== turnSeq) return;
     toolCap.textContent = toolCap.textContent.startsWith("⚠") ? toolCap.textContent : "";
     setPhase("idle");
+    renderLog();
     await speaker.drain();
     if (my !== turnSeq) return;
-    if (session && cfg.handsFree) startListening();
-    renderLog();
+    lastBotEndAt = performance.now();
+    if (session && cfg.handsFree) listenTurn({ patient: meta.patientAfter });
   }
 
   orb.addEventListener("click", () => {
     if (!greeted) {
       greeted = true; session = true;
+      const c = brainCfg();
+      speaker.prewarm(Dynamics.allReflexLines(), c);
       const g = Brain.greeting();
       botCap.textContent = g; userCap.textContent = "";
       const my = ++turnSeq;
-      speaker.say(g, brainCfg());
+      speaker.say(g, c, "reply");
       Brain.log.push({ role: "assistant", text: g });
       paint();
-      speaker.drain().then(() => { if (my === turnSeq && session) startListening(); });
+      speaker.drain().then(() => { if (my === turnSeq && session) { lastBotEndAt = performance.now(); listenTurn(); } });
       return;
     }
     session = true;
-    if (phase === "listening") { Voice.stopListening(); return; }
-    startListening(); // also barge-in while speaking or thinking
+    silences = 0;
+    if (phase === "listening" || phase === "waiting") { Voice.stopListening(); return; }
+    if (speaker.busy || phase === "thinking") interrupt(); // barge-in
+    listenTurn();
   });
   $("#endSession").addEventListener("click", () => {
-    session = false; turnSeq++; speaker.stop(); Brain.abort(); Voice.abortListening(); setPhase("idle");
+    session = false; holdStart = 0; turnSeq++; speaker.stop(); Brain.abort(); stopMonitor(); Voice.abortListening(); setPhase("idle");
   });
   $("#typeForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const i = $("#typeInput"); const t = i.value.trim();
     if (!t) return;
-    i.value = ""; greeted = true;
-    Voice.abortListening();
+    i.value = "";
     handleUtterance(t);
   });
   $("#kbd").addEventListener("click", () => { $("#typeForm").classList.toggle("open"); $("#typeInput").focus(); });
@@ -247,6 +384,7 @@
     f.effort.value = cfg.effort; f.persona.value = cfg.persona;
     f.asr.value = cfg.asr; f.tts.value = cfg.tts; f.sarvamKey.value = cfg.sarvamKey; f.openaiAudioKey.value = cfg.openaiAudioKey; f.openaiAudioBase.value = cfg.openaiAudioBase;
     f.asrModel.value = cfg.asrModel; f.ttsModel.value = cfg.ttsModel; f.ttsVoice.value = cfg.ttsVoice; f.rate.value = cfg.rate; f.handsFree.checked = cfg.handsFree;
+    f.reflexes.checked = cfg.reflexes; f.duplex.checked = cfg.duplex;
     syncVoice();
     $("#voiceInfo").textContent = `ब्राउज़र ASR: ${Voice.supported.browserASR ? "✓" : "✗ (Chrome में चलाएँ)"} · ब्राउज़र हिंदी आवाज़: ${Voice.hindiVoiceName() || "नहीं मिली — Sarvam/OpenAI TTS चुनें"}`;
   }
@@ -280,7 +418,8 @@
     cfg.provider = p;
     if (p !== "offline") { cfg.keys[p] = f.apiKey.value.trim(); cfg.models[p] = f.model.value.trim(); cfg.bases[p] = f.baseUrl.value.trim(); }
     Object.assign(cfg, { effort: f.effort.value, persona: f.persona.value.trim(), asr: f.asr.value, tts: f.tts.value, sarvamKey: f.sarvamKey.value.trim(), openaiAudioKey: f.openaiAudioKey.value.trim(),
-      openaiAudioBase: f.openaiAudioBase.value.trim() || DEFAULTS.openaiAudioBase, asrModel: f.asrModel.value.trim(), ttsModel: f.ttsModel.value.trim(), ttsVoice: f.ttsVoice.value.trim(), rate: +f.rate.value || 1, handsFree: f.handsFree.checked });
+      openaiAudioBase: f.openaiAudioBase.value.trim() || DEFAULTS.openaiAudioBase, asrModel: f.asrModel.value.trim(), ttsModel: f.ttsModel.value.trim(), ttsVoice: f.ttsVoice.value.trim(), rate: +f.rate.value || 1, handsFree: f.handsFree.checked,
+      reflexes: f.reflexes.checked, duplex: f.duplex.checked });
     saveCfg();
     paintBrainBadge();
     sheet.closest("dialog").close();

@@ -98,6 +98,8 @@
         <label class="fld"><span>बोलने की रफ़्तार</span><input name="rate" type="number" min="0.5" max="2" step="0.1"></label>
       </div>
       <label class="check"><input type="checkbox" name="handsFree"> लगातार बातचीत — जवाब के बाद अपने-आप सुनना शुरू करें</label>
+      <label class="check"><input type="checkbox" name="reflexes"> इंसानी प्रतिक्रियाएँ — "हम्म…", "जी…", "अरे वाह!" जैसी तुरंत हामी, और देर लगे तो "देख रही हूँ…"</label>
+      <label class="check"><input type="checkbox" name="duplex"> बोलते समय भी सुनें — आपकी "हाँ/हम्म" समझे, "रुको" पर रुके, बीच में बोलने पर आपकी सुने (हेडफ़ोन के साथ सबसे अच्छा; सिर्फ़ ब्राउज़र ASR)</label>
       <div id="voiceInfo" class="dim small"></div>
       <button type="button" id="testVoice" class="btn outline">🔊 आवाज़ सुनकर देखें</button>
     </fieldset>
@@ -112,6 +114,7 @@
 
 <script src="catalog.js"></script>
 <script src="store.js"></script>
+<script src="dynamics.js"></script>
 <script src="voice.js"></script>
 <script src="brain.js"></script>
 <script src="ui.js"></script>
