@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#9f2089">
+<title>वाणी शॉप — Voice-first shopping</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body style="padding-top:38px;"><div style="position:fixed;top:0;left:0;right:0;height:38px;z-index:2147483647;display:flex;align-items:center;padding:0 16px;background:#111827;box-shadow:0 1px 3px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.01em;"><span style="font-size:14px;line-height:1;">&larr;</span>Vaani Dashboards</a></div>
+
+<div class="phone">
+  <header class="top">
+    <div class="brand-row">
+      <button id="back" class="icon" data-act="back" aria-label="वापस" hidden>‹</button>
+      <div class="brand">वाणी<span>शॉप</span></div>
+      <span id="brainBadge" class="badge" title="कौन सा मॉडल बातचीत चला रहा है">डेमो मोड</span>
+      <button class="icon" data-act="nav" data-id="cart" aria-label="कार्ट">🛒<b data-cart-count hidden>0</b></button>
+      <button id="openSettings" class="icon" aria-label="सेटिंग">⚙️</button>
+    </div>
+    <form id="searchForm" class="search" role="search">
+      <span>🔍</span><input id="searchInput" placeholder="साड़ी, कुर्ती, कड़ाही… या माइक दबाकर बोलिए" autocomplete="off">
+    </form>
+  </header>
+
+  <main id="view" class="view" aria-live="polite"></main>
+
+  <section class="dock" aria-label="वाणी से बातचीत">
+    <div id="capbox" class="capbox" title="पूरी बातचीत देखें">
+      <div id="capUser" class="cap-user"></div>
+      <div id="capBot" class="cap-bot">नमस्ते! नीचे माइक दबाइए और हिंदी में बोलिए।</div>
+      <div id="capTool" class="cap-tool"></div>
+    </div>
+    <div class="dock-row">
+      <button id="kbd" class="mini-btn" aria-label="लिखकर बात करें">⌨️</button>
+      <button id="orb" class="orb" data-state="idle" aria-label="वाणी से बात करें">
+        <span class="ring"></span><span class="ring r2"></span><span class="mic">🎙️</span>
+      </button>
+      <button id="endSession" class="mini-btn" aria-label="बातचीत बंद करें" hidden>✕</button>
+    </div>
+    <div id="vstatus" class="vstatus">बात करने के लिए दबाइए</div>
+    <form id="typeForm" class="typeform"><input id="typeInput" placeholder="यहाँ लिखिए…" autocomplete="off"><button class="btn primary">भेजें</button></form>
+  </section>
+
+  <nav class="nav">
+    <button data-act="nav" data-id="home"><span>🏠</span>होम</button>
+    <button data-act="nav" data-id="wishlist"><span>♡</span>विशलिस्ट</button>
+    <button data-act="nav" data-id="orders"><span>📦</span>ऑर्डर</button>
+    <button data-act="nav" data-id="cart"><span>🛒</span>कार्ट<b data-cart-count hidden>0</b></button>
+  </nav>
+  <div id="toast" class="toast" role="status"></div>
+</div>
+
+<dialog id="logSheet" class="sheet">
+  <div class="sheet-head"><b>बातचीत</b><span><button id="newChat" class="link">नई बातचीत</button> <button class="icon" data-close aria-label="बंद">✕</button></span></div>
+  <div id="logBody" class="log"></div>
+</dialog>
+
+<dialog class="sheet">
+  <form id="settings" method="dialog">
+    <div class="sheet-head"><b>सेटिंग</b><button type="button" class="icon" data-close aria-label="बंद">✕</button></div>
+
+    <fieldset>
+      <legend>दिमाग़ (बातचीत का मॉडल)</legend>
+      <label class="fld"><span>प्रोवाइडर</span><select name="provider"></select></label>
+      <div id="llmFields">
+        <label class="fld"><span>API key</span><input name="apiKey" type="password" autocomplete="off" placeholder="sk-…"></label>
+        <div id="keyHint" class="dim small"></div>
+        <label class="fld"><span>मॉडल</span><input name="model" list="modelList" autocomplete="off"><datalist id="modelList"></datalist></label>
+        <label class="fld"><span>Base URL</span><input name="baseUrl" autocomplete="off"></label>
+        <label class="fld" id="effortRow"><span>सोचने की गहराई</span>
+          <select name="effort"><option value="low">कम — सबसे तेज़ जवाब</option><option value="medium">मध्यम</option><option value="high">ज़्यादा — धीमा, ज़्यादा सोच-समझकर</option></select></label>
+        <label class="fld"><span>पर्सोना के लिए अतिरिक्त निर्देश (वैकल्पिक)</span><textarea name="persona" rows="3" placeholder="जैसे: राजस्थानी अंदाज़ में बात करो, ज़्यादा मज़ाकिया रहो…"></textarea></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>आवाज़</legend>
+      <label class="fld"><span>सुनना (ASR)</span>
+        <select name="asr"><option value="browser">ब्राउज़र (Chrome, मुफ़्त)</option><option value="sarvam">Sarvam AI — saaras (भारतीय भाषाओं में बेहतर)</option><option value="openai">OpenAI — gpt-4o-transcribe</option></select></label>
+      <label class="fld"><span>बोलना (TTS)</span>
+        <select name="tts"><option value="browser">ब्राउज़र की हिंदी आवाज़ (मुफ़्त)</option><option value="sarvam">Sarvam AI — bulbul (प्राकृतिक हिंदी आवाज़)</option><option value="openai">OpenAI — gpt-4o-mini-tts</option><option value="off">बंद (सिर्फ़ टेक्स्ट)</option></select></label>
+      <div id="sarvamRow"><label class="fld"><span>Sarvam API key</span><input name="sarvamKey" type="password" autocomplete="off"></label></div>
+      <div id="oaRow">
+        <label class="fld"><span>OpenAI ऑडियो API key</span><input name="openaiAudioKey" type="password" autocomplete="off"></label>
+        <label class="fld"><span>ऑडियो Base URL</span><input name="openaiAudioBase" autocomplete="off"></label>
+      </div>
+      <div class="two">
+        <label class="fld"><span>ASR मॉडल</span><input name="asrModel" autocomplete="off"></label>
+        <label class="fld"><span>TTS मॉडल</span><input name="ttsModel" autocomplete="off"></label>
+      </div>
+      <div class="two">
+        <label class="fld"><span>TTS आवाज़</span><input name="ttsVoice" autocomplete="off"></label>
+        <label class="fld"><span>बोलने की रफ़्तार</span><input name="rate" type="number" min="0.5" max="2" step="0.1"></label>
+      </div>
+      <label class="check"><input type="checkbox" name="handsFree"> लगातार बातचीत — जवाब के बाद अपने-आप सुनना शुरू करें</label>
+      <div id="voiceInfo" class="dim small"></div>
+      <button type="button" id="testVoice" class="btn outline">🔊 आवाज़ सुनकर देखें</button>
+    </fieldset>
+
+    <p class="dim small warn">API keys सिर्फ़ इसी ब्राउज़र में (localStorage) रहती हैं और सीधे प्रोवाइडर को भेजी जाती हैं। यह डेमो के लिए है — असली ऐप में keys को अपने सर्वर/प्रॉक्सी के पीछे रखें और Base URL में प्रॉक्सी का पता डालें।</p>
+    <div class="row-btns">
+      <button type="button" id="resetData" class="btn ghost">डेटा रीसेट</button>
+      <button class="btn primary">सेव करें</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="catalog.js"></script>
+<script src="store.js"></script>
+<script src="voice.js"></script>
+<script src="brain.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
